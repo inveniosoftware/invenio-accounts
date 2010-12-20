@@ -116,12 +116,16 @@ def clean_logs():
     gc_exec_command('find %s -name "oai_archive*"'
         ' -atime +%s -exec rm %s -f {} \;' \
             % (CFG_TMPDIR, CFG_MAX_ATIME_RM_OAI, vstr))
+
+    write_message("- deleting/gzipping temporary old "
+            "BibSword files")
     gc_exec_command('find %s -name "bibsword_*"'
         ' -atime +%s -exec rm %s -f {} \;' \
             % (CFG_TMPDIR, CFG_MAX_ATIME_RM_BIBSWORD, vstr))
-    gc_exec_command('find %s -name "rec_fmt_*"'
+    gc_exec_command('find %s -name "bibsword_*"'
         ' -atime +%s -exec gzip %s -9 {} \;' \
             % (CFG_TMPDIR, CFG_MAX_ATIME_ZIP_BIBSWORD, vstr))
+
     write_message("""CLEANING OF LOG FILES FINISHED""")
 
 def clean_cache():
