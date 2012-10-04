@@ -1,3 +1,4 @@
+{#
 ## This file is part of Invenio.
 ## Copyright (C) 2012 CERN.
 ##
@@ -14,14 +15,18 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Invenio; if not, write to the Free Software Foundation, Inc.,
 ## 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+#}
+{% from "_formhelpers.html" import render_field with context %}
+{% extends "page.html" %}
+{% set title = _("Edit") %}
 
-templatesdir = $(sysconfdir)/templates
-templates_DATA = webgroup_index.html \
-		 webaccount_display.html \
-		 webaccount_edit.html \
-		 webaccount_login.html \
-		 webaccount_logout.html
-
-EXTRA_DIST = $(templates_DATA)
-
-CLEANFILES = *~ *.tmp
+{% block body %}
+<form name="edit" method="post" class="form-horizontal">
+  {%- for field in form -%}
+    {{ render_field(field) }}
+  {%- endfor -%}
+  <div class="form-actions">
+    <input type="submit" name="save" value="{{ _("Send") }}" class="btn btn-primary"/>
+  </div>
+</form>
+{% endblock %}
