@@ -28,7 +28,7 @@ class FormsTestCase(InvenioTestCase):
 
     def setUp(self):
         """Set up."""
-        from invenio.modules.accounts.models import User
+        from invenio_accounts.models import User
         from flask import current_app
         from invenio.base.globals import cfg
 
@@ -53,7 +53,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_login_form_nickname(self):
         """Test login form."""
-        from invenio.modules.accounts.forms import LoginForm
+        from invenio_accounts.forms import LoginForm
 
         loginform = LoginForm(
             nickname=self.nickname
@@ -65,7 +65,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_profile_form_nickname(self):
         """Test ProfileForm nickname."""
-        from invenio.modules.accounts.forms import ProfileForm
+        from invenio_accounts.forms import ProfileForm
         from flask_login import login_user, logout_user
         from invenio.ext.login import UserInfo
 
@@ -145,7 +145,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_profile_form_email(self):
         """Test ProfileForm email."""
-        from invenio.modules.accounts.forms import ProfileForm
+        from invenio_accounts.forms import ProfileForm
 
         form = ProfileForm(
             nickname=self.nickname,
@@ -192,7 +192,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_profile_form_repeat_email(self):
         """Test ProfileForm repeat email."""
-        from invenio.modules.accounts.forms import ProfileForm
+        from invenio_accounts.forms import ProfileForm
 
         self.delete_objects([self.user])
 
@@ -212,7 +212,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_lost_password_form_email(self):
         """Test LostPasswordForm email."""
-        from invenio.modules.accounts.forms import LostPasswordForm
+        from invenio_accounts.forms import LostPasswordForm
         from invenio.base.globals import cfg
 
         cfg['CFG_ACCESS_CONTROL_LIMIT_REGISTRATION_TO_DOMAIN'] = ''
@@ -268,7 +268,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_reset_password_password(self):
         """Test ResetPasswordForm password."""
-        from invenio.modules.accounts.forms import ResetPasswordForm
+        from invenio_accounts.forms import ResetPasswordForm
 
         not_valid_pwd = "x" * (self.min_len - 1)
         valid_pwd = "x" * self.min_len
@@ -293,7 +293,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_reset_password_password2(self):
         """Test ResetPasswordForm password2."""
-        from invenio.modules.accounts.forms import ResetPasswordForm
+        from invenio_accounts.forms import ResetPasswordForm
 
         form = ResetPasswordForm(
             password=self.password,
@@ -309,7 +309,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_change_password_current_password(self):
         """Test ChangePasswordForm current password."""
-        from invenio.modules.accounts.forms import ChangePasswordForm
+        from invenio_accounts.forms import ChangePasswordForm
         from flask_login import login_user, logout_user
         from invenio.ext.login import UserInfo
 
@@ -340,7 +340,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_change_password_password(self):
         """Test ChangePasswordForm password."""
-        from invenio.modules.accounts.forms import ChangePasswordForm
+        from invenio_accounts.forms import ChangePasswordForm
         from flask_login import login_user, logout_user
         from invenio.ext.login import UserInfo
 
@@ -373,7 +373,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_register_form_email(self):
         """Test RegisterForm email."""
-        from invenio.modules.accounts.forms import RegisterForm
+        from invenio_accounts.forms import RegisterForm
         from invenio.base.globals import cfg
 
         cfg['CFG_ACCESS_CONTROL_LIMIT_REGISTRATION_TO_DOMAIN'] = ''
@@ -441,7 +441,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_register_form_nickname(self):
         """Test RegisterForm nickname."""
-        from invenio.modules.accounts.forms import RegisterForm
+        from invenio_accounts.forms import RegisterForm
 
         valid_pwd = "x" * self.min_len
 
@@ -503,7 +503,7 @@ class FormsTestCase(InvenioTestCase):
 
     def test_register_form_password(self):
         """Test RegisterForm password."""
-        from invenio.modules.accounts.forms import RegisterForm
+        from invenio_accounts.forms import RegisterForm
 
         not_valid_pwd = "x" * (self.min_len - 1)
         valid_pwd = "x" * self.min_len

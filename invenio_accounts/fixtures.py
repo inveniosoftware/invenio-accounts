@@ -20,7 +20,6 @@
 """User fixtures."""
 
 from fixture import DataSet
-
 from flask import current_app
 
 

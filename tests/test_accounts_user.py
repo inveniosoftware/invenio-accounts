@@ -26,13 +26,13 @@ class UserTestCase(InvenioTestCase):
     """Test User class."""
 
     def test_note_is_converted_to_string(self):
-        from invenio.modules.accounts.models import User
+        from invenio_accounts.models import User
         u = User(email="test@test.pl", password="")
         u.note = 2
         self.assertTrue(isinstance(u.note, str))
 
     def test_verify_email_works_with_numbers_and_strings(self):
-        from invenio.modules.accounts.models import User
+        from invenio_accounts.models import User
         u = User(email="test@test.pl", password="")
         u.note = 2
         self.assertTrue(u.verify_email())

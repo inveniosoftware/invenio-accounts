@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2014, 2015 CERN.
 #
 # Invenio is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -17,26 +17,24 @@
 # along with Invenio; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-"""Account module signals."""
+"""Accounts bundles."""
 
-from blinker import Namespace
-_signals = Namespace()
+from __future__ import unicode_literals
 
+from invenio.base.bundles import invenio as _i
+from invenio.base.bundles import jquery as _j
+from invenio.base.bundles import styles as _styles
+from invenio.ext.assets import Bundle, RequireJSFilter
 
-profile_updated = _signals.signal('profile-updated')
-"""Signal sent when a user profile is updated.
+# The underscore makes it "hidden" for the bundle collector.
+_styles.contents += ("css/accounts/login.css",)
 
-Example subscriber
-
-.. code-block:: python
-
-    def listener(sender, *args, **kwargs):
-        pass
-
-    from invenio.modules.accounts.signals import profile_updated
-
-    profile_updated.connect(
-        listener,
-        sender=''
-    )
-"""
+js = Bundle(
+    "js/accounts/init.js",
+    output="accounts.js",
+    weight=80,
+    filters=RequireJSFilter(exclude=[_j, _i]),
+    bower={
+        "jquery-ui": "~1.11"
+    }
+)

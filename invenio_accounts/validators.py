@@ -20,9 +20,7 @@
 """Implements account validators."""
 
 from flask import current_app
-
 from flask_wtf import validators
-
 from sqlalchemy.exc import SQLAlchemyError
 
 from invenio.base.i18n import _

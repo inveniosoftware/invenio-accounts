@@ -20,22 +20,18 @@
 """WebAccount Forms."""
 
 from flask import current_app
-
 from flask_login import current_user
-
 from flask_wtf import Form, validators
-
-from invenio.base.globals import cfg
-from invenio.base.i18n import _
-from invenio.utils.forms import InvenioBaseForm
-
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-
 from wtforms.fields import BooleanField, HiddenField, PasswordField, \
     StringField, SubmitField
 from wtforms.validators import DataRequired, EqualTo, StopValidation, \
     ValidationError
+
+from invenio.base.globals import cfg
+from invenio.base.i18n import _
+from invenio.utils.forms import InvenioBaseForm
 
 from .models import User
 from .validators import validate_email, validate_nickname, \

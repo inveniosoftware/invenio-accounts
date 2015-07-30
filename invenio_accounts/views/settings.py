@@ -21,25 +21,20 @@
 
 from __future__ import absolute_import
 
-from flask import Blueprint, flash, redirect, render_template, request, \
-    url_for
-
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_breadcrumbs import register_breadcrumb
-
 from flask_login import current_user, login_required
-
 from flask_menu import current_menu, register_menu
 
 from invenio.base.i18n import _
 from invenio.ext.sqlalchemy import db
 from invenio.ext.sslify import ssl_required
 
+from ..errors import AccountSecurityError
 from ..forms import ChangePasswordForm, LostPasswordForm, ProfileForm, \
     VerificationForm
-from ..errors import AccountSecurityError
 from ..models import User
 from ..utils import send_reset_password_email
-
 
 blueprint = Blueprint(
     'accounts_settings',

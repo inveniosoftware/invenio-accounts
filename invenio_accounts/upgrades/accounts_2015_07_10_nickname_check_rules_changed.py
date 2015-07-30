@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2014 CERN.
+# Copyright (C) 2015 CERN.
 #
 # Invenio is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -17,32 +17,23 @@
 # along with Invenio; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-"""Upgrade Usergroup table."""
+"""Check if some of nicknames are not valid anymore."""
 
-from invenio.legacy.dbquery import run_sql
-from invenio.modules.upgrader.api import op
-from sqlalchemy.exc import OperationalError
+from invenio_accounts.models import User
 
-depends_on = ['invenio_release_1_1_0']
+# Important: Below is only a best guess. You MUST validate which previous
+# upgrade you depend on.
+depends_on = [u'accounts_2014_11_07_usergroup_name_column_unique']
 
 
 def info():
-    """Upgrade Usergroup table."""
-    return "Upgrade Usergroup table"
+    """Info message."""
+    return __doc__
 
 
 def do_upgrade():
     """Implement your upgrades here."""
-    try:
-        op.drop_index('ix_usergroup_name', table_name='usergroup')
-    except OperationalError:
-        pass
-    try:
-        op.drop_index('name', table_name='usergroup')
-    except OperationalError:
-        pass
-    op.create_index(op.f('ix_usergroup_name'), 'usergroup', ['name'],
-                    unique=True)
+    pass
 
 
 def estimate():
@@ -52,15 +43,22 @@ def estimate():
 
 def pre_upgrade():
     """Run pre-upgrade checks (optional)."""
-    result = run_sql("""
-        SELECT name, count(name) as count
-        FROM usergroup
-        GROUP BY name HAVING count > 1;
-    """)
-    if len(result) > 0:
-        raise RuntimeError("Integrity problem in the table Usergroup",
-                           "Duplicate Usergroup name")
+    users = User.query.all()
+
+    not_valid_nicknames = []
+    for user in users:
+        if not User.check_nickname(user.nickname):
+            not_valid_nicknames.append(user)
+
+    if len(not_valid_nicknames) > 0:
+        list_users = ', '.join([u.nickname for u in not_valid_nicknames])
+        raise RuntimeError(
+            "These nicknames are not valid: {list_users}. "
+            "Please fix them before continuing.".format(
+                list_users=list_users)
+        )
 
 
 def post_upgrade():
     """Run post-upgrade checks (optional)."""
+    pass

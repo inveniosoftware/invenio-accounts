@@ -23,12 +23,12 @@ from __future__ import absolute_import
 
 from flask import Blueprint, abort, current_app, flash, g, redirect, \
     render_template, request, url_for
-
 from flask_breadcrumbs import register_breadcrumb
-
 from flask_login import current_user, login_required
-
 from flask_menu import register_menu
+from six import text_type
+from sqlalchemy.exc import SQLAlchemyError
+from werkzeug import CombinedMultiDict, ImmutableMultiDict
 
 from invenio.base.decorators import wash_arguments
 from invenio.base.globals import cfg
@@ -38,27 +38,18 @@ from invenio.ext.login import UserInfo, authenticate, login_redirect, \
 from invenio.ext.sqlalchemy import db
 from invenio.ext.sslify import ssl_required
 from invenio.legacy import webuser
-from invenio.modules.access.errors import \
-    InvenioWebAccessMailCookieDeletedError, InvenioWebAccessMailCookieError
-from invenio.modules.access.mailcookie import \
-    mail_cookie_check_mail_activation, mail_cookie_check_pw_reset, \
-    mail_cookie_delete_cookie
-from invenio.modules.accounts.forms import LoginForm, LostPasswordForm, \
-    RegisterForm, ResetPasswordForm
-
+from invenio.modules.access.errors import InvenioWebAccessMailCookieDeletedError, \
+    InvenioWebAccessMailCookieError
+from invenio.modules.access.mailcookie import mail_cookie_check_mail_activation, \
+    mail_cookie_check_pw_reset, mail_cookie_delete_cookie
 from invenio.utils.datastructures import LazyDict, flatten_multidict
 
-from six import text_type
-
-from sqlalchemy.exc import SQLAlchemyError
-
-from werkzeug import CombinedMultiDict, ImmutableMultiDict
-
-from ..models import User
 from ..errors import AccountSecurityError
+from ..forms import LoginForm, LostPasswordForm, RegisterForm, \
+    ResetPasswordForm
+from ..models import User
 from ..utils import send_reset_password_email
 from ..validators import wash_login_method
-
 
 blueprint = Blueprint('webaccount', __name__, url_prefix="/youraccount",
                       template_folder='../templates',

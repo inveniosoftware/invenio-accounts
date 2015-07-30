@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2014 CERN.
 #
 # Invenio is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -17,24 +17,33 @@
 # along with Invenio; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-"""Check if some of nicknames are not valid anymore."""
+"""Upgrade Usergroup table."""
 
-from invenio.modules.accounts.models import User
+from sqlalchemy.exc import OperationalError
 
+from invenio.legacy.dbquery import run_sql
+from invenio.modules.upgrader.api import op
 
-# Important: Below is only a best guess. You MUST validate which previous
-# upgrade you depend on.
-depends_on = [u'accounts_2014_11_07_usergroup_name_column_unique']
+depends_on = ['invenio_release_1_1_0']
 
 
 def info():
-    """Info message."""
-    return __doc__
+    """Upgrade Usergroup table."""
+    return "Upgrade Usergroup table"
 
 
 def do_upgrade():
     """Implement your upgrades here."""
-    pass
+    try:
+        op.drop_index('ix_usergroup_name', table_name='usergroup')
+    except OperationalError:
+        pass
+    try:
+        op.drop_index('name', table_name='usergroup')
+    except OperationalError:
+        pass
+    op.create_index(op.f('ix_usergroup_name'), 'usergroup', ['name'],
+                    unique=True)
 
 
 def estimate():
@@ -44,22 +53,15 @@ def estimate():
 
 def pre_upgrade():
     """Run pre-upgrade checks (optional)."""
-    users = User.query.all()
-
-    not_valid_nicknames = []
-    for user in users:
-        if not User.check_nickname(user.nickname):
-            not_valid_nicknames.append(user)
-
-    if len(not_valid_nicknames) > 0:
-        list_users = ', '.join([u.nickname for u in not_valid_nicknames])
-        raise RuntimeError(
-            "These nicknames are not valid: {list_users}. "
-            "Please fix them before continuing.".format(
-                list_users=list_users)
-        )
+    result = run_sql("""
+        SELECT name, count(name) as count
+        FROM usergroup
+        GROUP BY name HAVING count > 1;
+    """)
+    if len(result) > 0:
+        raise RuntimeError("Integrity problem in the table Usergroup",
+                           "Duplicate Usergroup name")
 
 
 def post_upgrade():
     """Run post-upgrade checks (optional)."""
-    pass

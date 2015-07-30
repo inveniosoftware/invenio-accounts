@@ -21,13 +21,12 @@
 
 import hashlib
 
-from invenio.ext.passlib.hash import mysql_aes_encrypt
-from invenio.ext.sqlalchemy import db
-from invenio.modules.upgrader.api import op
-
 from sqlalchemy import select
 from sqlalchemy.dialects import mysql
 
+from invenio.ext.passlib.hash import mysql_aes_encrypt
+from invenio.ext.sqlalchemy import db
+from invenio.modules.upgrader.api import op
 
 depends_on = [u'accounts_2014_11_07_usergroup_name_column_unique']
 
