@@ -19,11 +19,22 @@
 
 """Unit tests for the user handling library."""
 
-from invenio.testsuite import InvenioTestCase, make_test_suite, run_test_suite
+from invenio.testsuite import InvenioTestCase
 
 
 class UserTestCase(InvenioTestCase):
+
     """Test User class."""
+
+    @property
+    def config(self):
+        """Config."""
+        cfg = super(UserTestCase, self).config
+        cfg['PACKAGES'] = [
+            'invenio.base',
+            'invenio_accounts',
+        ]
+        return cfg
 
     def test_note_is_converted_to_string(self):
         from invenio_accounts.models import User
@@ -40,9 +51,3 @@ class UserTestCase(InvenioTestCase):
         u2 = User(email="test2@test2.pl", password="")
         u2.note = "2"
         self.assertTrue(u2.verify_email())
-
-
-TEST_SUITE = make_test_suite(UserTestCase)
-
-if __name__ == "__main__":
-    run_test_suite(TEST_SUITE)

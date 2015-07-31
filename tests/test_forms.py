@@ -19,17 +19,28 @@
 
 """Unit tests for forms."""
 
-from invenio.testsuite import InvenioTestCase, make_test_suite, run_test_suite
+from flask import current_app
+
+from invenio.testsuite import InvenioTestCase
 
 
 class FormsTestCase(InvenioTestCase):
 
     """Test form classes."""
 
+    @property
+    def config(self):
+        """Config."""
+        cfg = super(FormsTestCase, self).config
+        cfg['PACKAGES'] = [
+            'invenio.base',
+            'invenio_accounts',
+        ]
+        return cfg
+
     def setUp(self):
         """Set up."""
         from invenio_accounts.models import User
-        from flask import current_app
         from invenio.base.globals import cfg
 
         self.min_len = cfg['CFG_ACCOUNT_MIN_PASSWORD_LENGTH'] or 1
@@ -531,9 +542,3 @@ class FormsTestCase(InvenioTestCase):
             password2=valid_pwd+"different"
         )
         assert form.validate() is False
-
-
-TEST_SUITE = make_test_suite(FormsTestCase)
-
-if __name__ == "__main__":
-    run_test_suite(TEST_SUITE)

@@ -38,9 +38,11 @@ from invenio.ext.login import UserInfo, authenticate, login_redirect, \
 from invenio.ext.sqlalchemy import db
 from invenio.ext.sslify import ssl_required
 from invenio.legacy import webuser
-from invenio.modules.access.errors import InvenioWebAccessMailCookieDeletedError, \
+from invenio.modules.access.errors import \
+    InvenioWebAccessMailCookieDeletedError, \
     InvenioWebAccessMailCookieError
-from invenio.modules.access.mailcookie import mail_cookie_check_mail_activation, \
+from invenio.modules.access.mailcookie import \
+    mail_cookie_check_mail_activation, \
     mail_cookie_check_pw_reset, mail_cookie_delete_cookie
 from invenio.utils.datastructures import LazyDict, flatten_multidict
 

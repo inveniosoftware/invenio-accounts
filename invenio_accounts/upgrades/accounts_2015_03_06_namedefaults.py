@@ -38,9 +38,9 @@ def do_upgrade():
     u = m.tables['user']
 
     conn = db.engine.connect()
-    conn.execute(u.update().where(u.c.family_name == None).values(
+    conn.execute(u.update().where(u.c.family_name.is_(None)).values(
         family_name=''))
-    conn.execute(u.update().where(u.c.given_names == None).values(
+    conn.execute(u.update().where(u.c.given_names.is_(None)).values(
         given_names=''))
 
     op.alter_column('user', 'family_name',
