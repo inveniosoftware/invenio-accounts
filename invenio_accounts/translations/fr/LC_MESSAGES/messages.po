@@ -1,0 +1,471 @@
+# French translations for invenio-accounts.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the invenio-accounts
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: invenio-accounts 0.1.1.dev20150731\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-08-04 20:26+0200\n"
+"PO-Revision-Date: 2015-08-04 20:26+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.0\n"
+
+#: invenio_accounts/forms.py:48
+#, python-format
+msgid "Desired nickname %(nick)s already exists in the database."
+msgstr ""
+
+#: invenio_accounts/forms.py:71
+#, python-format
+msgid "Supplied email address %(email)s already exists."
+msgstr ""
+
+#: invenio_accounts/forms.py:87
+msgid "Email addresses do not match."
+msgstr ""
+
+#: invenio_accounts/forms.py:95
+#, python-format
+msgid "Password must be at least %(x_pass)d characters long."
+msgstr ""
+
+#: invenio_accounts/forms.py:112
+msgid "Nobody is currently logged-in."
+msgstr ""
+
+#: invenio_accounts/forms.py:117
+msgid "The password inserted is not valid."
+msgstr ""
+
+#: invenio_accounts/forms.py:125
+msgid "Send verification email"
+msgstr ""
+
+#: invenio_accounts/forms.py:133 invenio_accounts/forms.py:263
+msgid "Nickname"
+msgstr ""
+
+#: invenio_accounts/forms.py:135 invenio_accounts/forms.py:265
+msgid "Nickname not provided"
+msgstr ""
+
+#: invenio_accounts/forms.py:139 invenio_accounts/forms.py:270
+#: invenio_accounts/templates/accounts/login_base.html:68
+msgid "Password"
+msgstr ""
+
+#: invenio_accounts/forms.py:140
+msgid "Remember Me"
+msgstr ""
+
+#: invenio_accounts/forms.py:143
+msgid "Sign in"
+msgstr ""
+
+#: invenio_accounts/forms.py:155
+msgid "Username"
+msgstr ""
+
+#: invenio_accounts/forms.py:162
+msgid "Family name"
+msgstr ""
+
+#: invenio_accounts/forms.py:163
+msgid "Given names"
+msgstr ""
+
+#: invenio_accounts/forms.py:165 invenio_accounts/forms.py:186
+#: invenio_accounts/forms.py:256
+msgid "Email address"
+msgstr ""
+
+#: invenio_accounts/forms.py:174
+msgid "Re-enter email address"
+msgstr ""
+
+#: invenio_accounts/forms.py:175
+msgid "Please re-enter your email address."
+msgstr ""
+
+#: invenio_accounts/forms.py:199 invenio_accounts/forms.py:228
+msgid "New password"
+msgstr ""
+
+#: invenio_accounts/forms.py:200 invenio_accounts/forms.py:229
+#: invenio_accounts/forms.py:271
+msgid "The password phrase may contain punctuation, spaces, etc."
+msgstr ""
+
+#: invenio_accounts/forms.py:208 invenio_accounts/forms.py:237
+msgid "Confirm new password"
+msgstr ""
+
+#: invenio_accounts/forms.py:210 invenio_accounts/forms.py:239
+#: invenio_accounts/forms.py:282
+msgid "Both passwords must match."
+msgstr ""
+
+#: invenio_accounts/forms.py:220
+msgid "Current password"
+msgstr ""
+
+#: invenio_accounts/forms.py:221
+msgid "Your current password"
+msgstr ""
+
+#: invenio_accounts/forms.py:248
+msgid "Password mismatch."
+msgstr ""
+
+#: invenio_accounts/forms.py:258
+msgid "Email not provided"
+msgstr ""
+
+#: invenio_accounts/forms.py:261 invenio_accounts/forms.py:268
+msgid "Example"
+msgstr ""
+
+#: invenio_accounts/forms.py:280
+msgid "Confirm password"
+msgstr ""
+
+#: invenio_accounts/forms.py:287 invenio_accounts/views/accounts.py:112
+#: invenio_accounts/views/accounts.py:126
+msgid "Register"
+msgstr ""
+
+#: invenio_accounts/helpers.py:62
+#, python-format
+msgid "Account registration at %(sitename)s"
+msgstr ""
+
+#: invenio_accounts/utils.py:43
+msgid "Something goes wrong when the cookie has been generated"
+msgstr ""
+
+#: invenio_accounts/utils.py:53
+#, python-format
+msgid "Password reset request for %(website)s"
+msgstr ""
+
+#: invenio_accounts/validators.py:59
+#, python-format
+msgid "Not a valid nickname or email: %(x_data)s"
+msgstr ""
+
+#: invenio_accounts/validators.py:75
+#, python-format
+msgid "Desired nickname %(x_name)s is invalid."
+msgstr ""
+
+#: invenio_accounts/validators.py:90 invenio_accounts/validators.py:95
+#, python-format
+msgid "Supplied email address %(x_addr)s is invalid."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/edit_base.html:21
+#: invenio_accounts/views/accounts.py:272
+#: invenio_accounts/views/accounts.py:326
+msgid "Edit"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/edit_base.html:29
+msgid "Send"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/email_reset_password_base.html:20
+#, python-format
+msgid ""
+"Somebody (possibly you) coming from %(ip_address)s has asked for a "
+"password reset at %(sitename)s for the account \"%(email)s\""
+msgstr ""
+
+#: invenio_accounts/templates/accounts/email_reset_password_base.html:26
+msgid "If you want to reset the password for this account, please go to:"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/email_reset_password_base.html:30
+msgid "in order to confirm the validity of this request."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/email_reset_password_base.html:32
+#, python-format
+msgid "Please note that this URL will remain valid for about %(days)s days only."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/login_base.html:30
+#, python-format
+msgid "You can login using %(x_url_open)sSingle-Sign-On%(x_url_close)s"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/login_base.html:42
+msgid "If you already have an account, please login using the form below."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/login_base.html:43
+#, python-format
+msgid "If you don't own an account yet, please %(x_url_open)s register"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/login_base.html:45
+#, python-format
+msgid "%(x_url_close)s an internal account."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/login_base.html:58
+msgid "Please Sign In"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/login_base.html:62
+msgid "Username or email"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/login_base.html:80
+msgid "Lost your password?"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/login_base.html:103
+msgid "Note"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/login_base.html:104
+msgid "You can use your nickname or your email address to login."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/logout_base.html:20
+#: invenio_accounts/views/accounts.py:186
+msgid "Logout"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/logout_base.html:22
+msgid "You have now been signed out."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/logout_base.html:26
+#, python-format
+msgid ""
+"You are still recognized by the centralized "
+"%(x_fmt_open)sSSO%(x_fmt_close)s system. You can %(x_url_open)slogout "
+"from SSO%(x_url_close)s, too."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/logout_base.html:34
+#, python-format
+msgid "If you wish you can %(x_url_open)ssign in again%(x_url_close)s."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/lost_base.html:27
+#: invenio_accounts/templates/accounts/resetpassword_base.html:27
+msgid ""
+"Please enter your email address. You will receive a link to create a new "
+"password via email."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/lost_base.html:33
+#: invenio_accounts/templates/accounts/resetpassword_base.html:33
+#: invenio_accounts/templates/accounts/settings/lost_base.html:33
+msgid "Get new password"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/settings/lost_base.html:26
+msgid ""
+"Please enter your email address. You will receive a link to create a  new"
+" password via email."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/settings/profile_base.html:30
+msgid "You have not yet verified your email address."
+msgstr ""
+
+#: invenio_accounts/templates/accounts/settings/profile_base.html:40
+msgid "Cancel"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/settings/profile_base.html:41
+msgid "Update Profile"
+msgstr ""
+
+#: invenio_accounts/templates/accounts/settings/profile_base.html:51
+msgid "Change Password"
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:68
+msgid "Login"
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:95
+#, python-format
+msgid "You are logged in as %(nick)s."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:101
+msgid "Invalid credentials."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:106
+msgid "Problem with login."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:136
+msgid "Account created"
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:137
+msgid "Your account has been successfully created."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:141
+msgid ""
+"In order to confirm its validity, an email message containing an account "
+"activation key has been sent to the given email address."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:145
+msgid ""
+"Please follow instructions presented there in order to complete the "
+"account registration process."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:149
+msgid ""
+"A second email will be sent when the account has been activated and can "
+"be used."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:156
+msgid "You can now access your account."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:158
+#: invenio_accounts/views/accounts.py:178
+msgid "Registration failure"
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:161
+msgid "Users cannot register themselves, only admin can register them."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:168
+msgid ""
+"The site is having troubles in sending you an email for confirming your "
+"email address."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:172
+msgid ""
+"The error has been logged and will be taken in consideration as soon as "
+"possible."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:176
+#, python-format
+msgid "Internal error %(ruid)s"
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:229
+msgid "Personalize"
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:230
+msgid "Your account"
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:277
+msgid "Invalid plugin name"
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:297
+msgid "Data has been saved."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:300
+msgid "Please, corrent errors."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:336
+#: invenio_accounts/views/settings.py:133
+#, python-format
+msgid "A password reset link has been sent to %(whom)s"
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:339
+#: invenio_accounts/views/settings.py:136
+msgid "Error happen when the email was send. Please contact the administrator."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:357
+msgid "This request for resetting a password has already been used."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:361
+msgid "This request for resetting a password is not valid or is expired."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:380
+msgid "The password was correctly reset."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:399
+msgid "Authorization failled."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:404
+msgid "Your email address has been validated"
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:408
+msgid "Your email address has been validated, and you can now proceed to sign-in."
+msgstr ""
+
+#: invenio_accounts/views/accounts.py:414
+msgid "The authorization token is invalid."
+msgstr ""
+
+#: invenio_accounts/views/settings.py:52
+msgid "Account"
+msgstr ""
+
+#: invenio_accounts/views/settings.py:68
+#, python-format
+msgid "%(icon)s Profile"
+msgstr ""
+
+#: invenio_accounts/views/settings.py:72
+msgid "Profile"
+msgstr ""
+
+#: invenio_accounts/views/settings.py:89
+msgid "Password changed."
+msgstr ""
+
+#: invenio_accounts/views/settings.py:96
+#, python-format
+msgid ""
+"Profile updated. We have sent a verification email to %(email)s. Please "
+"check it."
+msgstr ""
+
+#: invenio_accounts/views/settings.py:100
+msgid "Profile updated."
+msgstr ""
+
+#: invenio_accounts/views/settings.py:102
+msgid "No changes to profile."
+msgstr ""
+
+#: invenio_accounts/views/settings.py:107
+msgid "Verification email sent."
+msgstr ""
+
+#: invenio_accounts/views/settings.py:122
+msgid "Lost password"
+msgstr ""
+
