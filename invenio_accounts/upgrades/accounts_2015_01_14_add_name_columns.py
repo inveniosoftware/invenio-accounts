@@ -20,7 +20,7 @@
 """Add full name columns to User table."""
 
 from invenio.ext.sqlalchemy import db
-from invenio.modules.upgrader.api import op
+from invenio_upgrader.api import op
 
 depends_on = [u'accounts_2014_11_07_usergroup_name_column_unique']
 
