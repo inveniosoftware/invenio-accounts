@@ -24,6 +24,11 @@
 Changes
 =======
 
-Version 0.1.0 (release 2015-07-31)
+Version 0.1.1 (released 2015-08-25)
+
+- Adds missing `invenio_upgrader` dependency and amends past upgrade
+  recipes following its separation into standalone package.
+
+Version 0.1.0 (released 2015-07-31)
 
 - Initial public release.
