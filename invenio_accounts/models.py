@@ -235,7 +235,9 @@ class UserEXT(db.Model):
 
     user = db.relationship(User, backref="external_identifiers")
 
-    __table_args__ = (db.Index('id_user', id_user, method, unique=True),
-                      db.Model.__table_args__)
+    __table_args__ = (
+        db.Index('userext_id_user_method', id_user, method, unique=True),
+        db.Model.__table_args__
+    )
 
 __all__ = ('User', 'UserEXT')
