@@ -34,7 +34,7 @@ from .signals import profile_updated
 
 def get_default_user_preferences():
     """Return default user preferences."""
-    from invenio.modules.access.local_config import \
+    from invenio_access.local_config import \
         CFG_EXTERNAL_AUTHENTICATION, CFG_EXTERNAL_AUTH_DEFAULT
 
     user_preference = {
