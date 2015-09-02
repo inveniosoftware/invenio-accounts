@@ -36,6 +36,8 @@ history = open('CHANGES.rst').read()
 requirements = [
     'Flask>=0.10.1',
     'six>=1.7.2',
+    'cryptography>=0.6',
+    'itsdangerous>=0.24',
     'invenio-upgrader>=0.1.0',
 ]
 
