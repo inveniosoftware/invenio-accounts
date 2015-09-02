@@ -27,18 +27,16 @@ from invenio.base.globals import cfg
 from invenio.base.i18n import _
 from invenio.ext.email import send_email
 
+from .tokens import EmailConfirmationSerializer
+
 
 def send_account_activation_email(user):
     """Send an account activation email."""
-    from invenio.modules.access.mailcookie import \
-        mail_cookie_create_mail_activation
-
     expires_in = cfg.get('CFG_WEBSESSION_ADDRESS_ACTIVATION_EXPIRE_IN_DAYS')
 
-    address_activation_key = mail_cookie_create_mail_activation(
-        user.email,
-        cookie_timeout=timedelta(days=expires_in)
-    )
+    address_activation_key = EmailConfirmationSerializer(
+        expires_in=timedelta(days=expires_in).total_seconds()
+    ).create_token(user.id, {'email': user.email})
 
     # Render context.
     ctx = {
@@ -59,8 +57,8 @@ def send_account_activation_email(user):
         cfg.get('CFG_SITE_SUPPORT_EMAIL'),
         user.email,
         _("Account registration at %(sitename)s",
-          sitename=cfg["CFG_SITE_NAME_INTL"].get(getattr(g, 'ln',
-                                                 cfg['CFG_SITE_LANG']),
-                                                 cfg['CFG_SITE_NAME'])),
+          sitename=cfg["CFG_SITE_NAME_INTL"].get(
+              getattr(g, 'ln', cfg['CFG_SITE_LANG']),
+              cfg['CFG_SITE_NAME'])),
         render_template("accounts/emails/activation.tpl", **ctx)
     )

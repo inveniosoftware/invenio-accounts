@@ -34,15 +34,7 @@ from .signals import profile_updated
 
 def get_default_user_preferences():
     """Return default user preferences."""
-    from invenio.modules.access.local_config import \
-        CFG_EXTERNAL_AUTHENTICATION, CFG_EXTERNAL_AUTH_DEFAULT
-
-    user_preference = {
-        'login_method': 'Local'}
-
-    if CFG_EXTERNAL_AUTH_DEFAULT in CFG_EXTERNAL_AUTHENTICATION:
-        user_preference['login_method'] = CFG_EXTERNAL_AUTH_DEFAULT
-    return user_preference
+    return {'login_method': 'Local'}
 
 
 class User(db.Model):

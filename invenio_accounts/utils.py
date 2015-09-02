@@ -26,17 +26,18 @@ from flask import render_template
 from invenio.base.globals import cfg
 from invenio.base.i18n import _
 from invenio.ext.email import send_email
-from invenio.modules.access.mailcookie import mail_cookie_create_pw_reset
 
 from .errors import AccountSecurityError
+from .tokens import EmailConfirmationSerializer
 
 
 def send_reset_password_email(email):
     """Reset password by sending a email with the unique link."""
-    reset_key = mail_cookie_create_pw_reset(
-        email,
-        cookie_timeout=timedelta(
-            days=cfg['CFG_WEBSESSION_RESET_PASSWORD_EXPIRE_IN_DAYS']))
+    expires_in = cfg.get('CFG_WEBSESSION_ADDRESS_ACTIVATION_EXPIRE_IN_DAYS')
+
+    reset_key = EmailConfirmationSerializer(
+        expires_in=timedelta(days=expires_in).total_seconds()
+    ).create_token(email, {'email': email})
 
     if not reset_key:
         raise AccountSecurityError(

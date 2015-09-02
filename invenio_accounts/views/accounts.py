@@ -21,14 +21,17 @@
 
 from __future__ import absolute_import
 
+import warnings
+
 from flask import Blueprint, abort, current_app, flash, g, redirect, \
     render_template, request, url_for
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import current_user, login_required
 from flask_menu import register_menu
+from itsdangerous import BadData, SignatureExpired
 from six import text_type
 from sqlalchemy.exc import SQLAlchemyError
-from werkzeug import CombinedMultiDict, ImmutableMultiDict
+from werkzeug.datastructures import CombinedMultiDict, ImmutableMultiDict
 
 from invenio.base.decorators import wash_arguments
 from invenio.base.globals import cfg
@@ -38,18 +41,13 @@ from invenio.ext.login import UserInfo, authenticate, login_redirect, \
 from invenio.ext.sqlalchemy import db
 from invenio.ext.sslify import ssl_required
 from invenio.legacy import webuser
-from invenio.modules.access.errors import \
-    InvenioWebAccessMailCookieDeletedError, \
-    InvenioWebAccessMailCookieError
-from invenio.modules.access.mailcookie import \
-    mail_cookie_check_mail_activation, \
-    mail_cookie_check_pw_reset, mail_cookie_delete_cookie
 from invenio.utils.datastructures import LazyDict, flatten_multidict
 
 from ..errors import AccountSecurityError
 from ..forms import LoginForm, LostPasswordForm, RegisterForm, \
     ResetPasswordForm
 from ..models import User
+from ..tokens import EmailConfirmationSerializer
 from ..utils import send_reset_password_email
 from ..validators import wash_login_method
 
@@ -62,25 +60,19 @@ blueprint = Blueprint('webaccount', __name__, url_prefix="/youraccount",
 @wash_arguments({'nickname': (unicode, None),
                  'password': (unicode, None),
                  'login_method': (wash_login_method, 'Local'),
-                 'action': (unicode, ''),
                  'remember': (bool, False),
                  'referer': (unicode, None)})
 @register_breadcrumb(blueprint, '.login', _('Login'))
 @ssl_required
-def login(nickname=None, password=None, login_method=None, action='',
+def login(nickname=None, password=None, login_method=None,
           remember=False, referer=None):
     """Login."""
     if cfg.get('CFG_ACCESS_CONTROL_LEVEL_SITE') > 0:
         return abort(401)  # page is not authorized
 
-    if action:
-        from invenio.modules.access.mailcookie import \
-            InvenioWebAccessMailCookieError, \
-            mail_cookie_check_authorize_action
-        try:
-            action, arguments = mail_cookie_check_authorize_action(action)
-        except InvenioWebAccessMailCookieError:
-            pass
+    if 'action' in request.values:
+        warnings.warn('Action argument "{}" is not used anymore.'.format(
+            request.values['action']), DeprecationWarning)
     form = LoginForm(CombinedMultiDict(
         [ImmutableMultiDict({'referer': referer, 'login_method': 'Local'}
                             if referer else {'login_method': 'Local'}),
@@ -188,21 +180,13 @@ def register():
 def logout():
     """Logout."""
     logout_user()
-
-    from invenio.modules.access.local_config import \
-        CFG_EXTERNAL_AUTH_USING_SSO, \
-        CFG_EXTERNAL_AUTH_LOGOUT_SSO
-
-    if CFG_EXTERNAL_AUTH_USING_SSO:
-        return redirect(CFG_EXTERNAL_AUTH_LOGOUT_SSO)
-
     return render_template('accounts/logout.html',
-                           using_sso=CFG_EXTERNAL_AUTH_USING_SSO,
-                           logout_sso=CFG_EXTERNAL_AUTH_LOGOUT_SSO)
+                           using_sso=False,  # FIXME SSO should use signals
+                           logout_sso=None)  # FIXME not needed then
 
 
 def load_user_settings():
-    """Handy function to populate LazyDic with user settings."""
+    """Handy function to populate LazyDict with user settings."""
     from invenio.modules.dashboard.settings import Settings
     from invenio.base.utils import autodiscover_user_settings
     modules = autodiscover_user_settings()
@@ -351,15 +335,17 @@ def resetpassword(reset_key):
     """Reset password form (loaded after asked new password)."""
     email = None
     try:
-        email = mail_cookie_check_pw_reset(reset_key)
-    except InvenioWebAccessMailCookieDeletedError:
+        email = EmailConfirmationSerializer().load_token(
+            reset_key
+        )['data']['email']
+    except KeyError:
         flash(
             _('This request for resetting a password has already been used.'),
             'error'
         )
-    except InvenioWebAccessMailCookieError:
+    except (BadData, SignatureExpired):
         flash(_('This request for resetting a password is not valid or is '
-              'expired.'), 'error')
+                'expired.'), 'error')
 
     if email is None or cfg['CFG_ACCESS_CONTROL_LEVEL_ACCOUNTS'] >= 3:
         return redirect(url_for('webaccount.index'))
@@ -374,8 +360,6 @@ def resetpassword(reset_key):
         user.password = password
         db.session.merge(user)
         db.session.commit()
-        # delete cookie
-        mail_cookie_delete_cookie(reset_key)
 
         flash(_("The password was correctly reset."), 'success')
         return redirect(url_for('webaccount.index'))
@@ -388,9 +372,11 @@ def resetpassword(reset_key):
 def access():
     """Access."""
     try:
-        mail = mail_cookie_check_mail_activation(request.values['mailcookie'])
+        email = EmailConfirmationSerializer().load_token(
+            request.values['mailcookie']
+        )['data']['email']
 
-        u = User.query.filter(User.email == mail).one()
+        u = User.query.filter(User.email == email).one()
         u.note = 1
         try:
             db.session.commit()
