@@ -38,10 +38,10 @@ from invenio.ext.login import UserInfo, authenticate, login_redirect, \
 from invenio.ext.sqlalchemy import db
 from invenio.ext.sslify import ssl_required
 from invenio.legacy import webuser
-from invenio.modules.access.errors import \
+from invenio_access.errors import \
     InvenioWebAccessMailCookieDeletedError, \
     InvenioWebAccessMailCookieError
-from invenio.modules.access.mailcookie import \
+from invenio_access.mailcookie import \
     mail_cookie_check_mail_activation, \
     mail_cookie_check_pw_reset, mail_cookie_delete_cookie
 from invenio.utils.datastructures import LazyDict, flatten_multidict
@@ -74,7 +74,7 @@ def login(nickname=None, password=None, login_method=None, action='',
         return abort(401)  # page is not authorized
 
     if action:
-        from invenio.modules.access.mailcookie import \
+        from invenio_access.mailcookie import \
             InvenioWebAccessMailCookieError, \
             mail_cookie_check_authorize_action
         try:
@@ -189,7 +189,7 @@ def logout():
     """Logout."""
     logout_user()
 
-    from invenio.modules.access.local_config import \
+    from invenio_access.local_config import \
         CFG_EXTERNAL_AUTH_USING_SSO, \
         CFG_EXTERNAL_AUTH_LOGOUT_SSO
 

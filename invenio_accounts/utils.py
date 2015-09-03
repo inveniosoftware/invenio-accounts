@@ -26,7 +26,7 @@ from flask import render_template
 from invenio.base.globals import cfg
 from invenio.base.i18n import _
 from invenio.ext.email import send_email
-from invenio.modules.access.mailcookie import mail_cookie_create_pw_reset
+from invenio_access.mailcookie import mail_cookie_create_pw_reset
 
 from .errors import AccountSecurityError
 

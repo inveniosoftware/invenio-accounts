@@ -30,7 +30,7 @@ from invenio.ext.email import send_email
 
 def send_account_activation_email(user):
     """Send an account activation email."""
-    from invenio.modules.access.mailcookie import \
+    from invenio_access.mailcookie import \
         mail_cookie_create_mail_activation
 
     expires_in = cfg.get('CFG_WEBSESSION_ADDRESS_ACTIVATION_EXPIRE_IN_DAYS')
