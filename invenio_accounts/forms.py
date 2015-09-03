@@ -220,7 +220,6 @@ class ChangePasswordForm(InvenioBaseForm):
         _("Current password"),
         description=_("Your current password"),
         validators=[
-            DataRequired(),
             current_user_password_validator
         ]
     )
