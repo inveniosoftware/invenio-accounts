@@ -42,14 +42,17 @@ requirements = [
 ]
 
 test_requirements = [
-    'pytest>=2.7.0',
-    'pytest-cov>=1.8.0',
-    'pytest-pep8>=1.0.6',
+    'Flask-Testing>=0.4.1',
     'coverage>=3.7.1',
+    'pytest-cov>=1.8.1',
+    'pytest-pep8>=1.0.6',
+    'pytest>=2.7.0',
+    'unittest2>=1.1.0',
 ]
 
 
 class PyTest(TestCommand):
+
     """PyTest Test."""
 
     user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
