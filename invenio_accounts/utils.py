@@ -21,7 +21,7 @@
 
 from datetime import timedelta
 
-from flask import render_template
+from flask import g, render_template, url_for
 
 from invenio_base.globals import cfg
 from invenio_base.i18n import _
@@ -55,4 +55,38 @@ def send_reset_password_email(email):
                   website=cfg['CFG_SITE_URL']),
         toaddr=email,
         content=email_text
+    )
+
+
+def send_account_activation_email(user):
+    """Send an account activation email."""
+    expires_in = cfg.get('CFG_WEBSESSION_ADDRESS_ACTIVATION_EXPIRE_IN_DAYS')
+
+    address_activation_key = EmailConfirmationSerializer(
+        expires_in=timedelta(days=expires_in).total_seconds()
+    ).create_token(user.id, {'email': user.email})
+
+    # Render context.
+    ctx = {
+        "ip_address": None,
+        "user": user,
+        "email": user.email,
+        "activation_link": url_for(
+            'webaccount.access',
+            mailcookie=address_activation_key,
+            _external=True,
+            _scheme='https',
+        ),
+        "days": expires_in,
+    }
+
+    # Send email
+    send_email(
+        cfg.get('CFG_SITE_SUPPORT_EMAIL'),
+        user.email,
+        _("Account registration at %(sitename)s",
+          sitename=cfg["CFG_SITE_NAME_INTL"].get(
+              getattr(g, 'ln', cfg['CFG_SITE_LANG']),
+              cfg['CFG_SITE_NAME'])),
+        render_template("accounts/emails/activation.tpl", **ctx)
     )
