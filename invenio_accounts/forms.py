@@ -20,22 +20,28 @@
 """WebAccount Forms."""
 
 from flask import current_app
+
 from flask_login import current_user
+
 from flask_wtf import Form, validators
+
+from invenio_base.i18n import _
+
+from invenio_utils.forms import InvenioBaseForm
+
 from sqlalchemy.exc import SQLAlchemyError
+
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
 from wtforms.fields import BooleanField, HiddenField, PasswordField, \
     StringField, SubmitField
+
 from wtforms.validators import DataRequired, EqualTo, StopValidation, \
     ValidationError
 
-from invenio_base.globals import cfg
-from invenio_base.i18n import _
-from invenio_utils.forms import InvenioBaseForm
-
 from .models import User
 from .validators import validate_email, validate_nickname, \
-    validate_nickname_or_email, wash_login_method
+    validate_nickname_or_email, validate_password, wash_login_method
 
 
 def nickname_validator(form, field):
@@ -89,11 +95,7 @@ def repeat_email_validator(form, field):
 
 def min_length_password_validator(form, field):
     """Validate minimum length for password."""
-    min_length = cfg['CFG_ACCOUNT_MIN_PASSWORD_LENGTH']
-    if len(field.data) < min_length:
-        raise validators.ValidationError(
-            _("Password must be at least %(x_pass)d characters long.",
-              x_pass=min_length))
+    validate_password(field.data)
 
 
 def current_user_validator(attr):
