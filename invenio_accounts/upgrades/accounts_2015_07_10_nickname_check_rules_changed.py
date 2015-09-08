@@ -19,6 +19,8 @@
 
 """Check if some of nicknames are not valid anymore."""
 
+from invenio.ext.sqlalchemy import db
+
 from invenio_accounts.models import User
 
 # Important: Below is only a best guess. You MUST validate which previous
@@ -43,15 +45,13 @@ def estimate():
 
 def pre_upgrade():
     """Run pre-upgrade checks (optional)."""
-    users = User.query.all()
-
     not_valid_nicknames = []
-    for user in users:
-        if not User.check_nickname(user.nickname):
-            not_valid_nicknames.append(user)
+    for user in db.engine.execute(db.select([User.nickname])):
+        if not User.check_nickname(user[0]):
+            not_valid_nicknames.append(user[0])
 
     if len(not_valid_nicknames) > 0:
-        list_users = ', '.join([u.nickname for u in not_valid_nicknames])
+        list_users = ', '.join(not_valid_nicknames)
         raise RuntimeError(
             "These nicknames are not valid: {list_users}. "
             "Please fix them before continuing.".format(

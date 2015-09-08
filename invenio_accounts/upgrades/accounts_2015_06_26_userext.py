@@ -32,7 +32,7 @@ def info():
 
 def do_upgrade():
     """Implement your upgrades here."""
-    with op.batch_alter_table("UserEXT") as batch_op:
+    with op.batch_alter_table("userEXT") as batch_op:
         batch_op.alter_column(
             column_name='id',
             type_=db.String(255), nullable=False
@@ -41,7 +41,7 @@ def do_upgrade():
 
 def estimate():
     """Estimate running time of upgrade in seconds (optional)."""
-    pass
+    return 1
 
 
 def pre_upgrade():
