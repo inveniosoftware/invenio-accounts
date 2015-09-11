@@ -23,8 +23,8 @@ from datetime import timedelta
 
 from flask import g, render_template, url_for
 
-from invenio.base.globals import cfg
-from invenio.base.i18n import _
+from invenio_base.globals import cfg
+from invenio_base.i18n import _
 from invenio.ext.email import send_email
 
 from .tokens import EmailConfirmationSerializer

@@ -33,7 +33,7 @@ class FormsTestCase(InvenioTestCase):
         """Config."""
         cfg = super(FormsTestCase, self).config
         cfg['PACKAGES'] = [
-            'invenio.base',
+            'invenio_base',
             'invenio_accounts',
         ]
         return cfg
@@ -41,7 +41,7 @@ class FormsTestCase(InvenioTestCase):
     def setUp(self):
         """Set up."""
         from invenio_accounts.models import User
-        from invenio.base.globals import cfg
+        from invenio_base.globals import cfg
 
         self.min_len = cfg['CFG_ACCOUNT_MIN_PASSWORD_LENGTH'] or 1
 
@@ -224,7 +224,7 @@ class FormsTestCase(InvenioTestCase):
     def test_lost_password_form_email(self):
         """Test LostPasswordForm email."""
         from invenio_accounts.forms import LostPasswordForm
-        from invenio.base.globals import cfg
+        from invenio_base.globals import cfg
 
         cfg['CFG_ACCESS_CONTROL_LIMIT_REGISTRATION_TO_DOMAIN'] = ''
 
@@ -385,7 +385,7 @@ class FormsTestCase(InvenioTestCase):
     def test_register_form_email(self):
         """Test RegisterForm email."""
         from invenio_accounts.forms import RegisterForm
-        from invenio.base.globals import cfg
+        from invenio_base.globals import cfg
 
         cfg['CFG_ACCESS_CONTROL_LIMIT_REGISTRATION_TO_DOMAIN'] = ''
 

@@ -23,7 +23,7 @@ from flask import current_app
 from flask_wtf import validators
 from sqlalchemy.exc import SQLAlchemyError
 
-from invenio.base.i18n import _
+from invenio_base.i18n import _
 
 from .models import User
 

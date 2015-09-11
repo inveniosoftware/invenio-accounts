@@ -32,7 +32,7 @@ from datetime import datetime
 from itsdangerous import BadData, JSONWebSignatureSerializer, \
     SignatureExpired, TimedJSONWebSignatureSerializer
 
-from invenio.base.globals import cfg
+from invenio_base.globals import cfg
 
 
 class TokenMixin(object):

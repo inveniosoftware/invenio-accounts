@@ -29,8 +29,8 @@ from wtforms.fields import BooleanField, HiddenField, PasswordField, \
 from wtforms.validators import DataRequired, EqualTo, StopValidation, \
     ValidationError
 
-from invenio.base.globals import cfg
-from invenio.base.i18n import _
+from invenio_base.globals import cfg
+from invenio_base.i18n import _
 from invenio.utils.forms import InvenioBaseForm
 
 from .models import User

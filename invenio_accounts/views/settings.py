@@ -26,7 +26,7 @@ from flask_breadcrumbs import register_breadcrumb
 from flask_login import current_user, login_required
 from flask_menu import current_menu, register_menu
 
-from invenio.base.i18n import _
+from invenio_base.i18n import _
 from invenio.ext.sqlalchemy import db
 from invenio.ext.sslify import ssl_required
 

@@ -31,7 +31,7 @@ class UserTestCase(InvenioTestCase):
         """Config."""
         cfg = super(UserTestCase, self).config
         cfg['PACKAGES'] = [
-            'invenio.base',
+            'invenio_base',
             'invenio_accounts',
         ]
         return cfg

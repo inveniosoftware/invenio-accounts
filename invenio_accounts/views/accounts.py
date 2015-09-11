@@ -33,9 +33,9 @@ from six import text_type
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.datastructures import CombinedMultiDict, ImmutableMultiDict
 
-from invenio.base.decorators import wash_arguments
-from invenio.base.globals import cfg
-from invenio.base.i18n import _
+from invenio_base.decorators import wash_arguments
+from invenio_base.globals import cfg
+from invenio_base.i18n import _
 from invenio.ext.login import UserInfo, authenticate, login_redirect, \
     login_user, logout_user
 from invenio.ext.sqlalchemy import db
@@ -188,7 +188,7 @@ def logout():
 def load_user_settings():
     """Handy function to populate LazyDict with user settings."""
     from invenio.modules.dashboard.settings import Settings
-    from invenio.base.utils import autodiscover_user_settings
+    from invenio_base.utils import autodiscover_user_settings
     modules = autodiscover_user_settings()
     user_settings = {}
     for module in modules:
