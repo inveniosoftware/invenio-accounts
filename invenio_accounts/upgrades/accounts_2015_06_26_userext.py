@@ -19,7 +19,7 @@
 
 """Change id column from VARBINARY to String."""
 
-from invenio.ext.sqlalchemy import db
+from invenio_ext.sqlalchemy import db
 from invenio_upgrader.api import op
 
 depends_on = [u'accounts_2015_03_06_passlib']

@@ -241,7 +241,7 @@ class ChangePasswordForm(InvenioBaseForm):
 
     def validate_current_password(self, field):
         """Validate current password."""
-        from invenio.ext.login import authenticate
+        from invenio_ext.login import authenticate
         if not authenticate(current_user['nickname'], field.data):
             raise validators.ValidationError(
                 _("Password mismatch."))

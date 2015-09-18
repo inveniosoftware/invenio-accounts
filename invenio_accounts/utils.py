@@ -25,7 +25,7 @@ from flask import g, render_template, url_for
 
 from invenio_base.globals import cfg
 from invenio_base.i18n import _
-from invenio.ext.email import send_email
+from invenio_ext.email import send_email
 
 from .errors import AccountSecurityError
 from .tokens import EmailConfirmationSerializer

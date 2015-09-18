@@ -78,7 +78,7 @@ class FormsTestCase(InvenioTestCase):
         """Test ProfileForm nickname."""
         from invenio_accounts.forms import ProfileForm
         from flask_login import login_user, logout_user
-        from invenio.ext.login import UserInfo
+        from invenio_ext.login import UserInfo
 
         form = ProfileForm(
             nickname=self.nickname,
@@ -322,7 +322,7 @@ class FormsTestCase(InvenioTestCase):
         """Test ChangePasswordForm current password."""
         from invenio_accounts.forms import ChangePasswordForm
         from flask_login import login_user, logout_user
-        from invenio.ext.login import UserInfo
+        from invenio_ext.login import UserInfo
 
         valid_pwd = "x" * self.min_len
 
@@ -353,7 +353,7 @@ class FormsTestCase(InvenioTestCase):
         """Test ChangePasswordForm password."""
         from invenio_accounts.forms import ChangePasswordForm
         from flask_login import login_user, logout_user
-        from invenio.ext.login import UserInfo
+        from invenio_ext.login import UserInfo
 
         not_valid_pwd = "x" * (self.min_len - 1)
         valid_pwd = "x" * self.min_len
