@@ -27,8 +27,8 @@ from flask_login import current_user, login_required
 from flask_menu import current_menu, register_menu
 
 from invenio_base.i18n import _
-from invenio.ext.sqlalchemy import db
-from invenio.ext.sslify import ssl_required
+from invenio_ext.sqlalchemy import db
+from invenio_ext.sslify import ssl_required
 
 from ..errors import AccountSecurityError
 from ..forms import ChangePasswordForm, LostPasswordForm, ProfileForm, \

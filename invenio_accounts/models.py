@@ -24,9 +24,9 @@ import re
 from flask_login import current_user
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from invenio.ext.passlib import password_context
-from invenio.ext.passlib.hash import invenio_aes_encrypted_email
-from invenio.ext.sqlalchemy import db
+from invenio_ext.passlib import password_context
+from invenio_ext.passlib.hash import invenio_aes_encrypted_email
+from invenio_ext.sqlalchemy import db
 
 from .helpers import send_account_activation_email
 from .signals import profile_updated
