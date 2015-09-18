@@ -185,28 +185,6 @@ def logout():
                            logout_sso=None)  # FIXME not needed then
 
 
-def load_user_settings():
-    """Handy function to populate LazyDict with user settings."""
-    from invenio.modules.dashboard.settings import Settings
-    from invenio_base.utils import autodiscover_user_settings
-    modules = autodiscover_user_settings()
-    user_settings = {}
-    for module in modules:
-        candidates = getattr(module, 'settings')
-        if candidates is not None:
-            if type(candidates) is not list:
-                candidates = [candidates]
-            for candidate in candidates:
-                if issubclass(candidate, Settings):
-                    if candidate.__name__ in user_settings:
-                        raise Exception(candidate.__name__,
-                                        'duplicate user settings')
-                    user_settings[candidate.__name__] = candidate
-    return user_settings
-
-_USER_SETTINGS = LazyDict(load_user_settings)
-
-
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/display', methods=['GET', 'POST'])
 @login_required
@@ -214,96 +192,7 @@ _USER_SETTINGS = LazyDict(load_user_settings)
 @register_breadcrumb(blueprint, '.', _('Your account'))
 def index():
     """Index."""
-    # load plugins
-    plugins = filter(lambda x: x.is_authorized and x.widget,
-                     map(lambda x: x(), _USER_SETTINGS.values()))
-    closed_plugins = []
-    plugin_sort = (lambda w, x: x.index(w.name) if w.name in x else len(x))
-
-    dashboard_settings = current_user.get('dashboard_settings', {})
-
-    if current_user.is_super_admin:
-        # Check for a new release of Invenio
-        from invenio_ext.script import check_for_software_updates
-        check_for_software_updates(flash_message=True)
-
-    if dashboard_settings:
-        order_left = dashboard_settings.get('orderLeft', []) or []
-        order_middle = dashboard_settings.get('orderMiddle', []) or []
-        order_right = dashboard_settings.get('orderRight', []) or []
-
-        def extract_plugins(x):
-            return [p for p in plugins if p.name in x if p]
-
-        plugins_left = sorted(extract_plugins(order_left),
-                              key=lambda w: plugin_sort(w, order_left))
-        plugins_middle = sorted(extract_plugins(order_middle),
-                                key=lambda w: plugin_sort(w, order_middle))
-        plugins_right = sorted(extract_plugins(order_right),
-                               key=lambda w: plugin_sort(w, order_right))
-        closed_plugins = [p for p in plugins if p not in plugins_left and
-                          p not in plugins_middle and
-                          p not in plugins_right]
-        plugins = [plugins_left, plugins_middle, plugins_right]
-    else:
-        plugins = sorted(plugins, key=lambda w: plugin_sort(w, plugins))
-        plugins = [plugins[i:i + 3] for i in range(0, len(plugins), 3)]
-    return render_template('accounts/index.html',
-                           plugins=plugins, closed_plugins=closed_plugins)
-
-
-@blueprint.route('/edit/<name>', methods=['GET', 'POST'])
-@register_breadcrumb(blueprint, '.edit', _('Edit'))
-@login_required
-def edit(name):
-    """Edit."""
-    if name not in _USER_SETTINGS:
-        flash(_('Invalid plugin name'), 'error')
-        return redirect(url_for('.index'))
-
-    plugin = _USER_SETTINGS[name]()
-    form = None
-
-    if request.method == 'POST':
-        if plugin.form_builder:
-            form = plugin.form_builder(request.form)
-
-        if not form or form.validate():
-            if form:
-                # use the form to interpret data
-                settings_data = form.data
-            else:
-                # no form provided, save the POST request values
-                settings_data = flatten_multidict(request.values)
-
-            plugin.store(settings_data)
-            plugin.save()
-            flash(_('Data has been saved.'), 'success')
-            return redirect(url_for('.index'))
-
-        flash(_('Please, corrent errors.'), 'error')
-
-    # get post data or load data from settings
-    if not form and plugin.form_builder:
-        form = plugin.build_form()
-
-    return render_template(getattr(plugin, 'edit_template', '') or
-                           'accounts/edit.html', plugin=plugin, form=form)
-
-
-@blueprint.route('/view', methods=['GET'])
-@login_required
-@wash_arguments({'name': (unicode, "")})
-def view(name):
-    """View."""
-    if name not in _USER_SETTINGS:
-        return "1", 406
-
-    widget = _USER_SETTINGS[name]()
-    if widget.is_authorized and widget.widget:
-        return render_template('accounts/widget.html', widget=widget)
-    else:
-        return "2", 406
+    redirect(url_for('accounts_settings.index'))
 
 
 @blueprint.route('/lost', methods=['GET', 'POST'])
