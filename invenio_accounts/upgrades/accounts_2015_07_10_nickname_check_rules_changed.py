@@ -19,7 +19,7 @@
 
 """Check if some of nicknames are not valid anymore."""
 
-from invenio.ext.sqlalchemy import db
+from invenio_ext.sqlalchemy import db
 
 from invenio_accounts.models import User
 

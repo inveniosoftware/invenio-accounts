@@ -36,10 +36,10 @@ from werkzeug.datastructures import CombinedMultiDict, ImmutableMultiDict
 from invenio_base.decorators import wash_arguments
 from invenio_base.globals import cfg
 from invenio_base.i18n import _
-from invenio.ext.login import UserInfo, authenticate, login_redirect, \
+from invenio_ext.login import UserInfo, authenticate, login_redirect, \
     login_user, logout_user
-from invenio.ext.sqlalchemy import db
-from invenio.ext.sslify import ssl_required
+from invenio_ext.sqlalchemy import db
+from invenio_ext.sslify import ssl_required
 from invenio.legacy import webuser
 from invenio.utils.datastructures import LazyDict, flatten_multidict
 
@@ -224,7 +224,7 @@ def index():
 
     if current_user.is_super_admin:
         # Check for a new release of Invenio
-        from invenio.ext.script import check_for_software_updates
+        from invenio_ext.script import check_for_software_updates
         check_for_software_updates(flash_message=True)
 
     if dashboard_settings:

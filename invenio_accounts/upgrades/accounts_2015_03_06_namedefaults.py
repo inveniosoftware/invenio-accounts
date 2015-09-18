@@ -20,7 +20,7 @@
 from sqlalchemy import *
 from sqlalchemy.dialects import mysql
 
-from invenio.ext.sqlalchemy import db
+from invenio_ext.sqlalchemy import db
 from invenio_upgrader.api import op
 
 depends_on = [u'accounts_2015_03_06_passlib',
