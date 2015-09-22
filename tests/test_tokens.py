@@ -28,7 +28,7 @@ from __future__ import absolute_import
 
 from itsdangerous import SignatureExpired
 
-from invenio.testsuite import InvenioTestCase
+from invenio_testing import InvenioTestCase
 
 from invenio_accounts.tokens import EmailConfirmationSerializer
 

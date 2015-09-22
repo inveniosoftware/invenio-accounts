@@ -19,7 +19,7 @@
 
 """Unit tests for the user handling library."""
 
-from invenio.testsuite import InvenioTestCase
+from invenio_testing import InvenioTestCase
 
 
 class UserTestCase(InvenioTestCase):

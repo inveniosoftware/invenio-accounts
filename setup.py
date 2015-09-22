@@ -49,6 +49,7 @@ test_requirements = [
     'pytest-pep8>=1.0.6',
     'pytest>=2.8.0',
     'unittest2>=1.1.0',
+    'invenio-testing>=0.1.0',
 ]
 
 

@@ -21,7 +21,7 @@
 
 from flask import current_app
 
-from invenio.testsuite import InvenioTestCase
+from invenio_testing import InvenioTestCase
 
 
 class FormsTestCase(InvenioTestCase):
@@ -210,7 +210,7 @@ class FormsTestCase(InvenioTestCase):
         form = ProfileForm(
             nickname=self.nickname,
             email=self.email,
-            repeat_email=self.email+'fuu',
+            repeat_email=self.email + 'fuu',
         )
         assert form.validate() is False
 
@@ -314,7 +314,7 @@ class FormsTestCase(InvenioTestCase):
 
         form = ResetPasswordForm(
             password=self.password,
-            password2=self.password+"different"
+            password2=self.password + "different"
         )
         assert form.validate() is False
 
@@ -376,7 +376,7 @@ class FormsTestCase(InvenioTestCase):
         form = ChangePasswordForm(
             current_password=self.password,
             password=valid_pwd,
-            password2=valid_pwd+'different'
+            password2=valid_pwd + 'different'
         )
         assert form.validate() is False
 
@@ -539,6 +539,6 @@ class FormsTestCase(InvenioTestCase):
             email="valid@email.it",
             nickname="testvalidnickname",
             password=valid_pwd,
-            password2=valid_pwd+"different"
+            password2=valid_pwd + "different"
         )
         assert form.validate() is False
