@@ -41,7 +41,7 @@ from invenio_ext.login import UserInfo, authenticate, login_redirect, \
 from invenio_ext.sqlalchemy import db
 from invenio_ext.sslify import ssl_required
 from invenio.legacy import webuser
-from invenio.utils.datastructures import LazyDict, flatten_multidict
+from invenio_utils.datastructures import LazyDict, flatten_multidict
 
 from ..errors import AccountSecurityError
 from ..forms import LoginForm, LostPasswordForm, RegisterForm, \
@@ -247,7 +247,7 @@ def index():
         plugins = [plugins_left, plugins_middle, plugins_right]
     else:
         plugins = sorted(plugins, key=lambda w: plugin_sort(w, plugins))
-        plugins = [plugins[i:i+3] for i in range(0, len(plugins), 3)]
+        plugins = [plugins[i:i + 3] for i in range(0, len(plugins), 3)]
     return render_template('accounts/index.html',
                            plugins=plugins, closed_plugins=closed_plugins)
 

@@ -31,7 +31,7 @@ from wtforms.validators import DataRequired, EqualTo, StopValidation, \
 
 from invenio_base.globals import cfg
 from invenio_base.i18n import _
-from invenio.utils.forms import InvenioBaseForm
+from invenio_utils.forms import InvenioBaseForm
 
 from .models import User
 from .validators import validate_email, validate_nickname, \
