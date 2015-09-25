@@ -26,7 +26,7 @@ include *.txt
 include LICENSE
 include pytest.ini
 include tox.ini
-include .editorconfig .dockerignore .travis.yml
+include .editorconfig .dockerignore .travis.yml .travis.invenio.cfg
 include babel.ini
 recursive-include invenio_accounts *.po
 recursive-include invenio_accounts *.pot
