@@ -1,8 +1,8 @@
 =========================
- Invenio-Accounts v0.1.2
+ Invenio-Accounts v0.2.0
 =========================
 
-Invenio-Accounts v0.1.2 was released on September 3, 2015.
+Invenio-Accounts v0.2.0 was released on October 5, 2015.
 
 About
 -----
@@ -14,32 +14,43 @@ Invenio module for managing user accounts.
 Incompatible changes
 --------------------
 
-- Changes way how the access tokens are generated from "mailcookie" to
-  tokens using "itsdangerous" package.  (#7)
-- Removes support for local access configuration and the automatic SSO
-  logout url rediction.  (#8)
+- Removes legacy dashboard under '/youraccount/display' and redirects
+  to new settings panel.
+- Moves functions from helpers to utils module and deprecates usage of
+  helpers module.
 
-New features
-------------
+Improved features
+-----------------
 
-- Adds module for generating time limited tokens for password
-  recovery.  (#7)
+- Removes fixed user id from fixtures as it is automatically generated
+  by database engine. (closes inveniosoftware/invenio#3320)
 
 Bug fixes
 ---------
 
-- Changes index name definition in `UserEXT` model for `id_user` and
-  `method` columns.  (#5)
+- Removes dependencies to invenio.utils and replaces them with
+  invenio_utils.
+- Removes dependencies to invenio.testsuite and replaces them with
+  invenio_testing.
+- Removes calls to PluginManager consider_setuptools_entrypoints()
+  removed in PyTest 2.8.0.
+- Removes dependencies to invenio.ext and replaces them with
+  invenio_ext.
+- Adds missing `invenio_base` dependency.
+- Adds return value to `userext` estimate method and fixes the table
+  name.
+- Nickname check rules uses only the nickname column instead of all of
+  them.
 
 Installation
 ------------
 
-   $ pip install invenio-accounts==0.1.2
+   $ pip install invenio-accounts==0.2.0
 
 Documentation
 -------------
 
-   http://invenio-accounts.readthedocs.org/en/v0.1.2
+   http://invenio-accounts.readthedocs.org/en/v0.2.0
 
 Happy hacking and thanks for flying Invenio-Accounts.
 
