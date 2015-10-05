@@ -23,7 +23,7 @@ from flask import current_app
 
 from flask_wtf import validators
 
-from invenio.base.globals import cfg
+from invenio_base.globals import cfg
 
 from invenio_base.i18n import _
 
@@ -115,7 +115,7 @@ def validate_password(password):
 def validate_nickname_is_available(nickname):
     """Check whether the nickname is taken."""
     try:
-        User.get_by_nickname(nickname)
+        User.query.filter_by(nickname=nickname).one()
     except NoResultFound:
         return
     raise validators.ValidationError(
@@ -125,7 +125,7 @@ def validate_nickname_is_available(nickname):
 def validate_email_is_available(email):
     """Check whether the email is already taken."""
     try:
-        User.get_by_email(email)
+        User.query.filter_by(email=email).one()
     except NoResultFound:
         return
     raise validators.ValidationError(

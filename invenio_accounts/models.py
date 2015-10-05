@@ -73,16 +73,6 @@ class User(db.Model):
     """List of fields that can be updated with update_profile."""
 
     @staticmethod
-    def get_by_nickname(nickname):
-        """Get a user by their nickname."""
-        return User.query.filter_by(nickname=nickname).one()
-
-    @staticmethod
-    def get_by_email(email):
-        """Get a user by their email."""
-        return User.query.filter_by(email=email).one()
-
-    @staticmethod
     def check_nickname(nickname):
         """Check if it's a valid nickname."""
         re_invalid_nickname = re.compile(""".*[,'@]+.*""")
