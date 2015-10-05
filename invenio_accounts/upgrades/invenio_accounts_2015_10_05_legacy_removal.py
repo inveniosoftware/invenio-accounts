@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2014 CERN.
+# Copyright (C) 2015 CERN.
 #
 # Invenio is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -17,33 +17,32 @@
 # along with Invenio; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-"""Upgrade Usergroup table."""
+"""Remove legacy upgrade recipes."""
 
-from sqlalchemy.exc import OperationalError
+import warnings
 
-from invenio.legacy.dbquery import run_sql
+from invenio_ext.sqlalchemy import db
 from invenio_upgrader.api import op
 
-depends_on = ['invenio_release_1_1_0']
+from sqlalchemy.sql import text
+
+depends_on = []
+
+legacy_upgrades = [
+    'accounts_2014_11_07_usergroup_name_column_unique',
+]
 
 
 def info():
-    """Upgrade Usergroup table."""
-    return "Upgrade Usergroup table"
+    """Info message."""
+    return __doc__
 
 
 def do_upgrade():
     """Implement your upgrades here."""
-    try:
-        op.drop_index('ix_usergroup_name', table_name='usergroup')
-    except OperationalError:
-        pass
-    try:
-        op.drop_index('name', table_name='usergroup')
-    except OperationalError:
-        pass
-    op.create_index(op.f('ix_usergroup_name'), 'usergroup', ['name'],
-                    unique=True)
+    sql = text('delete from upgrade where upgrade = :upgrade')
+    for upgrade in legacy_upgrades:
+        db.engine.execute(sql, upgrade=upgrade)
 
 
 def estimate():
@@ -53,15 +52,13 @@ def estimate():
 
 def pre_upgrade():
     """Run pre-upgrade checks (optional)."""
-    result = run_sql("""
-        SELECT name, count(name) as count
-        FROM usergroup
-        GROUP BY name HAVING count > 1;
-    """)
-    if len(result) > 0:
-        raise RuntimeError("Integrity problem in the table Usergroup",
-                           "Duplicate Usergroup name")
+    sql = text('select 1 from upgrade where upgrade = :upgrade')
+    for upgrade in legacy_upgrades:
+        if not db.engine.execute(sql, upgrade=upgrade).fetchall():
+            warnings.warn("Upgrade '{}' was not applied.".format(upgrade))
 
 
 def post_upgrade():
     """Run post-upgrade checks (optional)."""
+    # Example of issuing warnings:
+    # warnings.warn("A continuable error occurred")

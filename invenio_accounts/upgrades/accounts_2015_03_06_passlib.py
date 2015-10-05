@@ -28,7 +28,7 @@ from invenio_ext.passlib.hash import mysql_aes_encrypt
 from invenio_ext.sqlalchemy import db
 from invenio_upgrader.api import op
 
-depends_on = [u'accounts_2014_11_07_usergroup_name_column_unique']
+depends_on = []
 
 
 def info():
