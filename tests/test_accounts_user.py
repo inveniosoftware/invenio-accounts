@@ -19,6 +19,8 @@
 
 """Unit tests for the user handling library."""
 
+from mock import patch
+
 from invenio_testing import InvenioTestCase
 
 
@@ -42,7 +44,8 @@ class UserTestCase(InvenioTestCase):
         u.note = 2
         self.assertTrue(isinstance(u.note, str))
 
-    def test_verify_email_works_with_numbers_and_strings(self):
+    @patch('invenio_accounts.utils.send_email')
+    def test_verify_email_works_with_numbers_and_strings(self, send_email):
         from invenio_accounts.models import User
         u = User(email="test@test.pl", password="")
         u.note = 2
@@ -50,4 +53,7 @@ class UserTestCase(InvenioTestCase):
 
         u2 = User(email="test2@test2.pl", password="")
         u2.note = "2"
+
+        send_email.return_value = True
+
         self.assertTrue(u2.verify_email())

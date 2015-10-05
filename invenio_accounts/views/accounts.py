@@ -40,7 +40,6 @@ from invenio_ext.login import UserInfo, authenticate, login_redirect, \
     login_user, logout_user
 from invenio_ext.sqlalchemy import db
 from invenio_ext.sslify import ssl_required
-from invenio.legacy import webuser
 from invenio_utils.datastructures import LazyDict, flatten_multidict
 
 from ..errors import AccountSecurityError
@@ -109,6 +108,7 @@ def register():
 
     # FIXME
     if cfg.get('CFG_ACCESS_CONTROL_LEVEL_SITE') > 0:
+        from invenio.legacy import webuser
         return webuser.page_not_authorized(
             req, "../youraccount/register?ln=%s" % g.ln,
             navmenuid='youraccount')
@@ -120,6 +120,7 @@ def register():
     state = ""
 
     if form.validate_on_submit():
+        from invenio.legacy import webuser
         ruid = webuser.registerUser(req, form.email.data.encode('utf8'),
                                     form.password.data.encode('utf8'),
                                     form.nickname.data.encode('utf8'),

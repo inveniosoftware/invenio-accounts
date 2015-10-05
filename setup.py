@@ -48,6 +48,7 @@ test_requirements = [
     'Flask-Testing>=0.4.1',
     'coverage>=4.0.0',
     'invenio-testing>=0.1.1',
+    'mock>=1.0.1',
     'pytest-cov>=2.1.0',
     'pytest-pep8>=1.0.6',
     'pytest>=2.8.0',
