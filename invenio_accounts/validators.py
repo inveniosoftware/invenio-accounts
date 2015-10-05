@@ -20,10 +20,16 @@
 """Implements account validators."""
 
 from flask import current_app
+
 from flask_wtf import validators
-from sqlalchemy.exc import SQLAlchemyError
+
+from invenio_base.globals import cfg
 
 from invenio_base.i18n import _
+
+from sqlalchemy.exc import SQLAlchemyError
+
+from sqlalchemy.orm.exc import NoResultFound
 
 from .models import User
 
@@ -95,3 +101,32 @@ def validate_email(email):
                 _("Supplied email address %(x_addr)s is invalid.",
                   x_addr=email)
             )
+
+
+def validate_password(password):
+    """Validate password."""
+    min_length = cfg['CFG_ACCOUNT_MIN_PASSWORD_LENGTH']
+    if len(password) < min_length:
+        raise validators.ValidationError(
+            _("Password must be at least %(x_pass)d characters long.",
+              x_pass=min_length))
+
+
+def validate_nickname_is_available(nickname):
+    """Check whether the nickname is taken."""
+    try:
+        User.query.filter_by(nickname=nickname).one()
+    except NoResultFound:
+        return
+    raise validators.ValidationError(
+        _('nickname %(x_nick)s is not available', x_nick=nickname))
+
+
+def validate_email_is_available(email):
+    """Check whether the email is already taken."""
+    try:
+        User.query.filter_by(email=email).one()
+    except NoResultFound:
+        return
+    raise validators.ValidationError(
+        _('email %(x_email)s is not available', x_email=email))

@@ -22,11 +22,12 @@
 import re
 
 from flask_login import current_user
-from sqlalchemy.ext.hybrid import hybrid_property
 
 from invenio_ext.passlib import password_context
 from invenio_ext.passlib.hash import invenio_aes_encrypted_email
 from invenio_ext.sqlalchemy import db
+
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from .helpers import send_account_activation_email
 from .signals import profile_updated
@@ -132,7 +133,7 @@ class User(db.Model):
         if not password_context.verify(password, self.password,
                                        scheme=self.password_scheme,
                                        **scheme_ctx):
-                return False
+            return False
 
         # Migrate hash if needed.
         if migrate and password_context.needs_update(self.password):
@@ -158,6 +159,22 @@ class User(db.Model):
             send_account_activation_email(self)
             return True
         return False
+
+    def activate(self):
+        """Activate the account."""
+        self.note = '1'
+
+    def deactivate(self):
+        """Deactivate the account."""
+        self.note = '0'
+
+    def unverify_email(self):
+        """Unverify the account's email.
+
+        An activation email should be sent separately to the user after
+        unverifying.
+        """
+        self.note = '2'
 
     def update_profile(self, data):
         """Update user profile.
