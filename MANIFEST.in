@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # This file is part of Invenio.
 # Copyright (C) 2015 CERN.
 #
@@ -20,24 +22,33 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-include *.py
+
+# TODO: Generate this manifest file by running the following commands:
+#
+#  git init
+#  git add -A
+#  pip install -e .[all]
+#  check-manifest -u
+
+# Check manifest will not automatically add these two files:
+include .dockerignore
+include .editorconfig
+include .tx/config
+
+# added by check_manifest.py
 include *.rst
+include *.sh
 include *.txt
 include LICENSE
-include pytest.ini
-include tox.ini
-include .editorconfig .dockerignore .travis.yml .travis.invenio.cfg
 include babel.ini
-recursive-include invenio_accounts *.po
-recursive-include invenio_accounts *.pot
-recursive-include invenio_accounts *.mo
+include config
+include pytest.ini
 recursive-include docs *.bat
 recursive-include docs *.py
 recursive-include docs *.rst
 recursive-include docs Makefile
-recursive-include invenio_accounts *.css
+recursive-include examples *.html
+recursive-include examples *.py
 recursive-include invenio_accounts *.html
-recursive-include invenio_accounts *.js
-recursive-include invenio_accounts *.py
-recursive-include invenio_accounts *.tpl
+recursive-include invenio_accounts *.po
 recursive-include tests *.py

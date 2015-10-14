@@ -1,5 +1,5 @@
 =========================
- Invenio-Accounts v0.2.0
+ Invenio-Accounts v1.0.0
 =========================
 
 Invenio-Accounts v0.2.0 was released on October 5, 2015.
@@ -50,7 +50,7 @@ Installation
 Documentation
 -------------
 
-   http://invenio-accounts.readthedocs.org/en/v0.2.0
+   http://pythonhosted.org/invenio-accounts/
 
 Happy hacking and thanks for flying Invenio-Accounts.
 

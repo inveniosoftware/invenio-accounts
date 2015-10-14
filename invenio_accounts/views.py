@@ -22,19 +22,15 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-# Extraction from Python source files
+"""Invenio user management and authentication."""
 
-[python: **.py]
-encoding = utf-8
+from __future__ import absolute_import, print_function
 
-# Extraction from Jinja2 templates
+from flask import Blueprint
 
-[jinja2: **/templates/**.html]
-encoding = utf-8
-extensions = jinja2.ext.autoescape, jinja2.ext.with_
-
-# Extraction from JavaScript files
-
-[javascript: **.js]
-encoding = utf-8
-extract_messages = $._, jQuery._
+blueprint = Blueprint(
+    'invenio_accounts',
+    __name__,
+    template_folder='templates',
+    static_folder='static',
+)

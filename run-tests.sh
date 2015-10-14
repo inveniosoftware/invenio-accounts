@@ -22,19 +22,9 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-# Extraction from Python source files
 
-[python: **.py]
-encoding = utf-8
-
-# Extraction from Jinja2 templates
-
-[jinja2: **/templates/**.html]
-encoding = utf-8
-extensions = jinja2.ext.autoescape, jinja2.ext.with_
-
-# Extraction from JavaScript files
-
-[javascript: **.js]
-encoding = utf-8
-extract_messages = $._, jQuery._
+pep257 invenio_accounts && \
+check-manifest --ignore ".travis-*" && \
+sphinx-build -qnNW docs docs/_build/html && \
+python setup.py test && \
+sphinx-build -qnNW -b doctest docs docs/_build/doctest

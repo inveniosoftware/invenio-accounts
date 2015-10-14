@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+{# -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
 # Copyright (C) 2015 CERN.
@@ -21,20 +21,13 @@
 # In applying this license, CERN does not
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
-
-# Extraction from Python source files
-
-[python: **.py]
-encoding = utf-8
-
-# Extraction from Jinja2 templates
-
-[jinja2: **/templates/**.html]
-encoding = utf-8
-extensions = jinja2.ext.autoescape, jinja2.ext.with_
-
-# Extraction from JavaScript files
-
-[javascript: **.js]
-encoding = utf-8
-extract_messages = $._, jQuery._
+-#}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    {%- block page_body %}{%- endblock page_body %}
+  </body>
+</html>

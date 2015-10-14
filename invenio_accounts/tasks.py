@@ -22,19 +22,15 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-# Extraction from Python source files
+"""Background tasks for accounts."""
 
-[python: **.py]
-encoding = utf-8
+from __future__ import absolute_import, print_function
 
-# Extraction from Jinja2 templates
+from celery import shared_task
+from flask import current_app
 
-[jinja2: **/templates/**.html]
-encoding = utf-8
-extensions = jinja2.ext.autoescape, jinja2.ext.with_
 
-# Extraction from JavaScript files
-
-[javascript: **.js]
-encoding = utf-8
-extract_messages = $._, jQuery._
+@shared_task
+def send_security_email(msg):
+    """Celery task to send security email."""
+    current_app.extensions['mail'].send(msg)

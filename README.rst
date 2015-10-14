@@ -41,6 +41,9 @@
         :target: https://github.com/inveniosoftware/invenio-accounts/blob/master/LICENSE
 
 
-Invenio module for managing user accounts.
+Invenio user management and authentication.
 
-*This is an experimental development preview release.*
+*This is an experimental developer preview release.*
+
+* Free software: GPLv2 license
+* Documentation: https://pythonhosted.org/invenio-accounts/
