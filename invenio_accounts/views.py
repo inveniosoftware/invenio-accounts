@@ -28,9 +28,29 @@ from __future__ import absolute_import, print_function
 
 from flask import Blueprint
 
+from flask_babelex import gettext as _
+
+from flask_menu import register_menu
+
 blueprint = Blueprint(
     'invenio_accounts',
     __name__,
     template_folder='templates',
     static_folder='static',
 )
+
+
+# Register menus
+@register_menu(blueprint, 'settings.account', _('Account'),
+               active_when=lambda: False)
+def _menu_header():
+    pass
+
+
+@blueprint.route('/change')
+@register_menu(blueprint, 'settings.account.change_password',
+               _('%(icon)s Change Password',
+                 icon='<i class="fa fa-key fa-fw"></i>'))
+def change_password():
+    """Register menu route."""
+    return
