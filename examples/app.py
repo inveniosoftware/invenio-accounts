@@ -23,13 +23,29 @@
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
 
-"""Minimal Flask application example for development.
+u"""Minimal Flask application example for development.
+
+Install the Invenio default theme
+
+You should execute these commands in the examples-directory.
+
+.. code-block:: console
+
+   $ pip install -e \
+   git+https://github.com/inveniosoftware/invenio-theme.git#egg=invenio-theme
+   $ pip install -e \
+   git+https://github.com/inveniosoftware/invenio-assets.git#egg=invenio-assets
+   $ flask -a app.py bower
+   $ cd instance
+   $ bower install
+   $ cd ..
+   $ flask -a app.py collect -v
+   $ flask -a app.py assets build
 
 Create database and tables:
 
 .. code-block:: console
 
-   $ cd examples
    $ flask -a app.py db init
    $ flask -a app.py db create
 
@@ -42,6 +58,8 @@ Create a user:
 
 Run the development server:
 
+.. code-block:: console
+
    $ flask -a app.py --debug run --debugger
    $ flask -a app.py shell
 """
@@ -49,13 +67,34 @@ Run the development server:
 from __future__ import absolute_import, print_function
 
 from flask import Flask, render_template
+
 from flask_babelex import Babel
+
 from flask_cli import FlaskCLI
+
 from flask_mail import Mail
+
 from flask_security import current_user
-from invenio_db import InvenioDB
 
 from invenio_accounts import InvenioAccounts
+
+from invenio_db import InvenioDB
+
+import pkg_resources
+
+try:
+    pkg_resources.get_distribution('invenio_assets')
+    from invenio_assets import InvenioAssets
+    INVENIO_ASSETS_AVAILABLE = True
+except pkg_resources.DistributionNotFound:
+    INVENIO_ASSETS_AVAILABLE = False
+
+try:
+    pkg_resources.get_distribution('invenio_theme')
+    from invenio_theme import InvenioTheme
+    INVENIO_THEME_AVAILABLE = True
+except pkg_resources.DistributionNotFound:
+    INVENIO_THEME_AVAILABLE = False
 
 # Create Flask application
 app = Flask(__name__)
@@ -73,6 +112,10 @@ FlaskCLI(app)
 Babel(app)
 Mail(app)
 InvenioDB(app)
+if INVENIO_ASSETS_AVAILABLE:
+    InvenioAssets(app)
+if INVENIO_THEME_AVAILABLE:
+    InvenioTheme(app)
 InvenioAccounts(app)
 
 
