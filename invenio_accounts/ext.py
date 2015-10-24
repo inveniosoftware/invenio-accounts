@@ -27,6 +27,7 @@
 from __future__ import absolute_import, print_function
 
 from flask.ext.security import Security, SQLAlchemyUserDatastore
+from invenio_db import db
 
 from .cli import accounts as accounts_cli
 from .models import Role, User
@@ -45,13 +46,10 @@ class InvenioAccounts(object):
 
     def init_app(self, app, use_celery=True):
         """Flask application initialization."""
-        assert 'sqlalchemy' in app.extensions
-        assert 'mail' in app.extensions
         self.init_config(app)
 
         # Create user datastore
-        self.datastore = SQLAlchemyUserDatastore(
-            app.extensions['sqlalchemy'].db, User, Role)
+        self.datastore = SQLAlchemyUserDatastore(db, User, Role)
 
         # Initialize extension.
         state = self.security.init_app(app, datastore=self.datastore)

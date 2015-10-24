@@ -130,6 +130,9 @@ setup(
     include_package_data=True,
     platforms='any',
     entry_points={
+        'invenio_base.apps': [
+            'invenio_acconts = invenio_accounts:InvenioAccounts',
+        ],
         'invenio_db.models': [
             'invenio_acconts = invenio_accounts.models',
         ],
