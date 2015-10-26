@@ -51,6 +51,7 @@ Invenio user management and authentication.
 - Henning Weiler <henning.weiler@cern.ch>
 - Jan Aage Lavik <jan.age.lavik@cern.ch>
 - Javier Martin Montull <javier.martin.montull@cern.ch>
+- Javier Delgado Fernandez <javier.delgado.fernandez@cern.ch>
 - Jerome Caffaro <jerome.caffaro@cern.ch>
 - Jiri Kuncar <jiri.kuncar@cern.ch>
 - Joaquim Rodrigues Silvestre <joaquim.rodrigues.silvestre@cern.ch>

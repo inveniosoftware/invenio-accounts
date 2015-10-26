@@ -33,6 +33,8 @@ from .cli import accounts as accounts_cli
 from .models import Role, User
 from .views import blueprint
 
+import pkg_resources
+
 
 class InvenioAccounts(object):
     """Invenio-Accounts extension."""
@@ -82,7 +84,11 @@ class InvenioAccounts(object):
         app.config.setdefault(
             "ACCOUNTS_SITENAME",
             app.config.get("THEME_SITENAME", "Invenio"))
-        app.config.setdefault("ACCOUNTS_USE_CELERY", True)
+        try:
+            pkg_resources.get_distribution('celery')
+            app.config.setdefault("ACCOUNTS_USE_CELERY", True)
+        except pkg_resources.DistributionNotFound:
+            app.config.setdefault("ACCOUNTS_USE_CELERY", False)
 
         # Change Flask-Security defaults
         app.config.setdefault('SECURITY_CHANGEABLE', True)
