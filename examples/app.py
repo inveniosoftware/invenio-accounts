@@ -37,8 +37,8 @@ Create a user:
 
 .. code-block:: console
 
-   $ flask -a app.py accounts users create -e info@invenio-software.org -a
-   $ flask -a app.py accounts users activate -u info@invenio-software.org
+   $ flask -a app.py accounts usercreate -e info@invenio-software.org -a
+   $ flask -a app.py accounts useractivate -u info@invenio-software.org
 
 Run the development server:
 
