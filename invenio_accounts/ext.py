@@ -82,6 +82,10 @@ class InvenioAccounts(object):
             app.config.get("COVER_TEMPLATE",
                            "invenio_accounts/base_cover.html"))
         app.config.setdefault(
+            "ACCOUNTS_SETTINGS_TEMPLATE",
+            app.config.get("SETTINGS_TEMPLATE",
+                           "invenio_accounts/settings/base.html"))
+        app.config.setdefault(
             "ACCOUNTS_SITENAME",
             app.config.get("THEME_SITENAME", "Invenio"))
         try:

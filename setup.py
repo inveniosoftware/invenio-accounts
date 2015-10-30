@@ -69,6 +69,7 @@ install_requires = [
     'Flask-Login>=0.2.11,<0.3.0',
     'Flask-Script>=2.0.5',
     'Flask-Security>=1.7.4',
+    'invenio-base>=0.3.1',
     'invenio-db>=1.0.0a1',
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
 ]
@@ -77,6 +78,7 @@ packages = find_packages()
 
 
 class PyTest(TestCommand):
+
     """PyTest Test."""
 
     user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
