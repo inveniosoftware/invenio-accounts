@@ -24,3 +24,4 @@
 
 -e git+https://github.com/mattupstate/flask-security.git#egg=Flask-Security
 -e git+https://github.com/inveniosoftware/invenio-db.git#egg=invenio-db
+-e git+https://github.com/inveniosoftware/invenio-base.git#egg=invenio-base

@@ -26,11 +26,12 @@
 
 from __future__ import absolute_import, print_function
 
-from flask import Blueprint
+from flask import Blueprint, current_app
 
 from flask_babelex import gettext as _
 
-from flask_menu import register_menu
+from flask_menu import current_menu
+
 
 blueprint = Blueprint(
     'invenio_accounts',
@@ -40,17 +41,36 @@ blueprint = Blueprint(
 )
 
 
-# Register menus
-@register_menu(blueprint, 'settings.account', _('Account'),
-               active_when=lambda: False)
-def _menu_header():
-    pass
+@blueprint.record_once
+def post_ext_init(state):
+    """."""
+    app = state.app
+
+    app.config.setdefault(
+        "ACCOUNTS_SITENAME",
+        app.config.get("THEME_SITENAME", "Invenio"))
+    app.config.setdefault(
+        "ACCOUNTS_BASE_TEMPLATE",
+        app.config.get("BASE_TEMPLATE",
+                       "invenio_accounts/base.html"))
+    app.config.setdefault(
+        "ACCOUNTS_COVER_TEMPLATE",
+        app.config.get("COVER_TEMPLATE",
+                       "invenio_accounts/base_cover.html"))
+    app.config.setdefault(
+        "ACCOUNTS_SETTINGS_TEMPLATE",
+        app.config.get("SETTINGS_TEMPLATE",
+                       "invenio_accounts/settings/base.html"))
 
 
-@blueprint.route('/change')
-@register_menu(blueprint, 'settings.account.change_password',
-               _('%(icon)s Change Password',
-                 icon='<i class="fa fa-key fa-fw"></i>'))
-def change_password():
-    """Register menu route."""
-    return
+@blueprint.before_app_first_request
+def init_menu():
+    """Initialize menu before first request."""
+    item = current_menu.submenu('settings.account')
+    item.register(None, _('Settings'))
+
+    item = current_menu.submenu('settings.account.change_password')
+    item.register(
+        "{0}.change_password".format(
+            current_app.config['SECURITY_BLUEPRINT_NAME']),
+        _('%(icon)s Change Password', icon='<i class="fa fa-key fa-fw"></i>'))

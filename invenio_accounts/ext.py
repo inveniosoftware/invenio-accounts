@@ -31,7 +31,6 @@ from invenio_db import db
 
 from .cli import accounts as accounts_cli
 from .models import Role, User
-from .views import blueprint
 
 import pkg_resources
 
@@ -63,9 +62,6 @@ class InvenioAccounts(object):
             def delay_security_email(msg):
                 send_security_email.delay(msg)
 
-        # Register blueprint for templates
-        app.register_blueprint(blueprint)
-
         # Register CLI
         app.cli.add_command(accounts_cli, 'accounts')
 
@@ -73,26 +69,13 @@ class InvenioAccounts(object):
 
     def init_config(self, app):
         """Initialize configuration."""
-        app.config.setdefault(
-            "ACCOUNTS_BASE_TEMPLATE",
-            app.config.get("BASE_TEMPLATE",
-                           "invenio_accounts/base.html"))
-        app.config.setdefault(
-            "ACCOUNTS_COVER_TEMPLATE",
-            app.config.get("COVER_TEMPLATE",
-                           "invenio_accounts/base_cover.html"))
-        app.config.setdefault(
-            "ACCOUNTS_SETTINGS_TEMPLATE",
-            app.config.get("SETTINGS_TEMPLATE",
-                           "invenio_accounts/settings/base.html"))
-        app.config.setdefault(
-            "ACCOUNTS_SITENAME",
-            app.config.get("THEME_SITENAME", "Invenio"))
         try:
             pkg_resources.get_distribution('celery')
             app.config.setdefault("ACCOUNTS_USE_CELERY", True)
         except pkg_resources.DistributionNotFound:
             app.config.setdefault("ACCOUNTS_USE_CELERY", False)
+
+        app.config.setdefault('ACCOUNTS', True)
 
         # Change Flask-Security defaults
         app.config.setdefault('SECURITY_CHANGEABLE', True)

@@ -23,8 +23,8 @@
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 #}
 
-{% macro render_field(field, icon="", autofocus=False, errormsg=True) %}
-  <div class="form-group form-group-lg{% if icon %} has-feedback{% endif %}{% if field.errors %} has-error{% endif %}">
+{% macro render_field(field, icon="", autofocus=False, errormsg=True, size="form-group-lg") %}
+  <div class="form-group {{size}}{% if icon %} has-feedback{% endif %}{% if field.errors %} has-error{% endif %}">
     {%- set extras = dict(autofocus="") if autofocus else dict() %}
     {{field(class_="form-control", placeholder=_(field.label.text), **extras)}}
     {%- if icon %}
@@ -39,7 +39,6 @@
   </div>
   {%- endif %}
 {% endmacro %}
-
 
 {% macro form_errors(form) %}
   {%- if form.errors %}

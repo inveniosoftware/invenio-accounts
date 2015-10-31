@@ -67,10 +67,10 @@ setup_requires = [
 install_requires = [
     'Flask-BabelEx>=0.9.2',
     'Flask-Login>=0.2.11,<0.3.0',
-    'Flask-Script>=2.0.5',
+    'Flask-Menu>=0.4.0',
     'Flask-Security>=1.7.4',
-    'invenio-base>=0.3.1',
-    'invenio-db>=1.0.0a1',
+    'invenio-base>=1.0.0a1',
+    'invenio-db>=1.0.0a4',
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
 ]
 
@@ -134,6 +134,9 @@ setup(
     entry_points={
         'invenio_base.apps': [
             'invenio_acconts = invenio_accounts:InvenioAccounts',
+        ],
+        'invenio_base.blueprints': [
+            'invenio_acconts = invenio_accounts.views:blueprint',
         ],
         'invenio_db.models': [
             'invenio_acconts = invenio_accounts.models',

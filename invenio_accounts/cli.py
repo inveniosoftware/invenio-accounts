@@ -32,7 +32,6 @@ import click
 from flask import current_app
 from flask_cli import with_appcontext
 from flask_security.forms import ConfirmRegisterForm
-from flask_security.script import AddRoleCommand, RemoveRoleCommand
 from flask_security.utils import encrypt_password
 from werkzeug.datastructures import MultiDict
 from werkzeug.local import LocalProxy

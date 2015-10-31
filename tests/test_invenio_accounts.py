@@ -36,6 +36,7 @@ from invenio_db import InvenioDB
 
 from invenio_accounts import InvenioAccounts
 from invenio_accounts.models import User, Role
+from invenio_accounts.views import blueprint
 
 
 def test_version():
@@ -114,6 +115,8 @@ def test_view(app):
     """Test view."""
     Menu(app)
     InvenioAccounts(app)
+    app.register_blueprint(blueprint)
+
     with app.test_client() as client:
         res = client.get("/login")
         assert res.status_code == 200

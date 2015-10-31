@@ -31,10 +31,8 @@ You should execute these commands in the examples-directory.
 
 .. code-block:: console
 
-   $ pip install -e \
-   git+https://github.com/inveniosoftware/invenio-theme.git#egg=invenio-theme
-   $ pip install -e \
-   git+https://github.com/inveniosoftware/invenio-assets.git#egg=invenio-assets
+   $ pip install invenio-theme
+   $ pip install invenio-assets
    $ flask -a app.py bower
    $ cd instance
    $ bower install
@@ -60,7 +58,7 @@ Run the development server:
 
 .. code-block:: console
 
-   $ flask -a app.py --debug run --debugger
+   $ flask -a app.py --debug run
    $ flask -a app.py shell
 """
 
