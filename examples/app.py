@@ -75,6 +75,7 @@ from flask_mail import Mail
 from flask_security import current_user
 
 from invenio_accounts import InvenioAccounts
+from invenio_accounts.views import blueprint
 
 from invenio_db import InvenioDB
 
@@ -115,6 +116,8 @@ if INVENIO_ASSETS_AVAILABLE:
 if INVENIO_THEME_AVAILABLE:
     InvenioTheme(app)
 InvenioAccounts(app)
+
+app.register_blueprint(blueprint)
 
 
 @app.route("/")

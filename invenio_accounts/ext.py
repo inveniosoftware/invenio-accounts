@@ -26,13 +26,12 @@
 
 from __future__ import absolute_import, print_function
 
+import pkg_resources
 from flask.ext.security import Security, SQLAlchemyUserDatastore
 from invenio_db import db
 
 from .cli import accounts as accounts_cli
 from .models import Role, User
-
-import pkg_resources
 
 
 class InvenioAccounts(object):
