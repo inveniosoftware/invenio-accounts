@@ -27,6 +27,7 @@
 
 from __future__ import absolute_import, print_function
 
+import os
 import shutil
 import tempfile
 
@@ -35,6 +36,7 @@ from flask import Flask
 from flask_babelex import Babel
 from flask_cli import FlaskCLI, ScriptInfo
 from flask_mail import Mail
+from flask_menu import Menu
 from invenio_db import InvenioDB, db
 
 from invenio_accounts import InvenioAccounts
@@ -53,10 +55,15 @@ def app(request):
         MAIL_SUPPRESS_SEND=True,
         SECRET_KEY="CHANGE_ME",
         SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
-        SQLALCHEMY_DATABASE_URI='sqlite://',  # in memory db
+        SQLALCHEMY_DATABASE_URI=os.getenv('SQLALCHEMY_DATABASE_URI',
+                                          'sqlite://'),
         TESTING=True,
+        LOGIN_DISABLED=False,
+        WTF_CSRF_ENABLED=False,
+        SERVER_NAME='example.com',
     )
     FlaskCLI(app)
+    Menu(app)
     Babel(app)
     Mail(app)
     InvenioDB(app)

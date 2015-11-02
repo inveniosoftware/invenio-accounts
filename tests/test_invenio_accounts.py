@@ -31,7 +31,6 @@ from flask import Flask
 from flask_babelex import Babel
 from flask_cli import FlaskCLI
 from flask_mail import Mail
-from flask_menu import Menu
 from invenio_db import InvenioDB
 
 from invenio_accounts import InvenioAccounts
@@ -113,7 +112,6 @@ def test_datastore_assignrole(app):
 
 def test_view(app):
     """Test view."""
-    Menu(app)
     InvenioAccounts(app)
     app.register_blueprint(blueprint)
 
