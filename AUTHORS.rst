@@ -21,10 +21,11 @@
     waive the privileges and immunities granted to it by virtue of its status
     as an Intergovernmental Organization or submit itself to any jurisdiction.
 
+
 Authors
 =======
 
-Invenio module for managing user accounts.
+Invenio user management and authentication.
 
 - Adrian Pawel Baran <adrian.pawel.baran@cern.ch>
 - Adrian-Tudor Panescu <adrian.tudor.panescu@cern.ch>
@@ -50,6 +51,7 @@ Invenio module for managing user accounts.
 - Henning Weiler <henning.weiler@cern.ch>
 - Jan Aage Lavik <jan.age.lavik@cern.ch>
 - Javier Martin Montull <javier.martin.montull@cern.ch>
+- Javier Delgado Fernandez <javier.delgado.fernandez@cern.ch>
 - Jerome Caffaro <jerome.caffaro@cern.ch>
 - Jiri Kuncar <jiri.kuncar@cern.ch>
 - Joaquim Rodrigues Silvestre <joaquim.rodrigues.silvestre@cern.ch>

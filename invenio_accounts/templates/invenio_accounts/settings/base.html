@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+{# -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
 # Copyright (C) 2015 CERN.
@@ -21,13 +21,9 @@
 # In applying this license, CERN does not
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
+#}
+{%- extends "invenio_accounts/base.html" %}
 
-"""Version information for Invenio-Accounts.
-
-This file is imported by ``invenio_accounts.__init__``,
-and parsed by ``setup.py``.
-"""
-
-from __future__ import absolute_import, print_function
-
-__version__ = "1.0.0a2.dev20150000"
+{%- block page_body %}
+{%- block settings_form %}{%- endblock settings_form %}
+{%- endblock page_body %}

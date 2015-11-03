@@ -22,12 +22,15 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-"""Version information for Invenio-Accounts.
-
-This file is imported by ``invenio_accounts.__init__``,
-and parsed by ``setup.py``.
-"""
+"""Background tasks for accounts."""
 
 from __future__ import absolute_import, print_function
 
-__version__ = "1.0.0a2.dev20150000"
+from celery import shared_task
+from flask import current_app
+
+
+@shared_task
+def send_security_email(msg):
+    """Celery task to send security email."""
+    current_app.extensions['mail'].send(msg)
