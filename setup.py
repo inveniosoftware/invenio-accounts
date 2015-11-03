@@ -133,16 +133,16 @@ setup(
     platforms='any',
     entry_points={
         'invenio_base.apps': [
-            'invenio_acconts = invenio_accounts:InvenioAccounts',
+            'invenio_accounts = invenio_accounts:InvenioAccounts',
         ],
         'invenio_base.blueprints': [
-            'invenio_acconts = invenio_accounts.views:blueprint',
+            'invenio_accounts = invenio_accounts.views:blueprint',
         ],
         'invenio_db.models': [
-            'invenio_acconts = invenio_accounts.models',
+            'invenio_accounts = invenio_accounts.models',
         ],
         'invenio_i18n.translations': [
-            'invenio_acconts = invenio_accounts',
+            'invenio_accounts = invenio_accounts',
         ],
     },
     extras_require=extras_require,
