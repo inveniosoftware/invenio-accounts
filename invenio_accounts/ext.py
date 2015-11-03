@@ -30,7 +30,8 @@ import pkg_resources
 from flask.ext.security import Security, SQLAlchemyUserDatastore
 from invenio_db import db
 
-from .cli import accounts as accounts_cli
+from .cli import roles as roles_cli
+from .cli import users as users_cli
 from .models import Role, User
 
 
@@ -62,7 +63,8 @@ class InvenioAccounts(object):
                 send_security_email.delay(msg)
 
         # Register CLI
-        app.cli.add_command(accounts_cli, 'accounts')
+        app.cli.add_command(roles_cli, 'roles')
+        app.cli.add_command(users_cli, 'users')
 
         app.extensions['invenio-accounts'] = self
 
