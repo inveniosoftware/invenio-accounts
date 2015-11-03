@@ -51,8 +51,8 @@ Create a user:
 
 .. code-block:: console
 
-   $ flask -a app.py accounts usercreate -e info@invenio-software.org -a
-   $ flask -a app.py accounts useractivate -u info@invenio-software.org
+   $ flask -a app.py users create -e info@invenio-software.org -a
+   $ flask -a app.py users activate -u info@invenio-software.org
 
 Run the development server:
 
@@ -64,22 +64,16 @@ Run the development server:
 
 from __future__ import absolute_import, print_function
 
+import pkg_resources
 from flask import Flask, render_template
-
 from flask_babelex import Babel
-
 from flask_cli import FlaskCLI
-
 from flask_mail import Mail
-
 from flask_security import current_user
+from invenio_db import InvenioDB
 
 from invenio_accounts import InvenioAccounts
 from invenio_accounts.views import blueprint
-
-from invenio_db import InvenioDB
-
-import pkg_resources
 
 try:
     pkg_resources.get_distribution('invenio_assets')

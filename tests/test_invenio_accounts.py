@@ -35,7 +35,7 @@ from flask_menu import Menu
 from invenio_db import InvenioDB
 
 from invenio_accounts import InvenioAccounts
-from invenio_accounts.models import User, Role
+from invenio_accounts.models import Role, User
 from invenio_accounts.views import blueprint
 
 

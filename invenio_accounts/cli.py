@@ -49,17 +49,22 @@ def commit(fn):
 
 
 @click.group()
-def accounts():
-    """Account commands."""
+def users():
+    """User commands."""
 
 
-@accounts.command()
+@click.group()
+def roles():
+    """Role commands."""
+
+
+@users.command('create')
 @click.option('-e', '--email', default=None)
 @click.password_option()
 @click.option('-a', '--active', default=False, is_flag=True)
 @with_appcontext
 @commit
-def usercreate(email, password, active):
+def users_create(email, password, active):
     """Create a user."""
     kwargs = dict(email=email, password=password, active='y' if active else '')
 
@@ -76,12 +81,12 @@ def usercreate(email, password, active):
         raise click.UsageError('Error creating user. %s' % form.errors)
 
 
-@accounts.command()
+@roles.command('create')
 @click.option('-n', '--name', default=None)
 @click.option('-d', '--description', default=None)
 @with_appcontext
 @commit
-def rolecreate(**kwargs):
+def roles_create(**kwargs):
     """Create a role."""
     if not kwargs['name']:
         raise click.UsageError('ERROR: You must specify a role name.')
@@ -89,12 +94,12 @@ def rolecreate(**kwargs):
     click.secho('Role "%(name)s" created successfully.' % kwargs, fg='green')
 
 
-@accounts.command()
+@roles.command('add')
 @click.option('-u', '--user')
 @click.option('-r', '--role')
 @with_appcontext
 @commit
-def roleadd(user, role):
+def roles_add(user, role):
     """Add user to role."""
     user, role = _datastore._prepare_role_modify_args(user, role)
     if user is None:
@@ -108,12 +113,12 @@ def roleadd(user, role):
         raise click.UsageError('Cannot add role to user.')
 
 
-@accounts.command()
+@roles.command('remove')
 @click.option('-u', '--user')
 @click.option('-r', '--role')
 @with_appcontext
 @commit
-def roleremove(user, role):
+def roles_remove(user, role):
     """Remove user from role."""
     user, role = _datastore._prepare_role_modify_args(user, role)
     if user is None:
@@ -127,11 +132,11 @@ def roleremove(user, role):
         raise click.UsageError('Cannot remove role from user.')
 
 
-@accounts.command()
+@users.command('activate')
 @click.option('-u', '--user')
 @with_appcontext
 @commit
-def useractivate(user):
+def users_activate(user):
     """Activate a user."""
     user_obj = _datastore.get_user(user)
     if user_obj is None:
@@ -142,11 +147,11 @@ def useractivate(user):
         click.secho('User "%s" was already activated.' % user, fg='yellow')
 
 
-@accounts.command()
+@users.command('deactivate')
 @click.option('-u', '--user')
 @with_appcontext
 @commit
-def userdeactivate(user):
+def users_deactivate(user):
     """Deactivate a user."""
     user_obj = _datastore.get_user(user)
     if user_obj is None:
