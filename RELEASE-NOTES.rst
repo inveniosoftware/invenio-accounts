@@ -2,7 +2,7 @@
  Invenio-Accounts v1.0.0
 =========================
 
-Invenio-Accounts v1.0.0 was released on October 30, 2015.
+Invenio-Accounts v1.0.0 was released on November 4, 2015.
 
 About
 -----
@@ -10,6 +10,11 @@ About
 Invenio module for managing user accounts.
 
 *This is an experimental development preview release.*
+
+What's new
+----------
+
+- Module rewrite using Flask-Security.
 
 Installation
 ------------
