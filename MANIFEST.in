@@ -50,5 +50,5 @@ recursive-include docs Makefile
 recursive-include examples *.html
 recursive-include examples *.py
 recursive-include invenio_accounts *.html
-recursive-include invenio_accounts *.po
+recursive-include invenio_accounts *.po *.pot
 recursive-include tests *.py
