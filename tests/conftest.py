@@ -34,6 +34,7 @@ import tempfile
 import pytest
 from flask import Flask
 from flask_babelex import Babel
+from flask_celeryext import FlaskCeleryExt
 from flask_cli import FlaskCLI, ScriptInfo
 from flask_mail import Mail
 from flask_menu import Menu
@@ -106,3 +107,28 @@ def script_info(request):
 
     request.addfinalizer(teardown)
     return ScriptInfo(create_app=lambda info: app)
+
+
+@pytest.fixture()
+def task_app():
+    """Flask application fixture."""
+    app = Flask('testapp')
+    app.config.update(
+        ACCOUNTS_USE_CELERY=True,
+        SECRET_KEY="CHANGE_ME",
+        SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
+        SQLALCHEMY_DATABASE_URI=os.environ.get(
+            'SQLALCHEMY_DATABASE_URI', 'sqlite://'
+        ),
+        CELERY_ALWAYS_EAGER=True,
+        CELERY_RESULT_BACKEND="cache",
+        CELERY_CACHE_BACKEND="memory",
+        CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
+        MAIL_SUPPRESS_SEND=True
+    )
+    FlaskCeleryExt(app)
+    FlaskCLI(app)
+    Mail(app)
+    InvenioAccounts(app)
+
+    return app

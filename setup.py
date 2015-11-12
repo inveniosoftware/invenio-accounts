@@ -49,6 +49,7 @@ tests_require = [
 extras_require = {
     'celery': [
         'celery>=3.1.0',
+        'Flask-CeleryExt>=0.1.0',
     ],
     'docs': [
         'Sphinx>=1.3',
