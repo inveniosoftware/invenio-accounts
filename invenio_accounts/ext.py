@@ -27,7 +27,8 @@
 from __future__ import absolute_import, print_function
 
 import pkg_resources
-from flask.ext.security import Security, SQLAlchemyUserDatastore
+from flask_celeryext import FlaskCeleryExt
+from flask_security import Security, SQLAlchemyUserDatastore
 from invenio_db import db
 
 from .cli import roles as roles_cli
@@ -61,6 +62,8 @@ class InvenioAccounts(object):
             @state.send_mail_task
             def delay_security_email(msg):
                 send_security_email.delay(msg)
+
+            FlaskCeleryExt(app)
 
         # Register CLI
         app.cli.add_command(roles_cli, 'roles')
