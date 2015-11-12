@@ -27,7 +27,7 @@
 from __future__ import absolute_import, print_function
 
 import pkg_resources
-from flask.ext.security import Security, SQLAlchemyUserDatastore
+from flask_security import Security, SQLAlchemyUserDatastore
 from invenio_db import db
 
 from .cli import roles as roles_cli
