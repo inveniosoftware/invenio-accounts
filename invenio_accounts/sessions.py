@@ -89,3 +89,15 @@ def delete_session(sid_s):
     _datastore.db.session.delete(sessionactivity)
     _datastore.commit()
     return 1
+
+
+def deactivate_user(user):
+    """Deactivates a user and invalidates (by deleting) their active sessions.
+
+    :param user: User to deactive.
+
+    :returns: True if user was successfully deactivated and their sessions
+        deleted. False if the user was already deactivated.
+    """
+    # TODO: delete user's active sessions
+    return _datastore.deactivate_user(user)

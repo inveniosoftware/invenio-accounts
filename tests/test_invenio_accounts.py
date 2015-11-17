@@ -33,9 +33,10 @@ from flask_mail import Mail
 from flask_security import url_for_security
 from invenio_db import InvenioDB
 
-from invenio_accounts import InvenioAccounts
+from invenio_accounts import InvenioAccounts, testutils
 from invenio_accounts.models import Role, User
 from invenio_accounts.views import blueprint
+from invenio_accounts.sessions import deactivate_user
 
 
 def test_version():
@@ -128,3 +129,25 @@ def test_configuration(app):
     app.config['ACCOUNTS_USE_CELERY'] = 'deadbeef'
     InvenioAccounts(app)
     assert 'deadbeef' == app.config['ACCOUNTS_USE_CELERY']
+
+
+def test_deactivate_user(app):
+    """Tests deactivation of users."""
+    ext = InvenioAccounts(app)
+    app.register_blueprint(blueprint)
+
+    with app.app_context():
+        user_bob = testutils.create_test_user(email='bob@bobmail.bob',
+                                              password='123',
+                                              active=True)
+        with app.test_client() as client:
+            assert user_bob.active
+            assert not testutils.client_authenticated(client)
+            testutils.login_user_via_view(client, user_bob.email,
+                                          user_bob.password_plaintext)
+            assert testutils.client_authenticated(client)
+            # Now we deactivate Bob.
+            # `deactivate_user` returns True if a change was made.
+            assert deactivate_user(user_bob)
+            assert not deactivate_user(user_bob)
+            assert not testutils.client_authenticated(client)
