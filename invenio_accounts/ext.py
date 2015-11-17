@@ -32,8 +32,8 @@ import pkg_resources
 from flask import current_app
 from flask_kvsession import KVSessionExtension
 from flask_login import user_logged_in
-from flask_security import Security, SQLAlchemyUserDatastore, changeable, \
-    recoverable, registerable, utils
+from flask_security import Security, changeable, recoverable, registerable, \
+    utils
 from invenio_db import db
 from passlib.registry import register_crypt_handler
 
@@ -43,6 +43,7 @@ from invenio_accounts.forms import confirm_register_form_factory, \
 from . import config
 from .cli import roles as roles_cli
 from .cli import users as users_cli
+from .datastore import SessionAwareSQLAlchemyUserDatastore
 from .hash import InvenioAesEncryptedEmail, _to_binary
 from .models import Role, User
 from .sessions import login_listener
@@ -93,7 +94,9 @@ class InvenioAccounts(object):
         InvenioAccounts.monkey_patch_flask_security()
 
         # Create user datastore
-        self.datastore = SQLAlchemyUserDatastore(db, User, Role)
+        if not self.datastore:
+            self.datastore = SessionAwareSQLAlchemyUserDatastore(
+                db, User, Role)
 
         # Create sessionstore
         if sessionstore is None:

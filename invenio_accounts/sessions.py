@@ -79,3 +79,17 @@ def delete_session(sid_s):
     with db.session.begin_nested():
         SessionActivity.query.filter_by(sid_s=sid_s).delete()
     return 1
+
+
+def delete_user_sessions(user):
+    """Delete all active user sessions.
+
+    :param user: User instance.
+    """
+    with db.session.begin_nested():
+        for s in user.active_sessions:
+            _sessionstore.delete(s.sid_s)
+
+        SessionActivity.query.filter_by(user=user).delete()
+
+    return True

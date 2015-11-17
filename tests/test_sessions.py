@@ -25,27 +25,23 @@
 """Test backend sessions."""
 
 import datetime
-import pickle
 import time
 
-import flask
-import flask_kvsession
 import flask_security
 import pytest
-import redis
-from flask_login import user_logged_in, user_logged_out
+from flask import current_app, session
 from invenio_db import db
-from itsdangerous import Signer
 from simplekv.memory.redisstore import RedisStore
 from werkzeug.local import LocalProxy
 
 from invenio_accounts import InvenioAccounts, testutils
 from invenio_accounts.models import SessionActivity
-from invenio_accounts.sessions import delete_session, login_listener
+from invenio_accounts.sessions import delete_session
 from invenio_accounts.views import blueprint
 
-_sessionstore = LocalProxy(lambda: flask.current_app.
+_sessionstore = LocalProxy(lambda: current_app.
                            extensions['invenio-accounts'].sessionstore)
+_datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
 
 
 def test_login_listener(app):
@@ -67,7 +63,7 @@ def test_login_listener(app):
 
             session_entry = query.first()
             assert session_entry.user_id == user.id
-            assert session_entry.sid_s == flask.session.sid_s
+            assert session_entry.sid_s == session.sid_s
 
 
 def test_repeated_login_session_population(app):
@@ -104,8 +100,7 @@ def test_repeated_login_session_population(app):
 
 
 def test_login_multiple_clients_single_user_session_population(app):
-    """Test session population/creation when logging in as the same user from
-    multiple clients."""
+    """Test session population/creation from multiple clients for same user."""
     with app.app_context():
         user = testutils.create_test_user()
 
@@ -116,9 +111,8 @@ def test_login_multiple_clients_single_user_session_population(app):
             with c as client:
                 testutils.login_user_via_view(client, user=user)
                 assert testutils.client_authenticated(client)
-                sid_s_list.append(flask.session.sid_s)
-                response = client.get(
-                    flask_security.url_for_security('logout'))
+                sid_s_list.append(session.sid_s)
+                client.get(flask_security.url_for_security('logout'))
                 assert not testutils.client_authenticated(client)
         # There is now `client_count` existing sessions and SessionActivity
         # entries
@@ -152,7 +146,7 @@ def test_sessionstore_default_ttl_secs(app):
 
         with app.test_client() as client:
             testutils.login_user_via_view(client, user=user)
-            sid = testutils.unserialize_session(flask.session.sid_s)
+            sid = testutils.unserialize_session(session.sid_s)
             while not sid.has_expired(ttl_delta):
                 pass
             # When we get here the session should have expired.
@@ -186,7 +180,7 @@ def test_session_ttl(app):
             testutils.login_user_via_view(client, user=user)
             assert len(app.kvsession_store.keys()) == 1
 
-            sid = testutils.unserialize_session(flask.session.sid_s)
+            sid = testutils.unserialize_session(session.sid_s)
             time.sleep(ttl_seconds + 1)
 
             assert sid.has_expired(ttl_delta)
@@ -200,7 +194,9 @@ def test_session_ttl(app):
 
 
 def test_repeated_login_session_expiration(app):
-    """Test that a new session (with a different sid_s) is created when logging
+    """Test repeated session login.
+
+    Test that a new session (with a different sid_s) is created when logging
     in again after a previous session has expired."""
     ttl_seconds = 1
     ttl_delta = datetime.timedelta(0, ttl_seconds)
@@ -210,21 +206,20 @@ def test_repeated_login_session_expiration(app):
         user = testutils.create_test_user()
         with app.test_client() as client:
             testutils.login_user_via_view(client, user=user)
-            first_sid_s = flask.session.sid_s
+            first_sid_s = session.sid_s
             time.sleep(ttl_seconds + 1)
             assert not testutils.client_authenticated(client)
 
             app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
                 0, 10000)
             testutils.login_user_via_view(client, user=user)
-            second_sid_s = flask.session.sid_s
+            second_sid_s = session.sid_s
 
             assert not first_sid_s == second_sid_s
 
 
 def test_session_deletion(app):
-    """Test that a user/client is no longer authenticated when its session is
-    deleted via `delete_session`."""
+    """Test if user is not authenticated when session is deleted."""
     with app.app_context():
         user = testutils.create_test_user()
 
@@ -232,7 +227,7 @@ def test_session_deletion(app):
             testutils.login_user_via_view(client, user=user)
             assert testutils.client_authenticated(client)
             assert len(user.active_sessions) == 1
-            saved_sid_s = flask.session.sid_s
+            saved_sid_s = session.sid_s
 
             delete_session(saved_sid_s)
             db.session.commit()
@@ -248,5 +243,24 @@ def test_session_deletion(app):
             # A new session is created in the kv-sessionstore, but its
             # sid_s is different and the user is not authenticated with it.
             assert len(app.kvsession_store.keys()) == 1
-            assert not flask.session.sid_s == saved_sid_s
+            assert not session.sid_s == saved_sid_s
+            assert not testutils.client_authenticated(client)
+
+
+def test_deactivate_user(app):
+    """Test deactivation of users."""
+    with app.app_context():
+        user_bob = testutils.create_test_user(email='bob@bobmail.bob',
+                                              password='123',
+                                              active=True)
+        with app.test_client() as client:
+            assert user_bob.active
+            assert not testutils.client_authenticated(client)
+            testutils.login_user_via_view(client, user_bob.email,
+                                          user_bob.password_plaintext)
+            assert testutils.client_authenticated(client)
+            # Now we deactivate Bob.
+            # `deactivate_user` returns True if a change was made.
+            _datastore.deactivate_user(user_bob)
+            db.session.commit()
             assert not testutils.client_authenticated(client)
