@@ -33,9 +33,9 @@ You should execute these commands in the examples-directory.
 
    $ pip install invenio-theme
    $ pip install invenio-assets
-   $ flask -a app.py bower
-   $ cd instance
-   $ bower install
+   $ flask -a app.py npm
+   $ cd static
+   $ npm install
    $ cd ..
    $ flask -a app.py collect -v
    $ flask -a app.py assets build
