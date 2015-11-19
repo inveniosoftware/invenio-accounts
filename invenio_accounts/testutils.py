@@ -22,7 +22,14 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-"""Invenio-Accounts utility functions for tests and testing purposes."""
+"""Invenio-Accounts utility functions for tests and testing purposes.
+
+DO NOT USE IN A PRODUCTION ENVIRONMENT.
+
+Functions within accessing the datastore will throw an error if called outside
+of an application context. If pytest-flask is installed you don't have to worry
+about this.
+"""
 
 from __future__ import absolute_import, print_function
 
@@ -41,8 +48,12 @@ def create_test_user(email='test@test.org',
                      password='123456', **kwargs):
     """Create a user in the datastore, bypassing the registration process.
 
+    Accesses the application's datastore. An error is thrown if called from
+    outside of an application context.
+
     Returns the created user model object instance, with the plaintext password
     as `user.password_plaintext`.
+
     DO NOT USE THIS IN PRODUCTION. IT IS MEANT FOR TESTING PURPOSES ONLY.
     """
     assert flask.current_app.testing

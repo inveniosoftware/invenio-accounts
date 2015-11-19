@@ -42,6 +42,7 @@ tests_require = [
     'pytest-cov>=1.8.0',
     'pytest-pep8>=1.0.6',
     'pytest>=2.8.0',
+    'pytest-flask>=0.10.0',
     'Flask-CeleryExt>=0.1.0',
     'Flask-CLI>=0.2.1',
     'Flask-Mail>=0.9.1',

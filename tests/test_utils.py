@@ -28,10 +28,12 @@
 from __future__ import absolute_import, print_function
 
 import flask_login
+import pkg_resources
 import pytest
 from flask_security import url_for_security
 from flask_security.utils import encrypt_password
 from invenio_db import db
+
 from invenio_accounts import InvenioAccounts, testutils
 from invenio_accounts.views import blueprint
 
@@ -54,7 +56,7 @@ def test_client_authenticated(app):
 
     with app.test_client() as client:
         # At this point we should not be authenticated/logged in as a user
-        assert not flask_login.current_user
+        assert flask_login.current_user.is_anonymous
         assert not testutils.client_authenticated(
             client, test_url=change_password_url)
 
@@ -78,7 +80,7 @@ def test_client_authenticated(app):
         response = client.post(login_url,
                                data={'email': email, 'password': password},
                                environ_base={'REMOTE_ADDR': '127.0.0.1'})
-        print(response.get_data(as_text=True))
+
         # Client gets redirected after logging in
         assert response.status_code == 302
         assert testutils.client_authenticated(client)
@@ -99,10 +101,6 @@ def test_create_test_user(app):
     ext = InvenioAccounts(app)
     email = 'test@test.org'
     password = '1234'
-
-    # Can't access the datastore outside of an application context
-    with pytest.raises(RuntimeError):
-        testutils.create_test_user(email, password)
 
     with app.app_context():
         user = testutils.create_test_user(email, password)
