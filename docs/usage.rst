@@ -26,3 +26,10 @@ Usage
 =====
 
 .. automodule:: invenio_accounts
+
+
+Test utilities
+--------------
+
+.. automodule:: invenio_accounts.testutils
+    :members:

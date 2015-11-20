@@ -24,7 +24,7 @@
 
 """Invenio-Accounts utility functions for tests and testing purposes.
 
-DO NOT USE IN A PRODUCTION ENVIRONMENT.
+.. warning:: DO NOT USE IN A PRODUCTION ENVIRONMENT.
 
 Functions within accessing the datastore will throw an error if called outside
 of an application context. If pytest-flask is installed you don't have to worry
@@ -53,8 +53,6 @@ def create_test_user(email='test@test.org',
 
     Returns the created user model object instance, with the plaintext password
     as `user.password_plaintext`.
-
-    DO NOT USE THIS IN PRODUCTION. IT IS MEANT FOR TESTING PURPOSES ONLY.
     """
     assert flask.current_app.testing
     encrypted_password = encrypt_password(password)
@@ -88,3 +86,17 @@ def client_authenticated(client, test_url=None):
 
     return (response.status_code == 200 and
             not flask_login.current_user.is_anonymous)
+
+
+def webdriver_authenticated(webdriver, test_url=None):
+    """Attempt to get the change password page through the given webdriver.
+
+    Similar to `client_authenticated`, but for selenium webdriver objects.
+    """
+    save_url = webdriver.current_url
+
+    webdriver.get(test_url or flask.url_for('security.change_password',
+                                            _external=True))
+    result_url = webdriver.current_url
+    webdriver.get(save_url)
+    return (flask.url_for('security.login', _external=True) not in result_url)
