@@ -30,6 +30,8 @@ import sys
 from setuptools import find_packages, setup
 from setuptools.command.test import test as TestCommand
 
+PY3 = sys.version_info[0] == 3
+
 readme = open('README.rst').read()
 history = open('CHANGES.rst').read()
 
@@ -74,6 +76,9 @@ install_requires = [
     'invenio-db>=1.0.0a4',
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
 ]
+
+if not PY3:
+    install_requires.append('ipaddr>=2.1.11')
 
 packages = find_packages()
 
