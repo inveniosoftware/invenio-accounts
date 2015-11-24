@@ -28,6 +28,7 @@ from __future__ import absolute_import, print_function
 
 from flask_security import RoleMixin, UserMixin
 from invenio_db import db
+from sqlalchemy.orm import validates
 from sqlalchemy_utils import IPAddressType
 
 userrole = db.Table(
@@ -68,11 +69,21 @@ class User(db.Model, UserMixin):
 
     current_login_at = db.Column(db.DateTime)
 
-    last_login_ip = db.Column(IPAddressType)
+    last_login_ip = db.Column(IPAddressType, nullable=True)
 
-    current_login_ip = db.Column(IPAddressType)
+    current_login_ip = db.Column(IPAddressType, nullable=True)
 
     login_count = db.Column(db.Integer)
 
     roles = db.relationship('Role', secondary=userrole,
                             backref=db.backref('users', lazy='dynamic'))
+
+    @validates('last_login_ip', 'current_login_ip')
+    def validate_ip(self, key, value):
+        """Hack untrackable IP addresses."""
+        # NOTE Flask-Security stores 'untrackable' value to IPAddressType
+        #      field. This incorrect value causes ValueError on loading
+        #      user object.
+        if value == 'untrackable':  # pragma: no cover
+            value = None
+        return value
