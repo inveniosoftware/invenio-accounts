@@ -30,8 +30,6 @@ import sys
 from setuptools import find_packages, setup
 from setuptools.command.test import test as TestCommand
 
-PY3 = sys.version_info[0] == 3
-
 readme = open('README.rst').read()
 history = open('CHANGES.rst').read()
 
@@ -50,6 +48,7 @@ tests_require = [
 ]
 
 extras_require = {
+    ':python_version=="2.7"': ['ipaddr>=2.1.11'],
     'celery': [
         'celery>=3.1.0',
     ],
@@ -60,7 +59,9 @@ extras_require = {
 }
 
 extras_require['all'] = []
-for reqs in extras_require.values():
+for name, reqs in extras_require.items():
+    if name[0] == ':':
+        continue
     extras_require['all'].extend(reqs)
 
 setup_requires = [
@@ -77,14 +78,10 @@ install_requires = [
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
 ]
 
-if not PY3:
-    install_requires.append('ipaddr>=2.1.11')
-
 packages = find_packages()
 
 
 class PyTest(TestCommand):
-
     """PyTest Test."""
 
     user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
