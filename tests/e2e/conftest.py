@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# Kill the thread by starting it again
 #
 # This file is part of Invenio.
 # Copyright (C) 2015 CERN.
@@ -27,9 +28,12 @@
 
 from __future__ import absolute_import, print_function
 
+import multiprocessing
 import os
 import shutil
+import sys
 import tempfile
+import time
 
 import pytest
 from flask import Flask
@@ -91,9 +95,44 @@ def app(request):
     return app
 
 
+def pytest_generate_tests(metafunc):
+    """Overrides pytest's default test collection function.
+    For each test in this directory which uses the `env_browser` fixture,
+    said test is called once for each value found in the
+    `E2E_WEBDRIVER_BROWSERS` environment variable."""
+    if 'env_browser' in metafunc.fixturenames:
+        # In Python 2.7 the fallback kwarg of os.environ.get is `failobj`,
+        # in 3.x it's `default`.
+        browsers = os.environ.get('E2E_WEBDRIVER_BROWSERS',
+                                  'Firefox').split()
+        metafunc.parametrize('env_browser', browsers, indirect=True)
+
+
 @pytest.fixture()
-def ff_browser(request):
-    """Pytest fixture for a selenium/webdriver instance with Firefox."""
-    ff = webdriver.Firefox()
-    request.addfinalizer(lambda: ff.quit())
-    return ff
+def env_browser(request):
+    """Fixture for a webdriver instance of the browser specified by the
+    request object's param. Defaults to Firefox.
+    The webdriver instance is killed after the number of seconds specified by
+    the `E2E_WEBDRIVER_TIMEOUT` variable or defaults to 300 (five minutes)."""
+    if request.param is None:
+        request.param = "Firefox"
+
+    max_time = int(os.environ.get('E2E_WEBDRIVER_TIMEOUT', '300'))
+
+    def wait_kill():
+        time.sleep(max_time)
+        browser.quit()
+
+    def finalizer():
+        browser.quit()
+        timeout_process.terminate()
+
+    timeout_process = multiprocessing.Process(target=wait_kill)
+
+    # Create instance of webdriver.`request.param`()
+    browser = getattr(webdriver, request.param)()
+    # Add finalizer to quit the webdriver instance
+    request.addfinalizer(finalizer)
+
+    timeout_process.start()
+    return browser

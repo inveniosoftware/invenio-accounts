@@ -70,6 +70,8 @@ install:
 before_script:
   - "export DISPLAY=:99.0" #set up xvfb, req'd for non-phantomJS webdrivers
   - "sh -e /etc/init.d/xvfb start"
+  - "export E2E_WEBDRIVER_BROWSERS='Firefox'"
+  - "export E2E_WEBDRIVER_TIMEOUT='300'" # Max allowed time for E2E tests
 
 script:
   - "./run-tests.sh"

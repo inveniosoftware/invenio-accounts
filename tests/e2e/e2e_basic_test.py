@@ -54,17 +54,18 @@ def test_live_server(live_server):
     assert response.code == 200
 
 
-def test_webdriver_not_authenticated(live_server, ff_browser):
+def test_webdriver_not_authenticated(live_server, env_browser):
     """Test that an unauthenticated webdriver client is redirected from
     the change password page to the login page."""
-    ff_browser.get(flask.url_for('security.change_password', _external=True))
+    browser = env_browser
+    browser.get(flask.url_for('security.change_password', _external=True))
     assert (flask.url_for('security.login', _external=True) in
-            ff_browser.current_url)
+            browser.current_url)
 
 
-def test_user_registration(live_server, ff_browser):
+def test_user_registration(live_server, env_browser):
     """E2E user registration and login test."""
-    browser = ff_browser
+    browser = env_browser
     # 1. Go to user registration page
     browser.get(flask.url_for('security.register', _external=True))
     assert (flask.url_for('security.register', _external=True) in

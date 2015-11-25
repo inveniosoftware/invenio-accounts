@@ -22,7 +22,7 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-# Check manifest will not automatically add these two files:
+# Check manifest will not automatically add these files:
 include .dockerignore
 include .editorconfig
 include .tx/config
