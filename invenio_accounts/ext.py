@@ -107,4 +107,12 @@ class InvenioAccounts(object):
         app.config.setdefault("SECURITY_SEND_LOGIN_TEMPLATE",
                               "invenio_accounts/send_login.html")
         app.config.setdefault("SECURITY_REGISTER_URL",
-                              "/signup")
+                              "/signup/")
+        app.config.setdefault("SECURITY_RESET_URL",
+                              "/lost-password/")
+        app.config.setdefault("SECURITY_LOGIN_URL",
+                              "/login/")
+        app.config.setdefault("SECURITY_LOGOUT_URL",
+                              "/logout/")
+        app.config.setdefault("SECURITY_CHANGE_URL",
+                              "/accounts/settings/password/")

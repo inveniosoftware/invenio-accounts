@@ -22,6 +22,8 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
+"""Test account views."""
+
 from flask_babelex import gettext as _
 from flask_security import url_for_security
 
@@ -38,36 +40,37 @@ def test_no_log_in_message_for_logged_in_users(app):
     InvenioAccounts(app)
     app.register_blueprint(blueprint)
     with app.app_context():
-        with app.test_client() as client:
-            log_in_message = _('Log In').encode('utf-8')
-            sign_up_message = _('Sign Up').encode('utf-8')
-            forgot_password_url = url_for_security('forgot_password')
+        forgot_password_url = url_for_security('forgot_password')
 
-            resp = client.get(forgot_password_url)
-            assert resp.status_code == 200
-            assert log_in_message in resp.data
-            assert sign_up_message in resp.data
+    with app.test_client() as client:
+        log_in_message = _('Log In').encode('utf-8')
+        sign_up_message = _('Sign Up').encode('utf-8')
 
-            test_email = 'info@invenio-software.org'
-            test_password = 'test1234'
-            resp = client.post(url_for_security('register'), data=dict(
-                email=test_email,
-                password=test_password,
-            ), environ_base={'REMOTE_ADDR': '127.0.0.1'})
+        resp = client.get(forgot_password_url)
+        assert resp.status_code == 200
+        assert log_in_message in resp.data
+        assert sign_up_message in resp.data
 
-            resp = client.post(url_for_security('login'), data=dict(
-                email=test_email,
-                password=test_password,
-            ))
+        test_email = 'info@invenio-software.org'
+        test_password = 'test1234'
+        resp = client.post(url_for_security('register'), data=dict(
+            email=test_email,
+            password=test_password,
+        ), environ_base={'REMOTE_ADDR': '127.0.0.1'})
 
-            resp = client.get(forgot_password_url, follow_redirects=True)
-            if resp.status_code == 200:
-                # This behavior will be phased out in future Flask-Security
-                # release as per mattupstate/flask-security#291
-                assert log_in_message not in resp.data
-                assert sign_up_message not in resp.data
-            else:
-                # Future Flask-Security will redirect to post login view when
-                # authenticated user requests password reset page.
-                assert resp.data == client.get(
-                    app.config['SECURITY_POST_LOGIN_VIEW']).data
+        resp = client.post(url_for_security('login'), data=dict(
+            email=test_email,
+            password=test_password,
+        ))
+
+        resp = client.get(forgot_password_url, follow_redirects=True)
+        if resp.status_code == 200:
+            # This behavior will be phased out in future Flask-Security
+            # release as per mattupstate/flask-security#291
+            assert log_in_message not in resp.data
+            assert sign_up_message not in resp.data
+        else:
+            # Future Flask-Security will redirect to post login view when
+            # authenticated user requests password reset page.
+            assert resp.data == client.get(
+                app.config['SECURITY_POST_LOGIN_VIEW']).data

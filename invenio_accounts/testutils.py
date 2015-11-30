@@ -21,20 +21,17 @@
 # In applying this license, CERN does not
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
+
 """Invenio-Accounts utility functions for tests and testing purposes."""
+
 from __future__ import absolute_import, print_function
 
 import flask
-
-from flask import current_app
-
 import flask_login
-
+from flask import current_app
 from flask_security import url_for_security
 from flask_security.utils import encrypt_password
-
 from werkzeug.local import LocalProxy
-
 
 # "Convenient references" (lifted from flask_security source)
 _datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
@@ -57,12 +54,12 @@ def create_test_user(email='test@test.org',
     return user
 
 
-def login_user_via_view(client, email, password):
+def login_user_via_view(client, email, password, login_url=None):
     """Attempt to log the given user in via the 'login' view on the client.
 
     Returns the response object.
     """
-    return client.post(url_for_security('login'),
+    return client.post(login_url or url_for_security('login'),
                        data={'email': email, 'password': password},
                        environ_base={'REMOTE_ADDR': '127.0.0.1'})
     # If the REMOTE_ADDR isn't set it'll throw out a ValueError as it attempts
@@ -70,13 +67,13 @@ def login_user_via_view(client, email, password):
     # `last_login_ip`.
 
 
-def client_authenticated(client):
+def client_authenticated(client, test_url=None):
     """Attempt to get the change password page with the given client object.
 
     Returns True if the client can get the change password page without getting
     redirected and flask_login's `current_user` object isn't anonymous.
     """
-    response = client.get(url_for_security('change_password'))
+    response = client.get(test_url or url_for_security('change_password'))
 
     return (response.status_code == 200 and
             not flask_login.current_user.is_anonymous())

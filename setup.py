@@ -55,12 +55,23 @@ extras_require = {
     'docs': [
         'Sphinx>=1.3',
     ],
+    'mysql': [
+        'invenio-db[mysql]>=1.0.0a6',
+    ],
+    'postgresql': [
+        'invenio-db[postgresql]>=1.0.0a6',
+    ],
+    'sqlite': [
+        'invenio-db>=1.0.0a6',
+    ],
     'tests': tests_require,
 }
 
 extras_require['all'] = []
 for name, reqs in extras_require.items():
     if name[0] == ':':
+        continue
+    if name in ('mysql', 'postgresql', 'sqlite'):
         continue
     extras_require['all'].extend(reqs)
 
@@ -73,8 +84,6 @@ install_requires = [
     'Flask-Login<0.3.0,>=0.2.11',
     'Flask-Menu>=0.4.0',
     'Flask-Security>=1.7.4',
-    'invenio-base>=1.0.0a1',
-    'invenio-db>=1.0.0a4',
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
 ]
 

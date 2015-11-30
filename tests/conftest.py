@@ -39,6 +39,8 @@ from flask_cli import FlaskCLI, ScriptInfo
 from flask_mail import Mail
 from flask_menu import Menu
 from invenio_db import InvenioDB, db
+from sqlalchemy_utils.functions import create_database, database_exists, \
+    drop_database
 
 from invenio_accounts import InvenioAccounts
 
@@ -46,7 +48,8 @@ from invenio_accounts import InvenioAccounts
 @pytest.fixture()
 def app(request):
     """Flask application fixture."""
-    app = Flask('testapp')
+    instance_path = tempfile.mkdtemp()
+    app = Flask('testapp', instance_path=instance_path)
     app.config.update(
         ACCOUNTS_USE_CELERY=False,
         CELERY_ALWAYS_EAGER=True,
@@ -56,8 +59,8 @@ def app(request):
         MAIL_SUPPRESS_SEND=True,
         SECRET_KEY="CHANGE_ME",
         SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
-        SQLALCHEMY_DATABASE_URI=os.getenv('SQLALCHEMY_DATABASE_URI',
-                                          'sqlite://'),
+        SQLALCHEMY_DATABASE_URI=os.environ.get(
+            'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
         TESTING=True,
         LOGIN_DISABLED=False,
         WTF_CSRF_ENABLED=False,
@@ -68,12 +71,17 @@ def app(request):
     Babel(app)
     Mail(app)
     InvenioDB(app)
+
     with app.app_context():
+        if not database_exists(str(db.engine.url)):
+            create_database(str(db.engine.url))
+        db.drop_all()
         db.create_all()
 
     def teardown():
         with app.app_context():
-            db.drop_all()
+            drop_database(str(db.engine.url))
+        shutil.rmtree(instance_path)
 
     request.addfinalizer(teardown)
     return app
@@ -88,7 +96,8 @@ def script_info(request):
         ACCOUNTS_USE_CELERY=False,
         SECRET_KEY="CHANGE_ME",
         SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
-        SQLALCHEMY_DATABASE_URI='sqlite://',  # in memory db
+        SQLALCHEMY_DATABASE_URI=os.environ.get(
+            'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
         TESTING=True,
     )
     FlaskCLI(app)
@@ -98,11 +107,14 @@ def script_info(request):
     InvenioAccounts(app)
 
     with app.app_context():
+        if not database_exists(str(db.engine.url)):
+            create_database(str(db.engine.url))
+        db.drop_all()
         db.create_all()
 
     def teardown():
         with app.app_context():
-            db.drop_all()
+            drop_database(str(db.engine.url))
         shutil.rmtree(instance_path)
 
     request.addfinalizer(teardown)
@@ -118,8 +130,7 @@ def task_app():
         SECRET_KEY="CHANGE_ME",
         SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
         SQLALCHEMY_DATABASE_URI=os.environ.get(
-            'SQLALCHEMY_DATABASE_URI', 'sqlite://'
-        ),
+            'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
         CELERY_ALWAYS_EAGER=True,
         CELERY_RESULT_BACKEND="cache",
         CELERY_CACHE_BACKEND="memory",

@@ -27,11 +27,8 @@
 from __future__ import absolute_import, print_function
 
 from flask import Blueprint, current_app
-
 from flask_babelex import gettext as _
-
 from flask_menu import current_menu
-
 
 blueprint = Blueprint(
     'invenio_accounts',

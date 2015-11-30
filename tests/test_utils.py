@@ -22,21 +22,22 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
+
+"""Test test utilities."""
+
 from __future__ import absolute_import, print_function
 
 import flask_login
-
+import pytest
 from flask_security import url_for_security
 from flask_security.utils import encrypt_password
-
+from invenio_db import db
 from invenio_accounts import InvenioAccounts, testutils
 from invenio_accounts.views import blueprint
 
-import pytest
-
 
 def test_client_authenticated(app):
-    """Tests for testutils.py:client_authenticated(client).
+    """Test for testutils.py:client_authenticated(client).
 
     We want to verify that it doesn't return True when the client isn't
     authenticated/logged in."""
@@ -45,53 +46,54 @@ def test_client_authenticated(app):
     app.register_blueprint(blueprint)
 
     email = 'test@test.org'
-    password = '1234'
+    password = '123456'
 
     with app.app_context():
-        with app.test_client() as client:
-            # At this point we should not be authenticated/logged in as a user
-            assert not flask_login.current_user
-            assert not testutils.client_authenticated(client)
+        change_password_url = url_for_security('change_password')
+        login_url = url_for_security('login')
 
-            # What's the status like when we're not logged in?
-            # get but don't follow redirects
-            # url_for_security(page) returns the internal resource location
-            # for the page (e.g. '/login' for 'login'), not the full URL
-            change_password_url = url_for_security('change_password')
-            response = client.get(change_password_url)
-            assert response.status_code == 302
-            assert change_password_url not in response.location
-            assert url_for_security('login') in response.location
+    with app.test_client() as client:
+        # At this point we should not be authenticated/logged in as a user
+        assert not flask_login.current_user
+        assert not testutils.client_authenticated(
+            client, test_url=change_password_url)
 
-            # Once more, following redirects
-            response = client.get(change_password_url, follow_redirects=True)
-            assert response.status_code == 200
-            assert response.location is None
+        # Test HTTP status code of view when not logged in.
+        response = client.get(change_password_url)
+        assert response.status_code == 302
+        assert change_password_url not in response.location
+        assert login_url in response.location
 
-            # Create a user manually directly in the datastore
-            ext.datastore.create_user(email=email,
-                                      password=encrypt_password(password))
+        # Once more, following redirects.
+        response = client.get(change_password_url, follow_redirects=True)
+        assert response.status_code == 200
+        assert response.location is None
 
-            # Manual login via view
-            response = client.post(url_for_security('login'),
-                                   data={'email': email,
-                                         'password': password},
-                                   environ_base={'REMOTE_ADDR': '127.0.0.1'})
-            # client gets redirected after logging in
-            assert response.status_code == 302
-            assert testutils.client_authenticated(client)
-            assert flask_login.current_user.is_authenticated()
-            # `is_authenticated()` returns True as long as the user object
-            # isn't anonymous, i.e. it's an actual user.
+        # Create a user manually directly in the datastore
+        ext.datastore.create_user(email=email,
+                                  password=encrypt_password(password))
+        db.session.commit()
 
-            response = client.get(change_password_url)
-            assert response.status_code == 200
-            response = client.get(change_password_url, follow_redirects=True)
-            assert response.status_code == 200
+        # Manual login via view
+        response = client.post(login_url,
+                               data={'email': email, 'password': password},
+                               environ_base={'REMOTE_ADDR': '127.0.0.1'})
+        print(response.get_data(as_text=True))
+        # Client gets redirected after logging in
+        assert response.status_code == 302
+        assert testutils.client_authenticated(client)
+        assert flask_login.current_user.is_authenticated()
+        # `is_authenticated()` returns True as long as the user object
+        # isn't anonymous, i.e. it's an actual user.
+
+        response = client.get(change_password_url)
+        assert response.status_code == 200
+        response = client.get(change_password_url, follow_redirects=True)
+        assert response.status_code == 200
 
 
 def test_create_test_user(app):
-    """Tests for testutils.py:create_test_user().
+    """Test for testutils.py:create_test_user().
 
     Demonstrates basic usage and context requirements."""
     ext = InvenioAccounts(app)
@@ -117,14 +119,14 @@ def test_create_test_user(app):
             # Catch-all "Exception" because it's raised by the datastore,
             # and the actual exception type will probably vary depending on
             # which datastore we're running the tests with.
-            user_copy = testutils.create_test_user(email, password)
+            testutils.create_test_user(email, password)
         # No more tests here b/c the sqlalchemy session crashes when we try to
         # create a user with a duplicate email.
 
 
 def test_login_user_via_view(app):
-    """Tests the login-via-view function/hack."""
-    ext = InvenioAccounts(app)
+    """Test the login-via-view function/hack."""
+    InvenioAccounts(app)
     app.register_blueprint(blueprint)
     email = 'test@test.org'
     password = '1234'

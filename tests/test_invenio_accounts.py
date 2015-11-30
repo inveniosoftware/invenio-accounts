@@ -22,7 +22,6 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-
 """Module tests."""
 
 from __future__ import absolute_import, print_function
@@ -31,6 +30,7 @@ from flask import Flask
 from flask_babelex import Babel
 from flask_cli import FlaskCLI
 from flask_mail import Mail
+from flask_security import url_for_security
 from invenio_db import InvenioDB
 
 from invenio_accounts import InvenioAccounts
@@ -115,6 +115,9 @@ def test_view(app):
     InvenioAccounts(app)
     app.register_blueprint(blueprint)
 
+    with app.app_context():
+        login_url = url_for_security('login')
+
     with app.test_client() as client:
-        res = client.get("/login")
+        res = client.get(login_url)
         assert res.status_code == 200

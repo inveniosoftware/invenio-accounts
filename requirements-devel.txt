@@ -22,6 +22,4 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-# inveniosoftware/invenio-accounts#41 -e git+https://github.com/mattupstate/flask-security.git#egg=Flask-Security
 -e git+https://github.com/inveniosoftware/invenio-db.git#egg=invenio-db
--e git+https://github.com/inveniosoftware/invenio-base.git#egg=invenio-base
