@@ -63,10 +63,7 @@ def post_ext_init(state):
 @blueprint.before_app_first_request
 def init_menu():
     """Initialize menu before first request."""
-    item = current_menu.submenu('settings.account')
-    item.register(None, _('Settings'))
-
-    item = current_menu.submenu('settings.account.change_password')
+    item = current_menu.submenu('settings.change_password')
     item.register(
         "{0}.change_password".format(
             current_app.config['SECURITY_BLUEPRINT_NAME']),
