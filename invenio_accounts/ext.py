@@ -72,7 +72,8 @@ class InvenioAccounts(object):
         """Initialize configuration."""
         try:
             pkg_resources.get_distribution('celery')
-            app.config.setdefault("ACCOUNTS_USE_CELERY", True)
+            app.config.setdefault(
+                "ACCOUNTS_USE_CELERY", not (app.debug or app.testing))
         except pkg_resources.DistributionNotFound:
             app.config.setdefault("ACCOUNTS_USE_CELERY", False)
 
