@@ -154,7 +154,7 @@ setup(
             'invenio_accounts = invenio_accounts.models',
         ],
         'invenio_i18n.translations': [
-            'invenio_accounts = invenio_accounts',
+            'messages = invenio_accounts',
         ],
     },
     extras_require=extras_require,
