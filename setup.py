@@ -81,9 +81,9 @@ setup_requires = [
 
 install_requires = [
     'Flask-BabelEx>=0.9.2',
-    'Flask-Login<0.3.0,>=0.2.11',
+    'Flask-Login>=0.3.0',
     'Flask-Menu>=0.4.0',
-    'Flask-Security>=1.7.4',
+    'Flask-Security>=1.7.5',
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
 ]
 

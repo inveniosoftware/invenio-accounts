@@ -76,4 +76,4 @@ def client_authenticated(client, test_url=None):
     response = client.get(test_url or url_for_security('change_password'))
 
     return (response.status_code == 200 and
-            not flask_login.current_user.is_anonymous())
+            not flask_login.current_user.is_anonymous)

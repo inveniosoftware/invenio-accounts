@@ -82,8 +82,8 @@ def test_client_authenticated(app):
         # Client gets redirected after logging in
         assert response.status_code == 302
         assert testutils.client_authenticated(client)
-        assert flask_login.current_user.is_authenticated()
-        # `is_authenticated()` returns True as long as the user object
+        assert flask_login.current_user.is_authenticated
+        # `is_authenticated` returns True as long as the user object
         # isn't anonymous, i.e. it's an actual user.
 
         response = client.get(change_password_url)

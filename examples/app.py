@@ -117,7 +117,7 @@ app.register_blueprint(blueprint)
 @app.route("/")
 def index():
     """Basic test view."""
-    if current_user.is_authenticated():
+    if current_user.is_authenticated:
         return render_template("authenticated.html")
     else:
         return render_template("anonymous.html")
