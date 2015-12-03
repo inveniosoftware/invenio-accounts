@@ -2,7 +2,7 @@
  Invenio-Accounts v1.0.0
 =========================
 
-Invenio-Accounts v1.0.0 was released on November 25, 2015.
+Invenio-Accounts v1.0.0 was released on December 3, 2015.
 
 About
 -----
