@@ -27,11 +27,14 @@
 {% from "invenio_accounts/_macros.html" import render_field, form_errors %}
 
 {% block panel %}
-{%- with form = login_user_form %}
 <div class="col-md-6 col-md-offset-3">
   <div class="panel panel-default">
     <div class="panel-body">
+      {%- block form_header %}
       <h3 class="text-center panel-free-title">{{_('Log in to account') }}</h3>
+      {%- endblock form_header %}
+      {%- block form_outer %}
+      {%- with form = login_user_form %}
       <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
       {{form.hidden_tag()}}
       {{form_errors(form)}}
@@ -39,16 +42,21 @@
       {{ render_field(form.password, icon="glyphicon glyphicon-lock", errormsg=False) }}
       <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="fa fa-sign-in"></i> {{_('Log In')}}</button>
       </form>
+      {%- endwith %}
+      {%- endblock form_outer %}
     </div>
+    {%- block registerable %}
     {%- if security.registerable %}
     <div class="panel-footer text-center">
         <h4 class="text-muted">{% trans sitename=config.ACCOUNTS_SITENAME %}New to {{sitename}}?{% endtrans %} <a href="{{url_for('security.register')}}">{{_('Sign Up')}}</a></h4>
     </div>
     {%- endif %}
+    {%- endblock %}
   </div>
+  {%- block recoverable %}
   {%- if security.recoverable %}
-  <a href="{{url_for('security.forgot_password')}}" class="text-white">{{_('Forgot password?')}}</a>
+  <a href="{{url_for('security.forgot_password')}}" class="text-muted">{{_('Forgot password?')}}</a>
   {%- endif %}
+  {%- endblock %}
 </div>
-{%- endwith %}
 {% endblock panel %}
