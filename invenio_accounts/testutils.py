@@ -38,7 +38,7 @@ _datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
 
 
 def create_test_user(email='test@test.org',
-                     password='', **kwargs):
+                     password='123456', **kwargs):
     """Create a user in the datastore, bypassing the registration process.
 
     Returns the created user model object instance, with the plaintext password

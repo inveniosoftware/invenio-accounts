@@ -124,6 +124,20 @@ def test_create_test_user(app):
         # create a user with a duplicate email.
 
 
+def test_create_test_user_defaults(app):
+    """Test the default values for testutils.py:create_test_user."""
+
+    ext = InvenioAccounts(app)
+    app.register_blueprint(blueprint)
+
+    with app.app_context():
+        user = testutils.create_test_user()
+        with app.test_client() as client:
+            testutils.login_user_via_view(client, user.email,
+                                          user.password_plaintext)
+            assert testutils.client_authenticated(client)
+
+
 def test_login_user_via_view(app):
     """Test the login-via-view function/hack."""
     InvenioAccounts(app)
