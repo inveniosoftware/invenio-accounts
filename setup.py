@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -86,7 +86,9 @@ install_requires = [
     'Flask-Login>=0.3.0',
     'Flask-Menu>=0.4.0',
     'Flask-Security>=1.7.5',
+    'Flask-KVSession>=0.6.1',
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
+    'redis>=2.10.5',
 ]
 
 packages = find_packages()

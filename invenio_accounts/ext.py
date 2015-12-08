@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -27,33 +27,50 @@
 from __future__ import absolute_import, print_function
 
 import pkg_resources
+from flask_kvsession import KVSessionExtension
 from flask_security import Security, SQLAlchemyUserDatastore
 from invenio_db import db
+from flask_login import user_logged_in
 
 from .cli import roles as roles_cli
 from .cli import users as users_cli
 from .models import Role, User
+from .sessions import login_listener
 
 
 class InvenioAccounts(object):
     """Invenio-Accounts extension."""
 
-    def __init__(self, app=None):
+    def __init__(self, app=None, sessionstore=None):
         """Extension initialization."""
         self.security = Security()
         self.datastore = None
         if app:
-            self.init_app(app)
+            self.init_app(app, sessionstore=sessionstore)
 
-    def init_app(self, app, use_celery=True):
-        """Flask application initialization."""
+    def init_app(self, app, use_celery=True, sessionstore=None):
+        """Flask application initialization.
+
+        :param sessionstore: store for sessions. Passed to
+            ``flask-kvsession``. Defaults to redis.
+        """
         self.init_config(app)
 
         # Create user datastore
         self.datastore = SQLAlchemyUserDatastore(db, User, Role)
 
+        # Create sessionstore
+        if sessionstore is None:
+            import redis
+            from simplekv.memory.redisstore import RedisStore
+            # TODO: use default from config?
+            sessionstore = RedisStore(redis.StrictRedis())
+        self.sessionstore = sessionstore
+        user_logged_in.connect(login_listener, app)
+
         # Initialize extension.
         state = self.security.init_app(app, datastore=self.datastore)
+        self.kvsession_extension = KVSessionExtension(self.sessionstore, app)
 
         if app.config['ACCOUNTS_USE_CELERY']:
             from invenio_accounts.tasks import send_security_email

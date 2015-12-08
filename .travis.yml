@@ -38,6 +38,7 @@ cache:
 services:
   - mysql
   - postgresql
+  - redis
 
 env:
   - REQUIREMENTS=lowest E2E_WEBDRIVER_BROWSERS="" EXTRAS=all,sqlite SQLALCHEMY_DATABASE_URI="sqlite:///test.db"

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -29,7 +29,7 @@ from __future__ import absolute_import, print_function
 from flask_security import RoleMixin, UserMixin
 from invenio_db import db
 from sqlalchemy.orm import validates
-from sqlalchemy_utils import IPAddressType
+from sqlalchemy_utils import IPAddressType, Timestamp
 
 userrole = db.Table(
     'accounts_userrole',
@@ -87,3 +87,25 @@ class User(db.Model, UserMixin):
         if value == 'untrackable':  # pragma: no cover
             value = None
         return value
+
+
+class SessionActivity(db.Model, Timestamp):
+    """User Session Activity model.
+
+    Instances of this model correspond to a session belonging to a user.
+    """
+
+    __tablename__ = "accounts_user_session_activity"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    """ID of user to whom this session belongs."""
+
+    sid_s = db.Column(db.String(255), unique=True, index=True)
+    """Serialized Session ID. Used as the session's key in the kv-session
+    store employed by `flask-kvsession`.
+    Named here as it is in `flask-kvsession` to avoid confusion.
+    """
+
+    user = db.relationship(User, backref='active_sessions')

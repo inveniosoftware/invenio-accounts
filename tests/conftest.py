@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -80,6 +80,10 @@ def app(request):
     def teardown():
         with app.app_context():
             drop_database(str(db.engine.url))
+            # Delete sessions in kvsession store
+            if hasattr(app, 'kvsession_store'):
+                for key in app.kvsession_store.iter_keys():
+                    app.kvsession_store.delete(key)
         shutil.rmtree(instance_path)
 
     request.addfinalizer(teardown)

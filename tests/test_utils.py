@@ -27,6 +27,9 @@
 
 from __future__ import absolute_import, print_function
 
+import datetime
+
+import flask
 import flask_login
 import pkg_resources
 import pytest
@@ -150,3 +153,57 @@ def test_login_user_via_view(app):
             testutils.login_user_via_view(client, user.email,
                                           user.password_plaintext)
             assert testutils.client_authenticated(client)
+
+
+def test_set_app_session_ttl(app):
+    """Test testutils.py:set_app_session_ttl."""
+    InvenioAccounts(app)
+    app.register_blueprint(blueprint)
+    ttl_seconds = 1
+    ttl_delta = testutils.set_app_session_ttl(app, ttl_seconds)
+    assert ttl_delta == datetime.timedelta(0, ttl_seconds)
+    user = testutils.create_test_user()
+    with app.test_client() as client:
+        testutils.login_user_via_view(client, user=user)
+        login_at = datetime.datetime.utcnow()
+        sid = testutils.unserialize_session(flask.session.sid_s)
+        while not sid.has_expired(ttl_delta):
+            pass
+        assert not testutils.client_authenticated(client)
+
+
+def test_create_sessions_for_user(app):
+    """Test testutils.py:create_sessions_for_user."""
+    InvenioAccounts(app)
+    app.register_blueprint(blueprint)
+    user = testutils.create_test_user()
+    assert len(user.active_sessions) == 0
+    res = testutils.create_sessions_for_user(user=user)
+    assert len(user.active_sessions) == 1
+    assert res['user'] == user
+
+    # Cookie is retrievable from the client.
+    sid_s = user.active_sessions[0].sid_s
+    client_one = res['clients'][0]
+    cookie = testutils.get_cookie_from_client(client_one)
+    assert sid_s == testutils.get_sid_s_from_cookie(cookie)
+
+    # The client is still authenticated
+    with client_one as client:
+        assert testutils.client_authenticated(client)
+
+    # Repeated calls create new sessions.
+    res = testutils.create_sessions_for_user(app=app, user=user)
+    assert len(user.active_sessions) == 2
+    assert len(res['clients']) == 1
+
+    # No user argument (fails b/c `create_test_user` has static default values)
+    # res = testutils.create_sessions_for_user(app=app)
+    # user_two = res['user']
+    # assert not user_two == user
+    # assert len(user_two.active_sessions) == 1
+
+    n = 3
+    res = testutils.create_sessions_for_user(user=user, n=n)
+    assert len(user.active_sessions) == 2+n
+    assert len(res['clients']) == n
