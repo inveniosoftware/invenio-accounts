@@ -153,6 +153,9 @@ setup(
         'invenio_db.models': [
             'invenio_accounts = invenio_accounts.models',
         ],
+        'invenio_db.versioning': [
+            'user_model = invenio_accounts.models:User'
+        ],
         'invenio_i18n.translations': [
             'messages = invenio_accounts',
         ],
