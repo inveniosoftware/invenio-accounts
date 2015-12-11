@@ -65,6 +65,7 @@ def app(request):
         LOGIN_DISABLED=False,
         WTF_CSRF_ENABLED=False,
         SERVER_NAME='example.com',
+        DB_VERSIONING_USER_MODEL_MODULE='invenio_accounts',
     )
     FlaskCLI(app)
     Menu(app)
@@ -98,6 +99,7 @@ def script_info(request):
         SQLALCHEMY_DATABASE_URI=os.environ.get(
             'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
         TESTING=True,
+        DB_VERSIONING_USER_MODEL_MODULE='invenio_accounts',
     )
     FlaskCLI(app)
     Babel(app)
@@ -134,7 +136,7 @@ def task_app():
         CELERY_RESULT_BACKEND="cache",
         CELERY_CACHE_BACKEND="memory",
         CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
-        MAIL_SUPPRESS_SEND=True
+        MAIL_SUPPRESS_SEND=True,
     )
     FlaskCeleryExt(app)
     FlaskCLI(app)
