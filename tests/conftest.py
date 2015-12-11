@@ -75,7 +75,6 @@ def app(request):
     with app.app_context():
         if not database_exists(str(db.engine.url)):
             create_database(str(db.engine.url))
-        db.drop_all()
         db.create_all()
 
     def teardown():
