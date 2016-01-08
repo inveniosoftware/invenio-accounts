@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# Kill the thread by starting it again
 #
 # This file is part of Invenio.
 # Copyright (C) 2015 CERN.
@@ -31,7 +30,6 @@ from __future__ import absolute_import, print_function
 import multiprocessing
 import os
 import shutil
-import sys
 import tempfile
 import time
 
