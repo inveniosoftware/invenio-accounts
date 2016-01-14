@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -121,3 +121,10 @@ def test_view(app):
     with app.test_client() as client:
         res = client.get(login_url)
         assert res.status_code == 200
+
+
+def test_configuration(app):
+    """Test configuration."""
+    app.config['ACCOUNTS_USE_CELERY'] = 'deadbeef'
+    InvenioAccounts(app)
+    assert 'deadbeef' == app.config['ACCOUNTS_USE_CELERY']
