@@ -40,7 +40,7 @@ def test_send_message_outbox(task_app):
                           sender='test1@test1.test1',
                           recipients=['test1@test1.test1'])
 
-            send_security_email(msg)
+            send_security_email(msg.__dict__)
 
             assert len(outbox) == 1
             sent_msg = outbox[0]

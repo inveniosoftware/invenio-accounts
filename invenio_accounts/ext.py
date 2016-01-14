@@ -60,7 +60,7 @@ class InvenioAccounts(object):
 
             @state.send_mail_task
             def delay_security_email(msg):
-                send_security_email.delay(msg)
+                send_security_email.delay(msg.__dict__)
 
         # Register CLI
         app.cli.add_command(roles_cli, 'roles')
