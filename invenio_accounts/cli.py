@@ -59,7 +59,7 @@ def roles():
 
 
 @users.command('create')
-@click.option('-e', '--email', default=None)
+@click.argument('email')
 @click.password_option()
 @click.option('-a', '--active', default=False, is_flag=True)
 @with_appcontext
@@ -82,21 +82,19 @@ def users_create(email, password, active):
 
 
 @roles.command('create')
-@click.option('-n', '--name', default=None)
+@click.argument('name')
 @click.option('-d', '--description', default=None)
 @with_appcontext
 @commit
 def roles_create(**kwargs):
     """Create a role."""
-    if not kwargs['name']:
-        raise click.UsageError('ERROR: You must specify a role name.')
     _datastore.create_role(**kwargs)
     click.secho('Role "%(name)s" created successfully.' % kwargs, fg='green')
 
 
 @roles.command('add')
-@click.option('-u', '--user')
-@click.option('-r', '--role')
+@click.argument('user')
+@click.argument('role')
 @with_appcontext
 @commit
 def roles_add(user, role):
@@ -114,8 +112,8 @@ def roles_add(user, role):
 
 
 @roles.command('remove')
-@click.option('-u', '--user')
-@click.option('-r', '--role')
+@click.argument('user')
+@click.argument('role')
 @with_appcontext
 @commit
 def roles_remove(user, role):
@@ -133,7 +131,7 @@ def roles_remove(user, role):
 
 
 @users.command('activate')
-@click.option('-u', '--user')
+@click.argument('user')
 @with_appcontext
 @commit
 def users_activate(user):
@@ -148,7 +146,7 @@ def users_activate(user):
 
 
 @users.command('deactivate')
-@click.option('-u', '--user')
+@click.argument('user')
 @with_appcontext
 @commit
 def users_deactivate(user):
