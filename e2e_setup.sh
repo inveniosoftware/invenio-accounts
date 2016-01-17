@@ -22,10 +22,7 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-
-pep257 invenio_accounts && \
-check-manifest --ignore ".travis-*" && \
-#isort -rc -c -df **/*.py && \
-sphinx-build -qnNW docs docs/_build/html && \
-python setup.py test -a "-k 'not e2e'" && \
-sphinx-build -qnNW -b doctest docs docs/_build/doctest
+export DISPLAY=:99.0 #set up xvfb, req'd for non-phantomJS webdrivers
+sh -e /etc/init.d/xvfb start
+export E2E_WEBDRIVER_BROWSERS='Firefox'
+export E2E_WEBDRIVER_TIMEOUT='300' # Max allowed time in seconds for E2E tests
