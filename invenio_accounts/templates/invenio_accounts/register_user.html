@@ -1,7 +1,7 @@
 {# -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -35,11 +35,13 @@
       <form action="{{ url_for_security('register') }}" method="POST" name="register_user_form">
       {{form_errors(form)}}
       {{ form.hidden_tag()}}
+      {%- block registration_form_fields %}
       {{ render_field(form.email, icon="glyphicon glyphicon-user", autofocus=True, errormsg=False) }}
       {{ render_field(form.password, icon="glyphicon glyphicon-lock", errormsg=False) }}
       {%- if form.password_confirm %}
         {{ render_field(form.password_confirm, icon="glyphicon glyphicon-lock", errormsg=False) }}
       {%- endif %}
+      {%- endblock registration_form_fields %}
       {%- if form.recaptcha %}
         <div class="form-group form-group-lg">{{ form.recaptcha() }}</div>
       {%- endif %}
