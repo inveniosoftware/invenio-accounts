@@ -27,7 +27,7 @@
 from __future__ import absolute_import, print_function
 
 from flask import Blueprint, current_app
-from flask_babelex import gettext as _
+from flask_babelex import lazy_gettext as _
 from flask_menu import current_menu
 
 blueprint = Blueprint(
@@ -67,4 +67,6 @@ def init_menu():
     item.register(
         "{0}.change_password".format(
             current_app.config['SECURITY_BLUEPRINT_NAME']),
-        _('%(icon)s Change Password', icon='<i class="fa fa-key fa-fw"></i>'))
+        # NOTE: Menu item text (icon replaced by a user icon).
+        _('%(icon)s Change Password', icon='<i class="fa fa-key fa-fw"></i>'),
+        order=1)
