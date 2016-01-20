@@ -28,6 +28,13 @@ Usage
 .. automodule:: invenio_accounts
 
 
+Models
+------
+
+.. automodule:: invenio_accounts.models
+    :members:
+
+
 Test utilities
 --------------
 

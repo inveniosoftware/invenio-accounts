@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -28,7 +28,6 @@
 from __future__ import absolute_import, print_function
 
 import flask_login
-import pkg_resources
 import pytest
 from flask_security import url_for_security
 from flask_security.utils import encrypt_password
@@ -127,13 +126,20 @@ def test_create_test_user_defaults(app):
 
     ext = InvenioAccounts(app)
     app.register_blueprint(blueprint)
-
     with app.app_context():
         user = testutils.create_test_user()
         with app.test_client() as client:
             testutils.login_user_via_view(client, user.email,
                                           user.password_plaintext)
             assert testutils.client_authenticated(client)
+
+        # Create a second user with default params
+        user_two = testutils.create_test_user()
+        assert not user_two.email == user.email
+        ext.datastore.db.session.delete(user)
+        ext.datastore.commit()
+        user_three = testutils.create_test_user()
+        assert not user_three.email == user_two.email
 
 
 def test_login_user_via_view(app):

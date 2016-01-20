@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -35,26 +35,43 @@ from __future__ import absolute_import, print_function
 
 import flask
 import flask_login
+import string
+import random
 from flask import current_app
 from flask_security import url_for_security
 from flask_security.utils import encrypt_password
 from werkzeug.local import LocalProxy
+from .models import User
 
 # "Convenient references" (lifted from flask_security source)
 _datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
 
 
-def create_test_user(email='test@test.org',
+def create_test_user(email=None,
                      password='123456', **kwargs):
-    """Create a user in the datastore, bypassing the registration process.
+    r"""Create a user account in the datastore for testing purposes.
 
-    Accesses the application's datastore. An error is thrown if called from
-    outside of an application context.
+    .. warning:: Accesses the application's datastore. An error is thrown if
+        called from outside of an application context.
 
-    Returns the created user model object instance, with the plaintext password
-    as `user.password_plaintext`.
+    Parameters are passed to the ``create_user`` function of the underlying
+    datastore.
+
+    :param email: Email to register account with. If None, one is randomly \
+            generated.
+    :param password: Desired password for the account.
+    :returns: Instance of :class:`invenio_accounts.models.User` with the \
+            plaintext password attached as the ``password_plaintext`` field.
     """
     assert flask.current_app.testing
+    if email is None:
+        # Generate dummy email
+        users = _datastore.db.session.query(User)
+        if users.count() == 0:
+            user_count = 1
+        else:
+            user_count = users.order_by(User.id.desc()).first().id + 1
+        email = 'testuser{0}'.format(user_count) + '@example.org'
     encrypted_password = encrypt_password(password)
     user = _datastore.create_user(email=email, password=encrypted_password,
                                   **kwargs)
