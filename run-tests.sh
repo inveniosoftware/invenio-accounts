@@ -27,5 +27,5 @@ pep257 invenio_accounts && \
 check-manifest --ignore ".travis-*" && \
 #isort -rc -c -df **/*.py && \
 sphinx-build -qnNW docs docs/_build/html && \
-python setup.py test -a "-k 'not e2e'" && \
+python setup.py test && \
 sphinx-build -qnNW -b doctest docs docs/_build/doctest

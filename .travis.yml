@@ -40,20 +40,19 @@ services:
   - postgresql
 
 env:
-  - REQUIREMENTS=devel E2E="yes" EXTRAS=all,postgresql SQLALCHEMY_DATABASE_URI="postgresql+psycopg2://postgres@localhost:5432/invenio"
-  - REQUIREMENTS=lowest E2E="no" EXTRAS=all,sqlite SQLALCHEMY_DATABASE_URI="sqlite:///test.db"
-  - REQUIREMENTS=lowest E2E="no" EXTRAS=all,mysql SQLALCHEMY_DATABASE_URI="mysql+pymysql://travis@localhost:3306/invenio"
-  - REQUIREMENTS=lowest E2E="no" EXTRAS=all,postgresql SQLALCHEMY_DATABASE_URI="postgresql+psycopg2://postgres@localhost:5432/invenio"
-  - REQUIREMENTS=release E2E="no" EXTRAS=all,sqlite SQLALCHEMY_DATABASE_URI="sqlite:///test.db"
-  - REQUIREMENTS=release E2E="no" EXTRAS=all,mysql SQLALCHEMY_DATABASE_URI="mysql+pymysql://travis@localhost:3306/invenio"
-  - REQUIREMENTS=release E2E="no" EXTRAS=all,postgresql SQLALCHEMY_DATABASE_URI="postgresql+psycopg2://postgres@localhost:5432/invenio"
-  - REQUIREMENTS=devel E2E="no" EXTRAS=all,sqlite SQLALCHEMY_DATABASE_URI="sqlite:///test.db"
-  - REQUIREMENTS=devel E2E="no" EXTRAS=all,mysql SQLALCHEMY_DATABASE_URI="mysql+pymysql://travis@localhost:3306/invenio"
-  - REQUIREMENTS=devel E2E="no" EXTRAS=all,postgresql SQLALCHEMY_DATABASE_URI="postgresql+psycopg2://postgres@localhost:5432/invenio"
+  - REQUIREMENTS=lowest E2E_WEBDRIVER_BROWSERS="" EXTRAS=all,sqlite SQLALCHEMY_DATABASE_URI="sqlite:///test.db"
+  - REQUIREMENTS=lowest E2E_WEBDRIVER_BROWSERS="" EXTRAS=all,mysql SQLALCHEMY_DATABASE_URI="mysql+pymysql://travis@localhost:3306/invenio"
+  - REQUIREMENTS=lowest E2E_WEBDRIVER_BROWSERS="" EXTRAS=all,postgresql SQLALCHEMY_DATABASE_URI="postgresql+psycopg2://postgres@localhost:5432/invenio"
+  - REQUIREMENTS=release E2E_WEBDRIVER_BROWSERS="" EXTRAS=all,sqlite SQLALCHEMY_DATABASE_URI="sqlite:///test.db"
+  - REQUIREMENTS=release E2E_WEBDRIVER_BROWSERS="" EXTRAS=all,mysql SQLALCHEMY_DATABASE_URI="mysql+pymysql://travis@localhost:3306/invenio"
+  - REQUIREMENTS=release E2E_WEBDRIVER_BROWSERS="Firefox" EXTRAS=all,postgresql SQLALCHEMY_DATABASE_URI="postgresql+psycopg2://postgres@localhost:5432/invenio"
+  - REQUIREMENTS=devel E2E_WEBDRIVER_BROWSERS="" EXTRAS=all,sqlite SQLALCHEMY_DATABASE_URI="sqlite:///test.db"
+  - REQUIREMENTS=devel E2E_WEBDRIVER_BROWSERS="" EXTRAS=all,mysql SQLALCHEMY_DATABASE_URI="mysql+pymysql://travis@localhost:3306/invenio"
+  - REQUIREMENTS=devel E2E_WEBDRIVER_BROWSERS="" EXTRAS=all,postgresql SQLALCHEMY_DATABASE_URI="postgresql+psycopg2://postgres@localhost:5432/invenio"
 
 python:
   - "2.7"
-  - "3.3"
+  # disabled - "3.3"
   - "3.4"
   - "3.5"
 
@@ -69,11 +68,12 @@ install:
   - "travis_retry pip install -e .[${EXTRAS}]"
 
 before_script:
-  - "if [ ${E2E} == 'yes' ]; then export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; export E2E_WEBDRIVER_BROWSERS='Firefox'; export E2E_WEBDRIVER_TIMEOUT='300'; fi"
-
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+    - "sleep 3" # give xvfb some time to start
 
 script:
-  - "if [ ${E2E} == 'yes' ]; then python setup.py test -a '-k \"e2e\"'; else ./run-tests.sh; fi"
+  - "./run-tests.sh"
 
 after_success:
   - coveralls

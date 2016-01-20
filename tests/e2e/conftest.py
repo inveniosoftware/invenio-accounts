@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -21,7 +21,6 @@
 # In applying this license, CERN does not
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
-
 
 """Pytest configuration."""
 
@@ -52,8 +51,8 @@ from invenio_accounts.views import blueprint
 def app(request):
     """Flask application fixture for E2E/integration/selenium tests.
 
-    Overrides the `app` fixture found in `../conftest.py`. Tests/files in
-    this folder and subfolders will see this variant of the `app` fixture.
+    Overrides the `app` fixture found in `../conftest.py`. Tests/files in this
+    folder and subfolders will see this variant of the `app` fixture.
     """
     instance_path = tempfile.mkdtemp()
     app = Flask('testapp', instance_path=instance_path)
@@ -94,10 +93,12 @@ def app(request):
 
 
 def pytest_generate_tests(metafunc):
-    """Overrides pytest's default test collection function.
-    For each test in this directory which uses the `env_browser` fixture,
-    said test is called once for each value found in the
-    `E2E_WEBDRIVER_BROWSERS` environment variable."""
+    """Override pytest's default test collection function.
+
+    For each test in this directory which uses the `env_browser` fixture, said
+    test is called once for each value found in the `E2E_WEBDRIVER_BROWSERS`
+    environment variable.
+    """
     if 'env_browser' in metafunc.fixturenames:
         # In Python 2.7 the fallback kwarg of os.environ.get is `failobj`,
         # in 3.x it's `default`.
@@ -108,17 +109,19 @@ def pytest_generate_tests(metafunc):
 
 @pytest.fixture()
 def env_browser(request):
-    """Fixture for a webdriver instance of the browser specified by the
-    request object's param. Defaults to Firefox.
-    The webdriver instance is killed after the number of seconds specified by
-    the `E2E_WEBDRIVER_TIMEOUT` variable or defaults to 300 (five minutes)."""
-    if request.param is None:
-        request.param = "Firefox"
+    """Create a webdriver instance of the browser specified by request.
 
-    max_time = int(os.environ.get('E2E_WEBDRIVER_TIMEOUT', '300'))
+    The default browser is Firefox.  The webdriver instance is killed after the
+    number of seconds specified by the ``E2E_WEBDRIVER_TIMEOUT`` variable or
+    defaults to 300 (five minutes).
+    """
+    if not request.param:
+        pytest.skip('Empty value in E2E_WEBDRIVER_BROWSERS.')
+
+    timeout = int(os.environ.get('E2E_WEBDRIVER_TIMEOUT', 300))
 
     def wait_kill():
-        time.sleep(max_time)
+        time.sleep(timeout)
         browser.quit()
 
     def finalizer():
