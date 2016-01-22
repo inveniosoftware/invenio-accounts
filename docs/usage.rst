@@ -43,6 +43,13 @@ Sessions
 .. autofunction:: invenio_accounts.sessions.delete_session
 
 
+Models
+------
+
+.. automodule:: invenio_accounts.models
+    :members:
+
+
 Test utilities
 --------------
 
