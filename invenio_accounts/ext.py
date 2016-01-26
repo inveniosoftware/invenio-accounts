@@ -28,9 +28,9 @@ from __future__ import absolute_import, print_function
 
 import pkg_resources
 from flask_kvsession import KVSessionExtension
+from flask_login import user_logged_in
 from flask_security import Security, SQLAlchemyUserDatastore
 from invenio_db import db
-from flask_login import user_logged_in
 
 from . import config
 from .cli import roles as roles_cli

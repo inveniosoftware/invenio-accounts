@@ -88,6 +88,10 @@ class User(db.Model, UserMixin):
             value = None
         return value
 
+    def __str__(self):
+        """Representation."""
+        return 'User <id={0.id}, email={0.email}>'.format(self)
+
 
 class SessionActivity(db.Model, Timestamp):
     """User Session Activity model.

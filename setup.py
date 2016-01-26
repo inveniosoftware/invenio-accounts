@@ -66,6 +66,9 @@ extras_require = {
     'sqlite': [
         'invenio-db>=1.0.0a6',
     ],
+    'admin': [
+        'invenio-admin>=1.0.0a2',
+    ],
     'tests': tests_require,
 }
 
@@ -148,6 +151,10 @@ setup(
     include_package_data=True,
     platforms='any',
     entry_points={
+        'invenio_admin.views': [
+            'invenio_accounts_user = invenio_accounts.admin:user_adminview',
+            'invenio_accounts_role = invenio_accounts.admin:role_adminview',
+        ],
         'invenio_base.apps': [
             'invenio_accounts = invenio_accounts:InvenioAccounts',
         ],

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -66,6 +66,7 @@ from __future__ import absolute_import, print_function
 
 import pkg_resources
 from flask import Flask, render_template
+from flask.ext.menu import Menu
 from flask_babelex import Babel
 from flask_cli import FlaskCLI
 from flask_mail import Mail
@@ -89,6 +90,13 @@ try:
 except pkg_resources.DistributionNotFound:
     INVENIO_THEME_AVAILABLE = False
 
+try:
+    pkg_resources.get_distribution('invenio_admin')
+    from invenio_admin import InvenioAdmin
+    INVENIO_ADMIN_AVAILABLE = True
+except pkg_resources.DistributionNotFound:
+    INVENIO_ADMIN_AVAILABLE = False
+
 # Create Flask application
 app = Flask(__name__)
 app.config.update(
@@ -105,12 +113,17 @@ FlaskCLI(app)
 Babel(app)
 Mail(app)
 InvenioDB(app)
+Menu(app)
+InvenioAccounts(app)
+
+
 if INVENIO_ASSETS_AVAILABLE:
     InvenioAssets(app)
 if INVENIO_THEME_AVAILABLE:
     InvenioTheme(app)
-InvenioAccounts(app)
-
+if INVENIO_ADMIN_AVAILABLE:
+    InvenioAdmin(app, permission_factory=lambda x: x,
+                 view_class_factory=lambda x:   x)
 app.register_blueprint(blueprint)
 
 
