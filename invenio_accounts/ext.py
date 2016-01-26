@@ -32,6 +32,7 @@ from flask_security import Security, SQLAlchemyUserDatastore
 from invenio_db import db
 from flask_login import user_logged_in
 
+from . import config
 from .cli import roles as roles_cli
 from .cli import users as users_cli
 from .models import Role, User
@@ -63,8 +64,10 @@ class InvenioAccounts(object):
         if sessionstore is None:
             import redis
             from simplekv.memory.redisstore import RedisStore
-            # TODO: use default from config?
-            sessionstore = RedisStore(redis.StrictRedis())
+
+            sessionstore = RedisStore(redis.StrictRedis.from_url(
+                app.config['ACCOUNTS_SESSION_REDIS_URL']))
+
         self.sessionstore = sessionstore
         user_logged_in.connect(login_listener, app)
 
@@ -134,3 +137,7 @@ class InvenioAccounts(object):
                               "/logout/")
         app.config.setdefault("SECURITY_CHANGE_URL",
                               "/accounts/settings/password/")
+
+        for k in dir(config):
+            if k.startswith('ACCOUNTS_'):
+                app.config.setdefault(k, getattr(config, k))
