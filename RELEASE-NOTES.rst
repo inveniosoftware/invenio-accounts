@@ -1,8 +1,8 @@
 ===========================
- Invenio-Accounts v1.0.0a7
+ Invenio-Accounts v1.0.0a8
 ===========================
 
-Invenio-Accounts v1.0.0a7 was released on January 20, 2016.
+Invenio-Accounts v1.0.0a8 was released on January 27, 2016.
 
 About
 -----
@@ -19,7 +19,7 @@ What's new
 Installation
 ------------
 
-   $ pip install invenio-accounts==1.0.0a7
+   $ pip install invenio-accounts==1.0.0a8
 
 Documentation
 -------------
