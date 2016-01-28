@@ -31,6 +31,7 @@ import time
 import flask
 import flask_kvsession
 import flask_security
+import pytest
 import redis
 from flask_login import user_logged_in, user_logged_out
 from invenio_db import db
@@ -132,10 +133,13 @@ def test_sessionstore_default_ttl_secs(app):
 
     See http://pythonhosted.org/simplekv/index.html#simplekv.TimeToLiveMixin.
     """
+    if type(app.kvsession_store) is not RedisStore:
+        pytest.skip('TTL support needed, this test requires Redis.')
+
     ttl_seconds = 1
     ttl_delta = datetime.timedelta(0, ttl_seconds)
 
-    sessionstore = RedisStore(redis.StrictRedis())
+    sessionstore = app.kvsession_store
     sessionstore.default_ttl_secs = ttl_seconds
 
     # Verify that the backend supports ttl
@@ -161,6 +165,9 @@ def test_sessionstore_default_ttl_secs(app):
 
 def test_session_ttl(app):
     """Test actual/working session expiration/TTL settings."""
+    if type(app.kvsession_store) is not RedisStore:
+        pytest.skip('TTL support needed, this test requires Redis.')
+
     ttl_seconds = 1
     # Set ttl to "0 days, 1 seconds"
     ttl_delta = datetime.timedelta(0, ttl_seconds)

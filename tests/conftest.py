@@ -39,6 +39,7 @@ from flask_cli import FlaskCLI, ScriptInfo
 from flask_mail import Mail
 from flask_menu import Menu
 from invenio_db import InvenioDB, db
+from simplekv.memory.redisstore import RedisStore
 from sqlalchemy_utils.functions import create_database, database_exists, \
     drop_database
 
@@ -85,16 +86,16 @@ def _database_setup(app, request):
         with app.app_context():
             drop_database(str(db.engine.url))
             # Delete sessions in kvsession store
-            if hasattr(app, 'kvsession_store'):
-                for key in app.kvsession_store.iter_keys():
-                    app.kvsession_store.delete(key)
+            if hasattr(app, 'kvsession_store') and \
+                    isinstance(app.kvsession_store, RedisStore):
+                app.kvsession_store.redis.flushall()
         shutil.rmtree(app.instance_path)
 
     request.addfinalizer(teardown)
     return app
 
 
-@pytest.fixture()
+@pytest.fixture
 def base_app(request):
     """Flask application fixture."""
     app = _app_factory()
@@ -102,7 +103,7 @@ def base_app(request):
     return app
 
 
-@pytest.fixture()
+@pytest.fixture
 def app(request):
     """Flask application fixture with Invenio Accounts."""
     app = _app_factory()
@@ -115,13 +116,13 @@ def app(request):
     return app
 
 
-@pytest.fixture()
+@pytest.fixture
 def script_info(app):
     """Get ScriptInfo object for testing CLI."""
     return ScriptInfo(create_app=lambda info: app)
 
 
-@pytest.fixture()
+@pytest.fixture
 def task_app(request):
     """Flask application with Celery enabled."""
     app = _app_factory(dict(

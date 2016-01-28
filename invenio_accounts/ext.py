@@ -26,6 +26,8 @@
 
 from __future__ import absolute_import, print_function
 
+import os
+
 import pkg_resources
 from flask_kvsession import KVSessionExtension
 from flask_login import user_logged_in
@@ -62,11 +64,17 @@ class InvenioAccounts(object):
 
         # Create sessionstore
         if sessionstore is None:
-            import redis
-            from simplekv.memory.redisstore import RedisStore
+            if app.testing and \
+                    os.environ.get('CI', 'false') == 'false':
+                from simplekv.memory import DictStore
 
-            sessionstore = RedisStore(redis.StrictRedis.from_url(
-                app.config['ACCOUNTS_SESSION_REDIS_URL']))
+                sessionstore = DictStore()
+            else:
+                import redis
+                from simplekv.memory.redisstore import RedisStore
+
+                sessionstore = RedisStore(redis.StrictRedis.from_url(
+                    app.config['ACCOUNTS_SESSION_REDIS_URL']))
 
         user_logged_in.connect(login_listener, app)
 

@@ -76,6 +76,7 @@ Invenio user management and authentication.
 - Peter Halliday <phalliday@cornell.edu>
 - Piotr Praczyk <piotr.praczyk@gmail.com>
 - Raquel Jimenez Encinar <raquel.jimenez.encinar@cern.ch>
+- Sami Hiltunen <sami.mikael.hiltunen@cern.ch>
 - Samuele Carli <samuele.carli@cern.ch>
 - Samuele Kaplun <samuele.kaplun@cern.ch>
 - Thomas Baron <thomas.baron@cern.ch>
