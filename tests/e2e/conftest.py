@@ -99,11 +99,15 @@ def pytest_generate_tests(metafunc):
     test is called once for each value found in the `E2E_WEBDRIVER_BROWSERS`
     environment variable.
     """
+    browsers = os.environ.get('E2E_WEBDRIVER_BROWSERS', '').split()
+
+    if not browsers:
+        pytest.skip('E2E_WEBDRIVER_BROWSERS not set, '
+                    'end-to-end tests skipped.')
+
     if 'env_browser' in metafunc.fixturenames:
         # In Python 2.7 the fallback kwarg of os.environ.get is `failobj`,
         # in 3.x it's `default`.
-        browsers = os.environ.get('E2E_WEBDRIVER_BROWSERS',
-                                  'Firefox').split()
         metafunc.parametrize('env_browser', browsers, indirect=True)
 
 
@@ -115,9 +119,6 @@ def env_browser(request):
     number of seconds specified by the ``E2E_WEBDRIVER_TIMEOUT`` variable or
     defaults to 300 (five minutes).
     """
-    if not request.param:
-        pytest.skip('Empty value in E2E_WEBDRIVER_BROWSERS.')
-
     timeout = int(os.environ.get('E2E_WEBDRIVER_TIMEOUT', 300))
 
     def wait_kill():
