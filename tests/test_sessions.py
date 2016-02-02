@@ -33,6 +33,7 @@ import flask_kvsession
 import flask_security
 import redis
 from flask_login import user_logged_in, user_logged_out
+from invenio_db import db as _db
 from itsdangerous import Signer
 from simplekv.memory.redisstore import RedisStore
 from werkzeug.local import LocalProxy
@@ -41,9 +42,6 @@ from invenio_accounts import InvenioAccounts, testutils
 from invenio_accounts.models import SessionActivity
 from invenio_accounts.sessions import delete_session, login_listener
 from invenio_accounts.views import blueprint
-
-_datastore = LocalProxy(lambda: flask.current_app.
-                        extensions['invenio-accounts'].datastore)
 
 _sessionstore = LocalProxy(lambda: flask.current_app.
                            extensions['invenio-accounts'].sessionstore)
@@ -56,7 +54,7 @@ def test_login_listener(app):
 
     user = testutils.create_test_user()
     # The SessionActivity table is initially empty
-    query = _datastore.db.session.query(SessionActivity)
+    query = _db.session.query(SessionActivity)
     assert query.count() == 0
 
     with app.test_client() as client:
@@ -65,7 +63,7 @@ def test_login_listener(app):
         assert testutils.client_authenticated(client)
         # After logging in, a SessionActivity has been created corresponding
         # to the user's session.
-        query = _datastore.db.session.query(SessionActivity)
+        query = _db.session.query(SessionActivity)
         assert query.count() == 1
 
         session_entry = query.first()
@@ -80,7 +78,7 @@ def test_repeated_login_session_population(app):
     app.register_blueprint(blueprint)
 
     user = testutils.create_test_user()
-    query = _datastore.db.session.query(SessionActivity)
+    query = _db.session.query(SessionActivity)
     assert query.count() == len(testutils.get_kvsession_keys())
 
     with app.test_client() as client:
@@ -88,20 +86,20 @@ def test_repeated_login_session_population(app):
         # one SessionActivity
         testutils.login_user_via_view(client, user=user)
         assert testutils.client_authenticated(client)
-        query = _datastore.db.session.query(SessionActivity)
+        query = _db.session.query(SessionActivity)
         assert query.count() == 1
         assert query.count() == len(testutils.get_kvsession_keys())
 
         # Sessions are not deleted upon logout
         client.get(flask_security.url_for_security('logout'))
         assert len(testutils.get_kvsession_keys()) == 1
-        query = _datastore.db.session.query(SessionActivity)
+        query = _db.session.query(SessionActivity)
         assert query.count() == len(testutils.get_kvsession_keys())
 
         # After logging out and back in, the number of sessions correspond to
         # the number of SessionActivity entries.
         testutils.login_user_via_view(client, user=user)
-        query = _datastore.db.session.query(SessionActivity)
+        query = _db.session.query(SessionActivity)
         assert query.count() == len(testutils.get_kvsession_keys())
 
 
@@ -125,7 +123,7 @@ def test_login_multiple_clients_single_user_session_population(app):
     # There is now `client_count` existing sessions and SessionActivity
     # entries
     assert len(testutils.get_kvsession_keys()) == client_count
-    query = _datastore.db.session.query(SessionActivity)
+    query = _db.session.query(SessionActivity)
     assert query.count() == client_count
     assert len(user.active_sessions) == client_count
 
@@ -234,7 +232,7 @@ def test_session_deletion(app):
         # The user now has no active sessions
         assert len(testutils.get_kvsession_keys()) == 0
         assert len(user.active_sessions) == 0
-        query = _datastore.db.session.query(SessionActivity)
+        query = _db.session.query(SessionActivity)
         assert query.count() == 0
 
         # After deleting the session, the client is not authenticated
