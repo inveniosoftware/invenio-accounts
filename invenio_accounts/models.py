@@ -101,15 +101,13 @@ class SessionActivity(db.Model, Timestamp):
 
     __tablename__ = "accounts_user_session_activity"
 
-    id = db.Column(db.Integer, primary_key=True)
-
-    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
-    """ID of user to whom this session belongs."""
-
-    sid_s = db.Column(db.String(255), unique=True, index=True)
+    sid_s = db.Column(db.String(255), primary_key=True)
     """Serialized Session ID. Used as the session's key in the kv-session
     store employed by `flask-kvsession`.
     Named here as it is in `flask-kvsession` to avoid confusion.
     """
+
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    """ID of user to whom this session belongs."""
 
     user = db.relationship(User, backref='active_sessions')

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -21,7 +21,6 @@
 # In applying this license, CERN does not
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
-
 
 """Test test utilities."""
 
@@ -57,44 +56,44 @@ def test_client_authenticated(app):
         change_password_url = url_for_security('change_password')
         login_url = url_for_security('login')
 
-    with app.test_client() as client:
-        # At this point we should not be authenticated/logged in as a user
-        assert flask_login.current_user.is_anonymous
-        assert not testutils.client_authenticated(
-            client, test_url=change_password_url)
+        with app.test_client() as client:
+            # At this point we should not be authenticated/logged in as a user
+            # assert flask_login.current_user.is_anonymous
+            assert not testutils.client_authenticated(
+                client, test_url=change_password_url)
 
-        # Test HTTP status code of view when not logged in.
-        response = client.get(change_password_url)
-        assert response.status_code == 302
-        assert change_password_url not in response.location
-        assert login_url in response.location
+            # Test HTTP status code of view when not logged in.
+            response = client.get(change_password_url)
+            assert response.status_code == 302
+            assert change_password_url not in response.location
+            assert login_url in response.location
 
-        # Once more, following redirects.
-        response = client.get(change_password_url, follow_redirects=True)
-        assert response.status_code == 200
-        assert response.location is None
+            # Once more, following redirects.
+            response = client.get(change_password_url, follow_redirects=True)
+            assert response.status_code == 200
+            assert response.location is None
 
-        # Create a user manually directly in the datastore
-        ext.datastore.create_user(email=email,
-                                  password=encrypt_password(password))
-        db.session.commit()
+            # Create a user manually directly in the datastore
+            ext.datastore.create_user(email=email,
+                                      password=encrypt_password(password))
+            db.session.commit()
 
-        # Manual login via view
-        response = client.post(login_url,
-                               data={'email': email, 'password': password},
-                               environ_base={'REMOTE_ADDR': '127.0.0.1'})
+            # Manual login via view
+            response = client.post(login_url,
+                                   data={'email': email, 'password': password},
+                                   environ_base={'REMOTE_ADDR': '127.0.0.1'})
 
-        # Client gets redirected after logging in
-        assert response.status_code == 302
-        assert testutils.client_authenticated(client)
-        assert flask_login.current_user.is_authenticated
-        # `is_authenticated` returns True as long as the user object
-        # isn't anonymous, i.e. it's an actual user.
+            # Client gets redirected after logging in
+            assert response.status_code == 302
+            assert testutils.client_authenticated(client)
+            assert flask_login.current_user.is_authenticated
+            # `is_authenticated` returns True as long as the user object
+            # isn't anonymous, i.e. it's an actual user.
 
-        response = client.get(change_password_url)
-        assert response.status_code == 200
-        response = client.get(change_password_url, follow_redirects=True)
-        assert response.status_code == 200
+            response = client.get(change_password_url)
+            assert response.status_code == 200
+            response = client.get(change_password_url, follow_redirects=True)
+            assert response.status_code == 200
 
 
 def test_create_test_user(app):
@@ -162,48 +161,51 @@ def test_set_app_session_ttl(app):
     ttl_seconds = 1
     ttl_delta = testutils.set_app_session_ttl(app, ttl_seconds)
     assert ttl_delta == datetime.timedelta(0, ttl_seconds)
-    user = testutils.create_test_user()
-    with app.test_client() as client:
-        testutils.login_user_via_view(client, user=user)
-        login_at = datetime.datetime.utcnow()
-        sid = testutils.unserialize_session(flask.session.sid_s)
-        while not sid.has_expired(ttl_delta):
-            pass
-        assert not testutils.client_authenticated(client)
+    with app.app_context():
+        user = testutils.create_test_user()
+        with app.test_client() as client:
+            testutils.login_user_via_view(client, user=user)
+            login_at = datetime.datetime.utcnow()
+            sid = testutils.unserialize_session(flask.session.sid_s)
+            while not sid.has_expired(ttl_delta):
+                pass
+            assert not testutils.client_authenticated(client)
 
 
 def test_create_sessions_for_user(app):
     """Test testutils.py:create_sessions_for_user."""
     InvenioAccounts(app)
     app.register_blueprint(blueprint)
-    user = testutils.create_test_user()
-    assert len(user.active_sessions) == 0
-    res = testutils.create_sessions_for_user(user=user)
-    assert len(user.active_sessions) == 1
-    assert res['user'] == user
+    with app.app_context():
+        user = testutils.create_test_user()
+        assert len(user.active_sessions) == 0
+        res = testutils.create_sessions_for_user(user=user)
+        assert len(user.active_sessions) == 1
+        assert res['user'] == user
 
-    # Cookie is retrievable from the client.
-    sid_s = user.active_sessions[0].sid_s
-    client_one = res['clients'][0]
-    cookie = testutils.get_cookie_from_client(client_one)
-    assert sid_s == testutils.get_sid_s_from_cookie(cookie)
+        # Cookie is retrievable from the client.
+        sid_s = user.active_sessions[0].sid_s
+        client_one = res['clients'][0]
+        cookie = testutils.get_cookie_from_client(client_one)
+        assert sid_s == testutils.get_sid_s_from_cookie(cookie)
 
-    # The client is still authenticated
-    with client_one as client:
-        assert testutils.client_authenticated(client)
+        # The client is still authenticated
+        with client_one as client:
+            assert testutils.client_authenticated(client)
 
-    # Repeated calls create new sessions.
-    res = testutils.create_sessions_for_user(app=app, user=user)
-    assert len(user.active_sessions) == 2
-    assert len(res['clients']) == 1
+        # Repeated calls create new sessions.
+        res = testutils.create_sessions_for_user(app=app, user=user)
+        assert len(user.active_sessions) == 2
+        assert len(res['clients']) == 1
 
-    # No user argument (fails b/c `create_test_user` has static default values)
-    # res = testutils.create_sessions_for_user(app=app)
-    # user_two = res['user']
-    # assert not user_two == user
-    # assert len(user_two.active_sessions) == 1
+        # No user argument (fails b/c `create_test_user` has static
+        # default values)
+        # res = testutils.create_sessions_for_user(app=app)
+        # user_two = res['user']
+        # assert not user_two == user
+        # assert len(user_two.active_sessions) == 1
 
-    n = 3
-    res = testutils.create_sessions_for_user(user=user, n=n)
-    assert len(user.active_sessions) == 2+n
-    assert len(res['clients']) == n
+        n = 3
+        res = testutils.create_sessions_for_user(user=user, n=n)
+        assert len(user.active_sessions) == 2 + n
+        assert len(res['clients']) == n
