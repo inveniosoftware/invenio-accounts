@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -41,6 +41,14 @@ def test_cli_createuser(script_info):
     result = runner.invoke(
         users_create, input='1234\n1234\n', obj=script_info)
     assert result.exit_code != 0
+
+    # Create user with invalid email
+    result = runner.invoke(
+        users_create,
+        ['not-an-email', '--password', '123456'],
+        obj=script_info
+    )
+    assert result.exit_code == 2
 
     # Create user
     result = runner.invoke(

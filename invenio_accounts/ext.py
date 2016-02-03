@@ -68,12 +68,11 @@ class InvenioAccounts(object):
             sessionstore = RedisStore(redis.StrictRedis.from_url(
                 app.config['ACCOUNTS_SESSION_REDIS_URL']))
 
-        self.sessionstore = sessionstore
         user_logged_in.connect(login_listener, app)
 
         # Initialize extension.
         state = self.security.init_app(app, datastore=self.datastore)
-        self.kvsession_extension = KVSessionExtension(self.sessionstore, app)
+        self.kvsession_extension = KVSessionExtension(sessionstore, app)
 
         if app.config['ACCOUNTS_USE_CELERY']:
             from invenio_accounts.tasks import send_security_email
@@ -94,7 +93,7 @@ class InvenioAccounts(object):
             pkg_resources.get_distribution('celery')
             app.config.setdefault(
                 "ACCOUNTS_USE_CELERY", not (app.debug or app.testing))
-        except pkg_resources.DistributionNotFound:
+        except pkg_resources.DistributionNotFound:  # pragma: no cover
             app.config.setdefault("ACCOUNTS_USE_CELERY", False)
 
         app.config.setdefault('ACCOUNTS', True)

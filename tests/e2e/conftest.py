@@ -62,13 +62,13 @@ def app(request):
         CELERY_CACHE_BACKEND="memory",
         CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
         CELERY_RESULT_BACKEND="cache",
+        LOGIN_DISABLED=False,
         MAIL_SUPPRESS_SEND=True,
         SECRET_KEY="CHANGE_ME",
         SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
         SQLALCHEMY_DATABASE_URI=os.environ.get(
             'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
         TESTING=True,
-        LOGIN_DISABLED=False,
     )
     FlaskCLI(app)
     Menu(app)

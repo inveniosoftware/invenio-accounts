@@ -35,7 +35,6 @@ from invenio_db import InvenioDB
 
 from invenio_accounts import InvenioAccounts
 from invenio_accounts.models import Role, User
-from invenio_accounts.views import blueprint
 
 
 def test_version():
@@ -67,8 +66,7 @@ def test_init():
 
 def test_datastore_usercreate(app):
     """Test create user."""
-    ext = InvenioAccounts(app)
-    ds = ext.datastore
+    ds = app.extensions['invenio-accounts'].datastore
 
     with app.app_context():
         u1 = ds.create_user(email='info@invenio-software.org', password='1234',
@@ -82,8 +80,7 @@ def test_datastore_usercreate(app):
 
 def test_datastore_rolecreate(app):
     """Test create user."""
-    ext = InvenioAccounts(app)
-    ds = ext.datastore
+    ds = app.extensions['invenio-accounts'].datastore
 
     with app.app_context():
         r1 = ds.create_role(name='superuser', description='1234')
@@ -96,8 +93,7 @@ def test_datastore_rolecreate(app):
 
 def test_datastore_assignrole(app):
     """Create and assign user to role."""
-    ext = InvenioAccounts(app)
-    ds = ext.datastore
+    ds = app.extensions['invenio-accounts'].datastore
 
     with app.app_context():
         u = ds.create_user(email='info@invenio-software.org', password='1234',
@@ -112,9 +108,6 @@ def test_datastore_assignrole(app):
 
 def test_view(app):
     """Test view."""
-    InvenioAccounts(app)
-    app.register_blueprint(blueprint)
-
     with app.app_context():
         login_url = url_for_security('login')
 
@@ -123,8 +116,9 @@ def test_view(app):
         assert res.status_code == 200
 
 
-def test_configuration(app):
+def test_configuration(base_app):
     """Test configuration."""
+    app = base_app
     app.config['ACCOUNTS_USE_CELERY'] = 'deadbeef'
     InvenioAccounts(app)
     assert 'deadbeef' == app.config['ACCOUNTS_USE_CELERY']

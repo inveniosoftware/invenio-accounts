@@ -36,9 +36,6 @@ from invenio_accounts.views import blueprint
 
 def test_session_activity_model(app):
     """Test SessionActivity model."""
-    ext = InvenioAccounts(app)
-    app.register_blueprint(blueprint)
-
     with app.app_context():
         # SessionActivity table is in the database
         inspector = inspect(db.engine)

@@ -45,9 +45,8 @@ from sqlalchemy_utils.functions import create_database, database_exists, \
 from invenio_accounts import InvenioAccounts
 
 
-@pytest.fixture()
-def app(request):
-    """Flask application fixture."""
+def _app_factory(config=None):
+    """Application factory."""
     instance_path = tempfile.mkdtemp()
     app = Flask('testapp', instance_path=instance_path)
     app.config.update(
@@ -56,22 +55,27 @@ def app(request):
         CELERY_CACHE_BACKEND="memory",
         CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
         CELERY_RESULT_BACKEND="cache",
+        LOGIN_DISABLED=False,
         MAIL_SUPPRESS_SEND=True,
         SECRET_KEY="CHANGE_ME",
         SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
         SQLALCHEMY_DATABASE_URI=os.environ.get(
             'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
-        TESTING=True,
-        LOGIN_DISABLED=False,
-        WTF_CSRF_ENABLED=False,
         SERVER_NAME='example.com',
+        TESTING=True,
+        WTF_CSRF_ENABLED=False,
     )
+    app.config.update(config or {})
     FlaskCLI(app)
     Menu(app)
     Babel(app)
     Mail(app)
     InvenioDB(app)
+    return app
 
+
+def _database_setup(app, request):
+    """Setup database."""
     with app.app_context():
         if not database_exists(str(db.engine.url)):
             create_database(str(db.engine.url))
@@ -84,65 +88,47 @@ def app(request):
             if hasattr(app, 'kvsession_store'):
                 for key in app.kvsession_store.iter_keys():
                     app.kvsession_store.delete(key)
-        shutil.rmtree(instance_path)
+        shutil.rmtree(app.instance_path)
 
     request.addfinalizer(teardown)
     return app
 
 
 @pytest.fixture()
-def script_info(request):
-    """Get ScriptInfo object for testing CLI."""
-    instance_path = tempfile.mkdtemp()
-    app = Flask('testapp', instance_path=instance_path)
-    app.config.update(
-        ACCOUNTS_USE_CELERY=False,
-        SECRET_KEY="CHANGE_ME",
-        SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
-        SQLALCHEMY_DATABASE_URI=os.environ.get(
-            'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
-        TESTING=True,
-    )
-    FlaskCLI(app)
-    Babel(app)
-    Mail(app)
-    InvenioDB(app)
+def base_app(request):
+    """Flask application fixture."""
+    app = _app_factory()
+    _database_setup(app, request)
+    return app
+
+
+@pytest.fixture()
+def app(request):
+    """Flask application fixture with Invenio Accounts."""
+    app = _app_factory()
     InvenioAccounts(app)
 
-    with app.app_context():
-        if not database_exists(str(db.engine.url)):
-            create_database(str(db.engine.url))
-        db.drop_all()
-        db.create_all()
+    from invenio_accounts.views import blueprint
+    app.register_blueprint(blueprint)
 
-    def teardown():
-        with app.app_context():
-            drop_database(str(db.engine.url))
-        shutil.rmtree(instance_path)
+    _database_setup(app, request)
+    return app
 
-    request.addfinalizer(teardown)
+
+@pytest.fixture()
+def script_info(app):
+    """Get ScriptInfo object for testing CLI."""
     return ScriptInfo(create_app=lambda info: app)
 
 
 @pytest.fixture()
-def task_app():
-    """Flask application fixture."""
-    app = Flask('testapp')
-    app.config.update(
+def task_app(request):
+    """Flask application with Celery enabled."""
+    app = _app_factory(dict(
         ACCOUNTS_USE_CELERY=True,
-        SECRET_KEY="CHANGE_ME",
-        SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
-        SQLALCHEMY_DATABASE_URI=os.environ.get(
-            'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
-        CELERY_ALWAYS_EAGER=True,
-        CELERY_RESULT_BACKEND="cache",
-        CELERY_CACHE_BACKEND="memory",
-        CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
-        MAIL_SUPPRESS_SEND=True
-    )
+        MAIL_SUPPRESS_SEND=True,
+    ))
     FlaskCeleryExt(app)
-    FlaskCLI(app)
-    Mail(app)
     InvenioAccounts(app)
-
+    _database_setup(app, request)
     return app

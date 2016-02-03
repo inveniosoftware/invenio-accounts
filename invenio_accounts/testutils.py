@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -122,80 +122,6 @@ def webdriver_authenticated(webdriver, test_url=None):
     return (flask.url_for('security.login', _external=True) not in result_url)
 
 
-def get_cookie_from_client(client, sid_s=None):
-    """Extract the cookie from the client's cookie jar.
-
-    If `sid_s` is None, it returns the first cookie.
-    """
-    for c in client.cookie_jar:
-        if sid_s is None or sid_s in c.value:
-            return c
-
-
-def get_sid_s_from_cookie(cookie):
-    """Extract the sid_s from the given cookie."""
-    return cookie.value.split('.')[0]
-
-
-def get_kvsession_keys():
-    """Return the key (sid_s) entries in the application's kvsession store."""
-    return current_app.kvsession_store.keys()
-
-
 def unserialize_session(sid_s):
     """Return the unserialized session."""
     return SessionID.unserialize(sid_s)
-
-
-def set_app_session_ttl(app=None, seconds=None, timedelta=None):
-    """Set `PERMANENT_SESSION_LIFETIME` for the provided app.
-
-    If `app` is None it is set for `flask.current_app`.
-    The value is set to the provided number of `seconds`
-    or (if `seconds` is none absent), the  value of the timedelta.
-
-    Returns the new value of the config variable.
-    """
-    app = app or flask.current_app
-    ttl = timedelta or datetime.timedelta(0, seconds)
-    app.config['PERMANENT_SESSION_LIFETIME'] = ttl
-    return ttl
-
-
-def let_session_expire(sid_s=None):
-    r"""Do nothing until the given sid has expired.
-
-    .. warning:: Don't use this unless the ``PERMANENT_SESSION_LIFETIME`` of \
-        the current app is relatively short -- it defaults to **31 days**.
-
-    :param sid_s: serialized session ID of the session to let expire. If \
-        None, ``flask.session`` is used.
-
-    """
-    sid = unserialize_session(sid_s or flask.session.sid_s)
-    ttl = flask.current_app.config['PERMANENT_SESSION_LIFETIME']
-    while not sid.has_expired(ttl):
-        pass
-    return
-
-
-def create_sessions_for_user(app=None, user=None, n=1):
-    r"""Create a bunch of sessions for the user by logging in with test clients.
-
-    :param app: Flask app to use. If None, ``flask.current_app`` is used.
-    :param user: User for which sessions are created. If None, a user is \
-        created via :func:`create_test_user`.
-    :param n: Number of sessions to create.
-
-    :returns: Dict containing the user and a list containing the clients \
-        used to log in.
-    """
-    app = app or flask.current_app
-    user = user or create_test_user()
-    client_list = []
-    for i in range(0, n):
-        with app.test_client() as client:
-            login_user_via_view(client, user=user)
-            client_list.append(client)
-
-    return {'user': user, 'clients': client_list}

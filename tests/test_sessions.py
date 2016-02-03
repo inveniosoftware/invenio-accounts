@@ -48,9 +48,7 @@ _sessionstore = LocalProxy(lambda: flask.current_app.
 
 
 def test_login_listener(app):
-    """Test sessions.py:login_listener"""
-    InvenioAccounts(app)
-    app.register_blueprint(blueprint)
+    """Test login listener."""
     with app.app_context():
         with app.test_client() as client:
             user = testutils.create_test_user()
@@ -72,15 +70,15 @@ def test_login_listener(app):
 
 
 def test_repeated_login_session_population(app):
-    """Verify that the number of SessionActivity entries match the number of
-    sessions in the kv-store, when logging in with one user."""
-    InvenioAccounts(app)
-    app.register_blueprint(blueprint)
+    """Verify session population on repeated login.
 
+    Check that the number of SessionActivity entries match the number of
+    sessions in the kv-store, when logging in with one user.
+    """
     with app.app_context():
         user = testutils.create_test_user()
         query = db.session.query(SessionActivity)
-        assert query.count() == len(testutils.get_kvsession_keys())
+        assert query.count() == len(app.kvsession_store.keys())
 
         with app.test_client() as client:
             # After logging in, there should be one session in the kv-store and
@@ -89,27 +87,24 @@ def test_repeated_login_session_population(app):
             assert testutils.client_authenticated(client)
             query = db.session.query(SessionActivity)
             assert query.count() == 1
-            assert query.count() == len(testutils.get_kvsession_keys())
+            assert query.count() == len(app.kvsession_store.keys())
 
             # Sessions are not deleted upon logout
             client.get(flask_security.url_for_security('logout'))
-            assert len(testutils.get_kvsession_keys()) == 1
+            assert len(app.kvsession_store.keys()) == 1
             query = db.session.query(SessionActivity)
-            assert query.count() == len(testutils.get_kvsession_keys())
+            assert query.count() == len(app.kvsession_store.keys())
 
             # After logging out and back in, the number of sessions correspond
             # to the number of SessionActivity entries.
             testutils.login_user_via_view(client, user=user)
             query = db.session.query(SessionActivity)
-            assert query.count() == len(testutils.get_kvsession_keys())
+            assert query.count() == len(app.kvsession_store.keys())
 
 
 def test_login_multiple_clients_single_user_session_population(app):
     """Test session population/creation when logging in as the same user from
     multiple clients."""
-    InvenioAccounts(app)
-    app.register_blueprint(blueprint)
-
     with app.app_context():
         user = testutils.create_test_user()
 
@@ -126,27 +121,27 @@ def test_login_multiple_clients_single_user_session_population(app):
                 assert not testutils.client_authenticated(client)
         # There is now `client_count` existing sessions and SessionActivity
         # entries
-        assert len(testutils.get_kvsession_keys()) == client_count
+        assert len(app.kvsession_store.keys()) == client_count
         query = db.session.query(SessionActivity)
         assert query.count() == client_count
         assert len(user.active_sessions) == client_count
 
 
 def test_sessionstore_default_ttl_secs(app):
-    """Test the `default_ttl_secs` field for simplekv sessionstore backends
-    using the TimeToLive-mixin
-    (http://pythonhosted.org/simplekv/index.html#simplekv.TimeToLiveMixin)"""
+    """Test the `default_ttl_secs` field for simplekv sessionstore.
+
+    See http://pythonhosted.org/simplekv/index.html#simplekv.TimeToLiveMixin.
+    """
     ttl_seconds = 1
     ttl_delta = datetime.timedelta(0, ttl_seconds)
 
     sessionstore = RedisStore(redis.StrictRedis())
     sessionstore.default_ttl_secs = ttl_seconds
 
-    ext = InvenioAccounts(app, sessionstore=sessionstore)
-    app.register_blueprint(blueprint)
-
     # Verify that the backend supports ttl
-    assert ext.sessionstore.ttl_support
+    assert sessionstore.ttl_support
+
+    app.kvsession_store = sessionstore
 
     with app.app_context():
         user = testutils.create_test_user()
@@ -170,10 +165,7 @@ def test_session_ttl(app):
     # Set ttl to "0 days, 1 seconds"
     ttl_delta = datetime.timedelta(0, ttl_seconds)
 
-    ext = InvenioAccounts(app)
-    app.register_blueprint(blueprint)
-
-    assert ext.sessionstore.ttl_support
+    assert app.kvsession_store.ttl_support
 
     # _THIS_ is what flask_kvsession uses to determine default ttl
     # sets default ttl to `ttl_seconds` seconds
@@ -185,26 +177,24 @@ def test_session_ttl(app):
 
         with app.test_client() as client:
             testutils.login_user_via_view(client, user=user)
-            assert len(testutils.get_kvsession_keys()) == 1
+            assert len(app.kvsession_store.keys()) == 1
 
             sid = testutils.unserialize_session(flask.session.sid_s)
-            testutils.let_session_expire()
+            time.sleep(ttl_seconds + 1)
 
             assert sid.has_expired(ttl_delta)
             assert not testutils.client_authenticated(client)
 
             # Expired sessions are automagically removed from the sessionstore
             # Although not _instantly_.
-            while len(testutils.get_kvsession_keys()) > 0:
+            while len(app.kvsession_store.keys()) > 0:
                 pass
-            assert len(testutils.get_kvsession_keys()) == 0
+            assert len(app.kvsession_store.keys()) == 0
 
 
 def test_repeated_login_session_expiration(app):
     """Test that a new session (with a different sid_s) is created when logging
     in again after a previous session has expired."""
-    InvenioAccounts(app)
-    app.register_blueprint(blueprint)
     ttl_seconds = 1
     ttl_delta = datetime.timedelta(0, ttl_seconds)
     app.config['PERMANENT_SESSION_LIFETIME'] = ttl_delta
@@ -214,7 +204,7 @@ def test_repeated_login_session_expiration(app):
         with app.test_client() as client:
             testutils.login_user_via_view(client, user=user)
             first_sid_s = flask.session.sid_s
-            testutils.let_session_expire()
+            time.sleep(ttl_seconds + 1)
             assert not testutils.client_authenticated(client)
 
             app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
@@ -228,9 +218,6 @@ def test_repeated_login_session_expiration(app):
 def test_session_deletion(app):
     """Test that a user/client is no longer authenticated when its session is
     deleted via `delete_session`."""
-    InvenioAccounts(app)
-    app.register_blueprint(blueprint)
-
     with app.app_context():
         user = testutils.create_test_user()
 
@@ -243,7 +230,7 @@ def test_session_deletion(app):
             delete_session(saved_sid_s)
             db.session.commit()
             # The user now has no active sessions
-            assert len(testutils.get_kvsession_keys()) == 0
+            assert len(app.kvsession_store.keys()) == 0
             assert len(user.active_sessions) == 0
             query = db.session.query(SessionActivity)
             assert query.count() == 0
@@ -253,6 +240,6 @@ def test_session_deletion(app):
 
             # A new session is created in the kv-sessionstore, but its
             # sid_s is different and the user is not authenticated with it.
-            assert len(testutils.get_kvsession_keys()) == 1
+            assert len(app.kvsession_store.keys()) == 1
             assert not flask.session.sid_s == saved_sid_s
             assert not testutils.client_authenticated(client)

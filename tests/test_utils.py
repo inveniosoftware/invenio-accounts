@@ -44,11 +44,9 @@ def test_client_authenticated(app):
     """Test for testutils.py:client_authenticated(client).
 
     We want to verify that it doesn't return True when the client isn't
-    authenticated/logged in."""
-    ext = InvenioAccounts(app)
-    # Required for the test app/templates
-    app.register_blueprint(blueprint)
-
+    authenticated/logged in.
+    """
+    ds = app.extensions['security'].datastore
     email = 'test@test.org'
     password = '123456'
 
@@ -74,8 +72,7 @@ def test_client_authenticated(app):
             assert response.location is None
 
             # Create a user manually directly in the datastore
-            ext.datastore.create_user(email=email,
-                                      password=encrypt_password(password))
+            ds.create_user(email=email, password=encrypt_password(password))
             db.session.commit()
 
             # Manual login via view
@@ -99,8 +96,9 @@ def test_client_authenticated(app):
 def test_create_test_user(app):
     """Test for testutils.py:create_test_user().
 
-    Demonstrates basic usage and context requirements."""
-    ext = InvenioAccounts(app)
+    Demonstrates basic usage and context requirements.
+    """
+    ds = app.extensions['security'].datastore
     email = 'test@test.org'
     password = '1234'
 
@@ -111,7 +109,7 @@ def test_create_test_user(app):
         assert user.password != password
 
         # Verify that user exists in app's datastore
-        user_ds = ext.datastore.find_user(email=email)
+        user_ds = ds.find_user(email=email)
         assert user_ds
         assert user_ds.password == user.password
 
@@ -126,10 +124,6 @@ def test_create_test_user(app):
 
 def test_create_test_user_defaults(app):
     """Test the default values for testutils.py:create_test_user."""
-
-    ext = InvenioAccounts(app)
-    app.register_blueprint(blueprint)
-
     with app.app_context():
         user = testutils.create_test_user()
         with app.test_client() as client:
@@ -140,8 +134,6 @@ def test_create_test_user_defaults(app):
 
 def test_login_user_via_view(app):
     """Test the login-via-view function/hack."""
-    InvenioAccounts(app)
-    app.register_blueprint(blueprint)
     email = 'test@test.org'
     password = '1234'
 
@@ -152,60 +144,3 @@ def test_login_user_via_view(app):
             testutils.login_user_via_view(client, user.email,
                                           user.password_plaintext)
             assert testutils.client_authenticated(client)
-
-
-def test_set_app_session_ttl(app):
-    """Test testutils.py:set_app_session_ttl."""
-    InvenioAccounts(app)
-    app.register_blueprint(blueprint)
-    ttl_seconds = 1
-    ttl_delta = testutils.set_app_session_ttl(app, ttl_seconds)
-    assert ttl_delta == datetime.timedelta(0, ttl_seconds)
-    with app.app_context():
-        user = testutils.create_test_user()
-        with app.test_client() as client:
-            testutils.login_user_via_view(client, user=user)
-            login_at = datetime.datetime.utcnow()
-            sid = testutils.unserialize_session(flask.session.sid_s)
-            while not sid.has_expired(ttl_delta):
-                pass
-            assert not testutils.client_authenticated(client)
-
-
-def test_create_sessions_for_user(app):
-    """Test testutils.py:create_sessions_for_user."""
-    InvenioAccounts(app)
-    app.register_blueprint(blueprint)
-    with app.app_context():
-        user = testutils.create_test_user()
-        assert len(user.active_sessions) == 0
-        res = testutils.create_sessions_for_user(user=user)
-        assert len(user.active_sessions) == 1
-        assert res['user'] == user
-
-        # Cookie is retrievable from the client.
-        sid_s = user.active_sessions[0].sid_s
-        client_one = res['clients'][0]
-        cookie = testutils.get_cookie_from_client(client_one)
-        assert sid_s == testutils.get_sid_s_from_cookie(cookie)
-
-        # The client is still authenticated
-        with client_one as client:
-            assert testutils.client_authenticated(client)
-
-        # Repeated calls create new sessions.
-        res = testutils.create_sessions_for_user(app=app, user=user)
-        assert len(user.active_sessions) == 2
-        assert len(res['clients']) == 1
-
-        # No user argument (fails b/c `create_test_user` has static
-        # default values)
-        # res = testutils.create_sessions_for_user(app=app)
-        # user_two = res['user']
-        # assert not user_two == user
-        # assert len(user_two.active_sessions) == 1
-
-        n = 3
-        res = testutils.create_sessions_for_user(user=user, n=n)
-        assert len(user.active_sessions) == 2 + n
-        assert len(res['clients']) == n

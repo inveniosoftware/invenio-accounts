@@ -40,8 +40,7 @@ from werkzeug.local import LocalProxy
 
 from invenio_accounts.models import SessionActivity
 
-_sessionstore = LocalProxy(lambda: flask.current_app.
-                           extensions['invenio-accounts'].sessionstore)
+_sessionstore = LocalProxy(lambda: flask.current_app.kvsession_store)
 
 
 def add_session(session=None):
