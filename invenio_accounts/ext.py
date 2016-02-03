@@ -32,6 +32,9 @@ from flask_login import user_logged_in
 from flask_security import Security, SQLAlchemyUserDatastore
 from invenio_db import db
 
+from invenio_accounts.forms import confirm_register_form_factory, \
+    register_form_factory
+
 from . import config
 from .cli import roles as roles_cli
 from .cli import users as users_cli
@@ -73,6 +76,14 @@ class InvenioAccounts(object):
         # Initialize extension.
         state = self.security.init_app(app, datastore=self.datastore)
         self.kvsession_extension = KVSessionExtension(sessionstore, app)
+
+        app.extensions['security'].register_form = register_form_factory(
+            app.extensions['security'].register_form, app)
+
+        app.extensions['security'].confirm_register_form = \
+            confirm_register_form_factory(
+                app.extensions['security'].confirm_register_form, app
+            )
 
         if app.config['ACCOUNTS_USE_CELERY']:
             from invenio_accounts.tasks import send_security_email

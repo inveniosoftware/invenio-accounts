@@ -64,6 +64,8 @@ Run the development server:
 
 from __future__ import absolute_import, print_function
 
+import os
+
 import pkg_resources
 from flask import Flask, render_template
 from flask.ext.menu import Menu
@@ -79,6 +81,7 @@ from invenio_accounts.views import blueprint
 try:
     pkg_resources.get_distribution('invenio_assets')
     from invenio_assets import InvenioAssets
+
     INVENIO_ASSETS_AVAILABLE = True
 except pkg_resources.DistributionNotFound:
     INVENIO_ASSETS_AVAILABLE = False
@@ -86,6 +89,7 @@ except pkg_resources.DistributionNotFound:
 try:
     pkg_resources.get_distribution('invenio_theme')
     from invenio_theme import InvenioTheme
+
     INVENIO_THEME_AVAILABLE = True
 except pkg_resources.DistributionNotFound:
     INVENIO_THEME_AVAILABLE = False
@@ -93,6 +97,7 @@ except pkg_resources.DistributionNotFound:
 try:
     pkg_resources.get_distribution('invenio_admin')
     from invenio_admin import InvenioAdmin
+
     INVENIO_ADMIN_AVAILABLE = True
 except pkg_resources.DistributionNotFound:
     INVENIO_ADMIN_AVAILABLE = False
@@ -109,6 +114,14 @@ app.config.update(
     SECRET_KEY="CHANGE_ME",
     SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
 )
+
+if os.environ.get('RECAPTCHA_PUBLIC_KEY') is not None \
+        and os.environ.get('RECAPTCHA_PRIVATE_KEY') is not None:
+    app.config.setdefault('RECAPTCHA_PUBLIC_KEY',
+                          os.environ['RECAPTCHA_PUBLIC_KEY'])
+    app.config.setdefault('RECAPTCHA_PRIVATE_KEY',
+                          os.environ['RECAPTCHA_PRIVATE_KEY'])
+
 FlaskCLI(app)
 Babel(app)
 Mail(app)
@@ -116,14 +129,13 @@ InvenioDB(app)
 Menu(app)
 InvenioAccounts(app)
 
-
 if INVENIO_ASSETS_AVAILABLE:
     InvenioAssets(app)
 if INVENIO_THEME_AVAILABLE:
     InvenioTheme(app)
 if INVENIO_ADMIN_AVAILABLE:
     InvenioAdmin(app, permission_factory=lambda x: x,
-                 view_class_factory=lambda x:   x)
+                 view_class_factory=lambda x: x)
 app.register_blueprint(blueprint)
 
 
@@ -134,6 +146,3 @@ def index():
         return render_template("authenticated.html")
     else:
         return render_template("anonymous.html")
-
-if __name__ == "__main__":
-    app.run()
