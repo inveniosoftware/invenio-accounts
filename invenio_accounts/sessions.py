@@ -34,13 +34,11 @@ from __future__ import absolute_import, print_function
 
 import flask
 from flask_login import user_logged_in
+from invenio_db import db as _db
 from sqlalchemy.exc import IntegrityError
 from werkzeug.local import LocalProxy
 
 from invenio_accounts.models import SessionActivity
-
-_datastore = LocalProxy(lambda: flask.current_app.
-                        extensions['invenio-accounts'].datastore)
 
 _sessionstore = LocalProxy(lambda: flask.current_app.
                            extensions['invenio-accounts'].sessionstore)
@@ -56,10 +54,10 @@ def add_session(session=None):
     user_id, sid_s = session['user_id'], session.sid_s
     session_activity = SessionActivity(user_id=user_id, sid_s=sid_s)
     try:
-        _datastore.db.session.add(session_activity)
-        _datastore.commit()
+        with _db.session.begin_nested():
+            _db.session.add(session_activity)
     except IntegrityError:
-        _datastore.db.session.rollback()
+        _db.session.rollback()
 
 
 def login_listener(app, user):
@@ -84,8 +82,9 @@ def delete_session(sid_s):
     # Remove entries from sessionstore
     _sessionstore.delete(sid_s)
     # Find and remove the corresponding SessionActivity entry
-    sessionactivity = _datastore.db.session.query(SessionActivity).\
-        filter_by(sid_s=sid_s).first()
-    _datastore.db.session.delete(sessionactivity)
-    _datastore.commit()
+    with _db.session.begin_nested():
+        sessionactivity = _db.session.query(SessionActivity).\
+            filter_by(sid_s=sid_s).first()
+        _db.session.delete(sessionactivity)
+    _db.session.commit()
     return 1

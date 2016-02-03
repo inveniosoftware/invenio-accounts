@@ -26,6 +26,7 @@
 
 from __future__ import absolute_import
 
+from invenio_db import db as _db
 from sqlalchemy import inspect
 
 from invenio_accounts import InvenioAccounts, testutils
@@ -38,17 +39,16 @@ def test_session_activity_model(app):
     ext = InvenioAccounts(app)
     app.register_blueprint(blueprint)
 
-    # SessionActivity table is in the datastore database.
-    datastore = app.extensions['invenio-accounts'].datastore
-    inspector = inspect(datastore.db.engine)
+    # SessionActivity table is in the database
+    inspector = inspect(_db.engine)
     assert 'accounts_user_session_activity' in inspector.get_table_names()
 
     user = testutils.create_test_user()
 
-    # Create a new SessionActivity object, put it in the datastore.
+    # Create a new SessionActivity object, put it in the db
     session_activity = SessionActivity(user_id=user.get_id(),
                                        sid_s="teststring")
-    database = datastore.db
+    database = _db
 
     # the `created` field is magicked in via the Timestamp mixin class
     assert not session_activity.created
