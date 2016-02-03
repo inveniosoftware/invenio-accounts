@@ -53,9 +53,11 @@ def add_session(session=None):
     """
     user_id, sid_s = session['user_id'], session.sid_s
     session_activity = SessionActivity(user_id=user_id, sid_s=sid_s)
-    with _db.session.begin_nested():
+    try:
+        with _db.session.begin_nested():
             _db.session.add(session_activity)
-    _db.session.commit()
+    except IntegrityError:
+        _db.session.rollback()
 
 
 def login_listener(app, user):
