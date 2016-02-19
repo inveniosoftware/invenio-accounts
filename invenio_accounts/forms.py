@@ -35,7 +35,7 @@ class RegistrationFormRecaptcha(Form):
     """Form for editing user profile."""
 
     recaptcha = RecaptchaField(validators=[
-        Recaptcha(message=_("Invalid reCAPTCHA spam protection."))])
+        Recaptcha(message=_("Please complete the reCAPTCHA."))])
 
 
 def confirm_register_form_factory(Form, app):

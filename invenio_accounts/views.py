@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -63,10 +63,28 @@ def post_ext_init(state):
 @blueprint.before_app_first_request
 def init_menu():
     """Initialize menu before first request."""
+    # Register breadcrumb root
+    item = current_menu.submenu('breadcrumbs.settings')
+    item.register('', _('Account'))
+    item = current_menu.submenu('breadcrumbs.{0}'.format(
+        current_app.config['SECURITY_BLUEPRINT_NAME']))
+    item.register('', _('Change password'))
+
+    # Register settings menu
     item = current_menu.submenu('settings.change_password')
     item.register(
         "{0}.change_password".format(
             current_app.config['SECURITY_BLUEPRINT_NAME']),
         # NOTE: Menu item text (icon replaced by a user icon).
-        _('%(icon)s Change Password', icon='<i class="fa fa-key fa-fw"></i>'),
+        _('%(icon)s Change password', icon='<i class="fa fa-key fa-fw"></i>'),
         order=1)
+
+    # Register breadcrumb
+    item = current_menu.submenu('breadcrumbs.{0}.change_password'.format(
+        current_app.config['SECURITY_BLUEPRINT_NAME']))
+    item.register(
+        "{0}.change_password".format(
+            current_app.config['SECURITY_BLUEPRINT_NAME']),
+        _("Change password"),
+        order=0,
+    )
