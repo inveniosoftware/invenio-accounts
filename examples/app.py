@@ -126,13 +126,14 @@ FlaskCLI(app)
 Babel(app)
 Mail(app)
 InvenioDB(app)
-Menu(app)
 InvenioAccounts(app)
 
 if INVENIO_ASSETS_AVAILABLE:
     InvenioAssets(app)
 if INVENIO_THEME_AVAILABLE:
     InvenioTheme(app)
+else:
+    Menu(app)
 if INVENIO_ADMIN_AVAILABLE:
     InvenioAdmin(app, permission_factory=lambda x: x,
                  view_class_factory=lambda x: x)
