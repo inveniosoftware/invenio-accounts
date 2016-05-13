@@ -27,3 +27,7 @@
 # ACCOUNTS_SESSION_REDIS_URL should be in the form
 # redis://username:password@host:port/db_index
 ACCOUNTS_SESSION_REDIS_URL = 'redis://localhost:6379/0'
+
+# ACCOUNTS_FORCE_BLUEPRINT_REGISTRATION can be use to override
+# ``register_blueprint`` option.
+ACCOUNTS_REGISTER_BLUEPRINT = None

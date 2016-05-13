@@ -91,6 +91,7 @@ def test_init_rest():
     assert 'security' not in app.blueprints.keys()
 
     app = Flask('testapp')
+    app.config['ACCOUNTS_REGISTER_BLUEPRINT'] = True
     FlaskCLI(app)
     Babel(app)
     Mail(app)
@@ -98,7 +99,7 @@ def test_init_rest():
     ext = InvenioAccountsREST()
     assert 'invenio-accounts' not in app.extensions
     assert 'security' not in app.blueprints.keys()
-    ext.init_app(app, register_blueprint=True)
+    ext.init_app(app)
     assert 'invenio-accounts' in app.extensions
     assert 'security' in app.blueprints.keys()
 

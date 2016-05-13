@@ -84,6 +84,10 @@ class InvenioAccounts(object):
         user_logged_in.connect(login_listener, app)
 
         # Initialize extension.
+        _register_blueprint = app.config.get('ACCOUNTS_REGISTER_BLUEPRINT')
+        if _register_blueprint is not None:
+            register_blueprint = _register_blueprint
+
         state = self.security.init_app(app, datastore=self.datastore,
                                        register_blueprint=register_blueprint)
         self.kvsession_extension = KVSessionExtension(sessionstore, app)
