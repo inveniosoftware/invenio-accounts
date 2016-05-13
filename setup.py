@@ -159,7 +159,7 @@ setup(
             'invenio_accounts = invenio_accounts:InvenioAccounts',
         ],
         'invenio_base.api_apps': [
-            'invenio_accounts = invenio_accounts:InvenioAccounts',
+            'invenio_accounts_rest = invenio_accounts:InvenioAccountsREST',
         ],
         'invenio_base.blueprints': [
             'invenio_accounts = invenio_accounts.views:blueprint',

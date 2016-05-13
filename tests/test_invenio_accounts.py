@@ -33,7 +33,7 @@ from flask_mail import Mail
 from flask_security import url_for_security
 from invenio_db import InvenioDB
 
-from invenio_accounts import InvenioAccounts
+from invenio_accounts import InvenioAccounts, InvenioAccountsREST
 from invenio_accounts.models import Role, User
 
 
@@ -52,6 +52,7 @@ def test_init():
     InvenioDB(app)
     ext = InvenioAccounts(app)
     assert 'invenio-accounts' in app.extensions
+    assert 'security' in app.blueprints.keys()
 
     app = Flask('testapp')
     FlaskCLI(app)
@@ -60,8 +61,46 @@ def test_init():
     InvenioDB(app)
     ext = InvenioAccounts()
     assert 'invenio-accounts' not in app.extensions
+    assert 'security' not in app.blueprints.keys()
     ext.init_app(app)
     assert 'invenio-accounts' in app.extensions
+    assert 'security' in app.blueprints.keys()
+
+
+def test_init_rest():
+    """Test REST extension initialization."""
+    app = Flask('testapp')
+    FlaskCLI(app)
+    Babel(app)
+    Mail(app)
+    InvenioDB(app)
+    ext = InvenioAccountsREST(app)
+    assert 'invenio-accounts' in app.extensions
+    assert 'security' not in app.blueprints.keys()
+
+    app = Flask('testapp')
+    FlaskCLI(app)
+    Babel(app)
+    Mail(app)
+    InvenioDB(app)
+    ext = InvenioAccountsREST()
+    assert 'invenio-accounts' not in app.extensions
+    assert 'security' not in app.blueprints.keys()
+    ext.init_app(app)
+    assert 'invenio-accounts' in app.extensions
+    assert 'security' not in app.blueprints.keys()
+
+    app = Flask('testapp')
+    FlaskCLI(app)
+    Babel(app)
+    Mail(app)
+    InvenioDB(app)
+    ext = InvenioAccountsREST()
+    assert 'invenio-accounts' not in app.extensions
+    assert 'security' not in app.blueprints.keys()
+    ext.init_app(app, register_blueprint=True)
+    assert 'invenio-accounts' in app.extensions
+    assert 'security' in app.blueprints.keys()
 
 
 def test_datastore_usercreate(app):

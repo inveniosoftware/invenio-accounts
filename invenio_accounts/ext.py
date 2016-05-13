@@ -54,11 +54,13 @@ class InvenioAccounts(object):
         if app:
             self.init_app(app, sessionstore=sessionstore)
 
-    def init_app(self, app, use_celery=True, sessionstore=None):
+    def init_app(self, app, use_celery=True, sessionstore=None,
+                 register_blueprint=True):
         """Flask application initialization.
 
         :param sessionstore: store for sessions. Passed to
             ``flask-kvsession``. Defaults to redis.
+        :param register_blueprint: Register the Security blueprint or not.
         """
         self.init_config(app)
 
@@ -82,7 +84,8 @@ class InvenioAccounts(object):
         user_logged_in.connect(login_listener, app)
 
         # Initialize extension.
-        state = self.security.init_app(app, datastore=self.datastore)
+        state = self.security.init_app(app, datastore=self.datastore,
+                                       register_blueprint=register_blueprint)
         self.kvsession_extension = KVSessionExtension(sessionstore, app)
 
         app.extensions['security'].register_form = register_form_factory(
@@ -159,3 +162,21 @@ class InvenioAccounts(object):
         for k in dir(config):
             if k.startswith('ACCOUNTS_'):
                 app.config.setdefault(k, getattr(config, k))
+
+
+class InvenioAccountsREST(InvenioAccounts):
+    """Invenio-Accounts REST extension."""
+
+    def init_app(self, app, use_celery=True, sessionstore=None,
+                 register_blueprint=False):
+        """Flask application initialization.
+
+        :param sessionstore: store for sessions. Passed to
+            ``flask-kvsession``. Defaults to redis.
+        :param register_blueprint: Do not register the Security blueprint
+            by default.
+        """
+        return super(InvenioAccountsREST, self).init_app(
+            app, use_celery=use_celery, sessionstore=sessionstore,
+            register_blueprint=register_blueprint,
+        )
