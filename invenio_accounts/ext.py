@@ -29,10 +29,13 @@ from __future__ import absolute_import, print_function
 import os
 
 import pkg_resources
+from flask import current_app
 from flask_kvsession import KVSessionExtension
 from flask_login import user_logged_in
-from flask_security import Security, SQLAlchemyUserDatastore
+from flask_security import Security, SQLAlchemyUserDatastore, changeable, \
+    recoverable, registerable, utils
 from invenio_db import db
+from passlib.registry import register_crypt_handler
 
 from invenio_accounts.forms import confirm_register_form_factory, \
     register_form_factory
@@ -40,8 +43,19 @@ from invenio_accounts.forms import confirm_register_form_factory, \
 from . import config
 from .cli import roles as roles_cli
 from .cli import users as users_cli
+from .hash import InvenioAesEncryptedEmail, _to_binary
 from .models import Role, User
 from .sessions import login_listener
+
+
+def get_hmac(password):
+    """Override Flask-Security's default MAC signing of plain passwords."""
+    return _to_binary(password)
+
+
+def encrypt_password(password):
+    """Override Flask-Security's default encryption function."""
+    return current_app.extensions['security'].pwd_context.encrypt(password)
 
 
 class InvenioAccounts(object):
@@ -54,6 +68,17 @@ class InvenioAccounts(object):
         if app:
             self.init_app(app, sessionstore=sessionstore)
 
+    @staticmethod
+    def monkey_patch_flask_security():
+        """Monkey-patch Flask-Security."""
+        if utils.get_hmac != get_hmac:
+            utils.get_hmac = get_hmac
+        if utils.encrypt_password != encrypt_password:
+            utils.encrypt_password = encrypt_password
+            changeable.encrypt_password = encrypt_password
+            recoverable.encrypt_password = encrypt_password
+            registerable.encrypt_password = encrypt_password
+
     def init_app(self, app, use_celery=True, sessionstore=None,
                  register_blueprint=True):
         """Flask application initialization.
@@ -63,6 +88,9 @@ class InvenioAccounts(object):
         :param register_blueprint: Register the Security blueprint or not.
         """
         self.init_config(app)
+
+        # Monkey-patch Flask-Security
+        InvenioAccounts.monkey_patch_flask_security()
 
         # Create user datastore
         self.datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -124,12 +152,17 @@ class InvenioAccounts(object):
 
         app.config.setdefault('ACCOUNTS', True)
 
+        # Register Invenio legacy password hashing
+        register_crypt_handler(InvenioAesEncryptedEmail)
+
         # Change Flask-Security defaults
         app.config.setdefault('SECURITY_CHANGEABLE', True)
         app.config.setdefault('SECURITY_CONFIRMABLE', True)
         app.config.setdefault('SECURITY_PASSWORD_HASH', 'pbkdf2_sha512')
-        app.config.setdefault('SECURITY_PASSWORD_SCHEMES', ['pbkdf2_sha512'])
-        app.config.setdefault('SECURITY_DEPRECATED_PASSWORD_SCHEMES', [])
+        app.config.setdefault('SECURITY_PASSWORD_SCHEMES',
+                              ['pbkdf2_sha512', 'invenio_aes_encrypted_email'])
+        app.config.setdefault('SECURITY_DEPRECATED_PASSWORD_SCHEMES',
+                              ['invenio_aes_encrypted_email'])
         app.config.setdefault('SECURITY_RECOVERABLE', True)
         app.config.setdefault('SECURITY_REGISTERABLE', True)
         app.config.setdefault('SECURITY_TRACKABLE', True)

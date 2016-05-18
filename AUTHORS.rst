@@ -71,6 +71,7 @@ Invenio user management and authentication.
 - Mikael Karlsson <i8myshoes@gmail.com>
 - Nicholas Robinson <nicholas.robinson@cern.ch>
 - Nikolaos Kasioumis <nikolaos.kasioumis@cern.ch>
+- Orestis Melkonian <melkon.or@gmail.com>
 - Patrick Glauner <patrick.oliver.glauner@cern.ch>
 - Paulo Cabral <paulo.cabral@cern.ch>
 - Peter Halliday <phalliday@cornell.edu>
