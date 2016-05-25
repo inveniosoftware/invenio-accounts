@@ -1,8 +1,8 @@
-===========================
- Invenio-Accounts v1.0.0a10
-===========================
+============================
+ Invenio-Accounts v1.0.0a11
+============================
 
-Invenio-Accounts v1.0.0a10 was released on April 19, 2016.
+Invenio-Accounts v1.0.0a11 was released on May 25, 2016.
 
 About
 -----
@@ -19,7 +19,7 @@ What's new
 Installation
 ------------
 
-   $ pip install invenio-accounts==1.0.0a10
+   $ pip install invenio-accounts==1.0.0a11
 
 Documentation
 -------------
