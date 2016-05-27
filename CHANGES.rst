@@ -25,7 +25,7 @@
 Changes
 =======
 
-Version 1.0.0a11 (released 2016-05-25)
+Version 1.0.0a12 (released 2016-05-27)
 --------------------------------------
 
 - Module rewrite using Flask-Security.
