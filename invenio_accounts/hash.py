@@ -33,7 +33,7 @@ from passlib.utils.handlers import GenericHandler, HasSalt, parse_mc2, \
     render_mc2
 from six import PY3, binary_type, text_type
 
-__all__ = ('invenio_aes_encrypted_email', )
+__all__ = ('InvenioAesEncryptedEmail', )
 
 
 def _to_binary(val):

@@ -29,7 +29,6 @@ from flask_admin.actions import action
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form.fields import DateTimeField
 from flask_babelex import gettext as _
-from flask_login import login_user, logout_user
 from werkzeug.local import LocalProxy
 
 from .cli import commit

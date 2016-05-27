@@ -33,9 +33,7 @@ created.
 from __future__ import absolute_import, print_function
 
 import flask
-from flask_login import user_logged_in
 from invenio_db import db
-from sqlalchemy.exc import IntegrityError
 from werkzeug.local import LocalProxy
 
 from invenio_accounts.models import SessionActivity

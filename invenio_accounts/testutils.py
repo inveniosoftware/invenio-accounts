@@ -33,8 +33,6 @@ about this.
 
 from __future__ import absolute_import, print_function
 
-import datetime
-
 import flask
 import flask_login
 from flask import current_app
@@ -64,6 +62,14 @@ def create_test_user(email='test@test.org',
     _datastore.commit()
     user.password_plaintext = password
     return user
+
+
+def login_user_via_session(client, user=None, email=None):
+    """Login a user via the session."""
+    if not user:
+        user = _datastore.find_user(email=email)
+    with client.session_transaction() as sess:
+        sess['user_id'] = user.get_id()
 
 
 def login_user_via_view(client, email=None, password=None, user=None,

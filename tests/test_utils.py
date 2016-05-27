@@ -26,18 +26,13 @@
 
 from __future__ import absolute_import, print_function
 
-import datetime
-
-import flask
 import flask_login
-import pkg_resources
 import pytest
 from flask_security import url_for_security
 from flask_security.utils import encrypt_password
 from invenio_db import db
 
-from invenio_accounts import InvenioAccounts, testutils
-from invenio_accounts.views import blueprint
+from invenio_accounts import testutils
 
 
 def test_client_authenticated(app):
@@ -143,4 +138,17 @@ def test_login_user_via_view(app):
             assert not testutils.client_authenticated(client)
             testutils.login_user_via_view(client, user.email,
                                           user.password_plaintext)
+            assert testutils.client_authenticated(client)
+
+
+def test_login_user_via_session(app):
+    """Test the login-via-view function/hack."""
+    email = 'test@test.org'
+    password = '1234'
+
+    with app.app_context():
+        user = testutils.create_test_user(email, password)
+        with app.test_client() as client:
+            assert not testutils.client_authenticated(client)
+            testutils.login_user_via_session(client, email=user.email)
             assert testutils.client_authenticated(client)
