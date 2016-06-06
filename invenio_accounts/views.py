@@ -68,23 +68,26 @@ def init_menu():
     item.register('', _('Account'))
     item = current_menu.submenu('breadcrumbs.{0}'.format(
         current_app.config['SECURITY_BLUEPRINT_NAME']))
-    item.register('', _('Change password'))
 
-    # Register settings menu
-    item = current_menu.submenu('settings.change_password')
-    item.register(
-        "{0}.change_password".format(
-            current_app.config['SECURITY_BLUEPRINT_NAME']),
-        # NOTE: Menu item text (icon replaced by a user icon).
-        _('%(icon)s Change password', icon='<i class="fa fa-key fa-fw"></i>'),
-        order=1)
+    if current_app.config.get('SECURITY_CHANGEABLE', True):
+        item.register('', _('Change password'))
 
-    # Register breadcrumb
-    item = current_menu.submenu('breadcrumbs.{0}.change_password'.format(
-        current_app.config['SECURITY_BLUEPRINT_NAME']))
-    item.register(
-        "{0}.change_password".format(
-            current_app.config['SECURITY_BLUEPRINT_NAME']),
-        _("Change password"),
-        order=0,
-    )
+        # Register settings menu
+        item = current_menu.submenu('settings.change_password')
+        item.register(
+            "{0}.change_password".format(
+                current_app.config['SECURITY_BLUEPRINT_NAME']),
+            # NOTE: Menu item text (icon replaced by a user icon).
+            _('%(icon)s Change password',
+                icon='<i class="fa fa-key fa-fw"></i>'),
+            order=1)
+
+        # Register breadcrumb
+        item = current_menu.submenu('breadcrumbs.{0}.change_password'.format(
+            current_app.config['SECURITY_BLUEPRINT_NAME']))
+        item.register(
+            "{0}.change_password".format(
+                current_app.config['SECURITY_BLUEPRINT_NAME']),
+            _("Change password"),
+            order=0,
+        )
