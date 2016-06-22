@@ -55,7 +55,7 @@ extras_require = {
         'celery>=3.1.0',
     ],
     'docs': [
-        'Sphinx>=1.3',
+        'Sphinx>=1.4.2',
     ],
     'mysql': [
         'invenio-db[mysql]>=1.0.0a6',
