@@ -31,35 +31,36 @@ You should execute these commands in the examples-directory.
 
 .. code-block:: console
 
+   $ export FLASK_APP=app.py
    $ pip install invenio-theme
    $ pip install invenio-assets
-   $ flask -a app.py npm
+   $ flask npm
    $ cd static
    $ npm install
    $ cd ..
-   $ flask -a app.py collect -v
-   $ flask -a app.py assets build
+   $ flask collect -v
+   $ flask assets build
 
 Create database and tables:
 
 .. code-block:: console
 
-   $ flask -a app.py db init
-   $ flask -a app.py db create
+   $ flask db init
+   $ flask db create
 
 Create a user:
 
 .. code-block:: console
 
-   $ flask -a app.py users create info@invenio-software.org -a
-   $ flask -a app.py users activate info@invenio-software.org
+   $ flask users create info@invenio-software.org -a
+   $ flask users activate info@invenio-software.org
 
 Run the development server:
 
 .. code-block:: console
 
-   $ flask -a app.py --debug run
-   $ flask -a app.py shell
+   $ export FLASK_DEBUG=1
+   $ flask run
 """
 
 from __future__ import absolute_import, print_function
@@ -68,10 +69,9 @@ import os
 
 import pkg_resources
 from flask import Flask, render_template
-from flask.ext.menu import Menu
 from flask_babelex import Babel
-from flask_cli import FlaskCLI
 from flask_mail import Mail
+from flask_menu import Menu
 from flask_security import current_user
 from invenio_db import InvenioDB
 
@@ -122,7 +122,10 @@ if os.environ.get('RECAPTCHA_PUBLIC_KEY') is not None \
     app.config.setdefault('RECAPTCHA_PRIVATE_KEY',
                           os.environ['RECAPTCHA_PRIVATE_KEY'])
 
-FlaskCLI(app)
+if not hasattr(app, 'cli'):
+    from flask_cli import FlaskCLI
+    FlaskCLI(app)
+
 Babel(app)
 Mail(app)
 InvenioDB(app)

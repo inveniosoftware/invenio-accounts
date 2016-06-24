@@ -35,7 +35,6 @@ import pytest
 from flask import Flask
 from flask_babelex import Babel
 from flask_celeryext import FlaskCeleryExt
-from flask_cli import FlaskCLI, ScriptInfo
 from flask_mail import Mail
 from flask_menu import Menu
 from invenio_db import InvenioDB, db
@@ -44,6 +43,11 @@ from sqlalchemy_utils.functions import create_database, database_exists, \
     drop_database
 
 from invenio_accounts import InvenioAccounts
+
+try:
+    from flask.cli import ScriptInfo
+except ImportError:
+    from flask_cli import ScriptInfo
 
 
 def _app_factory(config=None):
@@ -67,7 +71,9 @@ def _app_factory(config=None):
         WTF_CSRF_ENABLED=False,
     )
     app.config.update(config or {})
-    FlaskCLI(app)
+    if not hasattr(app, 'cli'):
+        from flask_cli import FlaskCLI
+        FlaskCLI(app)
     Menu(app)
     Babel(app)
     Mail(app)

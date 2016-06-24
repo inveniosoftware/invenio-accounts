@@ -30,11 +30,15 @@ from functools import wraps
 
 import click
 from flask import current_app
-from flask_cli import with_appcontext
 from flask_security.forms import ConfirmRegisterForm
 from flask_security.utils import encrypt_password
 from werkzeug.datastructures import MultiDict
 from werkzeug.local import LocalProxy
+
+try:
+    from flask.cli import with_appcontext
+except ImportError:  # pragma: no cover
+    from flask_cli import with_appcontext
 
 _datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
 
