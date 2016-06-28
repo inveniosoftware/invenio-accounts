@@ -49,7 +49,7 @@ def test_no_log_in_message_for_logged_in_users(app):
         assert log_in_message in resp.data
         assert sign_up_message in resp.data
 
-        test_email = 'info@invenio-software.org'
+        test_email = 'info@inveniosoftware.org'
         test_password = 'test1234'
         resp = client.post(url_for_security('register'), data=dict(
             email=test_email,

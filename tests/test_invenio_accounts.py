@@ -109,13 +109,13 @@ def test_datastore_usercreate(app):
     ds = app.extensions['invenio-accounts'].datastore
 
     with app.app_context():
-        u1 = ds.create_user(email='info@invenio-software.org', password='1234',
+        u1 = ds.create_user(email='info@inveniosoftware.org', password='1234',
                             active=True)
         ds.commit()
-        u2 = ds.find_user(email='info@invenio-software.org')
+        u2 = ds.find_user(email='info@inveniosoftware.org')
         assert u1 == u2
         assert 1 == \
-            User.query.filter_by(email='info@invenio-software.org').count()
+            User.query.filter_by(email='info@inveniosoftware.org').count()
 
 
 def test_datastore_rolecreate(app):
@@ -136,12 +136,12 @@ def test_datastore_assignrole(app):
     ds = app.extensions['invenio-accounts'].datastore
 
     with app.app_context():
-        u = ds.create_user(email='info@invenio-software.org', password='1234',
+        u = ds.create_user(email='info@inveniosoftware.org', password='1234',
                            active=True)
         r = ds.create_role(name='superuser', description='1234')
         ds.add_role_to_user(u, r)
         ds.commit()
-        u = ds.get_user('info@invenio-software.org')
+        u = ds.get_user('info@inveniosoftware.org')
         assert len(u.roles) == 1
         assert u.roles[0].name == 'superuser'
 

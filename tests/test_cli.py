@@ -53,7 +53,7 @@ def test_cli_createuser(script_info):
     # Create user
     result = runner.invoke(
         users_create,
-        ['info@invenio-software.org', '--password', '123456'],
+        ['info@inveniosoftware.org', '--password', '123456'],
         obj=script_info
     )
     assert result.exit_code == 0

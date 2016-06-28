@@ -52,8 +52,8 @@ Create a user:
 
 .. code-block:: console
 
-   $ flask users create info@invenio-software.org -a
-   $ flask users activate info@invenio-software.org
+   $ flask users create info@inveniosoftware.org -a
+   $ flask users activate info@inveniosoftware.org
 
 Run the development server:
 
