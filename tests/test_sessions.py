@@ -48,7 +48,7 @@ def test_login_listener(app):
     """Test login listener."""
     with app.app_context():
         with app.test_client() as client:
-            user = testutils.create_test_user()
+            user = testutils.create_test_user('test@example.org')
             # The SessionActivity table is initially empty
             query = db.session.query(SessionActivity)
             assert query.count() == 0
@@ -73,7 +73,7 @@ def test_repeated_login_session_population(app):
     sessions in the kv-store, when logging in with one user.
     """
     with app.app_context():
-        user = testutils.create_test_user()
+        user = testutils.create_test_user('test@example.org')
         query = db.session.query(SessionActivity)
         assert query.count() == len(app.kvsession_store.keys())
 
@@ -102,7 +102,7 @@ def test_repeated_login_session_population(app):
 def test_login_multiple_clients_single_user_session_population(app):
     """Test session population/creation from multiple clients for same user."""
     with app.app_context():
-        user = testutils.create_test_user()
+        user = testutils.create_test_user('test@example.org')
 
         client_count = 3
         clients = [app.test_client() for _ in range(client_count)]
@@ -142,7 +142,7 @@ def test_sessionstore_default_ttl_secs(app):
     app.kvsession_store = sessionstore
 
     with app.app_context():
-        user = testutils.create_test_user()
+        user = testutils.create_test_user('test@example.org')
 
         with app.test_client() as client:
             testutils.login_user_via_view(client, user=user)
@@ -174,7 +174,7 @@ def test_session_ttl(app):
     assert app.permanent_session_lifetime.total_seconds() == ttl_seconds
 
     with app.app_context():
-        user = testutils.create_test_user()
+        user = testutils.create_test_user('test@example.org')
 
         with app.test_client() as client:
             testutils.login_user_via_view(client, user=user)
@@ -203,7 +203,7 @@ def test_repeated_login_session_expiration(app):
     app.config['PERMANENT_SESSION_LIFETIME'] = ttl_delta
 
     with app.app_context():
-        user = testutils.create_test_user()
+        user = testutils.create_test_user('test@example.org')
         with app.test_client() as client:
             testutils.login_user_via_view(client, user=user)
             first_sid_s = session.sid_s
@@ -221,7 +221,7 @@ def test_repeated_login_session_expiration(app):
 def test_session_deletion(app):
     """Test if user is not authenticated when session is deleted."""
     with app.app_context():
-        user = testutils.create_test_user()
+        user = testutils.create_test_user('test@example.org')
 
         with app.test_client() as client:
             testutils.login_user_via_view(client, user=user)

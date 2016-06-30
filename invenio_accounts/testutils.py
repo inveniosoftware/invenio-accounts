@@ -45,8 +45,7 @@ from werkzeug.local import LocalProxy
 _datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
 
 
-def create_test_user(email='test@test.org',
-                     password='123456', **kwargs):
+def create_test_user(email, password='123456', **kwargs):
     """Create a user in the datastore, bypassing the registration process.
 
     Accesses the application's datastore. An error is thrown if called from

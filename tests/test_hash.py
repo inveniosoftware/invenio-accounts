@@ -104,7 +104,7 @@ def test_invenio_aes_encrypted_email(app):
 def test_user_login(app):
     """Test users' high-level login process."""
     with app.app_context():
-        user = create_test_user()
+        user = create_test_user('test@example.org')
         with app.test_client() as client:
             login_user_via_view(client, user.email, user.password_plaintext)
             assert client_authenticated(client)
@@ -128,7 +128,7 @@ def test_legacy_user_login(app):
 def test_monkey_patch(app):
     """Test monkey-patching of Flask-Security's get_hmac function."""
     with app.app_context():
-        user = create_test_user()
+        user = create_test_user('test@example.org')
         assert verify_password(user.password_plaintext, user.password)
 
 
@@ -139,7 +139,8 @@ def test_monkey_patch_legacy(app):
         assert verify_password(user.password_plaintext, user.password)
 
 
-def create_legacy_user(email='test@test.org', password=u'qwert1234', **kwargs):
+def create_legacy_user(email='test@example.org', password=u'qwert1234',
+                       **kwargs):
     """Create a legacy user in the datastore.
 
     A legacy user's password has been encrypted with the legacy mechanism,
