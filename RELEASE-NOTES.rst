@@ -1,8 +1,8 @@
 ============================
- Invenio-Accounts v1.0.0a12
+ Invenio-Accounts v1.0.0a13
 ============================
 
-Invenio-Accounts v1.0.0a12 was released on May 27, 2016.
+Invenio-Accounts v1.0.0a13 was released on July 4, 2016.
 
 About
 -----
@@ -19,7 +19,7 @@ What's new
 Installation
 ------------
 
-   $ pip install invenio-accounts==1.0.0a12
+   $ pip install invenio-accounts==1.0.0a13
 
 Documentation
 -------------
