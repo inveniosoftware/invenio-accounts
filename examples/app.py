@@ -122,10 +122,6 @@ if os.environ.get('RECAPTCHA_PUBLIC_KEY') is not None \
     app.config.setdefault('RECAPTCHA_PRIVATE_KEY',
                           os.environ['RECAPTCHA_PRIVATE_KEY'])
 
-if not hasattr(app, 'cli'):
-    from flask_cli import FlaskCLI
-    FlaskCLI(app)
-
 Babel(app)
 Mail(app)
 InvenioDB(app)

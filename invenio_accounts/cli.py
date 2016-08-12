@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -30,15 +30,11 @@ from functools import wraps
 
 import click
 from flask import current_app
+from flask.cli import with_appcontext
 from flask_security.forms import ConfirmRegisterForm
 from flask_security.utils import encrypt_password
 from werkzeug.datastructures import MultiDict
 from werkzeug.local import LocalProxy
-
-try:
-    from flask.cli import with_appcontext
-except ImportError:  # pragma: no cover
-    from flask_cli import with_appcontext
 
 _datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
 

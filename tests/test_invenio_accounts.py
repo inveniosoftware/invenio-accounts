@@ -28,7 +28,6 @@ from __future__ import absolute_import, print_function
 
 from flask import Flask
 from flask_babelex import Babel
-from flask_cli import FlaskCLI
 from flask_mail import Mail
 from flask_security import url_for_security
 from invenio_db import InvenioDB
@@ -46,7 +45,6 @@ def test_version():
 def test_init():
     """Test extension initialization."""
     app = Flask('testapp')
-    FlaskCLI(app)
     Babel(app)
     Mail(app)
     InvenioDB(app)
@@ -55,7 +53,6 @@ def test_init():
     assert 'security' in app.blueprints.keys()
 
     app = Flask('testapp')
-    FlaskCLI(app)
     Babel(app)
     Mail(app)
     InvenioDB(app)
@@ -70,7 +67,6 @@ def test_init():
 def test_init_rest():
     """Test REST extension initialization."""
     app = Flask('testapp')
-    FlaskCLI(app)
     Babel(app)
     Mail(app)
     InvenioDB(app)
@@ -79,7 +75,6 @@ def test_init_rest():
     assert 'security' not in app.blueprints.keys()
 
     app = Flask('testapp')
-    FlaskCLI(app)
     Babel(app)
     Mail(app)
     InvenioDB(app)
@@ -92,7 +87,6 @@ def test_init_rest():
 
     app = Flask('testapp')
     app.config['ACCOUNTS_REGISTER_BLUEPRINT'] = True
-    FlaskCLI(app)
     Babel(app)
     Mail(app)
     InvenioDB(app)

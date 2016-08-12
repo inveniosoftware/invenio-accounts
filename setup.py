@@ -44,7 +44,6 @@ tests_require = [
     'pytest-flask>=0.10.0',
     'selenium>=2.48.0',
     'Flask-CeleryExt>=0.1.0',
-    'Flask-CLI>=0.2.1',
     'Flask-Mail>=0.9.1',
 ]
 
@@ -57,13 +56,13 @@ extras_require = {
         'Sphinx>=1.4.2',
     ],
     'mysql': [
-        'invenio-db[mysql]>=1.0.0a6',
+        'invenio-db[mysql]>=1.0.0b1',
     ],
     'postgresql': [
-        'invenio-db[postgresql]>=1.0.0a6',
+        'invenio-db[postgresql]>=1.0.0b1',
     ],
     'sqlite': [
-        'invenio-db>=1.0.0a6',
+        'invenio-db>=1.0.0b1',
     ],
     'admin': [
         'invenio-admin>=1.0.0a2',
@@ -85,13 +84,14 @@ setup_requires = [
 ]
 
 install_requires = [
-    'cryptography>=1.3',
     'Flask-BabelEx>=0.9.2',
+    'Flask-KVSession>=0.6.1',
     'Flask-Login>=0.3.0',
     'Flask-Menu>=0.4.0',
     'Flask-Security>=1.7.5',
-    'Flask-KVSession>=0.6.1',
+    'Flask>=0.11',
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
+    'cryptography>=1.3',
     'redis>=2.10.5',
 ]
 

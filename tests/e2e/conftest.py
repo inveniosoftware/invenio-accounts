@@ -35,7 +35,6 @@ import time
 import pytest
 from flask import Flask
 from flask_babelex import Babel
-from flask_cli import FlaskCLI
 from flask_mail import Mail
 from flask_menu import Menu
 from invenio_db import InvenioDB, db
@@ -70,7 +69,6 @@ def app(request):
             'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
         TESTING=True,
     )
-    FlaskCLI(app)
     Menu(app)
     Babel(app)
     Mail(app)
