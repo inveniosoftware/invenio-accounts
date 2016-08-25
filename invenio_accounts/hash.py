@@ -80,7 +80,12 @@ def _mysql_aes_engine(key):
 
 
 def mysql_aes_encrypt(val, key):
-    """Mysql AES encrypt value with secret key."""
+    """Mysql AES encrypt value with secret key.
+
+    :param val: Plain text value.
+    :param key: The AES key.
+    :returns: The encrypted AES value.
+    """
     assert isinstance(val, binary_type) or isinstance(val, text_type)
     assert isinstance(key, binary_type) or isinstance(key, text_type)
     k = _mysql_aes_key(_to_binary(key))
@@ -91,7 +96,12 @@ def mysql_aes_encrypt(val, key):
 
 
 def mysql_aes_decrypt(encrypted_val, key):
-    """Mysql AES decrypt value with secret key."""
+    """Mysql AES decrypt value with secret key.
+
+    :param encrypted_val: Encrypted value.
+    :param key: The AES key.
+    :returns: The AES value decrypted.
+    """
     assert isinstance(encrypted_val, binary_type) \
         or isinstance(encrypted_val, text_type)
     assert isinstance(key, binary_type) or isinstance(key, text_type)
@@ -130,7 +140,11 @@ class InvenioAesEncryptedEmail(HasSalt, GenericHandler):
         return render_mc2(self.ident, self.salt, self.checksum)
 
     def _calc_checksum(self, secret):
-        """Calculate string."""
+        """Calculate string.
+
+        :param secret: The secret key.
+        :returns: The checksum.
+        """
         return str_to_uascii(
             hashlib.sha256(mysql_aes_encrypt(self.salt, secret)).hexdigest()
         )

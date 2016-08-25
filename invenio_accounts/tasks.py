@@ -33,7 +33,10 @@ from flask_mail import Message
 
 @shared_task
 def send_security_email(data):
-    """Celery task to send security email."""
+    """Celery task to send security email.
+
+    :param data: Contains the email data.
+    """
     msg = Message()
     msg.__dict__.update(data)
     current_app.extensions['mail'].send(msg)

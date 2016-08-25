@@ -24,10 +24,16 @@
 
 """Default configuration for ACCOUNTS."""
 
-# ACCOUNTS_SESSION_REDIS_URL should be in the form
-# redis://username:password@host:port/db_index
 ACCOUNTS_SESSION_REDIS_URL = 'redis://localhost:6379/0'
+"""Redis URL used by the module as a cache system for sessions.
 
-# ACCOUNTS_FORCE_BLUEPRINT_REGISTRATION can be use to override
-# ``register_blueprint`` option.
+It should be in the form ``redis://username:password@host:port/db_index``.
+"""
+
 ACCOUNTS_REGISTER_BLUEPRINT = None
+"""Register the Security blueprint or not.
+
+It can be used to override the ``register_blueprint`` option.
+
+.. note:: If the value is ``None``, then the blueprint is not registered.
+"""

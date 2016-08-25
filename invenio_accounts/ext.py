@@ -50,12 +50,20 @@ from .sessions import login_listener
 
 
 def get_hmac(password):
-    """Override Flask-Security's default MAC signing of plain passwords."""
+    """Override Flask-Security's default MAC signing of plain passwords.
+
+    :param password: The plain password.
+    :returns: The password hmac.
+    """
     return _to_binary(password)
 
 
 def encrypt_password(password):
-    """Override Flask-Security's default encryption function."""
+    """Override Flask-Security's default encryption function.
+
+    :param password: The plain password.
+    :returns: The encrypted password.
+    """
     return current_app.extensions['security'].pwd_context.encrypt(password)
 
 
@@ -63,7 +71,12 @@ class InvenioAccounts(object):
     """Invenio-Accounts extension."""
 
     def __init__(self, app=None, sessionstore=None):
-        """Extension initialization."""
+        """Extension initialization.
+
+        :param app: The Flask application.
+        :param sessionstore: store for sessions. Passed to
+            ``flask-kvsession``. Defaults to redis.
+        """
         self.security = Security()
         self.datastore = None
         if app:
@@ -83,9 +96,26 @@ class InvenioAccounts(object):
     def init_app(self, app, sessionstore=None, register_blueprint=True):
         """Flask application initialization.
 
+        The following actions are executed:
+
+        #. Initialize the configuration.
+
+        #. Monkey-patch Flask-Security.
+
+        #. Create the user datastore.
+
+        #. Create the sessionstore.
+
+        #. Initialize the extension, the forms to register users and
+            confirms their emails, the CLI and, if ``ACCOUNTS_USE_CELERY`` is
+            ``True``, register a celery task to send emails.
+
+        :param app: The Flask application.
         :param sessionstore: store for sessions. Passed to
-            ``flask-kvsession``. Defaults to redis.
-        :param register_blueprint: Register the Security blueprint or not.
+            ``flask-kvsession``. If ``None`` then Redis is configured.
+            (Default: ``None``)
+        :param register_blueprint: If ``True``, the application registers the
+            blueprints. (Default: ``True``)
         """
         self.init_config(app)
 
@@ -144,7 +174,10 @@ class InvenioAccounts(object):
         app.extensions['invenio-accounts'] = self
 
     def init_config(self, app):
-        """Initialize configuration."""
+        """Initialize configuration.
+
+        :param app: The Flask application.
+        """
         try:
             pkg_resources.get_distribution('celery')
             app.config.setdefault(
@@ -209,10 +242,12 @@ class InvenioAccountsREST(InvenioAccounts):
     def init_app(self, app, sessionstore=None, register_blueprint=False):
         """Flask application initialization.
 
+        :param app: The Flask application.
         :param sessionstore: store for sessions. Passed to
-            ``flask-kvsession``. Defaults to redis.
-        :param register_blueprint: Do not register the Security blueprint
-            by default.
+            ``flask-kvsession``. If ``None`` then Redis is configured.
+            (Default: ``None``)
+        :param register_blueprint: If ``True``, the application registers the
+            blueprints. (Default: ``True``)
         """
         return super(InvenioAccountsREST, self).init_app(
             app, sessionstore=sessionstore,

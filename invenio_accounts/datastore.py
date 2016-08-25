@@ -35,7 +35,11 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
     """Datastore which deletes active session when a user is deactivated."""
 
     def deactivate_user(self, user):
-        """Deactivate a  user."""
+        """Deactivate a  user.
+
+        :param user: A :class:`invenio_accounts.models.User` instance.
+        :returns: The datastore instance.
+        """
         res = super(SessionAwareSQLAlchemyUserDatastore, self).deactivate_user(
             user)
         if res:

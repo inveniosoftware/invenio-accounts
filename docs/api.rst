@@ -25,6 +25,47 @@
 API Docs
 ========
 
-invenio_accounts
-----------------
+.. automodule:: invenio_accounts.ext
+   :members:
 
+Administration
+--------------
+
+.. automodule:: invenio_accounts.admin
+   :members:
+
+Configuration
+-------------
+
+.. automodule:: invenio_accounts.config
+   :members:
+
+Datastore
+---------
+
+.. automodule:: invenio_accounts.datastore
+   :members:
+
+Forms
+-----
+
+.. automodule:: invenio_accounts.forms
+   :members:
+
+Hash
+----
+
+.. automodule:: invenio_accounts.hash
+   :members:
+
+Tasks
+-----
+
+.. automodule:: invenio_accounts.tasks
+   :members:
+
+Views
+-----
+
+.. automodule:: invenio_accounts.views
+   :members:

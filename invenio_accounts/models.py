@@ -36,6 +36,7 @@ userrole = db.Table(
     db.Column('user_id', db.Integer(), db.ForeignKey('accounts_user.id')),
     db.Column('role_id', db.Integer(), db.ForeignKey('accounts_role.id')),
 )
+"""Relationship between users and roles."""
 
 
 class Role(db.Model, RoleMixin):
@@ -46,8 +47,10 @@ class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer(), primary_key=True)
 
     name = db.Column(db.String(80), unique=True)
+    """Role name."""
 
     description = db.Column(db.String(255))
+    """Role description."""
 
 
 class User(db.Model, UserMixin):
@@ -58,25 +61,35 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
 
     email = db.Column(db.String(255), unique=True)
+    """User email."""
 
     password = db.Column(db.String(255))
+    """User password."""
 
     active = db.Column(db.Boolean)
+    """Flag to say if the user is active or not ."""
 
     confirmed_at = db.Column(db.DateTime)
+    """When the user confirmed the email address."""
 
     last_login_at = db.Column(db.DateTime)
+    """When the user logged-in for the last time."""
 
     current_login_at = db.Column(db.DateTime)
+    """When user logged into the current session."""
 
     last_login_ip = db.Column(IPAddressType, nullable=True)
+    """Last user IP address."""
 
     current_login_ip = db.Column(IPAddressType, nullable=True)
+    """Current user IP address."""
 
     login_count = db.Column(db.Integer)
+    """Count how many times the user logged in."""
 
     roles = db.relationship('Role', secondary=userrole,
                             backref=db.backref('users', lazy='dynamic'))
+    """List of the user's roles."""
 
     @validates('last_login_ip', 'current_login_ip')
     def validate_ip(self, key, value):

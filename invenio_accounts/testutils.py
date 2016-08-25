@@ -53,6 +53,10 @@ def create_test_user(email, password='123456', **kwargs):
 
     Returns the created user model object instance, with the plaintext password
     as `user.password_plaintext`.
+
+    :param email: The user email.
+    :param password: The user password. (Default: ``123456``)
+    :returns: A :class:`invenio_accounts.models.User` instance.
     """
     assert flask.current_app.testing
     encrypted_password = encrypt_password(password)
@@ -64,7 +68,13 @@ def create_test_user(email, password='123456', **kwargs):
 
 
 def login_user_via_session(client, user=None, email=None):
-    """Login a user via the session."""
+    """Login a user via the session.
+
+    :param client: The CLI test client.
+    :param user: The :class:`invenio_accounts.models.User` instance. Optional.
+        (Default: ``None``)
+    :param email: Load the user by the email. Optional. (Default: ``None``)
+    """
     if not user:
         user = _datastore.find_user(email=email)
     with client.session_transaction() as sess:
@@ -128,5 +138,9 @@ def webdriver_authenticated(webdriver, test_url=None):
 
 
 def unserialize_session(sid_s):
-    """Return the unserialized session."""
+    """Return the unserialized session.
+
+    :param sid_s: The session ID.
+    :returns: The unserialized version.
+    """
     return SessionID.unserialize(sid_s)

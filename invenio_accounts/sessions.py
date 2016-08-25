@@ -55,7 +55,11 @@ def add_session(session=None):
 
 
 def login_listener(app, user):
-    """Connect to the user_logged_in signal for table population."""
+    """Connect to the user_logged_in signal for table population.
+
+    :param app: The Flask application.
+    :param user: The :class:`invenio_accounts.models.User` instance.
+    """
     @flask.after_this_request
     def add_user_session(response):
         """Regenerate current session and add to the SessionActivity table.
@@ -77,7 +81,8 @@ def delete_session(sid_s):
     On a successful deletion, the flask-kvsession store returns 1 while the
     sqlalchemy datastore returns None.
 
-    :returns: 1 if deletion was successful.
+    :param sid_s: The session ID.
+    :returns: ``1`` if deletion was successful.
     """
     # Remove entries from sessionstore
     _sessionstore.delete(sid_s)
@@ -91,6 +96,7 @@ def delete_user_sessions(user):
     """Delete all active user sessions.
 
     :param user: User instance.
+    :returns: If ``True`` then the session is successfully deleted.
     """
     with db.session.begin_nested():
         for s in user.active_sessions:
