@@ -80,8 +80,7 @@ class InvenioAccounts(object):
             recoverable.encrypt_password = encrypt_password
             registerable.encrypt_password = encrypt_password
 
-    def init_app(self, app, use_celery=True, sessionstore=None,
-                 register_blueprint=True):
+    def init_app(self, app, sessionstore=None, register_blueprint=True):
         """Flask application initialization.
 
         :param sessionstore: store for sessions. Passed to
@@ -207,8 +206,7 @@ class InvenioAccounts(object):
 class InvenioAccountsREST(InvenioAccounts):
     """Invenio-Accounts REST extension."""
 
-    def init_app(self, app, use_celery=True, sessionstore=None,
-                 register_blueprint=False):
+    def init_app(self, app, sessionstore=None, register_blueprint=False):
         """Flask application initialization.
 
         :param sessionstore: store for sessions. Passed to
@@ -217,6 +215,6 @@ class InvenioAccountsREST(InvenioAccounts):
             by default.
         """
         return super(InvenioAccountsREST, self).init_app(
-            app, use_celery=use_celery, sessionstore=sessionstore,
+            app, sessionstore=sessionstore,
             register_blueprint=register_blueprint,
         )
