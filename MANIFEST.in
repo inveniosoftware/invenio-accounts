@@ -39,8 +39,12 @@ recursive-include docs *.bat
 recursive-include docs *.py
 recursive-include docs *.rst
 recursive-include docs Makefile
+recursive-exclude examples/static *
+exclude examples/static
 recursive-include examples *.html
 recursive-include examples *.py
+recursive-include examples *.sh
+recursive-include examples *.txt
 recursive-include invenio_accounts *.html
 recursive-include invenio_accounts *.po *.pot *.mo
 recursive-include tests *.py

@@ -31,36 +31,9 @@ You should execute these commands in the examples-directory.
 
 .. code-block:: console
 
-   $ export FLASK_APP=app.py
-   $ pip install invenio-theme
-   $ pip install invenio-assets
-   $ flask npm
-   $ cd static
-   $ npm install
-   $ cd ..
-   $ flask collect -v
-   $ flask assets build
-
-Create database and tables:
-
-.. code-block:: console
-
-   $ flask db init
-   $ flask db create
-
-Create a user:
-
-.. code-block:: console
-
-   $ flask users create info@inveniosoftware.org -a
-   $ flask users activate info@inveniosoftware.org
-
-Run the development server:
-
-.. code-block:: console
-
-   $ export FLASK_DEBUG=1
-   $ flask run
+    $ pip install -e .[all]
+    $ cd examples
+    $ ./app-recreate.sh
 """
 
 from __future__ import absolute_import, print_function
