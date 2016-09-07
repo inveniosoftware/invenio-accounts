@@ -57,9 +57,15 @@ def add_session(session=None):
 def login_listener(app, user):
     """Connect to the user_logged_in signal for table population."""
     @flask.after_this_request
-    def populate_session_activity(response):
-        """Add the current session to the SessionActivity table."""
-        # Have to save the session so that the sid_s gets generated.
+    def add_user_session(response):
+        """Regenerate current session and add to the SessionActivity table.
+
+        .. note:: `flask.session.regenerate()` actually calls Flask-KVSession's
+            `flask_kvsession.KVSession.regenerate`.
+        """
+        # Regenerate the session to avoid "session fixation" vulnerabilities.
+        flask.session.regenerate()
+        # Save the session first so that the sid_s gets generated.
         app.session_interface.save_session(app, flask.session, response)
         add_session(flask.session)
         return response

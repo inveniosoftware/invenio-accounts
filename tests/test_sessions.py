@@ -67,11 +67,7 @@ def test_login_listener(app):
 
 
 def test_repeated_login_session_population(app):
-    """Verify session population on repeated login.
-
-    Check that the number of SessionActivity entries match the number of
-    sessions in the kv-store, when logging in with one user.
-    """
+    """Verify session population on repeated login."""
     with app.app_context():
         user = testutils.create_test_user('test@example.org')
         query = db.session.query(SessionActivity)
@@ -84,19 +80,26 @@ def test_repeated_login_session_population(app):
             assert testutils.client_authenticated(client)
             query = db.session.query(SessionActivity)
             assert query.count() == 1
-            assert query.count() == len(app.kvsession_store.keys())
+            assert len(app.kvsession_store.keys()) == 1
+            first_login_session_id = app.kvsession_store.keys()[0]
 
             # Sessions are not deleted upon logout
             client.get(flask_security.url_for_security('logout'))
             assert len(app.kvsession_store.keys()) == 1
             query = db.session.query(SessionActivity)
-            assert query.count() == len(app.kvsession_store.keys())
+            assert query.count() == 1
+            assert len(app.kvsession_store.keys()) == 1
+            # Session id doesn't change after logout
+            assert first_login_session_id == app.kvsession_store.keys()[0]
 
-            # After logging out and back in, the number of sessions correspond
-            # to the number of SessionActivity entries.
+            # After logging out and back in, the inital session id in the
+            # sessionstore should be updated, and there should be two
+            # SessionActivity entries (the old one and the regenerated).
             testutils.login_user_via_view(client, user=user)
             query = db.session.query(SessionActivity)
-            assert query.count() == len(app.kvsession_store.keys())
+            assert query.count() == 2
+            assert len(app.kvsession_store.keys()) == 1
+            assert first_login_session_id != app.kvsession_store.keys()[0]
 
 
 def test_login_multiple_clients_single_user_session_population(app):
