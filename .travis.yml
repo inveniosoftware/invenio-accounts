@@ -32,6 +32,9 @@ sudo: false
 
 language: python
 
+matrix:
+  fast_finish: true
+
 cache:
   - pip
 

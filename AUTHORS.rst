@@ -32,6 +32,7 @@ Invenio user management and authentication.
 - Alberto <alberto.rodriguez.peon@cern.ch>
 - Alberto Pepe <alberto.pepe@cern.ch>
 - Alessio Deiana <alessio.deiana@cern.ch>
+- Alizee Pace <alizee.pace@gmail.com>
 - Alper Cinar <alper@srdc.com.tr>
 - Artem Tsikiridis <artem.tsikiridis@cern.ch>
 - Benoit Thiell <bthiell@cfa.harvard.edu>
