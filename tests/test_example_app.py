@@ -24,12 +24,12 @@
 
 """Test example app."""
 
-import json
 import os
 import signal
 import subprocess
-import sys
 import time
+
+from six import b
 
 
 def setup_module(module):
@@ -53,12 +53,12 @@ def test_example_app():
     webapp = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                               preexec_fn=os.setsid, shell=True)
 
-    # wait until node is installing modules
+    # wait until npm is finished installing modules
     for out in webapp.stdout:
-        if b'node-sass' in out:
+        if b('Installing npm utilities') in out:
             break
     # and start the timeout to run tests
-    time.sleep(60)
+    time.sleep(120)
 
     # Testing open index page
     cmd = 'curl -v http://127.0.0.1:5000/'

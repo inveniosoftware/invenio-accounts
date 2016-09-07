@@ -133,7 +133,7 @@ def test_sessionstore_default_ttl_secs(app):
     if type(app.kvsession_store) is not RedisStore:
         pytest.skip('TTL support needed, this test requires Redis.')
 
-    ttl_seconds = 1
+    ttl_seconds = 3
     ttl_delta = datetime.timedelta(0, ttl_seconds)
 
     sessionstore = app.kvsession_store
@@ -165,7 +165,7 @@ def test_session_ttl(app):
     if type(app.kvsession_store) is not RedisStore:
         pytest.skip('TTL support needed, this test requires Redis.')
 
-    ttl_seconds = 1
+    ttl_seconds = 3
     # Set ttl to "0 days, 1 seconds"
     ttl_delta = datetime.timedelta(0, ttl_seconds)
 
@@ -201,7 +201,7 @@ def test_repeated_login_session_expiration(app):
 
     Test that a new session (with a different sid_s) is created when logging
     in again after a previous session has expired."""
-    ttl_seconds = 1
+    ttl_seconds = 3
     ttl_delta = datetime.timedelta(0, ttl_seconds)
     app.config['PERMANENT_SESSION_LIFETIME'] = ttl_delta
 
