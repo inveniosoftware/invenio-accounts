@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: invenio-accounts 1.0.0a14.dev20160704\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2016-08-18 10:27+0200\n"
+"POT-Creation-Date: 2016-09-09 08:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Alizee Pace <alizee.pace@gmail.com>, 2016\n"
 "Language-Team: French (https://www.transifex.com/inveniosoftware/teams/23537/fr/)\n"
@@ -42,11 +42,11 @@ msgstr "Impossible de trouver cet utilisateur."
 
 #: invenio_accounts/admin.py:86 invenio_accounts/admin.py:109
 msgid "User(s) were successfully inactivated."
-msgstr "Ces utilisateur(s) ont été désactivés avec succès."
+msgstr "Ces utilisateurs ont été désactivés avec succès."
 
 #: invenio_accounts/admin.py:92
 msgid "Failed to inactivate users."
-msgstr "Echec : ces utilisateurs n'ont pas pu être désactivés."
+msgstr "Échec : ces utilisateurs n'ont pas pu être désactivés."
 
 #: invenio_accounts/admin.py:95
 msgid "Activate"
@@ -58,11 +58,11 @@ msgstr "Êtes-vous sûr de vouloir activer les utilisateurs séléctionnés?"
 
 #: invenio_accounts/admin.py:115
 msgid "Failed to activate users."
-msgstr "Echec: ces utilisateurs n'ont pas pu être activés."
+msgstr "Échec: ces utilisateurs n'ont pas pu être activés."
 
 #: invenio_accounts/admin.py:137 invenio_accounts/admin.py:143
 msgid "User Management"
-msgstr "Gestion des Utilisateurs"
+msgstr "Gestion des utilisateurs"
 
 #: invenio_accounts/forms.py:38
 msgid "Please complete the reCAPTCHA."
@@ -157,7 +157,7 @@ msgstr "Déja inscrit?"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:35
 msgid "Resend Confirmation Email"
-msgstr "Renvoyer l'Email de Confirmation"
+msgstr "Renvoyer l'email de confirmation"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:36
 msgid ""
@@ -169,4 +169,4 @@ msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:41
 msgid "Send Confirmation"
-msgstr "Envoyer la Confirmation"
+msgstr "Envoyer la confirmation"

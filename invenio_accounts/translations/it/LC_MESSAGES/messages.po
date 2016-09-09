@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: invenio-accounts 1.0.0a14.dev20160704\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2016-08-18 10:27+0200\n"
+"POT-Creation-Date: 2016-09-09 08:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Alizee Pace <alizee.pace@gmail.com>, 2016\n"
 "Language-Team: Italian (https://www.transifex.com/inveniosoftware/teams/23537/it/)\n"
@@ -62,11 +62,11 @@ msgstr "Impossibile di attivare gli utenti."
 
 #: invenio_accounts/admin.py:137 invenio_accounts/admin.py:143
 msgid "User Management"
-msgstr "Gestione degli Utenti"
+msgstr "Gestione Utenti"
 
 #: invenio_accounts/forms.py:38
 msgid "Please complete the reCAPTCHA."
-msgstr "Completare la reCAPTCHA."
+msgstr "Completa la reCAPTCHA."
 
 #: invenio_accounts/views.py:68
 msgid "Account"

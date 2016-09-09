@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: invenio-accounts 1.0.0a14.dev20160704\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2016-08-18 10:27+0200\n"
+"POT-Creation-Date: 2016-09-09 08:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Jiří Kunčar <jiri.kuncar@gmail.com>, 2016\n"
+"Last-Translator: Alizee Pace <alizee.pace@gmail.com>, 2016\n"
 "Language-Team: Czech (https://www.transifex.com/inveniosoftware/teams/23537/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -30,11 +30,11 @@ msgstr "IP posledního připojení"
 
 #: invenio_accounts/admin.py:72
 msgid "Inactivate"
-msgstr "Inaktivovat"
+msgstr "Deaktivovat"
 
 #: invenio_accounts/admin.py:73
 msgid "Are you sure you want to inactivate selected users?"
-msgstr "Opravdu chcete inaktivovat vybrané uživatele?"
+msgstr "Opravdu chcete deaktivovat vybrané uživatele?"
 
 #: invenio_accounts/admin.py:82 invenio_accounts/admin.py:105
 msgid "Cannot find user."
@@ -42,11 +42,11 @@ msgstr "Uživatele nelze najít."
 
 #: invenio_accounts/admin.py:86 invenio_accounts/admin.py:109
 msgid "User(s) were successfully inactivated."
-msgstr "Uživatel(é) byl(i) úspěšně inaktivován(i)."
+msgstr "Uživatelé byli úspěšně deaktivováni."
 
 #: invenio_accounts/admin.py:92
 msgid "Failed to inactivate users."
-msgstr "Nelze inaktivovat uživatelé."
+msgstr "Nelze deaktivovat uživatele."
 
 #: invenio_accounts/admin.py:95
 msgid "Activate"
@@ -58,7 +58,7 @@ msgstr "Opravdu chcete aktivovat vybrané uživatele?"
 
 #: invenio_accounts/admin.py:115
 msgid "Failed to activate users."
-msgstr "Nelze aktivovat uživatelé."
+msgstr "Nelze aktivovat uživatele."
 
 #: invenio_accounts/admin.py:137 invenio_accounts/admin.py:143
 msgid "User Management"
