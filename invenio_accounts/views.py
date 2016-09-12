@@ -91,3 +91,15 @@ def init_menu():
             _("Change password"),
             order=0,
         )
+
+
+@blueprint.before_app_first_request
+def check_security_settings():
+    """Warn if session cookie is not secure in production."""
+    in_production = not (current_app.debug or current_app.testing)
+    secure = current_app.config.get('SESSION_COOKIE_SECURE')
+    if in_production and not secure:
+        current_app.logger.warning(
+            "SESSION_COOKIE_SECURE setting must be set to True to prevent the "
+            "session cookie from being leaked over an insecure channel."
+        )
