@@ -25,13 +25,12 @@
 import pytest
 from flask import current_app, url_for
 from flask.ext.security.utils import encrypt_password
-from flask_admin import Admin, menu
+from flask_admin import menu
 from invenio_admin import InvenioAdmin
 from invenio_db import db
 from werkzeug.local import LocalProxy
 
 from invenio_accounts import InvenioAccounts
-from invenio_accounts.admin import role_adminview, user_adminview
 from invenio_accounts.cli import users_create
 
 _datastore = LocalProxy(
@@ -39,21 +38,8 @@ _datastore = LocalProxy(
 )
 
 
-def test_admin(app):
+def test_admin(app, admin_view):
     """Test flask-admin interace."""
-    assert isinstance(role_adminview, dict)
-    assert isinstance(user_adminview, dict)
-
-    assert 'model' in role_adminview
-    assert 'modelview' in role_adminview
-    assert 'model' in user_adminview
-    assert 'modelview' in user_adminview
-
-    admin = Admin(app, name="Test")
-
-    user_model = user_adminview.pop('model')
-    user_view = user_adminview.pop('modelview')
-    admin.add_view(user_view(user_model, db.session, **user_adminview))
 
     # Test activation and deactivation
 
@@ -92,3 +78,64 @@ def test_admin(app):
             data={'rowid': -42, 'action': 'activate'},
             follow_redirects=True
         )
+
+
+def test_admin_createuser(app, admin_view):
+    """Test flask-admin user creation"""
+
+    with app.test_client() as client:
+        # Test empty mail form
+
+        res = client.post(
+            url_for('user.create_view'),
+            data={'email': ''},
+            follow_redirects=True
+        )
+        assert b'This field is required.' in res.data
+
+        # Reproduces the workflow described in #154
+
+        res = client.post(
+            url_for('user.create_view'),
+            data={'email': 'test1@test.cern'},
+            follow_redirects=True
+        )
+        assert _datastore.get_user('test1@test.cern') is not None
+
+        res = client.post(
+            url_for('user.create_view'),
+            data={'email': 'test2@test.cern', 'active': 'true'},
+            follow_redirects=True
+        )
+        user = _datastore.get_user('test2@test.cern')
+        assert user is not None
+        assert user.active is True
+
+        res = client.post(
+            url_for('user.create_view'),
+            data={'email': 'test3@test.cern', 'active': 'false'},
+            follow_redirects=True
+        )
+        user = _datastore.get_user('test3@test.cern')
+        assert user is not None
+        assert user.active is False
+
+    user_data = dict(email='test4@test.cern', active=False,
+                     password=encrypt_password('123456'))
+    _datastore.create_user(**user_data)
+
+    user_data = dict(email='test5@test.cern', active=True,
+                     password=encrypt_password('123456'))
+    _datastore.create_user(**user_data)
+
+    user_data = dict(email='test6@test.cern', active=False,
+                     password=encrypt_password('123456'))
+    _datastore.create_user(**user_data)
+    _datastore.commit()
+    assert _datastore.get_user('test4@test.cern') is not None
+    user = _datastore.get_user('test5@test.cern')
+    assert user is not None
+    assert user.active is True
+    user = _datastore.get_user('test6@test.cern')
+    assert user is not None
+    assert user.active is False

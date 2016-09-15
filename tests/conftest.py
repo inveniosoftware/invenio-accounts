@@ -34,6 +34,7 @@ import tempfile
 import pytest
 from flask import Flask
 from flask.cli import ScriptInfo
+from flask_admin import Admin
 from flask_babelex import Babel
 from flask_celeryext import FlaskCeleryExt
 from flask_mail import Mail
@@ -44,6 +45,7 @@ from sqlalchemy_utils.functions import create_database, database_exists, \
     drop_database
 
 from invenio_accounts import InvenioAccounts
+from invenio_accounts.admin import role_adminview, user_adminview
 
 
 def _app_factory(config=None):
@@ -132,3 +134,21 @@ def task_app(request):
     InvenioAccounts(app)
     _database_setup(app, request)
     return app
+
+
+@pytest.fixture
+def admin_view(app):
+    assert isinstance(role_adminview, dict)
+    assert isinstance(user_adminview, dict)
+
+    assert 'model' in role_adminview
+    assert 'modelview' in role_adminview
+    assert 'model' in user_adminview
+    assert 'modelview' in user_adminview
+
+    admin = Admin(app, name="Test")
+
+    user_adminview_copy = dict(user_adminview)
+    user_model = user_adminview_copy.pop('model')
+    user_view = user_adminview_copy.pop('modelview')
+    admin.add_view(user_view(user_model, db.session, **user_adminview_copy))

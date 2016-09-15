@@ -30,6 +30,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.form.fields import DateTimeField
 from flask_babelex import gettext as _
 from werkzeug.local import LocalProxy
+from wtforms.validators import DataRequired
 
 from .cli import commit
 from .models import Role, User
@@ -49,11 +50,16 @@ class UserView(ModelView):
     )
 
     column_list = \
-        form_columns = \
         column_searchable_list = \
         column_sortable_list = \
         column_details_list = \
         list_all
+
+    form_columns = ('email', 'active')
+
+    form_args = dict(
+        email=dict(label='Email', validators=[DataRequired()])
+    )
 
     column_filters = ('id', 'email', 'active', 'confirmed_at', 'last_login_at',
                       'current_login_at', 'login_count')
