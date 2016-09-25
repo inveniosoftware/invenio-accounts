@@ -24,7 +24,7 @@ Installation
 Documentation
 -------------
 
-   http://pythonhosted.org/invenio-accounts/
+   http://invenio-accounts.readthedocs.io/
 
 Happy hacking and thanks for flying Invenio-Accounts.
 

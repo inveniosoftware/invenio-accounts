@@ -46,4 +46,4 @@ Invenio user management and authentication.
 *This is an experimental developer preview release.*
 
 * Free software: GPLv2 license
-* Documentation: https://pythonhosted.org/invenio-accounts/
+* Documentation: https://invenio-accounts.readthedocs.io/

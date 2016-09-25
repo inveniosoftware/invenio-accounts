@@ -33,6 +33,7 @@ include *.sh
 include *.txt
 include LICENSE
 include babel.ini
+include docs/requirements.txt
 include config
 include pytest.ini
 recursive-include docs *.bat

@@ -128,7 +128,7 @@ def test_login_multiple_clients_single_user_session_population(app):
 def test_sessionstore_default_ttl_secs(app):
     """Test the `default_ttl_secs` field for simplekv sessionstore.
 
-    See http://pythonhosted.org/simplekv/index.html#simplekv.TimeToLiveMixin.
+    See http://simplekv.readthedocs.io/index.html#simplekv.TimeToLiveMixin.
     """
     if type(app.kvsession_store) is not RedisStore:
         pytest.skip('TTL support needed, this test requires Redis.')
