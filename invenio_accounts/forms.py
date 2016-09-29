@@ -27,11 +27,11 @@
 Currently supported: recaptcha
 """
 from flask_babelex import gettext as _
-from flask_wtf import Form, Recaptcha, RecaptchaField
+from flask_wtf import FlaskForm, Recaptcha, RecaptchaField
 from wtforms import FormField
 
 
-class RegistrationFormRecaptcha(Form):
+class RegistrationFormRecaptcha(FlaskForm):
     """Form for editing user profile."""
 
     recaptcha = RecaptchaField(validators=[
