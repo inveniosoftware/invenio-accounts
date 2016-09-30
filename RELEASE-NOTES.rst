@@ -1,8 +1,8 @@
 ============================
- Invenio-Accounts v1.0.0a14
+ Invenio-Accounts v1.0.0a15
 ============================
 
-Invenio-Accounts v1.0.0a14 was released on September 8, 2016.
+Invenio-Accounts v1.0.0a15 was released on September 30, 2016.
 
 About
 -----
@@ -19,18 +19,18 @@ What's new
 Installation
 ------------
 
-   $ pip install invenio-accounts==1.0.0a14
+   $ pip install invenio-accounts==1.0.0a15
 
 Documentation
 -------------
 
-   http://invenio-accounts.readthedocs.io/
+   https://invenio-accounts.readthedocs.io/
 
 Happy hacking and thanks for flying Invenio-Accounts.
 
 | Invenio Development Team
 |   Email: info@inveniosoftware.org
 |   IRC: #invenio on irc.freenode.net
-|   Twitter: http://twitter.com/inveniosoftware
+|   Twitter: https://twitter.com/inveniosoftware
 |   GitHub: https://github.com/inveniosoftware/invenio-accounts
 |   URL: http://inveniosoftware.org
