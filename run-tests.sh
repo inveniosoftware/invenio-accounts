@@ -23,9 +23,9 @@
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
 
-pydocstyle invenio_accounts && \
+pydocstyle invenio_accounts tests && \
 check-manifest --ignore ".travis-*" && \
-isort -rc -c -df **/*.py && \
+isort -rc -c -df && \
 sphinx-build -qnNW docs docs/_build/html && \
 python setup.py test && \
 sphinx-build -qnNW -b doctest docs docs/_build/doctest

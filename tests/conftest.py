@@ -138,6 +138,7 @@ def task_app(request):
 
 @pytest.fixture
 def admin_view(app):
+    """Admin view fixture."""
     assert isinstance(role_adminview, dict)
     assert isinstance(user_adminview, dict)
 

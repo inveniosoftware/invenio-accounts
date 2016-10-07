@@ -26,12 +26,7 @@
 
 from __future__ import absolute_import, print_function
 
-import sys
-import urllib
-
 import flask
-import pytest
-import six
 from six.moves.urllib.request import urlopen
 
 from invenio_accounts import testutils
@@ -40,11 +35,10 @@ from invenio_accounts import testutils
 def test_live_server(live_server):
     """Test that the login page of `live_server` is reachable.
 
-    The `live_server` fixture is provided by pytest-flask.
-    When a test using said fixture is run, the return object of the `app`
-    fixture is run in a background process.
-    For this test pytest will use the `app` fixture defined in `./conftest.py`
-    instead of the one in `../conftest.py`.
+    The `live_server` fixture is provided by pytest-flask.  When a test using
+    said fixture is run, the return object of the `app` fixture is run in a
+    background process.  For this test pytest will use the `app` fixture
+    defined in `./conftest.py` instead of the one in `../conftest.py`.
     """
     # With pytest-flask we don't need to be in the application context
     # to use `flask.url_for`.
@@ -55,8 +49,11 @@ def test_live_server(live_server):
 
 
 def test_webdriver_not_authenticated(live_server, env_browser):
-    """Test that an unauthenticated webdriver client is redirected from
-    the change password page to the login page."""
+    """Test unauthenticated webdriver client redirect.
+
+    Test that an unauthenticated webdriver client is redirected from
+    the change password page to the login page.
+    """
     browser = env_browser
     browser.get(flask.url_for('security.change_password', _external=True))
     assert (flask.url_for('security.login', _external=True) in
