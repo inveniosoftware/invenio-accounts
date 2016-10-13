@@ -119,6 +119,10 @@ setup(
     include_package_data=True,
     platforms='any',
     entry_points={
+        'flask.commands': [
+            'roles = invenio_accounts.cli:roles',
+            'users = invenio_accounts.cli:users',
+        ],
         'invenio_admin.views': [
             'invenio_accounts_user = invenio_accounts.admin:user_adminview',
             'invenio_accounts_role = invenio_accounts.admin:role_adminview',

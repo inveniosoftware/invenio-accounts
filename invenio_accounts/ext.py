@@ -41,8 +41,6 @@ from invenio_accounts.forms import confirm_register_form_factory, \
     register_form_factory
 
 from . import config
-from .cli import roles as roles_cli
-from .cli import users as users_cli
 from .datastore import SessionAwareSQLAlchemyUserDatastore
 from .hash import InvenioAesEncryptedEmail, _to_binary
 from .models import Role, User
@@ -166,10 +164,6 @@ class InvenioAccounts(object):
             @state.send_mail_task
             def delay_security_email(msg):
                 send_security_email.delay(msg.__dict__)
-
-        # Register CLI
-        app.cli.add_command(roles_cli, 'roles')
-        app.cli.add_command(users_cli, 'users')
 
         app.extensions['invenio-accounts'] = self
 
