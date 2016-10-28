@@ -25,10 +25,10 @@
 Changes
 =======
 
-Version 1.0.0a15 (released 2016-09-30)
+Version 1.0.0a16 (released 2016-10-28)
 --------------------------------------
 
-- Module rewrite using Flask-Security.
+- Module rewrite using Flask-Security(-Fork).
 
 Version 0.2.0 (released 2015-10-05)
 -----------------------------------
