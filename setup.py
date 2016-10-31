@@ -25,7 +25,6 @@
 """Invenio user management and authentication."""
 
 import os
-import sys
 
 from setuptools import find_packages, setup
 
@@ -42,7 +41,7 @@ tests_require = [
     'pytest-pep8>=1.0.6',
     'pytest>=2.8.0',
     'pytest-flask>=0.10.0',
-    'selenium>=2.48.0',
+    'selenium>=3.0.1',
     'Flask-CeleryExt>=0.1.0',
     'Flask-Mail>=0.9.1',
 ]

@@ -26,6 +26,8 @@
 
 from __future__ import absolute_import, print_function
 
+from time import sleep
+
 import flask
 from six.moves.urllib.request import urlopen
 
@@ -80,6 +82,8 @@ def test_user_registration(live_server, env_browser):
 
     # 3. submit form
     signup_form.submit()
+    sleep(1)  # we need to wait after each form submission for redirect
+
     # ...and get redirected to the "home page" ('/')
     # This isn't a very important part of the process, and the '/' url isn't
     # even registered for the Invenio-Accounts e2e app. So we don't check it.
@@ -104,6 +108,7 @@ def test_user_registration(live_server, env_browser):
     # 6. Submit!
     # check if authenticated at `flask.url_for('security.change_password')`
     login_form.submit()
+    sleep(1)
 
     assert testutils.webdriver_authenticated(browser)
 
