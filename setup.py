@@ -55,13 +55,13 @@ extras_require = {
         'Sphinx>=1.4.2',
     ],
     'mysql': [
-        'invenio-db[mysql]>=1.0.0b1',
+        'invenio-db[versioning,mysql]>=1.0.0b3',
     ],
     'postgresql': [
-        'invenio-db[postgresql]>=1.0.0b1',
+        'invenio-db[versioning,postgresql]>=1.0.0b3',
     ],
     'sqlite': [
-        'invenio-db>=1.0.0b1',
+        'invenio-db[versioning]>=1.0.0b3',
     ],
     'admin': [
         'invenio-admin>=1.0.0a2',
@@ -134,6 +134,9 @@ setup(
         ],
         'invenio_base.blueprints': [
             'invenio_accounts = invenio_accounts.views:blueprint',
+        ],
+        'invenio_db.alembic': [
+            'invenio_accounts = invenio_accounts:alembic',
         ],
         'invenio_db.models': [
             'invenio_accounts = invenio_accounts.models',

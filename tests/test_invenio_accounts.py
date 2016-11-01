@@ -26,11 +26,12 @@
 
 from __future__ import absolute_import, print_function
 
+import pytest
 from flask import Flask
 from flask_babelex import Babel
 from flask_mail import Mail
 from flask_security import url_for_security
-from invenio_db import InvenioDB
+from invenio_db import InvenioDB, db
 
 from invenio_accounts import InvenioAccounts, InvenioAccountsREST
 from invenio_accounts.models import Role, User
@@ -96,6 +97,24 @@ def test_init_rest():
     ext.init_app(app)
     assert 'invenio-accounts' in app.extensions
     assert 'security' in app.blueprints.keys()
+
+
+def test_alembic(app):
+    """Test alembic recipes."""
+    ext = app.extensions['invenio-db']
+
+    if db.engine.name == 'sqlite':
+        raise pytest.skip('Upgrades are not supported on SQLite.')
+
+    assert not ext.alembic.compare_metadata()
+    db.drop_all()
+    ext.alembic.upgrade()
+
+    assert not ext.alembic.compare_metadata()
+    ext.alembic.downgrade(target='96e796392533')
+    ext.alembic.upgrade()
+
+    assert not ext.alembic.compare_metadata()
 
 
 def test_datastore_usercreate(app):
