@@ -42,14 +42,14 @@ tests_require = [
     'pytest>=2.8.0',
     'pytest-flask>=0.10.0',
     'selenium>=3.0.1',
-    'Flask-CeleryExt>=0.1.0',
+    'Flask-CeleryExt>=0.2.2',
     'Flask-Mail>=0.9.1',
 ]
 
 extras_require = {
     ':python_version=="2.7"': ['ipaddr>=2.1.11'],
     'celery': [
-        'celery>=3.1.0',
+        'celery>=3.1.0,<4.0',
     ],
     'docs': [
         'Sphinx>=1.4.2',
