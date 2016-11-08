@@ -33,7 +33,10 @@ You should execute these commands in the examples-directory.
 
     $ pip install -e .[all]
     $ cd examples
-    $ ./app-recreate.sh
+    $ ./app-setup.sh
+    $ ./app-fixtures.sh
+    $ FLASK_APP=app.py flask run
+    $ ./app-teardown.sh
 """
 
 from __future__ import absolute_import, print_function
