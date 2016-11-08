@@ -1,15 +1,13 @@
-============================
- Invenio-Accounts v1.0.0a16
-============================
+===========================
+ Invenio-Accounts v1.0.0b1
+===========================
 
-Invenio-Accounts v1.0.0a16 was released on October 28, 2016.
+Invenio-Accounts v1.0.0b1 was released on November 8, 2016.
 
 About
 -----
 
 Invenio module for managing user accounts.
-
-*This is an experimental development preview release.*
 
 What's new
 ----------
@@ -19,7 +17,7 @@ What's new
 Installation
 ------------
 
-   $ pip install invenio-accounts==1.0.0a16
+   $ pip install invenio-accounts==1.0.0b1
 
 Documentation
 -------------
