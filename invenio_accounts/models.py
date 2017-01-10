@@ -66,7 +66,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255))
     """User password."""
 
-    active = db.Column(db.Boolean)
+    active = db.Column(db.Boolean(name='active'))
     """Flag to say if the user is active or not ."""
 
     confirmed_at = db.Column(db.DateTime)
