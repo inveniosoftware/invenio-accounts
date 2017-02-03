@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015, 2016 CERN.
+# Copyright (C) 2015, 2016, 2017 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -32,27 +32,27 @@ readme = open('README.rst').read()
 history = open('CHANGES.rst').read()
 
 tests_require = [
+    'Flask-CeleryExt>=0.2.2',
+    'Flask-Mail>=0.9.1',
     'check-manifest>=0.25',
     'coverage>=4.0',
     'isort>=4.2.2',
     'pydocstyle>=1.0.0',
     'pytest-cache>=1.0',
     'pytest-cov>=1.8.0',
+    'pytest-flask>=0.10.0',
     'pytest-pep8>=1.0.6',
     'pytest>=2.8.0',
-    'pytest-flask>=0.10.0',
     'selenium>=3.0.1',
-    'Flask-CeleryExt>=0.2.2',
-    'Flask-Mail>=0.9.1',
 ]
 
 extras_require = {
-    ':python_version=="2.7"': ['ipaddr>=2.1.11'],
     'celery': [
         'celery>=3.1.0,<4.0',
     ],
     'docs': [
         'Sphinx>=1.4.2',
+        'invenio-i18n>=1.0.0b2',
     ],
     'mysql': [
         'invenio-db[versioning,mysql]>=1.0.0b3',
@@ -83,6 +83,7 @@ setup_requires = [
 ]
 
 install_requires = [
+    'ipaddr>=2.1.11;python_version=="2.7"',
     'Flask>=0.11.1',
     'Flask-BabelEx>=0.9.2',
     'Flask-KVSession>=0.6.1',
@@ -108,7 +109,7 @@ setup(
     version=version,
     description=__doc__,
     long_description=readme + '\n\n' + history,
-    keywords='invenio accounts',
+    keywords='invenio accounts user role login',
     license='GPLv2',
     author='CERN',
     author_email='info@inveniosoftware.org',
@@ -126,11 +127,11 @@ setup(
             'invenio_accounts_user = invenio_accounts.admin:user_adminview',
             'invenio_accounts_role = invenio_accounts.admin:role_adminview',
         ],
-        'invenio_base.apps': [
-            'invenio_accounts = invenio_accounts:InvenioAccounts',
-        ],
         'invenio_base.api_apps': [
             'invenio_accounts_rest = invenio_accounts:InvenioAccountsREST',
+        ],
+        'invenio_base.apps': [
+            'invenio_accounts = invenio_accounts:InvenioAccounts',
         ],
         'invenio_base.blueprints': [
             'invenio_accounts = invenio_accounts.views:blueprint',

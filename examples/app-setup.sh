@@ -8,9 +8,12 @@ set -o nounset
 
 DIR=`dirname "$0"`
 
-cd "$DIR"
+cd $DIR
 export FLASK_APP=app.py
-mkdir instance
+
+# Setup app
+mkdir $DIR/instance
+
 mkdir static
 
 # Install specific dependencies

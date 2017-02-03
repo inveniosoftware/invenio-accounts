@@ -96,15 +96,15 @@ def _database_setup(app, request):
     return app
 
 
-@pytest.fixture
+@pytest.yield_fixture()
 def base_app(request):
     """Flask application fixture."""
     app = _app_factory()
     _database_setup(app, request)
-    return app
+    yield app
 
 
-@pytest.fixture
+@pytest.yield_fixture()
 def app(request):
     """Flask application fixture with Invenio Accounts."""
     app = _app_factory()
@@ -114,7 +114,7 @@ def app(request):
     app.register_blueprint(blueprint)
 
     _database_setup(app, request)
-    return app
+    yield app
 
 
 @pytest.fixture

@@ -40,8 +40,12 @@
 .. image:: https://img.shields.io/github/license/inveniosoftware/invenio-accounts.svg
         :target: https://github.com/inveniosoftware/invenio-accounts/blob/master/LICENSE
 
-
 Invenio user management and authentication.
 
-* Free software: GPLv2 license
-* Documentation: https://invenio-accounts.readthedocs.io/
+*This is an experimental developer preview release.*
+
+This module allows you to create and manage users. It will also add a login
+to your website for authentication.
+
+Further documentation is available on
+https://invenio-accounts.readthedocs.io/

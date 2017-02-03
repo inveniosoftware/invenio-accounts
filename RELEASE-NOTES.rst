@@ -7,7 +7,7 @@ Invenio-Accounts v1.0.0b1 was released on November 8, 2016.
 About
 -----
 
-Invenio module for managing user accounts.
+Invenio user management and authentication.
 
 What's new
 ----------

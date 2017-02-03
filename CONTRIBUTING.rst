@@ -53,9 +53,9 @@ If you are proposing a feature:
 Get Started!
 ------------
 
-Ready to contribute? Here's how to set up `invenio` for local development.
+Ready to contribute? Here's how to set up `invenio-accounts` for local development.
 
-1. Fork the `invenio` repo on GitHub.
+1. Fork the `inveniosoftware/invenio-accounts` repo on GitHub.
 2. Clone your fork locally:
 
    .. code-block:: console
@@ -95,7 +95,12 @@ Ready to contribute? Here's how to set up `invenio` for local development.
    .. code-block:: console
 
       $ git add .
-      $ git commit -s -m "Your detailed description of your changes."
+      $ git commit -s
+          -m "component: title without verbs"
+          -m "* NEW Adds your new feature."
+          -m "* FIX Fixes an existing issue."
+          -m "* BETTER Improves and existing feature."
+          -m "* Changes something that should not be visible in release notes."
       $ git push origin name-of-your-bugfix-or-feature
 
 7. Submit a pull request through the GitHub website.
@@ -109,5 +114,5 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring.
 3. The pull request should work for Python 2.7, 3.3, 3.4 and 3.5. Check
-   https://travis-ci.com/inveniosoftware/invenio-accounts/pull_requests
+   https://travis-ci.org/inveniosoftware/invenio-accounts/pull_requests
    and make sure that the tests pass for all supported Python versions.

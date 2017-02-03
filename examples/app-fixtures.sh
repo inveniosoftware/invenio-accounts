@@ -11,7 +11,7 @@ DIR=`dirname "$0"`
 cd $DIR
 export FLASK_APP=app.py
 
-## Load fixtures
+# Setup fixtures
 
 # Create a user
 flask users create info@inveniosoftware.org --password 123456

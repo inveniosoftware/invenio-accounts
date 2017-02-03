@@ -36,6 +36,24 @@ You should execute these commands in the examples-directory.
     $ ./app-setup.sh
     $ ./app-fixtures.sh
     $ FLASK_APP=app.py flask run
+
+You should have the service `redis` running on your machine. To know how to
+install `redis`, see the `redis website <https://redis.io/>`_.
+
+Now you can open you browser and go to `http://localhost:5000
+<http://localhost:5000>`_. There, you can log in and log out with the
+following credentials:
+
+:user:
+  info@inveniosoftware.org
+
+:password:
+  123456
+
+At the end, don't forget to clean-up your folder:
+
+.. code-block:: console
+
     $ ./app-teardown.sh
 """
 
@@ -50,6 +68,7 @@ from flask_mail import Mail
 from flask_menu import Menu
 from flask_security import current_user
 from invenio_db import InvenioDB
+from invenio_i18n import InvenioI18N
 
 from invenio_accounts import InvenioAccounts
 from invenio_accounts.views import blueprint
@@ -102,6 +121,7 @@ Babel(app)
 Mail(app)
 InvenioDB(app)
 InvenioAccounts(app)
+InvenioI18N(app)
 
 if INVENIO_ASSETS_AVAILABLE:
     InvenioAssets(app)

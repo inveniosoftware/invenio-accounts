@@ -1,6 +1,6 @@
 ..
     This file is part of Invenio.
-    Copyright (C) 2015, 2016, 2017 CERN.
+    Copyright (C) 2017 CERN.
 
     Invenio is free software; you can redistribute it
     and/or modify it under the terms of the GNU General Public License as
@@ -22,29 +22,7 @@
     as an Intergovernmental Organization or submit itself to any jurisdiction.
 
 
-Usage
-=====
+Example application
+===================
 
-.. automodule:: invenio_accounts
-    :members:
-
-
-Models
-------
-
-.. automodule:: invenio_accounts.models
-    :members:
-
-
-Sessions
---------
-
-.. automodule:: invenio_accounts.sessions
-.. autofunction:: invenio_accounts.sessions.delete_session
-
-
-Test utilities
---------------
-
-.. automodule:: invenio_accounts.testutils
-    :members:
+.. automodule:: app

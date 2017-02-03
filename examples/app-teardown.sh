@@ -1,9 +1,17 @@
 #!/bin/sh
 
+# quit on errors:
+set -o errexit
+
+# quit on unbound symbols:
+set -o nounset
+
 DIR=`dirname "$0"`
 
-cd "$DIR"
+cd $DIR
 export FLASK_APP=app.py
+
+# Teardown app
 
 # Drop database tables.
 flask db drop --yes-i-know

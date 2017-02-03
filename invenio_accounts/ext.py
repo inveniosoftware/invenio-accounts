@@ -179,54 +179,16 @@ class InvenioAccounts(object):
         except pkg_resources.DistributionNotFound:  # pragma: no cover
             app.config.setdefault("ACCOUNTS_USE_CELERY", False)
 
-        app.config.setdefault('ACCOUNTS', True)
-
         # Register Invenio legacy password hashing
         register_crypt_handler(InvenioAesEncryptedEmail)
 
         # Change Flask-Security defaults
-        app.config.setdefault('SECURITY_CHANGEABLE', True)
-        app.config.setdefault('SECURITY_CONFIRMABLE', True)
-        app.config.setdefault('SECURITY_PASSWORD_HASH', 'pbkdf2_sha512')
-        app.config.setdefault('SECURITY_PASSWORD_SCHEMES',
-                              ['pbkdf2_sha512', 'invenio_aes_encrypted_email'])
-        app.config.setdefault('SECURITY_DEPRECATED_PASSWORD_SCHEMES',
-                              ['invenio_aes_encrypted_email'])
-        app.config.setdefault('SECURITY_RECOVERABLE', True)
-        app.config.setdefault('SECURITY_REGISTERABLE', True)
-        app.config.setdefault('SECURITY_TRACKABLE', True)
-        app.config.setdefault('SECURITY_LOGIN_WITHOUT_CONFIRMATION', True)
         app.config.setdefault('SECURITY_PASSWORD_SALT',
                               app.config['SECRET_KEY'])
 
-        # Change default templates
-        app.config.setdefault("SECURITY_FORGOT_PASSWORD_TEMPLATE",
-                              "invenio_accounts/forgot_password.html")
-        app.config.setdefault("SECURITY_LOGIN_USER_TEMPLATE",
-                              "invenio_accounts/login_user.html")
-        app.config.setdefault("SECURITY_REGISTER_USER_TEMPLATE",
-                              "invenio_accounts/register_user.html")
-        app.config.setdefault("SECURITY_RESET_PASSWORD_TEMPLATE",
-                              "invenio_accounts/reset_password.html")
-        app.config.setdefault("SECURITY_CHANGE_PASSWORD_TEMPLATE",
-                              "invenio_accounts/change_password.html")
-        app.config.setdefault("SECURITY_SEND_CONFIRMATION_TEMPLATE",
-                              "invenio_accounts/send_confirmation.html")
-        app.config.setdefault("SECURITY_SEND_LOGIN_TEMPLATE",
-                              "invenio_accounts/send_login.html")
-        app.config.setdefault("SECURITY_REGISTER_URL",
-                              "/signup/")
-        app.config.setdefault("SECURITY_RESET_URL",
-                              "/lost-password/")
-        app.config.setdefault("SECURITY_LOGIN_URL",
-                              "/login/")
-        app.config.setdefault("SECURITY_LOGOUT_URL",
-                              "/logout/")
-        app.config.setdefault("SECURITY_CHANGE_URL",
-                              "/accounts/settings/password/")
-
+        config_apps = ['ACCOUNTS', 'SECURITY_']
         for k in dir(config):
-            if k.startswith('ACCOUNTS_'):
+            if any([k.startswith(prefix) for prefix in config_apps]):
                 app.config.setdefault(k, getattr(config, k))
 
 

@@ -34,12 +34,6 @@ Administration
 .. automodule:: invenio_accounts.admin
    :members:
 
-Configuration
--------------
-
-.. automodule:: invenio_accounts.config
-   :members:
-
 Datastore
 ---------
 
