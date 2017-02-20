@@ -29,6 +29,11 @@ from __future__ import absolute_import, print_function
 from celery import shared_task
 from flask import current_app
 from flask_mail import Message
+from invenio_db import db
+
+from .models import SessionActivity
+from .proxies import current_accounts
+from .sessions import delete_session
 
 
 @shared_task
@@ -40,3 +45,28 @@ def send_security_email(data):
     msg = Message()
     msg.__dict__.update(data)
     current_app.extensions['mail'].send(msg)
+
+
+@shared_task
+def clean_session_table():
+    """Automatically clean session table.
+
+    To enable a periodically clean, you should configure the task as a
+    celery periodic task.
+
+    .. code-block:: python
+
+        from datetime import timedelta
+        CELERYBEAT_SCHEDULE = {
+            'session_cleaner': {
+                'task': 'invenio_accounts.tasks.clean_session_table',
+                'schedule': timedelta(days=1),
+            },
+        }
+
+    See ``invenio-celery`` documentation to have more details.
+    """
+    sessions = SessionActivity.query_by_expired().all()
+    for session in sessions:
+        delete_session(sid_s=session.sid_s)
+    db.session.commit()

@@ -26,6 +26,9 @@
 
 from __future__ import absolute_import, print_function
 
+from datetime import datetime
+
+from flask import current_app
 from flask_security import RoleMixin, UserMixin
 from invenio_db import db
 from sqlalchemy.orm import validates
@@ -124,3 +127,10 @@ class SessionActivity(db.Model, Timestamp):
     """ID of user to whom this session belongs."""
 
     user = db.relationship(User, backref='active_sessions')
+
+    @classmethod
+    def query_by_expired(cls):
+        """Query to select all expired sessions."""
+        lifetime = current_app.permanent_session_lifetime
+        expired_moment = datetime.utcnow() - lifetime
+        return cls.query.filter(cls.created < expired_moment)

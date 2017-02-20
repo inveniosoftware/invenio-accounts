@@ -55,8 +55,8 @@ Hash
 Tasks
 -----
 
-.. automodule:: invenio_accounts.tasks
-   :members:
+.. autotask:: invenio_accounts.tasks.send_security_email
+.. autotask:: invenio_accounts.tasks.clean_session_table
 
 Views
 -----
