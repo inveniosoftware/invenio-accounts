@@ -46,7 +46,9 @@ from sqlalchemy_utils.functions import create_database, database_exists, \
     drop_database
 
 from invenio_accounts import InvenioAccounts
-from invenio_accounts.admin import role_adminview, user_adminview
+from invenio_accounts.admin import role_adminview, session_adminview, \
+    user_adminview
+from invenio_accounts.testutils import create_test_user
 
 
 def _app_factory(config=None):
@@ -142,11 +144,14 @@ def admin_view(app):
     """Admin view fixture."""
     assert isinstance(role_adminview, dict)
     assert isinstance(user_adminview, dict)
+    assert isinstance(session_adminview, dict)
 
     assert 'model' in role_adminview
     assert 'modelview' in role_adminview
     assert 'model' in user_adminview
     assert 'modelview' in user_adminview
+    assert 'model' in session_adminview
+    assert 'modelview' in session_adminview
 
     admin = Admin(app, name="Test")
 
@@ -155,9 +160,29 @@ def admin_view(app):
     user_view = user_adminview_copy.pop('modelview')
     admin.add_view(user_view(user_model, db.session, **user_adminview_copy))
 
+    admin.add_view(session_adminview['modelview'](
+        session_adminview['model'], db.session,
+        category=session_adminview['category']))
+
 
 @pytest.fixture()
 def app_i18n(app):
     """Init invenio-i18n."""
     InvenioI18N(app)
     return app
+
+
+@pytest.fixture()
+def users(app):
+    """Create users."""
+    user1 = create_test_user(email='info@inveniosoftware.org',
+                             password='tester')
+    user2 = create_test_user(email='info2@inveniosoftware.org',
+                             password='tester2')
+
+    return [
+        {'email': user1.email, 'id': user1.id,
+         'password': user1.password_plaintext},
+        {'email': user2.email, 'id': user2.id,
+         'password': user2.password_plaintext},
+    ]

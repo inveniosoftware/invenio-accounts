@@ -5,6 +5,8 @@
   </head>
   <body>
     You are logged in.
-    <a href="{{url_for_security('logout')}}">Log out</a>
+    <a href="{{url_for_security('logout')}}">Log out</a>.</br>
+    Go to my <a href="{{url_for_security('change_password')}}">account page</a>.<br>
+    Go to <a href="{{url_for('admin.index')}}">admin page</a>.
   </body>
 </html>

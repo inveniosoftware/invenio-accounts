@@ -23,7 +23,7 @@
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
 import pytest
-from flask import current_app, url_for
+from flask import current_app, session, url_for
 from flask.ext.security.utils import encrypt_password
 from flask_admin import menu
 from invenio_admin import InvenioAdmin
@@ -32,6 +32,8 @@ from werkzeug.local import LocalProxy
 
 from invenio_accounts import InvenioAccounts
 from invenio_accounts.cli import users_create
+from invenio_accounts.models import SessionActivity
+from invenio_accounts.testutils import login_user_via_view
 
 _datastore = LocalProxy(
     lambda: current_app.extensions['security'].datastore
@@ -139,3 +141,44 @@ def test_admin_createuser(app, admin_view):
     user = _datastore.get_user('test6@test.cern')
     assert user is not None
     assert user.active is False
+
+
+def test_admin_sessions(app, admin_view, users):
+    """Test flask-admin session."""
+    with app.test_request_context():
+        index_view_url = url_for('sessionactivity.index_view')
+        delete_view_url = url_for('sessionactivity.delete_view')
+    with app.test_client() as client:
+        res = client.get(index_view_url)
+        assert res.status_code == 200
+
+        # simulate login as user 1
+        datastore = app.extensions['security'].datastore
+        login_user_via_view(client=client, email=users[0]['email'],
+                            password=users[0]['password'])
+        from flask import session
+        sid_s = session.sid_s
+        # and try to delete own session sid_s: FAILS
+        res = client.post(
+            delete_view_url, data={'id': sid_s}, follow_redirects=True)
+        assert res.status_code == 200
+        sessions = SessionActivity.query.all()
+        assert len(sessions) == 1
+        assert sessions[0].sid_s == sid_s
+
+    with app.test_client() as client:
+        # simulate login as user 2
+        login_user_via_view(client=client, email=users[1]['email'],
+                            password=users[1]['password'])
+        new_sid_s = session.sid_s
+        sessions = SessionActivity.query.all()
+        assert len(sessions) == 2
+        all_sid_s = [session.sid_s for session in sessions]
+        assert sorted([sid_s, new_sid_s]) == sorted(all_sid_s)
+        # and try to delete a session of another user: WORKS
+        res = client.post(
+            delete_view_url, data={'id': sid_s},
+            follow_redirects=True)
+        sessions = SessionActivity.query.all()
+        assert len(sessions) == 1
+        assert sessions[0].sid_s == new_sid_s

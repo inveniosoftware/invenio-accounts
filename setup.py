@@ -55,7 +55,7 @@ extras_require = {
         'celery>=3.1.0,<4.0',
     ],
     'docs': [
-        'Sphinx>=1.4.2',
+        'Sphinx>=1.4.2,<1.6',
     ],
     'mysql': [
         'invenio-db[versioning,mysql]>=1.0.0b3',
@@ -130,6 +130,8 @@ setup(
         'invenio_admin.views': [
             'invenio_accounts_user = invenio_accounts.admin:user_adminview',
             'invenio_accounts_role = invenio_accounts.admin:role_adminview',
+            'invenio_accounts_session = '
+            'invenio_accounts.admin:session_adminview',
         ],
         'invenio_base.api_apps': [
             'invenio_accounts_rest = invenio_accounts:InvenioAccountsREST',

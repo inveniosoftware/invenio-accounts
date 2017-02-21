@@ -25,6 +25,8 @@
 
 u"""Minimal Flask application example for development.
 
+Run Redis server.
+
 Install the Invenio default theme
 
 You should execute these commands in the examples-directory.

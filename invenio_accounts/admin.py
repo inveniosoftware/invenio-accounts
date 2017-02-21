@@ -26,6 +26,7 @@
 
 from flask import current_app, flash
 from flask_admin.actions import action
+from flask_admin.babel import lazy_gettext
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.sqla.ajax import QueryAjaxModelLoader
 from flask_admin.form.fields import DateTimeField
@@ -33,13 +34,15 @@ from flask_admin.model.fields import AjaxSelectMultipleField
 from flask_babelex import gettext as _
 from flask_security.recoverable import send_reset_password_instructions
 from flask_security.utils import encrypt_password
+from invenio_db import db
 from passlib import pwd
 from werkzeug.local import LocalProxy
 from wtforms.fields import BooleanField
 from wtforms.validators import DataRequired
 
 from .cli import commit
-from .models import Role, User
+from .models import Role, SessionActivity, User
+from .sessions import delete_session
 
 _datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
 
@@ -175,6 +178,56 @@ class RoleView(ModelView):
     }
 
 
+class SessionActivityView(ModelView):
+    """Admin view for user sessions."""
+
+    can_view_details = False
+    can_create = False
+    can_edit = False
+
+    list_all = ('user.id', 'user.email', 'sid_s', 'created')
+
+    column_labels = {
+        'user.id': 'User ID',
+        'user.email': 'Email',
+        'sid_s': 'Session ID',
+    }
+    column_list = list_all
+    column_filters = list_all
+    column_sortable_list = list_all
+
+    form_ajax_refs = {
+        'user': {
+            'fields': (User.id, User.email)
+        },
+    }
+
+    def delete_model(self, model):
+        is_current = SessionActivity.is_current(sid_s=model.sid_s)
+        if is_current:
+            flash('You could not remove your current session', 'error')
+            return
+        delete_session(sid_s=model.sid_s)
+        db.session.commit()
+
+    @action('delete', lazy_gettext('Delete selected sessions'),
+            lazy_gettext('Are you sure you want to delete selected sessions?'))
+    def action_delete(self, ids):
+        is_current = any(SessionActivity.is_current(sid_s=id_) for id_ in ids)
+        if is_current:
+            flash('You could not remove your current session', 'error')
+            return
+        for id_ in ids:
+            delete_session(sid_s=id_)
+        db.session.commit()
+
+
+session_adminview = {
+    'model': SessionActivity,
+    'modelview': SessionActivityView,
+    'category': _('User Management')
+}
+
 user_adminview = {
     'model': User,
     'modelview': UserView,
@@ -187,4 +240,4 @@ role_adminview = {
     'category': _('User Management')
 }
 
-__all__ = ('user_adminview', 'role_adminview')
+__all__ = ('user_adminview', 'role_adminview', 'session_adminview')
