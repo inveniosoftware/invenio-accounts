@@ -28,7 +28,7 @@ from __future__ import absolute_import, print_function
 
 from datetime import datetime
 
-from flask import current_app
+from flask import current_app, session
 from flask_security import RoleMixin, UserMixin
 from invenio_db import db
 from sqlalchemy.orm import validates
@@ -134,3 +134,13 @@ class SessionActivity(db.Model, Timestamp):
         lifetime = current_app.permanent_session_lifetime
         expired_moment = datetime.utcnow() - lifetime
         return cls.query.filter(cls.created < expired_moment)
+
+    @classmethod
+    def query_by_user(cls, user_id):
+        """Query to select user sessions."""
+        return cls.query.filter_by(user_id=user_id)
+
+    @classmethod
+    def is_current(cls, sid_s):
+        """Check if the session is the current one."""
+        return session.sid_s == sid_s

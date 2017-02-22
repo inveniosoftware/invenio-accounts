@@ -1,0 +1,66 @@
+{# -*- coding: utf-8 -*-
+#
+# This file is part of Invenio.
+# Copyright (C) 2017 CERN.
+#
+# Invenio is free software; you can redistribute it
+# and/or modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of the
+# License, or (at your option) any later version.
+#
+# Invenio is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Invenio; if not, write to the
+# Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+# MA 02111-1307, USA.
+#
+# In applying this license, CERN does not
+# waive the privileges and immunities granted to it by virtue of its status
+# as an Intergovernmental Organization or submit itself to any jurisdiction.
+#}
+{%- extends config.ACCOUNTS_SETTINGS_TEMPLATE %}
+
+{% set panel_title = _('Security') %}
+{% set panel_subtitle = _('This is a list of devices that have logged into your account.') %}
+{% set panel_icon = 'fa fa-shield fa-fw' %}
+{% from "invenio_accounts/_macros.html" import render_field, form_errors %}
+
+{% set revoke_action = _("Revoke") %}
+{% set session_title = _("Session identifier") %}
+{% set signed_in_title = _("Signed in") %}
+
+
+{% block settings_form %}
+  <p>{{panel_subtitle}}</p>
+  <hr>
+  {% for session in sessions %}
+  <div class="row record-elem">
+    <div class="col-xs-1">
+      {% if is_current(session.sid_s) %}
+        <i class="fa fa-circle" aria-hidden="true"></i>
+      {% else %}
+        <i class="fa fa-circle-o" aria-hidden="true"></i>
+      {% endif %}
+    </div>
+    <div class="col-xs-9">
+      <b>{{session_title}}</b>: {{session.sid_s}}<br>
+      <small>
+        {{signed_in_title}}:
+        {{session.created | tousertimezone | dateformat}}
+      </small>
+    </div>
+    <div class="col-xs-1">
+        <form action="{{url_for('invenio_accounts.revoke_session', sid_s=session.sid_s)}}" method="post">
+          <input type="hidden" name="sid_s" value="{{session.sid_s}}">
+          <button type="submit" class="icon" title="{{remove_action}}">
+            {{revoke_action}}
+          </button>
+        </form>
+    </div>
+  </div>
+  {% endfor %}
+{% endblock settings_form %}

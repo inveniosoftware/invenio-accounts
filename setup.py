@@ -37,6 +37,7 @@ tests_require = [
     'check-manifest>=0.25',
     'coverage>=4.0',
     'isort>=4.2.2',
+    'mock>=2.0.0',
     'pydocstyle>=1.0.0',
     'pytest-cache>=1.0',
     'pytest-cov>=1.8.0',
@@ -52,7 +53,6 @@ extras_require = {
     ],
     'docs': [
         'Sphinx>=1.4.2',
-        'invenio-i18n>=1.0.0b2',
     ],
     'mysql': [
         'invenio-db[versioning,mysql]>=1.0.0b3',
@@ -83,16 +83,18 @@ setup_requires = [
 ]
 
 install_requires = [
-    'ipaddr>=2.1.11;python_version=="2.7"',
-    'Flask>=0.11.1',
     'Flask-BabelEx>=0.9.2',
+    'Flask-Breadcrumbs>=0.3.0',
     'Flask-KVSession>=0.6.1',
     'Flask-Login>=0.3.0',
     'Flask-Menu>=0.4.0',
     'Flask-Security-Fork>=1.8.0',
     'Flask-WTF>=0.13.0',
+    'Flask>=0.11.1',
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
     'cryptography>=1.3',
+    'invenio-i18n>=1.0.0b2',
+    'ipaddr>=2.1.11;python_version=="2.7"',
     'redis>=2.10.5',
 ]
 

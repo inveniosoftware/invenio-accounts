@@ -209,3 +209,5 @@ SECURITY_CHANGE_URL = '/accounts/settings/password/'
    <https://pythonhosted.org/Flask-Security/configuration.html>`_
    configuration.
 """
+
+ACCOUNTS_SETTINGS_SECURITY_TEMPLATE = 'invenio_accounts/settings/security.html'

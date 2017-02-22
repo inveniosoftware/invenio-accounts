@@ -40,6 +40,7 @@ from flask_celeryext import FlaskCeleryExt
 from flask_mail import Mail
 from flask_menu import Menu
 from invenio_db import InvenioDB, db
+from invenio_i18n import InvenioI18N
 from simplekv.memory.redisstore import RedisStore
 from sqlalchemy_utils.functions import create_database, database_exists, \
     drop_database
@@ -153,3 +154,10 @@ def admin_view(app):
     user_model = user_adminview_copy.pop('model')
     user_view = user_adminview_copy.pop('modelview')
     admin.add_view(user_view(user_model, db.session, **user_adminview_copy))
+
+
+@pytest.fixture()
+def app_i18n(app):
+    """Init invenio-i18n."""
+    InvenioI18N(app)
+    return app
