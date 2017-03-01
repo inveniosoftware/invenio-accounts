@@ -138,6 +138,9 @@ setup(
         'invenio_base.blueprints': [
             'invenio_accounts = invenio_accounts.views:blueprint',
         ],
+        'invenio_celery.tasks': [
+            'invenio_accounts = invenio_accounts.tasks',
+        ],
         'invenio_db.alembic': [
             'invenio_accounts = invenio_accounts:alembic',
         ],
