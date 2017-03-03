@@ -35,6 +35,7 @@ from flask_menu import current_menu, register_menu
 from flask_security import current_user
 from invenio_db import db
 
+from .forms import RevokeForm
 from .models import SessionActivity
 from .sessions import delete_session
 
@@ -114,13 +115,13 @@ def check_security_settings():
         )
 
 
-@blueprint.route('/security', methods=['GET', 'POST'])
+@blueprint.route('/security/', methods=['GET'])
 @login_required
 @register_menu(
     blueprint, 'settings.security',
     # NOTE: Menu item text (icon replaced by a user icon).
     _('%(icon)s Security', icon='<i class="fa fa-shield fa-fw"></i>'),
-    order=0)
+    order=2)
 @register_breadcrumb(blueprint, 'breadcrumbs.settings.security', _('Security'))
 def security():
     """View for security page."""
@@ -134,18 +135,23 @@ def security():
             del sessions[index]
     return render_template(
         current_app.config['ACCOUNTS_SETTINGS_SECURITY_TEMPLATE'],
+        formclass=RevokeForm,
         sessions=[master_session] + sessions,
         is_current=SessionActivity.is_current
     )
 
 
-@blueprint.route('/revoke_session', methods=['POST'])
+@blueprint.route('/sessions/revoke/', methods=['POST'])
 @login_required
 def revoke_session():
     """Revoke a session."""
-    sid_s = request.form['sid_s']
+    form = RevokeForm(request.form)
+    if not form.validate_on_submit():
+        abort(403)
+
+    sid_s = form.data['sid_s']
     if SessionActivity.query.filter_by(
-            user_id=current_user.id, sid_s=sid_s).count() == 1:
+            user_id=current_user.get_id(), sid_s=sid_s).count() == 1:
         delete_session(sid_s=sid_s)
         db.session.commit()
         if not SessionActivity.is_current(sid_s=sid_s):

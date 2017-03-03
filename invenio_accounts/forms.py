@@ -28,7 +28,7 @@ Currently supported: recaptcha
 """
 from flask_babelex import gettext as _
 from flask_wtf import FlaskForm, Recaptcha, RecaptchaField
-from wtforms import FormField
+from wtforms import FormField, HiddenField
 
 
 class RegistrationFormRecaptcha(FlaskForm):
@@ -36,6 +36,12 @@ class RegistrationFormRecaptcha(FlaskForm):
 
     recaptcha = RecaptchaField(validators=[
         Recaptcha(message=_("Please complete the reCAPTCHA."))])
+
+
+class RevokeForm(FlaskForm):
+    """Form for revoking a session."""
+
+    sid_s = HiddenField()
 
 
 def confirm_register_form_factory(Form, app):
