@@ -71,21 +71,31 @@ def upgrade():
         sa.Column('updated', sa.DateTime(), nullable=False),
         sa.Column('sid_s', sa.String(length=255), nullable=False),
         sa.Column('user_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], [u'accounts_user.id'], ),
+        sa.ForeignKeyConstraint(
+            ['user_id'], [u'accounts_user.id'],
+            name='fk_accounts_session_activity_user_id',
+        ),
         sa.PrimaryKeyConstraint('sid_s')
     )
     op.create_table(
         'accounts_userrole',
         sa.Column('user_id', sa.Integer(), nullable=True),
         sa.Column('role_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['role_id'], ['accounts_role.id'], ),
-        sa.ForeignKeyConstraint(['user_id'], ['accounts_user.id'], )
+        sa.ForeignKeyConstraint(
+            ['role_id'], ['accounts_role.id'],
+            name='fk_accounts_userrole_role_id',
+        ),
+        sa.ForeignKeyConstraint(
+            ['user_id'], ['accounts_user.id'],
+            name='fk_accounts_userrole_user_id',
+        ),
     )
     with op.batch_alter_table('transaction') as batch_op:
         batch_op.add_column(sa.Column(
             'user_id',
             sa.Integer(),
-            sa.ForeignKey('accounts_user.id'),
+            sa.ForeignKey(
+                'accounts_user.id', name='fk_transaction_accounts_user_id'),
             nullable=True,
         ))
         batch_op.create_index(

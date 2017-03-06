@@ -36,8 +36,10 @@ from sqlalchemy_utils import IPAddressType, Timestamp
 
 userrole = db.Table(
     'accounts_userrole',
-    db.Column('user_id', db.Integer(), db.ForeignKey('accounts_user.id')),
-    db.Column('role_id', db.Integer(), db.ForeignKey('accounts_role.id')),
+    db.Column('user_id', db.Integer(), db.ForeignKey(
+        'accounts_user.id', name='fk_accounts_userrole_user_id')),
+    db.Column('role_id', db.Integer(), db.ForeignKey(
+        'accounts_role.id', name='fk_accounts_userrole_role_id')),
 )
 """Relationship between users and roles."""
 
@@ -123,7 +125,8 @@ class SessionActivity(db.Model, Timestamp):
     Named here as it is in `flask-kvsession` to avoid confusion.
     """
 
-    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        User.id, name='fk_accounts_session_activity_user_id'))
     """ID of user to whom this session belongs."""
 
     user = db.relationship(User, backref='active_sessions')
