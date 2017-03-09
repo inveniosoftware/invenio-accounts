@@ -48,6 +48,9 @@ tests_require = [
 ]
 
 extras_require = {
+    ':python_version=="2.7"': [
+        'ipaddr>=2.1.11',
+    ],
     'celery': [
         'celery>=3.1.0,<4.0',
     ],
@@ -94,7 +97,6 @@ install_requires = [
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
     'cryptography>=1.3',
     'invenio-i18n>=1.0.0b2',
-    'ipaddr>=2.1.11;python_version=="2.7"',
     'redis>=2.10.5',
 ]
 
