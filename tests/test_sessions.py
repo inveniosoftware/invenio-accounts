@@ -83,21 +83,19 @@ def test_repeated_login_session_population(app):
             assert len(app.kvsession_store.keys()) == 1
             first_login_session_id = app.kvsession_store.keys()[0]
 
-            # Sessions are not deleted upon logout
+            # SessionActivity is deleted upon logout
             client.get(flask_security.url_for_security('logout'))
-            assert len(app.kvsession_store.keys()) == 1
             query = db.session.query(SessionActivity)
-            assert query.count() == 1
+            assert query.count() == 0
+            # Session id changes after logout
             assert len(app.kvsession_store.keys()) == 1
-            # Session id doesn't change after logout
-            assert first_login_session_id == app.kvsession_store.keys()[0]
+            assert first_login_session_id != app.kvsession_store.keys()[0]
 
-            # After logging out and back in, the inital session id in the
-            # sessionstore should be updated, and there should be two
-            # SessionActivity entries (the old one and the regenerated).
+            # After logging out and back in, the should be one
+            # SessionActivity entry.
             testutils.login_user_via_view(client, user=user)
             query = db.session.query(SessionActivity)
-            assert query.count() == 2
+            assert query.count() == 1
             assert len(app.kvsession_store.keys()) == 1
             assert first_login_session_id != app.kvsession_store.keys()[0]
 
@@ -115,8 +113,7 @@ def test_login_multiple_clients_single_user_session_population(app):
                 testutils.login_user_via_view(client, user=user)
                 assert testutils.client_authenticated(client)
                 sid_s_list.append(session.sid_s)
-                client.get(flask_security.url_for_security('logout'))
-                assert not testutils.client_authenticated(client)
+
         # There is now `client_count` existing sessions and SessionActivity
         # entries
         assert len(app.kvsession_store.keys()) == client_count

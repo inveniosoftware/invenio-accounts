@@ -31,7 +31,7 @@ import os
 import pkg_resources
 from flask import current_app
 from flask_kvsession import KVSessionExtension
-from flask_login import user_logged_in
+from flask_login import user_logged_in, user_logged_out
 from flask_security import Security, changeable, recoverable, registerable, \
     utils
 from invenio_db import db
@@ -44,7 +44,7 @@ from . import config
 from .datastore import SessionAwareSQLAlchemyUserDatastore
 from .hash import InvenioAesEncryptedEmail, _to_binary
 from .models import Role, User
-from .sessions import login_listener
+from .sessions import login_listener, logout_listener
 
 
 def get_hmac(password):
@@ -140,6 +140,7 @@ class InvenioAccounts(object):
                     app.config['ACCOUNTS_SESSION_REDIS_URL']))
 
         user_logged_in.connect(login_listener, app)
+        user_logged_out.connect(logout_listener, app)
 
         # Initialize extension.
         _register_blueprint = app.config.get('ACCOUNTS_REGISTER_BLUEPRINT')

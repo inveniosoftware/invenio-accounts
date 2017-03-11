@@ -36,7 +36,8 @@ import flask
 from invenio_db import db
 from werkzeug.local import LocalProxy
 
-from invenio_accounts.models import SessionActivity
+from .models import SessionActivity
+from .proxies import current_accounts
 
 _sessionstore = LocalProxy(lambda: flask.current_app.kvsession_store)
 
@@ -67,11 +68,27 @@ def login_listener(app, user):
         .. note:: `flask.session.regenerate()` actually calls Flask-KVSession's
             `flask_kvsession.KVSession.regenerate`.
         """
-        # Regenerate the session to avoid "session fixation" vulnerabilities.
+        # Regenerate the session to avoid session fixation vulnerabilities.
         flask.session.regenerate()
         # Save the session first so that the sid_s gets generated.
         app.session_interface.save_session(app, flask.session, response)
         add_session(flask.session)
+        return response
+
+
+def logout_listener(app, user):
+    """Connect to the user_logged_out signal.
+
+    :param app: The Flask application.
+    :param user: The :class:`invenio_accounts.models.User` instance.
+    """
+    delete_session(flask.session.sid_s)
+    # Regenerate the session to avoid session fixation vulnerabilities.
+    flask.session.regenerate()
+
+    @flask.after_this_request
+    def _commit(response=None):
+        current_accounts.datastore.commit()
         return response
 
 
