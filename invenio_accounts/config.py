@@ -203,7 +203,7 @@ SECURITY_LOGOUT_URL = '/logout/'
    configuration.
 """
 
-SECURITY_CHANGE_URL = '/accounts/settings/password/'
+SECURITY_CHANGE_URL = '/account/settings/password/'
 """
 .. note:: Overwrite `Flask-Security
    <https://pythonhosted.org/Flask-Security/configuration.html>`_
