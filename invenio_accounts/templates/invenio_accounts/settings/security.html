@@ -51,7 +51,7 @@
       <small>
         {{_("Signed in")}}:
         {{session.created | tousertimezone | dateformat}}
-        {% if is_current_sid %}<span class="text-muted">(current session)</span>{% endif %}
+        {% if is_current_sid %}<span class="text-muted">({{_("current session")}})</span>{% endif %}
       </small>
     </div>
     <div class="col-xs-1">
