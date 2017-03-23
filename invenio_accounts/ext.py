@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015, 2016 CERN.
+# Copyright (C) 2015, 2016, 2017 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -58,13 +58,13 @@ def get_hmac(password):
     return _to_binary(password)
 
 
-def encrypt_password(password):
-    """Override Flask-Security's default encryption function.
+def hash_password(password):
+    """Override Flask-Security's default hashing function.
 
     :param password: The plain password.
-    :returns: The encrypted password.
+    :returns: The hashed password.
     """
-    return current_app.extensions['security'].pwd_context.encrypt(password)
+    return current_app.extensions['security'].pwd_context.hash(password)
 
 
 class InvenioAccounts(object):
@@ -87,11 +87,11 @@ class InvenioAccounts(object):
         """Monkey-patch Flask-Security."""
         if utils.get_hmac != get_hmac:
             utils.get_hmac = get_hmac
-        if utils.encrypt_password != encrypt_password:
-            utils.encrypt_password = encrypt_password
-            changeable.encrypt_password = encrypt_password
-            recoverable.encrypt_password = encrypt_password
-            registerable.encrypt_password = encrypt_password
+        if utils.hash_password != hash_password:
+            utils.hash_password = hash_password
+            changeable.hash_password = hash_password
+            recoverable.hash_password = hash_password
+            registerable.hash_password = hash_password
 
     def load_obj_or_import_string(self, value):
         """Import string or return object.

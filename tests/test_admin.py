@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015, 2016 CERN.
+# Copyright (C) 2015, 2016, 2017 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -24,8 +24,8 @@
 
 import pytest
 from flask import current_app, session, url_for
-from flask.ext.security.utils import encrypt_password
 from flask_admin import menu
+from flask_security.utils import hash_password
 from invenio_admin import InvenioAdmin
 from invenio_db import db
 from werkzeug.local import LocalProxy
@@ -49,7 +49,7 @@ def test_admin(app, admin_view):
         # create user and save url for testing
         request_url = url_for("user.action_view")
         kwargs = dict(email="test@test.cern", active=False,
-                      password=encrypt_password('aafaf4as5fa'))
+                      password=hash_password('aafaf4as5fa'))
         _datastore.create_user(**kwargs)
         _datastore.commit()
         inserted_id = _datastore.get_user('test@test.cern').id
@@ -123,15 +123,15 @@ def test_admin_createuser(app, admin_view):
         assert user.active is False
 
     user_data = dict(email='test4@test.cern', active=False,
-                     password=encrypt_password('123456'))
+                     password=hash_password('123456'))
     _datastore.create_user(**user_data)
 
     user_data = dict(email='test5@test.cern', active=True,
-                     password=encrypt_password('123456'))
+                     password=hash_password('123456'))
     _datastore.create_user(**user_data)
 
     user_data = dict(email='test6@test.cern', active=False,
-                     password=encrypt_password('123456'))
+                     password=hash_password('123456'))
     _datastore.create_user(**user_data)
     _datastore.commit()
     assert _datastore.get_user('test4@test.cern') is not None

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015, 2016 CERN.
+# Copyright (C) 2015, 2016, 2017 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -38,7 +38,7 @@ import flask_login
 from flask import current_app
 from flask_kvsession import SessionID
 from flask_security import url_for_security
-from flask_security.utils import encrypt_password
+from flask_security.utils import hash_password
 from werkzeug.local import LocalProxy
 
 # "Convenient references" (lifted from flask_security source)
@@ -59,8 +59,8 @@ def create_test_user(email, password='123456', **kwargs):
     :returns: A :class:`invenio_accounts.models.User` instance.
     """
     assert flask.current_app.testing
-    encrypted_password = encrypt_password(password)
-    user = _datastore.create_user(email=email, password=encrypted_password,
+    hashed_password = hash_password(password)
+    user = _datastore.create_user(email=email, password=hashed_password,
                                   **kwargs)
     _datastore.commit()
     user.password_plaintext = password

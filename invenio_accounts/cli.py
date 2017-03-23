@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015, 2016 CERN.
+# Copyright (C) 2015, 2016, 2017 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -32,7 +32,7 @@ import click
 from flask import current_app
 from flask.cli import with_appcontext
 from flask_security.forms import ConfirmRegisterForm
-from flask_security.utils import encrypt_password
+from flask_security.utils import hash_password
 from werkzeug.datastructures import MultiDict
 from werkzeug.local import LocalProxy
 
@@ -71,7 +71,7 @@ def users_create(email, password, active):
     form = ConfirmRegisterForm(MultiDict(kwargs), csrf_enabled=False)
 
     if form.validate():
-        kwargs['password'] = encrypt_password(kwargs['password'])
+        kwargs['password'] = hash_password(kwargs['password'])
         kwargs['active'] = active
         _datastore.create_user(**kwargs)
         click.secho('User created successfully.', fg='green')

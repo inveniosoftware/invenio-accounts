@@ -86,13 +86,13 @@ setup_requires = [
 ]
 
 install_requires = [
-    'Flask-BabelEx>=0.9.2',
+    'Flask-BabelEx>=0.9.3',
     'Flask-Breadcrumbs>=0.3.0',
     'Flask-KVSession>=0.6.1',
     'Flask-Login>=0.3.0',
     'Flask-Menu>=0.4.0',
-    'Flask-Security-Fork>=1.8.0',
-    'Flask-WTF>=0.13.0',
+    'Flask-Security>=3.0.0',
+    'Flask-WTF>=0.13.1',
     'Flask>=0.11.1',
     'future>=0.16.0',
     # Not using 'ipaddress' extras for SQLALchemy-Utils in favor of
