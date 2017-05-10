@@ -82,12 +82,11 @@ def logout_listener(app, user):
     :param app: The Flask application.
     :param user: The :class:`invenio_accounts.models.User` instance.
     """
-    delete_session(flask.session.sid_s)
-    # Regenerate the session to avoid session fixation vulnerabilities.
-    flask.session.regenerate()
-
     @flask.after_this_request
     def _commit(response=None):
+        delete_session(flask.session.sid_s)
+        # Regenerate the session to avoid session fixation vulnerabilities.
+        flask.session.regenerate()
         current_accounts.datastore.commit()
         return response
 
