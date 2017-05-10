@@ -57,6 +57,9 @@ class Role(db.Model, RoleMixin):
     description = db.Column(db.String(255))
     """Role description."""
 
+    def __str__(self):
+        return '{0.name} - {0.description}'.format(self)
+
 
 class User(db.Model, UserMixin):
     """User data model."""

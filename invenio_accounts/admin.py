@@ -56,7 +56,7 @@ class UserView(ModelView):
         column_details_list = \
         list_all
 
-    form_columns = ('email', 'password', 'active')
+    form_columns = ('email', 'password', 'active', 'roles')
 
     form_args = dict(
         email=dict(label='Email', validators=[DataRequired()])
