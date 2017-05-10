@@ -27,7 +27,9 @@
 from flask import current_app, flash
 from flask_admin.actions import action
 from flask_admin.contrib.sqla import ModelView
+from flask_admin.contrib.sqla.ajax import QueryAjaxModelLoader
 from flask_admin.form.fields import DateTimeField
+from flask_admin.model.fields import AjaxSelectMultipleField
 from flask_security.utils import encrypt_password
 from flask_babelex import gettext as _
 from werkzeug.local import LocalProxy
@@ -134,12 +136,29 @@ class RoleView(ModelView):
     list_all = ('id', 'name', 'description')
 
     column_list = \
-        form_columns = \
         column_searchable_list = \
         column_filters = \
         column_details_list = \
         columns_sortable_list = \
         list_all
+
+    form_columns = ('name', 'description', 'users')
+
+    user_loader = QueryAjaxModelLoader(
+        'user',
+        LocalProxy(lambda: _datastore.db.session),
+        User,
+        fields=['email'],
+        page_size=10
+    )
+
+    form_extra_fields = {
+        'users': AjaxSelectMultipleField(user_loader)
+    }
+
+    form_ajax_refs = {
+        'user': user_loader
+    }
 
 
 user_adminview = {
