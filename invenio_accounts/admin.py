@@ -28,6 +28,7 @@ from flask import current_app, flash
 from flask_admin.actions import action
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form.fields import DateTimeField
+from flask_security.utils import encrypt_password
 from flask_babelex import gettext as _
 from werkzeug.local import LocalProxy
 from wtforms.validators import DataRequired
@@ -55,7 +56,7 @@ class UserView(ModelView):
         column_details_list = \
         list_all
 
-    form_columns = ('email', 'active')
+    form_columns = ('email', 'password', 'active')
 
     form_args = dict(
         email=dict(label='Email', validators=[DataRequired()])
@@ -74,6 +75,10 @@ class UserView(ModelView):
         'current_login_ip': _('Current Login IP'),
         'last_login_ip': _('Last Login IP')
     }
+
+    def on_model_change(self, form, User, is_created):
+        if form.password.data is not None:
+            User.password = encrypt_password(form.password.data)
 
     @action('inactivate', _('Inactivate'),
             _('Are you sure you want to inactivate selected users?'))
