@@ -30,13 +30,16 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.sqla.ajax import QueryAjaxModelLoader
 from flask_admin.form.fields import DateTimeField
 from flask_admin.model.fields import AjaxSelectMultipleField
+from flask_security.recoverable import send_reset_password_instructions
 from flask_security.utils import encrypt_password
 from flask_babelex import gettext as _
 from werkzeug.local import LocalProxy
+from wtforms.fields import BooleanField
 from wtforms.validators import DataRequired
 
 from .cli import commit
 from .models import Role, User
+from .utils import generate_password
 
 _datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
 
@@ -58,11 +61,18 @@ class UserView(ModelView):
         column_details_list = \
         list_all
 
-    form_columns = ('email', 'password', 'active', 'roles')
+    form_columns = ('email', 'password', 'active', 'roles', 'notification')
 
     form_args = dict(
-        email=dict(label='Email', validators=[DataRequired()])
+        email=dict(label='Email', validators=[DataRequired()]),
+        password=dict(default=generate_password())
     )
+
+    form_extra_fields = {
+        'notification': BooleanField(
+            'Send User Notification',
+            description='Send the new user an email about their account.')
+    }
 
     column_filters = ('id', 'email', 'active', 'confirmed_at', 'last_login_at',
                       'current_login_at', 'login_count')
@@ -81,6 +91,10 @@ class UserView(ModelView):
     def on_model_change(self, form, User, is_created):
         if form.password.data is not None:
             User.password = encrypt_password(form.password.data)
+
+    def after_model_change(self, form, User, is_created):
+        if is_created and form.notification.data is True:
+            send_reset_password_instructions(User)
 
     @action('inactivate', _('Inactivate'),
             _('Are you sure you want to inactivate selected users?'))
