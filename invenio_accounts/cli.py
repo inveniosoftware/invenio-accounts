@@ -40,7 +40,7 @@ _datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
 
 
 def commit(fn):
-    """Decorator to commit changes in datastore."""
+    """Commit changes in datastore (used as a decorator)."""
     @wraps(fn)
     def wrapper(*args, **kwargs):
         fn(*args, **kwargs)

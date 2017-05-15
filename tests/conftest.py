@@ -78,7 +78,7 @@ def _app_factory(config=None):
 
 
 def _database_setup(app, request):
-    """Setup database."""
+    """Set up the database."""
     with app.app_context():
         if not database_exists(str(db.engine.url)):
             create_database(str(db.engine.url))

@@ -30,16 +30,16 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.sqla.ajax import QueryAjaxModelLoader
 from flask_admin.form.fields import DateTimeField
 from flask_admin.model.fields import AjaxSelectMultipleField
+from flask_babelex import gettext as _
 from flask_security.recoverable import send_reset_password_instructions
 from flask_security.utils import encrypt_password
-from flask_babelex import gettext as _
+from passlib import pwd
 from werkzeug.local import LocalProxy
 from wtforms.fields import BooleanField
 from wtforms.validators import DataRequired
 
 from .cli import commit
 from .models import Role, User
-from .utils import generate_password
 
 _datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
 
@@ -65,7 +65,7 @@ class UserView(ModelView):
 
     form_args = dict(
         email=dict(label='Email', validators=[DataRequired()]),
-        password=dict(default=generate_password())
+        password=dict(default=pwd.genword(length=12))
     )
 
     form_extra_fields = {
