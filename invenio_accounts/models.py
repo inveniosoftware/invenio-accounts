@@ -58,6 +58,7 @@ class Role(db.Model, RoleMixin):
     """Role description."""
 
     def __str__(self):
+        """Return the name and description of the role."""
         return '{0.name} - {0.description}'.format(self)
 
 
