@@ -113,7 +113,7 @@ def app(request):
     app = _app_factory()
     InvenioAccounts(app)
 
-    from invenio_accounts.views import blueprint
+    from invenio_accounts.views.settings import blueprint
     app.register_blueprint(blueprint)
 
     _database_setup(app, request)

@@ -50,6 +50,12 @@ ACCOUNTS_USE_CELERY = None
 By default, it uses Celery if it can find it.
 """
 
+ACCOUNTS_SESSION_ACTIVITY_ENABLED = True
+"""Enable session activity store on database."""
+
+ACCOUNTS_SETTINGS_SECURITY_TEMPLATE = 'invenio_accounts/settings/security.html'
+"""Template for the account security page."""
+
 # Change Flask-Security defaults
 SECURITY_CHANGEABLE = True
 """
@@ -209,5 +215,3 @@ SECURITY_CHANGE_URL = '/account/settings/password/'
    <https://pythonhosted.org/Flask-Security/configuration.html>`_
    configuration.
 """
-
-ACCOUNTS_SETTINGS_SECURITY_TEMPLATE = 'invenio_accounts/settings/security.html'

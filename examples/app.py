@@ -25,8 +25,6 @@
 
 u"""Minimal Flask application example for development.
 
-Run Redis server.
-
 Install the Invenio default theme
 
 You should execute these commands in the examples-directory.
@@ -73,7 +71,7 @@ from invenio_db import InvenioDB
 from invenio_i18n import InvenioI18N
 
 from invenio_accounts import InvenioAccounts
-from invenio_accounts.views import blueprint
+from invenio_accounts.views.settings import blueprint
 
 try:
     pkg_resources.get_distribution('invenio_assets')
