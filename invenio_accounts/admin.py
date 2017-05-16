@@ -203,8 +203,7 @@ class SessionActivityView(ModelView):
     }
 
     def delete_model(self, model):
-        is_current = SessionActivity.is_current(sid_s=model.sid_s)
-        if is_current:
+        if SessionActivity.is_current(sid_s=model.sid_s):
             flash('You could not remove your current session', 'error')
             return
         delete_session(sid_s=model.sid_s)

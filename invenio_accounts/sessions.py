@@ -73,6 +73,7 @@ def login_listener(app, user):
         # Save the session first so that the sid_s gets generated.
         app.session_interface.save_session(app, flask.session, response)
         add_session(flask.session)
+        current_accounts.datastore.commit()
         return response
 
 
