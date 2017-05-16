@@ -43,7 +43,7 @@ from sqlalchemy_utils.functions import create_database, database_exists, \
     drop_database
 
 from invenio_accounts import InvenioAccounts
-from invenio_accounts.views import blueprint
+from invenio_accounts.views.settings import blueprint
 
 
 @pytest.fixture()

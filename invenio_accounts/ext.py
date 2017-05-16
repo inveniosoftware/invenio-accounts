@@ -139,8 +139,8 @@ class InvenioAccounts(object):
                 sessionstore = RedisStore(redis.StrictRedis.from_url(
                     app.config['ACCOUNTS_SESSION_REDIS_URL']))
 
-        user_logged_in.connect(login_listener, app)
-        user_logged_out.connect(logout_listener, app)
+        if app.config['ACCOUNTS_SESSION_ACTIVITY_ENABLED']:
+            self._enable_session_activity(app=app)
 
         # Initialize extension.
         _register_blueprint = app.config.get('ACCOUNTS_REGISTER_BLUEPRINT')
@@ -191,6 +191,15 @@ class InvenioAccounts(object):
         for k in dir(config):
             if any([k.startswith(prefix) for prefix in config_apps]):
                 app.config.setdefault(k, getattr(config, k))
+
+    def _enable_session_activity(self, app):
+        """Enable session activity."""
+        user_logged_in.connect(login_listener, app)
+        user_logged_out.connect(logout_listener, app)
+        from .views.settings import blueprint
+        from .views.security import security, revoke_session
+        blueprint.route('/security/', methods=['GET'])(security)
+        blueprint.route('/sessions/revoke/', methods=['POST'])(revoke_session)
 
 
 class InvenioAccountsREST(InvenioAccounts):

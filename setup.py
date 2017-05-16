@@ -140,7 +140,7 @@ setup(
             'invenio_accounts = invenio_accounts:InvenioAccounts',
         ],
         'invenio_base.blueprints': [
-            'invenio_accounts = invenio_accounts.views:blueprint',
+            'invenio_accounts = invenio_accounts.views.settings:blueprint',
         ],
         'invenio_celery.tasks': [
             'invenio_accounts = invenio_accounts.tasks',

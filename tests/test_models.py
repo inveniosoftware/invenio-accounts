@@ -29,9 +29,8 @@ from __future__ import absolute_import
 from invenio_db import db
 from sqlalchemy import inspect
 
-from invenio_accounts import InvenioAccounts, testutils
+from invenio_accounts import testutils
 from invenio_accounts.models import SessionActivity
-from invenio_accounts.views import blueprint
 
 
 def test_session_activity_model(app):

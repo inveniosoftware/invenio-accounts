@@ -34,10 +34,9 @@ from invenio_db import db
 from simplekv.memory.redisstore import RedisStore
 from werkzeug.local import LocalProxy
 
-from invenio_accounts import InvenioAccounts, testutils
+from invenio_accounts import testutils
 from invenio_accounts.models import SessionActivity
 from invenio_accounts.sessions import delete_session
-from invenio_accounts.views import blueprint
 
 _sessionstore = LocalProxy(lambda: current_app.
                            extensions['invenio-accounts'].sessionstore)
@@ -197,7 +196,8 @@ def test_repeated_login_session_expiration(app):
     """Test repeated session login.
 
     Test that a new session (with a different sid_s) is created when logging
-    in again after a previous session has expired."""
+    in again after a previous session has expired.
+    """
     ttl_seconds = 3
     ttl_delta = datetime.timedelta(0, ttl_seconds)
     app.config['PERMANENT_SESSION_LIFETIME'] = ttl_delta
