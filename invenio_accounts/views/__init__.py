@@ -23,3 +23,8 @@
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
 """Invenio-accounts views."""
+
+from .settings import blueprint
+
+
+__all__ = ('blueprint', )
