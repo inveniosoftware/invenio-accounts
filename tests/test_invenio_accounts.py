@@ -111,7 +111,7 @@ def test_alembic(app):
     ext.alembic.upgrade()
 
     assert not ext.alembic.compare_metadata()
-    ext.alembic.downgrade(target='96e796392533')
+    ext.alembic.downgrade(target='e12419831262')
     ext.alembic.upgrade()
 
     assert not ext.alembic.compare_metadata()

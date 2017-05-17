@@ -30,6 +30,7 @@ import time
 import flask_security
 import pytest
 from flask import current_app, session
+from flask_security import url_for_security
 from invenio_db import db
 from simplekv.memory.redisstore import RedisStore
 from werkzeug.local import LocalProxy
@@ -264,3 +265,24 @@ def test_deactivate_user(app):
             _datastore.deactivate_user(user_bob)
             db.session.commit()
             assert not testutils.client_authenticated(client)
+
+
+def test_session_extra_info_on_login(app, users):
+    """Test session extra info on login."""
+    with app.test_client() as client:
+        user_agent = ('Mozilla/5.0 (X11; Linux x86_64; rv:43.0) '
+                      'Gecko/20100101 Firefox/43.0')
+        res = client.post(url_for_security('login'),
+                          data={'email': users[0]['email'],
+                                'password': users[0]['password']},
+                          environ_base={'REMOTE_ADDR': '188.184.9.234'},
+                          headers={'User-Agent': user_agent})
+        assert res.status_code == 302
+        # check session extra info are there
+        [session] = SessionActivity.query.all()
+        assert session.browser == 'Firefox'
+        assert session.browser_version == '43'
+        assert session.device == 'Other'
+        assert session.operative_system == 'Linux'
+        assert session.country == 'CH'
+        assert session.ip_addr == '188.184.9.234'

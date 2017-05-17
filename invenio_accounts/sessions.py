@@ -33,13 +33,34 @@ created.
 from __future__ import absolute_import, print_function
 
 import flask
+
+from geolite2 import geolite2
 from invenio_db import db
+from ua_parser import user_agent_parser
 from werkzeug.local import LocalProxy
 
 from .models import SessionActivity
 from .proxies import current_accounts
 
 _sessionstore = LocalProxy(lambda: flask.current_app.kvsession_store)
+
+
+def _get_user_country(user_ip):
+    """Get user country."""
+    if user_ip:
+        match = geolite2.reader().get(user_ip)
+        return match['country']['iso_code'] if match else None
+
+
+def _extract_info_from_useragent(user_agent):
+    """Extract extra informations from user."""
+    parsed_string = user_agent_parser.Parse(user_agent)
+    return {
+        'operative_system': parsed_string.get('os', {}).get('family'),
+        'browser': parsed_string.get('user_agent', {}).get('family'),
+        'browser_version': parsed_string.get('user_agent', {}).get('major'),
+        'device': parsed_string.get('device', {}).get('family'),
+    }
 
 
 def add_session(session=None):
@@ -51,7 +72,15 @@ def add_session(session=None):
     """
     user_id, sid_s = session['user_id'], session.sid_s
     with db.session.begin_nested():
-        session_activity = SessionActivity(user_id=user_id, sid_s=sid_s)
+        user_ip = flask.request.remote_addr
+        session_activity = SessionActivity(
+            user_id=user_id, sid_s=sid_s,
+            ip_addr=user_ip,
+            country=_get_user_country(user_ip=user_ip),
+            **_extract_info_from_useragent(
+                user_agent=flask.request.headers.get('User-Agent', '')
+            )
+        )
         db.session.merge(session_activity)
 
 

@@ -97,7 +97,9 @@ install_requires = [
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
     'cryptography>=1.3',
     'invenio-i18n>=1.0.0b2',
+    'maxminddb-geolite2>=2017.404',
     'redis>=2.10.5',
+    'ua-parser>=0.7.3',
 ]
 
 packages = find_packages()
