@@ -38,6 +38,9 @@
   {%- for session in sessions %}
   {%- set is_current_sid = is_current(session.sid_s) %}
   {%- set form = formclass(sid_s=session.sid_s) %}
+  {%- set browser_text = '{0} {1} on {2}'.format(
+            session.browser, session.browser_version, session.operative_system)
+            if session.browser else '' %}
   <div class="row record-elem">
     <div class="col-xs-1">
       {%- if is_current_sid %}
@@ -47,11 +50,20 @@
       {%- endif %}
     </div>
     <div class="col-xs-9">
-      <b>{{_("Session identifier")}}:</b> {{session.sid_s}}<br />
+      <b>{{session.ip_addr}}</b><br />
       <small>
         {{_("Signed in")}}:
         {{session.created | tousertimezone | dateformat}}
         {% if is_current_sid %}<span class="text-muted">({{_("current session")}})</span>{% endif %}
+        {%- if session.browser %}
+        <br>{{'{0} {1} on {2} ({3})'.format(
+          session.browser, session.browser_version, session.operative_system,
+          session.device)
+          }}
+        {%- endif %}
+        {%- if session.country %}
+          <br>{{_('Location')}}: {{session.country}}
+        {%- endif %}
       </small>
     </div>
     <div class="col-xs-1">
