@@ -135,7 +135,7 @@ class SessionActivity(db.Model, Timestamp):
 
     user = db.relationship(User, backref='active_sessions')
 
-    ip_addr = db.Column(db.String(80), nullable=True)
+    ip = db.Column(db.String(80), nullable=True)
     """IP address."""
 
     country = db.Column(db.String(3), nullable=True)
@@ -147,7 +147,7 @@ class SessionActivity(db.Model, Timestamp):
     browser_version = db.Column(db.String(30), nullable=True)
     """Browser version."""
 
-    operative_system = db.Column(db.String(80), nullable=True)
+    os = db.Column(db.String(80), nullable=True)
     """User operative system name."""
 
     device = db.Column(db.String(80), nullable=True)

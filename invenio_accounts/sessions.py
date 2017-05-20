@@ -32,8 +32,7 @@ created.
 
 from __future__ import absolute_import, print_function
 
-import flask
-
+from flask import after_this_request, current_app, request, session
 from geolite2 import geolite2
 from invenio_db import db
 from ua_parser import user_agent_parser
@@ -42,13 +41,13 @@ from werkzeug.local import LocalProxy
 from .models import SessionActivity
 from .proxies import current_accounts
 
-_sessionstore = LocalProxy(lambda: flask.current_app.kvsession_store)
+_sessionstore = LocalProxy(lambda: current_app.kvsession_store)
 
 
-def _get_user_country(user_ip):
+def _ip2country(ip):
     """Get user country."""
-    if user_ip:
-        match = geolite2.reader().get(user_ip)
+    if ip:
+        match = geolite2.reader().get(ip)
         return match['country']['iso_code'] if match else None
 
 
@@ -56,7 +55,7 @@ def _extract_info_from_useragent(user_agent):
     """Extract extra informations from user."""
     parsed_string = user_agent_parser.Parse(user_agent)
     return {
-        'operative_system': parsed_string.get('os', {}).get('family'),
+        'os': parsed_string.get('os', {}).get('family'),
         'browser': parsed_string.get('user_agent', {}).get('family'),
         'browser_version': parsed_string.get('user_agent', {}).get('major'),
         'device': parsed_string.get('device', {}).get('family'),
@@ -66,19 +65,19 @@ def _extract_info_from_useragent(user_agent):
 def add_session(session=None):
     r"""Add a session to the SessionActivity table.
 
-    :param session: Flask Session object to add. If None, ``flask.session``
+    :param session: Flask Session object to add. If None, ``session``
         is used. The object is expected to have a dictionary entry named
         ``"user_id"`` and a field ``sid_s``
     """
     user_id, sid_s = session['user_id'], session.sid_s
     with db.session.begin_nested():
-        user_ip = flask.request.remote_addr
         session_activity = SessionActivity(
-            user_id=user_id, sid_s=sid_s,
-            ip_addr=user_ip,
-            country=_get_user_country(user_ip=user_ip),
+            user_id=user_id,
+            sid_s=sid_s,
+            ip=request.remote_addr,
+            country=_ip2country(request.remote_addr),
             **_extract_info_from_useragent(
-                user_agent=flask.request.headers.get('User-Agent', '')
+                request.headers.get('User-Agent', '')
             )
         )
         db.session.merge(session_activity)
@@ -90,7 +89,7 @@ def login_listener(app, user):
     :param app: The Flask application.
     :param user: The :class:`invenio_accounts.models.User` instance.
     """
-    @flask.after_this_request
+    @after_this_request
     def add_user_session(response):
         """Regenerate current session and add to the SessionActivity table.
 
@@ -98,10 +97,10 @@ def login_listener(app, user):
             `flask_kvsession.KVSession.regenerate`.
         """
         # Regenerate the session to avoid session fixation vulnerabilities.
-        flask.session.regenerate()
+        session.regenerate()
         # Save the session first so that the sid_s gets generated.
-        app.session_interface.save_session(app, flask.session, response)
-        add_session(flask.session)
+        app.session_interface.save_session(app, session, response)
+        add_session(session)
         current_accounts.datastore.commit()
         return response
 
@@ -112,11 +111,11 @@ def logout_listener(app, user):
     :param app: The Flask application.
     :param user: The :class:`invenio_accounts.models.User` instance.
     """
-    @flask.after_this_request
+    @after_this_request
     def _commit(response=None):
-        delete_session(flask.session.sid_s)
+        delete_session(session.sid_s)
         # Regenerate the session to avoid session fixation vulnerabilities.
-        flask.session.regenerate()
+        session.regenerate()
         current_accounts.datastore.commit()
         return response
 
