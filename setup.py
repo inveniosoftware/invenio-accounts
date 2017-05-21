@@ -89,7 +89,8 @@ install_requires = [
     'Flask-BabelEx>=0.9.2',
     'Flask-Breadcrumbs>=0.3.0',
     'Flask-KVSession>=0.6.1',
-    'Flask-Login>=0.3.0',
+    # FIXME wait the unpin of Flask-Login inside Flask-Security requirements
+    'Flask-Login>=0.3.0,<0.4',
     'Flask-Menu>=0.4.0',
     'Flask-Security-Fork>=1.8.0',
     'Flask-WTF>=0.13.0',
