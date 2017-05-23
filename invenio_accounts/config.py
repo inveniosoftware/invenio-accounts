@@ -24,6 +24,8 @@
 
 """Default configuration for ACCOUNTS."""
 
+from datetime import timedelta
+
 ACCOUNTS = True
 """Tells if the templates should use the accounts module.
 
@@ -215,3 +217,72 @@ SECURITY_CHANGE_URL = '/account/settings/password/'
    <https://pythonhosted.org/Flask-Security/configuration.html>`_
    configuration.
 """
+
+ACCOUNTS_JWT_ENABLE = True
+"""Enable JWT support.
+
+.. note::
+
+    More details about `JWT <https://jwt.io>`_
+"""
+
+ACCOUNTS_JWT_DOM_TOKEN = True
+"""Register JTW context processor.
+
+.. code-block:: html
+
+    {% if current_user.is_authenticated %}
+        {{ jwt() }}
+    {% endif %}
+
+This will generate a ``hidden`` field as follows:
+
+.. code-block:: html
+
+    <input type="hidden" name="authorized_token" value="xxx">
+
+On your API call you can use it with simple javascript, an example using
+``jQuery`` is the following:
+
+.. code-block:: javascript
+
+    $.ajax({
+        url: '/example',
+        method: 'POST',
+        beforeSend: function(request) {
+            request.setRequestHeader(
+                'Authorization',
+                'Bearer ' + $('[name=authorized_token]').val()
+            );
+        },
+    });
+"""
+
+ACCOUNTS_JWT_DOM_TOKEN_TEMPLATE = 'invenio_accounts/jwt.html'
+"""Template for the context processor."""
+
+ACCOUNTS_JWT_SECRET_KEY = None
+"""Secret key for JWT.
+
+.. note::
+
+    If is set to ``None`` it will use the ``SECRET_KEY``.
+"""
+
+ACCOUNTS_JWT_EXPIRATION_DELTA = timedelta(days=1)
+"""Token expiration period for JWT."""
+
+ACCOUNTS_JWT_ALOGORITHM = 'HS256'
+"""Set JWT encryption alogirthm.
+
+.. note::
+
+   `Available aglorithms
+   <https://pyjwt.readthedocs.io/en/latest/algorithms.html>`_
+"""
+
+ACCOUNTS_JWT_DECODE_FACTORY = 'invenio_accounts.utils:jwt_decode_token'
+"""Import path of factory used to decode JWT."""
+
+ACCOUNTS_JWT_CREATION_FACTORY = 'invenio_accounts.utils:jwt_create_token'
+"""Import path of factory used to generate JWT."""

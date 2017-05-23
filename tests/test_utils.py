@@ -26,6 +26,8 @@
 
 from __future__ import absolute_import, print_function
 
+from datetime import datetime
+
 import flask_login
 import pytest
 from flask_security import url_for_security
@@ -33,6 +35,8 @@ from flask_security.utils import encrypt_password
 from invenio_db import db
 
 from invenio_accounts import testutils
+from invenio_accounts.errors import JWTDecodeError, JWTExpiredToken
+from invenio_accounts.utils import jwt_create_token, jwt_decode_token
 
 
 def test_client_authenticated(app):
@@ -152,3 +156,35 @@ def test_login_user_via_session(app):
             assert not testutils.client_authenticated(client)
             testutils.login_user_via_session(client, email=user.email)
             assert testutils.client_authenticated(client)
+
+
+def test_jwt_token(app):
+    """Test jwt creation."""
+    with app.app_context():
+        # Extra parameters
+        extra = dict(
+            defenders=['jessica', 'luke', 'danny', 'matt']
+        )
+        # Create token normally
+        token = jwt_create_token(user_id=22, additional_data=extra)
+        decode = jwt_decode_token(token)
+        # Decode
+        assert 'jessica' in decode.get('defenders')
+        assert 22 == decode.get('sub')
+
+
+def test_jwt_expired_token(app):
+    """Test jwt creation."""
+    with app.app_context():
+        # Extra parameters
+        extra = dict(
+            exp=datetime(1970, 1, 1),
+        )
+        # Create token
+        token = jwt_create_token(user_id=1, additional_data=extra)
+        # Decode
+        with pytest.raises(JWTExpiredToken):
+            jwt_decode_token(token)
+        # Random token
+        with pytest.raises(JWTDecodeError):
+            jwt_decode_token('Roadster SV')
