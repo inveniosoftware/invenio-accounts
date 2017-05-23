@@ -94,10 +94,12 @@ install_requires = [
     'Flask-Security-Fork>=1.8.0',
     'Flask-WTF>=0.13.0',
     'Flask>=0.11.1',
+    'future>=0.16.0',
     'SQLAlchemy-Utils[ipaddress]>=0.31.0',
     'cryptography>=1.3',
     'invenio-i18n>=1.0.0b2',
     'maxminddb-geolite2>=2017.404',
+    'pyjwt>=1.5.0',
     'redis>=2.10.5',
     'ua-parser>=0.7.3',
 ]

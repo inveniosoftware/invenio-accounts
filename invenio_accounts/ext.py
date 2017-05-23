@@ -29,6 +29,7 @@ from __future__ import absolute_import, print_function
 import os
 
 import pkg_resources
+import six
 from flask import current_app
 from flask_kvsession import KVSessionExtension
 from flask_login import user_logged_in, user_logged_out
@@ -36,6 +37,7 @@ from flask_security import Security, changeable, recoverable, registerable, \
     utils
 from invenio_db import db
 from passlib.registry import register_crypt_handler
+from werkzeug.utils import cached_property, import_string
 
 from invenio_accounts.forms import confirm_register_form_factory, \
     register_form_factory
@@ -90,6 +92,33 @@ class InvenioAccounts(object):
             changeable.encrypt_password = encrypt_password
             recoverable.encrypt_password = encrypt_password
             registerable.encrypt_password = encrypt_password
+
+    def load_obj_or_import_string(self, value):
+        """Import string or return object.
+
+        :params value: Import path or class object to instantiate.
+        :params default: Default object to return if the import fails.
+        :returns: The imported object.
+        """
+        imp = current_app.config.get(value)
+        if isinstance(imp, six.string_types):
+            return import_string(imp)
+        elif imp:
+            return imp
+
+    @cached_property
+    def jwt_decode_factory(self):
+        """Load default JWT veryfication factory."""
+        return self.load_obj_or_import_string(
+            'ACCOUNTS_JWT_DECODE_FACTORY'
+        )
+
+    @cached_property
+    def jwt_creation_factory(self):
+        """Load default JWT creation factory."""
+        return self.load_obj_or_import_string(
+            'ACCOUNTS_JWT_CREATION_FACTORY'
+        )
 
     def init_app(self, app, sessionstore=None, register_blueprint=True):
         """Flask application initialization.
@@ -166,6 +195,12 @@ class InvenioAccounts(object):
             def delay_security_email(msg):
                 send_security_email.delay(msg.__dict__)
 
+        # Register context processor
+        if app.config['ACCOUNTS_JWT_DOM_TOKEN']:
+            from invenio_accounts.context_processors.jwt import \
+                jwt_proccessor
+            app.context_processor(jwt_proccessor)
+
         app.extensions['invenio-accounts'] = self
 
     def init_config(self, app):
@@ -186,6 +221,15 @@ class InvenioAccounts(object):
         # Change Flask-Security defaults
         app.config.setdefault('SECURITY_PASSWORD_SALT',
                               app.config['SECRET_KEY'])
+
+        # Set secret key
+        app.config.setdefault(
+            'ACCOUNTS_JWT_SECRET_KEY',
+            app.config.get(
+                'ACCOUNTS_JWT_SECRET_KEY',
+                app.config.get('SECRET_KEY')
+            )
+        )
 
         config_apps = ['ACCOUNTS', 'SECURITY_']
         for k in dir(config):
