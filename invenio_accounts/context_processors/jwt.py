@@ -41,6 +41,12 @@ def jwt_proccessor():
                 token=token
             )
         )
+
+    def jwt_token():
+        """Context processor function to generate jwt."""
+        return current_accounts.jwt_creation_factory()
+
     return {
-        'jwt': jwt
+        'jwt': jwt,
+        'jwt_token': jwt_token,
     }
