@@ -99,6 +99,7 @@ install_requires = [
     'cryptography>=1.3',
     'invenio-i18n>=1.0.0b2',
     'maxminddb-geolite2>=2017.404',
+    'passlib>=1.7.1',
     'pyjwt>=1.5.0',
     'redis>=2.10.5',
     'ua-parser>=0.7.3',
