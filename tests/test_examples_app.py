@@ -53,7 +53,7 @@ def example_app():
     webapp = subprocess.Popen(
         'FLASK_APP=app.py FLASK_DEBUG=1 flask run',
         stdout=subprocess.PIPE, preexec_fn=os.setsid, shell=True)
-    time.sleep(5)
+    time.sleep(15)
     yield webapp
 
     # Stop server
