@@ -68,7 +68,7 @@ class UserView(ModelView):
 
     form_args = dict(
         email=dict(label='Email', validators=[DataRequired()]),
-        password=dict(default=pwd.genword(length=12))
+        password=dict(default=lambda: pwd.genword(length=12))
     )
 
     form_extra_fields = {
