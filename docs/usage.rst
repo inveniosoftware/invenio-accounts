@@ -26,25 +26,3 @@ Usage
 =====
 
 .. automodule:: invenio_accounts
-    :members:
-
-
-Models
-------
-
-.. automodule:: invenio_accounts.models
-    :members:
-
-
-Sessions
---------
-
-.. automodule:: invenio_accounts.sessions
-.. autofunction:: invenio_accounts.sessions.delete_session
-
-
-Test utilities
---------------
-
-.. automodule:: invenio_accounts.testutils
-    :members:

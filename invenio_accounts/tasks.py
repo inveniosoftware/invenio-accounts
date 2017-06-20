@@ -51,8 +51,8 @@ def send_security_email(data):
 def clean_session_table():
     """Automatically clean session table.
 
-    To enable a periodically clean, you should configure the task as a
-    celery periodic task.
+    To enable a periodically clean of the session table, you should configure
+    the task as a celery periodic task.
 
     .. code-block:: python
 
@@ -64,7 +64,8 @@ def clean_session_table():
             },
         }
 
-    See ``invenio-celery`` documentation to have more details.
+    See `Invenio-Celery <https://invenio-celery.readthedocs.io/>`_
+    documentation for further details.
     """
     sessions = SessionActivity.query_by_expired().all()
     for session in sessions:

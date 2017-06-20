@@ -25,6 +25,9 @@
 API Docs
 ========
 
+Extension
+---------
+
 .. automodule:: invenio_accounts.ext
    :members:
 
@@ -40,6 +43,13 @@ Datastore
 .. automodule:: invenio_accounts.datastore
    :members:
 
+Errors
+------
+
+.. automodule:: invenio_accounts.errors
+   :members:
+
+
 Forms
 -----
 
@@ -52,6 +62,32 @@ Hash
 .. automodule:: invenio_accounts.hash
    :members:
 
+Models
+------
+
+.. automodule:: invenio_accounts.models
+   :members:
+
+
+Proxies
+-------
+
+.. automodule:: invenio_accounts.proxies
+   :members:
+
+
+Utils
+-----
+
+.. automodule:: invenio_accounts.utils
+   :members:
+
+Testing utils
+-------------
+
+.. automodule:: invenio_accounts.testutils
+  :members:
+
 Tasks
 -----
 
@@ -61,5 +97,8 @@ Tasks
 Views
 -----
 
-.. automodule:: invenio_accounts.views
+.. automodule:: invenio_accounts.views.security
+   :members:
+
+.. automodule:: invenio_accounts.views.settings
    :members:

@@ -53,170 +53,89 @@ By default, it uses Celery if it can find it.
 """
 
 ACCOUNTS_SESSION_ACTIVITY_ENABLED = True
-"""Enable session activity store on database."""
+"""Enable session activity tracking."""
 
 ACCOUNTS_SETTINGS_SECURITY_TEMPLATE = 'invenio_accounts/settings/security.html'
 """Template for the account security page."""
 
 # Change Flask-Security defaults
-SECURITY_CHANGEABLE = True
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
-
-SECURITY_CONFIRMABLE = True
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
-
 SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Default password hashing algorithm for new passwords."""
 
 SECURITY_PASSWORD_SCHEMES = ['pbkdf2_sha512', 'invenio_aes_encrypted_email']
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
+"""Supported password hashing algorithms (for passwords already stored).
+
+You should include both the default, supported and any deprecated schemes.
 """
 
 SECURITY_DEPRECATED_PASSWORD_SCHEMES = ['invenio_aes_encrypted_email']
+"""Deprecated password hashing algorithms.
+
+Password hashes in a deprecated scheme are automatically migrated to the
+new default algorithm the next time the user login.
 """
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+
+SECURITY_DEFAULT_REMEMBER_ME = False
+""""Remember me" feature is by default disabled."""
+
+SECURITY_CHANGEABLE = True
+"""Allow password change by users."""
+
+SECURITY_CONFIRMABLE = True
+"""Allow user to confirm their email address."""
 
 SECURITY_RECOVERABLE = True
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Allow password recovery by users."""
 
 SECURITY_REGISTERABLE = True
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Allow users to register."""
 
 SECURITY_TRACKABLE = True
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Enable user tracking on login."""
 
 SECURITY_LOGIN_WITHOUT_CONFIRMATION = True
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Allow users to login without first confirming their email address."""
 
 SECURITY_PASSWORD_SALT = None
-"""Salt for storing passwords.
-
-Default is `app.config['SECRET_KEY']`.
-
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Salt for storing passwords."""
 
 # Change default templates
 SECURITY_FORGOT_PASSWORD_TEMPLATE = 'invenio_accounts/forgot_password.html'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Default template for password recovery (asking for email)."""
 
 SECURITY_LOGIN_USER_TEMPLATE = 'invenio_accounts/login_user.html'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Default template for login."""
 
 SECURITY_REGISTER_USER_TEMPLATE = 'invenio_accounts/register_user.html'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Default template for user registration."""
 
 SECURITY_RESET_PASSWORD_TEMPLATE = 'invenio_accounts/reset_password.html'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Default template for password recovery (reset of the password)."""
 
 SECURITY_CHANGE_PASSWORD_TEMPLATE = 'invenio_accounts/change_password.html'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Default template for change password."""
 
 SECURITY_SEND_CONFIRMATION_TEMPLATE = \
     'invenio_accounts/send_confirmation.html'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Default template for email confirmation."""
 
 SECURITY_SEND_LOGIN_TEMPLATE = 'invenio_accounts/send_login.html'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""Default template for email confirmation."""
 
 SECURITY_REGISTER_URL = '/signup/'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""URL endpoint for user registation."""
 
 SECURITY_RESET_URL = '/lost-password/'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""URL endpoint for password recovery."""
 
 SECURITY_LOGIN_URL = '/login/'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""URL endpoint for login."""
 
 SECURITY_LOGOUT_URL = '/logout/'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""URL endpoint for logout."""
 
 SECURITY_CHANGE_URL = '/account/settings/password/'
-"""
-.. note:: Overwrite `Flask-Security
-   <https://pythonhosted.org/Flask-Security/configuration.html>`_
-   configuration.
-"""
+"""URL endpoint for password change."""
 
 ACCOUNTS_JWT_ENABLE = True
 """Enable JWT support.
@@ -227,7 +146,7 @@ ACCOUNTS_JWT_ENABLE = True
 """
 
 ACCOUNTS_JWT_DOM_TOKEN = True
-"""Register JTW context processor.
+"""Register JWT context processor.
 
 .. code-block:: html
 
@@ -286,3 +205,9 @@ ACCOUNTS_JWT_DECODE_FACTORY = 'invenio_accounts.utils:jwt_decode_token'
 
 ACCOUNTS_JWT_CREATION_FACTORY = 'invenio_accounts.utils:jwt_create_token'
 """Import path of factory used to generate JWT."""
+
+RECAPTCHA_PUBLIC_KEY = None
+"""reCAPTCHA public key."""
+
+RECAPTCHA_PRIVATE_KEY = None
+"""reCAPTCHA private key."""
