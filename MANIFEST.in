@@ -37,6 +37,7 @@ include docs/requirements.txt
 include pytest.ini
 recursive-exclude examples/static *
 recursive-include docs *.bat
+recursive-include docs *.png
 recursive-include docs *.py
 recursive-include docs *.rst
 recursive-include docs Makefile

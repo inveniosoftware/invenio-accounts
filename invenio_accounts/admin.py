@@ -92,10 +92,12 @@ class UserView(ModelView):
     }
 
     def on_model_change(self, form, User, is_created):
+        """Hash password when saving."""
         if form.password.data is not None:
             User.password = encrypt_password(form.password.data)
 
     def after_model_change(self, form, User, is_created):
+        """Send password instructions if desired."""
         if is_created and form.notification.data is True:
             send_reset_password_instructions(User)
 
@@ -203,6 +205,7 @@ class SessionActivityView(ModelView):
     }
 
     def delete_model(self, model):
+        """Delete a specific session."""
         if SessionActivity.is_current(sid_s=model.sid_s):
             flash('You could not remove your current session', 'error')
             return
@@ -212,6 +215,7 @@ class SessionActivityView(ModelView):
     @action('delete', lazy_gettext('Delete selected sessions'),
             lazy_gettext('Are you sure you want to delete selected sessions?'))
     def action_delete(self, ids):
+        """Delete selected sessions."""
         is_current = any(SessionActivity.is_current(sid_s=id_) for id_ in ids)
         if is_current:
             flash('You could not remove your current session', 'error')
@@ -239,4 +243,11 @@ role_adminview = {
     'category': _('User Management')
 }
 
-__all__ = ('user_adminview', 'role_adminview', 'session_adminview')
+__all__ = (
+    'role_adminview',
+    'RoleView',
+    'session_adminview',
+    'SessionActivityView',
+    'user_adminview',
+    'UserView',
+)

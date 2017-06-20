@@ -22,7 +22,32 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-"""Invenio user management and authentication."""
+"""Invenio user management and authentication.
+
+Adminstration interface
+-----------------------
+You can view and manage users and roles via the administration interface. Below
+is a screenshot from the user creation:
+
+.. image:: admin.png
+
+Command-line interface
+----------------------
+Users and roles can be created via the CLI. Below is a simple example of
+creating a user, a role and assining the user to the role:
+
+.. code-block:: console
+
+    $ flask users create --active info@inveniosoftware.org
+    $ flask roles create admins
+    $ flask roles add info@inveniosoftware.org admins
+
+You can also e.g. deactive users:
+
+.. code-block:: console
+
+    $ flask users deactivate info@inveniosoftware.org
+"""
 
 from __future__ import absolute_import, print_function
 

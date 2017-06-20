@@ -30,3 +30,4 @@ from werkzeug.local import LocalProxy
 current_accounts = LocalProxy(
     lambda: current_app.extensions['invenio-accounts']
 )
+"""Proxy to the current Invenio-Accounts extension."""

@@ -25,4 +25,6 @@
 Example application
 ===================
 
-.. automodule:: app
+.. include:: ../examples/app.py
+   :start-after: SPHINX-START
+   :end-before: SPHINX-END

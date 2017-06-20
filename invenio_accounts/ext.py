@@ -134,8 +134,8 @@ class InvenioAccounts(object):
         #. Create the sessionstore.
 
         #. Initialize the extension, the forms to register users and
-            confirms their emails, the CLI and, if ``ACCOUNTS_USE_CELERY`` is
-            ``True``, register a celery task to send emails.
+           confirms their emails, the CLI and, if ``ACCOUNTS_USE_CELERY`` is
+           ``True``, register a celery task to send emails.
 
         :param app: The Flask application.
         :param sessionstore: store for sessions. Passed to

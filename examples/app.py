@@ -25,36 +25,48 @@
 
 u"""Minimal Flask application example for development.
 
-Install the Invenio default theme
+SPHINX-START
 
-You should execute these commands in the examples-directory.
+First install Invenio-Accounts, setup the application and load fixture data by
+running:
 
 .. code-block:: console
 
-    $ pip install -e .[all]
-    $ cd examples
-    $ ./app-setup.sh
-    $ ./app-fixtures.sh
-    $ FLASK_APP=app.py flask run
+   $ pip install -e .[all]
+   $ cd examples
+   $ ./app-setup.sh
+   $ ./app-fixtures.sh
 
-You should have the service `redis` running on your machine. To know how to
-install `redis`, see the `redis website <https://redis.io/>`_.
+You should also have the `Redis` running on your machine. To know how
+to install and run `redis`, please refer to the
+`redis website <https://redis.io/>`_.
 
-Now you can open you browser and go to `http://localhost:5000
-<http://localhost:5000>`_. There, you can log in and log out with the
-following credentials:
+Next, start the development server:
 
-:user:
-  info@inveniosoftware.org
+.. code-block:: console
 
-:password:
-  123456
+   $ export FLASK_APP=app.py FLASK_DEBUG=1
+   $ flask run
 
-At the end, don't forget to clean-up your folder:
+and open the example application in your browser:
+
+.. code-block:: console
+
+    $ open http://127.0.0.1:5000/
+
+
+You can login with:
+
+- User: ``info@inveniosoftware.org``
+- Password: ``123456``
+
+To reset the example application run:
 
 .. code-block:: console
 
     $ ./app-teardown.sh
+
+SPHINX-END
 """
 
 from __future__ import absolute_import, print_function
