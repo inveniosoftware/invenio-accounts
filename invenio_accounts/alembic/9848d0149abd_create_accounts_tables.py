@@ -94,8 +94,7 @@ def upgrade():
         batch_op.add_column(sa.Column(
             'user_id',
             sa.Integer(),
-            sa.ForeignKey(
-                'accounts_user.id', name='fk_transaction_accounts_user_id'),
+            sa.ForeignKey('accounts_user.id'),
             nullable=True,
         ))
         batch_op.create_index(
