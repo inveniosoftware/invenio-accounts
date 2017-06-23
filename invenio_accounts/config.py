@@ -137,6 +137,10 @@ SECURITY_LOGOUT_URL = '/logout/'
 SECURITY_CHANGE_URL = '/account/settings/password/'
 """URL endpoint for password change."""
 
+REMEMBER_COOKIE_DURATION = timedelta(days=90)
+"""Remember me cookie life time changed to 90 days instead of 365 days."""
+
+# JWT related config
 ACCOUNTS_JWT_ENABLE = True
 """Enable JWT support.
 
