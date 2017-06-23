@@ -88,7 +88,8 @@ def _database_setup(app, request):
 
     def teardown():
         with app.app_context():
-            drop_database(str(db.engine.url))
+            if database_exists(str(db.engine.url)):
+                drop_database(str(db.engine.url))
             # Delete sessions in kvsession store
             if hasattr(app, 'kvsession_store') and \
                     isinstance(app.kvsession_store, RedisStore):
@@ -134,6 +135,18 @@ def task_app(request):
         MAIL_SUPPRESS_SEND=True,
     ))
     FlaskCeleryExt(app)
+    InvenioAccounts(app)
+    _database_setup(app, request)
+    return app
+
+
+@pytest.fixture
+def cookie_app(request):
+    """Flask application  enabled."""
+    app = _app_factory(dict(
+        SESSION_COOKIE_SECURE=True,
+        SESSION_COOKIE_DOMAIN='example.com',
+    ))
     InvenioAccounts(app)
     _database_setup(app, request)
     return app

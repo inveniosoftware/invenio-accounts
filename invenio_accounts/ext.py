@@ -218,11 +218,37 @@ class InvenioAccounts(object):
         # Register Invenio legacy password hashing
         register_crypt_handler(InvenioAesEncryptedEmail)
 
-        # Change Flask-Security defaults
-        app.config.setdefault('SECURITY_PASSWORD_SALT',
-                              app.config['SECRET_KEY'])
+        # Change Flask defaults
+        app.config.setdefault(
+            'SESSION_COOKIE_SECURE',
+            not app.debug
+        )
 
-        # Set secret key
+        # Change Flask-Security defaults
+        app.config.setdefault(
+            'SECURITY_PASSWORD_SALT',
+            app.config['SECRET_KEY']
+        )
+
+        # Set default values for remember me cookie to same as session cookie.
+        app.config.setdefault(
+            'REMEMBER_COOKIE_HTTPONLY',
+            app.config.get('SESSION_COOKIE_HTTPONLY')
+        )
+
+        app.config.setdefault(
+            'REMEMBER_COOKIE_SECURE',
+            app.config.get('SESSION_COOKIE_SECURE')
+        )
+
+        # Note, SESSION_COOKIE_DOMAIN must be explicitly set otherwise the
+        # cookie domain for the remember me cookie will not be set.
+        app.config.setdefault(
+            'REMEMBER_COOKIE_DOMAIN',
+            app.config.get('SESSION_COOKIE_DOMAIN'),
+        )
+
+        # Set JWT secret key
         app.config.setdefault(
             'ACCOUNTS_JWT_SECRET_KEY',
             app.config.get(
