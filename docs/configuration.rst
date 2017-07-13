@@ -44,7 +44,7 @@ The ``SECRET_KEY`` (see `Flask
 <http://flask.pocoo.org/docs/0.12/config/#builtin-configuration-values>`_
 documentation) is the most important configuration variable. A large part of
 the security of a web application is based on the secrecy of the value. In case
-the secret key is leaked, it is imperative that a new secret key is.
+the secret key is leaked, it is imperative that a new secret key is created.
 
 Sessions
 --------
@@ -70,8 +70,9 @@ by configure a Celery schedule similar to this:
 Remember me
 -----------
 Invenio supports a "remember me" feature which allows a user to be logged in,
-in case their session expired (which by default happens after 31 days). You can
-enable the feature by default by setting:
+in case their session expired (which by default happens after 31 days). By
+default a user must **opt-in** via a checkbox in the login form. If by default
+you instead would like a user to **opt-out**
 
 .. autodata:: invenio_accounts.config.SECURITY_DEFAULT_REMEMBER_ME
 

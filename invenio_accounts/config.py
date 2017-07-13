@@ -76,7 +76,11 @@ new default algorithm the next time the user login.
 """
 
 SECURITY_DEFAULT_REMEMBER_ME = False
-""""Remember me" feature is by default disabled."""
+""""Remember me" default value in login form.
+
+This is only the default value in the login form. A user can always choose to
+change it when they login.
+"""
 
 SECURITY_CHANGEABLE = True
 """Allow password change by users."""
