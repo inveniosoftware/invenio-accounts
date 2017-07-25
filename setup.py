@@ -95,7 +95,9 @@ install_requires = [
     'Flask-WTF>=0.13.0',
     'Flask>=0.11.1',
     'future>=0.16.0',
-    'SQLAlchemy-Utils[ipaddress]>=0.31.0',
+    # Not using 'ipaddress' extras for SQLALchemy-Utils in favor of
+    # direct 'ipaddr' version marker (issues with Python3 builds on Travis).
+    'SQLAlchemy-Utils>=0.31.0',
     'cryptography>=1.3',
     'invenio-i18n>=1.0.0b2',
     'maxminddb-geolite2>=2017.404',
