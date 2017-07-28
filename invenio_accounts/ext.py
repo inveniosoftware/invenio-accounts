@@ -30,7 +30,7 @@ import os
 
 import pkg_resources
 import six
-from flask import current_app
+from flask import current_app, session
 from flask_kvsession import KVSessionExtension
 from flask_login import user_logged_in, user_logged_out
 from flask_security import Security, changeable, recoverable, registerable, \
@@ -120,6 +120,15 @@ class InvenioAccounts(object):
             'ACCOUNTS_JWT_CREATION_FACTORY'
         )
 
+    def make_session_permanent(self, app):
+        """Make session permanent by default.
+
+        Set `PERMANENT_SESSION_LIFETIME` to specify time-to-live
+        """
+        @app.before_request
+        def make_session_permanent():
+            session.permanent = True
+
     def init_app(self, app, sessionstore=None, register_blueprint=True):
         """Flask application initialization.
 
@@ -145,6 +154,7 @@ class InvenioAccounts(object):
             blueprints. (Default: ``True``)
         """
         self.init_config(app)
+        self.make_session_permanent(app)
 
         # Monkey-patch Flask-Security
         InvenioAccounts.monkey_patch_flask_security()
