@@ -32,7 +32,7 @@ import pkg_resources
 import six
 from flask import current_app, session
 from flask_kvsession import KVSessionExtension
-from flask_login import user_logged_in, user_logged_out
+from flask_login import LoginManager, user_logged_in, user_logged_out
 from flask_security import Security, changeable, recoverable, registerable, \
     utils
 from invenio_db import db
@@ -92,6 +92,13 @@ class InvenioAccounts(object):
             changeable.hash_password = hash_password
             recoverable.hash_password = hash_password
             registerable.hash_password = hash_password
+
+        # Disable remember me cookie generation as it does not work with
+        # session activity tracking (a remember me token will bypass revoking
+        # of  a session).
+        def patch_set_cookie(*args, **kwargs):
+            pass
+        LoginManager._set_cookie = patch_set_cookie
 
     def load_obj_or_import_string(self, value):
         """Import string or return object.
@@ -228,24 +235,6 @@ class InvenioAccounts(object):
         app.config.setdefault(
             'SECURITY_PASSWORD_SALT',
             app.config['SECRET_KEY']
-        )
-
-        # Set default values for remember me cookie to same as session cookie.
-        app.config.setdefault(
-            'REMEMBER_COOKIE_HTTPONLY',
-            app.config.get('SESSION_COOKIE_HTTPONLY')
-        )
-
-        app.config.setdefault(
-            'REMEMBER_COOKIE_SECURE',
-            app.config.get('SESSION_COOKIE_SECURE')
-        )
-
-        # Note, SESSION_COOKIE_DOMAIN must be explicitly set otherwise the
-        # cookie domain for the remember me cookie will not be set.
-        app.config.setdefault(
-            'REMEMBER_COOKIE_DOMAIN',
-            app.config.get('SESSION_COOKIE_DOMAIN'),
         )
 
         # Set JWT secret key

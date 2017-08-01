@@ -24,10 +24,12 @@
 
 """Test account views."""
 
-import mock
 from flask import url_for
 from flask_babelex import gettext as _
+from flask_login import COOKIE_NAME
 from flask_security import url_for_security
+from flask_security.forms import LoginForm
+from flask_security.views import _security
 
 from invenio_accounts.models import SessionActivity
 from invenio_accounts.testutils import create_test_user
@@ -124,3 +126,28 @@ def test_view_list_sessions(app, app_i18n):
             assert res.status_code == 302
             assert SessionActivity.query.filter_by(
                 user_id=user1.id, sid_s=sessions_2[0].sid_s).count() == 0
+
+
+def test_login_remember_me_disabled(app, users):
+    """Test login remember me is disabled."""
+    email = users[0]['email']
+    password = users[0]['password']
+    _security.login_form = LoginForm
+    with app.test_client() as client:
+        res = client.post(
+            url_for_security('login'),
+            data={'email': email, 'password': password, 'remember': True},
+            environ_base={'REMOTE_ADDR': '127.0.0.1'})
+        # check the remember_me cookie is not there
+        name = '{0}='.format(COOKIE_NAME)
+        assert all([
+            name not in val for val in res.headers.values()])
+        # check the session cookie is still there
+        assert any([
+            'session=' in val for val in res.headers.values()])
+
+
+def test_flask_login_set_cookie():
+    """Test flask login still have a _set_cookie function."""
+    from flask_login import LoginManager
+    assert hasattr(LoginManager, '_set_cookie')
