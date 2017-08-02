@@ -96,9 +96,15 @@ class InvenioAccounts(object):
         # Disable remember me cookie generation as it does not work with
         # session activity tracking (a remember me token will bypass revoking
         # of  a session).
-        def patch_set_cookie(*args, **kwargs):
+        def patch_do_nothing(*args, **kwargs):
             pass
-        LoginManager._set_cookie = patch_set_cookie
+        LoginManager._set_cookie = patch_do_nothing
+
+        # Disable loading user from header because we want to be sure we
+        # can load user only through the login form.
+        def patch_reload_anonym(self, *args, **kwargs):
+            self.reload_user()
+        LoginManager._load_from_header = patch_reload_anonym
 
     def load_obj_or_import_string(self, value):
         """Import string or return object.
