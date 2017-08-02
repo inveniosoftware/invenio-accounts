@@ -181,9 +181,6 @@ def test_cookies(cookie_app, users):
     """Test cookies set on login."""
     u = users[0]
 
-    with cookie_app.app_context():
-        login_url = url_for_security('login')
-
     with cookie_app.test_client() as client:
         res = client.post(
             url_for_security('login'),
@@ -192,7 +189,7 @@ def test_cookies(cookie_app, users):
         assert res.status_code == 302
         cookies = {c.name: c for c in client.cookie_jar}
         assert 'session' in cookies
-        assert 'remember_token' in cookies
+        assert 'remember_token' not in cookies
 
         # Cookie must be HTTP only, secure and have a domain specified.
         for c in cookies.values():
@@ -200,5 +197,3 @@ def test_cookies(cookie_app, users):
             assert c.domain_specified is True, 'no domain in {}'.format(c.name)
             assert c.has_nonstandard_attr('HttpOnly')
             assert c.secure is True
-
-        assert cookies['session'].domain == cookies['remember_token'].domain

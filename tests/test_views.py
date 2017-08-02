@@ -24,9 +24,12 @@
 
 """Test account views."""
 
+import base64
+
+import mock
 from flask import url_for
 from flask_babelex import gettext as _
-from flask_login import COOKIE_NAME
+from flask_login import COOKIE_NAME, LoginManager
 from flask_security import url_for_security
 from flask_security.forms import LoginForm
 from flask_security.views import _security
@@ -147,7 +150,41 @@ def test_login_remember_me_disabled(app, users):
             'session=' in val for val in res.headers.values()])
 
 
-def test_flask_login_set_cookie():
-    """Test flask login still have a _set_cookie function."""
-    from flask_login import LoginManager
+def test_login_from_headers_disabled(app, users):
+    """Test login from headers is disabled."""
+    app.login_manager.request_callback = None
+    email = users[0]['email']
+    basic_fmt = 'Basic {0}'
+    decoded = bytes.decode(base64.b64encode(str.encode(str(email))))
+    headers = [('Authorization', basic_fmt.format(decoded))]
+    with app.test_client() as client:
+        res = client.get(
+            url_for('invenio_accounts.security'),
+            headers=headers,
+            environ_base={'REMOTE_ADDR': '127.0.0.1'})
+        # check redirect to login
+        assert res.status_code == 302
+        assert '<a href="/login/' in res.data.decode('utf-8')
+
+
+def test_flask_login_disabled_function_exist():
+    """Test flask login still has disabled functions."""
     assert hasattr(LoginManager, '_set_cookie')
+    assert hasattr(LoginManager, '_load_from_header')
+
+
+def test_flask_login_load_from_header_works_as_expected(app, users):
+    """Test flask login load from header exists."""
+    def load_user(*args, **kwargs):
+        app.login_manager.reload_user()
+    app.login_manager.request_callback = None
+    headers = [('Authorization', 'Basic 123')]
+    with app.test_client() as client, \
+            mock.patch.object(LoginManager, '_load_from_header',
+                              side_effect=load_user) as mock_h:
+        client.get(
+            url_for('invenio_accounts.security'),
+            headers=headers,
+            environ_base={'REMOTE_ADDR': '127.0.0.1'})
+        # check the patch is called
+        assert mock_h.called is True
