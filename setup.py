@@ -144,7 +144,7 @@ setup(
             'invenio_accounts_rest = invenio_accounts:InvenioAccountsREST',
         ],
         'invenio_base.apps': [
-            'invenio_accounts = invenio_accounts:InvenioAccounts',
+            'invenio_accounts_ui = invenio_accounts:InvenioAccountsUI',
         ],
         'invenio_base.blueprints': [
             'invenio_accounts = invenio_accounts.views.settings:blueprint',
