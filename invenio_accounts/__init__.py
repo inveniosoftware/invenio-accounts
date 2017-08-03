@@ -51,7 +51,7 @@ You can also e.g. deactive users:
 
 from __future__ import absolute_import, print_function
 
-from .ext import InvenioAccounts, InvenioAccountsREST
+from .ext import InvenioAccounts, InvenioAccountsUI, InvenioAccountsREST
 from .proxies import current_accounts
 from .version import __version__
 
@@ -59,5 +59,6 @@ __all__ = (
     '__version__',
     'current_accounts',
     'InvenioAccounts',
+    'InvenioAccountsUI',
     'InvenioAccountsREST',
 )

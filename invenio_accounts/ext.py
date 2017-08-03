@@ -120,15 +120,6 @@ class InvenioAccounts(object):
             'ACCOUNTS_JWT_CREATION_FACTORY'
         )
 
-    def make_session_permanent(self, app):
-        """Make session permanent by default.
-
-        Set `PERMANENT_SESSION_LIFETIME` to specify time-to-live
-        """
-        @app.before_request
-        def make_session_permanent():
-            session.permanent = True
-
     def init_app(self, app, sessionstore=None, register_blueprint=True):
         """Flask application initialization.
 
@@ -154,7 +145,6 @@ class InvenioAccounts(object):
             blueprints. (Default: ``True``)
         """
         self.init_config(app)
-        self.make_session_permanent(app)
 
         # Monkey-patch Flask-Security
         InvenioAccounts.monkey_patch_flask_security()
@@ -299,3 +289,32 @@ class InvenioAccountsREST(InvenioAccounts):
             app, sessionstore=sessionstore,
             register_blueprint=register_blueprint,
         )
+
+
+class InvenioAccountsUI(InvenioAccounts):
+    """Invenio-Accounts UI extension."""
+
+    def init_app(self, app, sessionstore=None, register_blueprint=True):
+        """Flask application initialization.
+
+        :param app: The Flask application.
+        :param sessionstore: store for sessions. Passed to
+            ``flask-kvsession``. If ``None`` then Redis is configured.
+            (Default: ``None``)
+        :param register_blueprint: If ``True``, the application registers the
+            blueprints. (Default: ``True``)
+        """
+        self.make_session_permanent(app)
+        return super(InvenioAccountsUI, self).init_app(
+            app, sessionstore=sessionstore,
+            register_blueprint=register_blueprint
+        )
+
+    def make_session_permanent(self, app):
+        """Make session permanent by default.
+
+        Set `PERMANENT_SESSION_LIFETIME` to specify time-to-live
+        """
+        @app.before_request
+        def make_session_permanent():
+            session.permanent = True
