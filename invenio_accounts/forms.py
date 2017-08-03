@@ -66,3 +66,20 @@ def register_form_factory(Form, app):
         return RegisterForm
 
     return Form
+
+
+def login_form_factory(Form, app):
+    """Return extended login form."""
+    class LoginForm(Form):
+
+        def __init__(self, *args, **kwargs):
+            """Init the login form.
+
+            .. note::
+
+                The ``remember me`` option will be completely disabled.
+            """
+            super(LoginForm, self).__init__(*args, **kwargs)
+            self.remember.data = False
+
+    return LoginForm

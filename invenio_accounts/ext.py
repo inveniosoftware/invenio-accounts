@@ -40,7 +40,7 @@ from passlib.registry import register_crypt_handler
 from werkzeug.utils import cached_property, import_string
 
 from invenio_accounts.forms import confirm_register_form_factory, \
-    register_form_factory
+    login_form_factory, register_form_factory
 
 from . import config
 from .datastore import SessionAwareSQLAlchemyUserDatastore
@@ -201,6 +201,9 @@ class InvenioAccounts(object):
             confirm_register_form_factory(
                 app.extensions['security'].confirm_register_form, app
             )
+
+        app.extensions['security'].login_form = login_form_factory(
+            app.extensions['security'].login_form, app)
 
         if app.config['ACCOUNTS_USE_CELERY']:
             from invenio_accounts.tasks import send_security_email
