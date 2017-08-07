@@ -169,8 +169,11 @@ def test_login_from_headers_disabled(app, users):
 
 def test_flask_login_disabled_function_exist():
     """Test flask login still has disabled functions."""
+    # in case one of them fails, it means that flask-login has changed
+    # and we should check if the unwanted login methods are still disabled.
     assert hasattr(LoginManager, '_set_cookie')
     assert hasattr(LoginManager, '_load_from_header')
+    assert hasattr(LoginManager, '_load_from_request')
 
 
 def test_flask_login_load_from_header_works_as_expected(app, users):
@@ -185,6 +188,20 @@ def test_flask_login_load_from_header_works_as_expected(app, users):
         client.get(
             url_for('invenio_accounts.security'),
             headers=headers,
+            environ_base={'REMOTE_ADDR': '127.0.0.1'})
+        # check the patch is called
+        assert mock_h.called is True
+
+
+def test_flask_login_load_from_request_works_as_expected(app, users):
+    """Test flask login load from request exists."""
+    def load_user(*args, **kwargs):
+        app.login_manager.reload_user()
+    with app.test_client() as client, \
+            mock.patch.object(LoginManager, '_load_from_request',
+                              side_effect=load_user) as mock_h:
+        client.get(
+            url_for('invenio_accounts.security'),
             environ_base={'REMOTE_ADDR': '127.0.0.1'})
         # check the patch is called
         assert mock_h.called is True

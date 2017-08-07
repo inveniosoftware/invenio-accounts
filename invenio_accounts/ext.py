@@ -100,11 +100,12 @@ class InvenioAccounts(object):
             pass
         LoginManager._set_cookie = patch_do_nothing
 
-        # Disable loading user from header because we want to be sure we
-        # can load user only through the login form.
+        # Disable loading user from headers and object because we want to be
+        # sure we can load user only through the login form.
         def patch_reload_anonym(self, *args, **kwargs):
             self.reload_user()
         LoginManager._load_from_header = patch_reload_anonym
+        LoginManager._load_from_request = patch_reload_anonym
 
     def load_obj_or_import_string(self, value):
         """Import string or return object.
