@@ -53,29 +53,6 @@ configure where your Redis instance is located using:
 
 .. autodata:: invenio_accounts.config.ACCOUNTS_SESSION_REDIS_URL
 
-If the session activity tracking is enabled you should also ensure that you
-regularly clean the session tracking tables for expired sessions. You do this
-by configure a Celery schedule similar to this:
-
-.. code-block:: python
-
-    from datetime import timedelta
-    CELERYBEAT_SCHEDULE = {
-        'session_cleaner': {
-            'task': 'invenio_accounts.tasks.clean_session_table',
-            'schedule': timedelta(days=1),
-        },
-    }
-
-Remember me
------------
-Invenio supports a "remember me" feature which allows a user to be logged in,
-in case their session expired (which by default happens after 31 days). By
-default a user must **opt-in** via a checkbox in the login form. If by default
-you instead would like a user to **opt-out**
-
-.. autodata:: invenio_accounts.config.SECURITY_DEFAULT_REMEMBER_ME
-
 Password hashing
 ----------------
 Invenio defaults to use PBKDF2 SHA512 algorithm for password hashing:
@@ -136,6 +113,22 @@ browse and revoke active session resulting in that the information is removed.
 The session activity tracking feature is used to allow users to logout from all
 their active sessions, but also allow administrators to ban a user and ensure
 they are logged out of all active sessions in the application.
+
+**Cleaning session activity table**
+
+If the session activity tracking is enabled you should also ensure that you
+regularly clean the session tracking tables for expired sessions. You do this
+by configuring a Celery Beat schedule similar to this:
+
+.. code-block:: python
+
+    from datetime import timedelta
+    CELERYBEAT_SCHEDULE = {
+        'session_cleaner': {
+            'task': 'invenio_accounts.tasks.clean_session_table',
+            'schedule': timedelta(days=1),
+        },
+    }
 
 Templates
 ---------
