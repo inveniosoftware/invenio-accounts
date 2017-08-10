@@ -58,16 +58,16 @@ extras_require = {
         'Sphinx>=1.4.2,<1.6',
     ],
     'mysql': [
-        'invenio-db[versioning,mysql]>=1.0.0b3',
+        'invenio-db[versioning,mysql]>=1.0.0b8',
     ],
     'postgresql': [
-        'invenio-db[versioning,postgresql]>=1.0.0b3',
+        'invenio-db[versioning,postgresql]>=1.0.0b8',
     ],
     'sqlite': [
-        'invenio-db[versioning]>=1.0.0b3',
+        'invenio-db[versioning]>=1.0.0b8',
     ],
     'admin': [
-        'invenio-admin>=1.0.0a2',
+        'invenio-admin>=1.0.0b3',
     ],
     'tests': tests_require,
 }
@@ -99,7 +99,7 @@ install_requires = [
     # direct 'ipaddr' version marker (issues with Python3 builds on Travis).
     'SQLAlchemy-Utils>=0.31.0',
     'cryptography>=1.3',
-    'invenio-i18n>=1.0.0b2',
+    'invenio-i18n>=1.0.0b4',
     # Until the next ``requests`` is released
     'idna>=2.1,<2.6',
     'maxminddb-geolite2>=2017.404',
