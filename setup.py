@@ -100,6 +100,8 @@ install_requires = [
     'SQLAlchemy-Utils>=0.31.0',
     'cryptography>=1.3',
     'invenio-i18n>=1.0.0b2',
+    # Until the next ``requests`` is released
+    'idna>=2.1,<2.6',
     'maxminddb-geolite2>=2017.404',
     'passlib>=1.7.1',
     'pyjwt>=1.5.0',
