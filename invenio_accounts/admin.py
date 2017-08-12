@@ -33,7 +33,7 @@ from flask_admin.form.fields import DateTimeField
 from flask_admin.model.fields import AjaxSelectMultipleField
 from flask_babelex import gettext as _
 from flask_security.recoverable import send_reset_password_instructions
-from flask_security.utils import encrypt_password
+from flask_security.utils import hash_password
 from invenio_db import db
 from passlib import pwd
 from werkzeug.local import LocalProxy
@@ -94,7 +94,7 @@ class UserView(ModelView):
     def on_model_change(self, form, User, is_created):
         """Hash password when saving."""
         if form.password.data is not None:
-            User.password = encrypt_password(form.password.data)
+            User.password = hash_password(form.password.data)
 
     def after_model_change(self, form, User, is_created):
         """Send password instructions if desired."""
