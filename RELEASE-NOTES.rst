@@ -1,8 +1,8 @@
 ===========================
- Invenio-Accounts v1.0.0b8
+ Invenio-Accounts v1.0.0b9
 ===========================
 
-Invenio-Accounts v1.0.0b8 was released on August 10, 2017.
+Invenio-Accounts v1.0.0b9 was released on August 16, 2017.
 
 About
 -----
@@ -12,12 +12,12 @@ Invenio user management and authentication.
 What's new
 ----------
 
-- Module rewrite using Flask-Security(-Fork).
+- Module rewrite using Flask-Security.
 
 Installation
 ------------
 
-   $ pip install invenio-accounts==1.0.0b8
+   $ pip install invenio-accounts==1.0.0b9
 
 Documentation
 -------------
