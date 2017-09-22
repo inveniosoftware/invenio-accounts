@@ -104,7 +104,7 @@ install_requires = [
     'passlib>=1.7.1',
     'pyjwt>=1.5.0',
     'redis>=2.10.5',
-    'simplekv==0.10',  # FIXME: see issue simplekv#57
+    'simplekv>=0.11.2',
     'ua-parser>=0.7.3',
 ]
 
