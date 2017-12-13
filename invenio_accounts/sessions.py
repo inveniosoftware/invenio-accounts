@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015, 2016 CERN.
+# Copyright (C) 2015, 2016, 2017 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -113,7 +113,8 @@ def logout_listener(app, user):
     """
     @after_this_request
     def _commit(response=None):
-        delete_session(session.sid_s)
+        if hasattr(session, 'sid_s'):
+            delete_session(session.sid_s)
         # Regenerate the session to avoid session fixation vulnerabilities.
         session.regenerate()
         current_accounts.datastore.commit()
