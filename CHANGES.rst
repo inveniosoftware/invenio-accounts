@@ -24,7 +24,7 @@
 Changes
 =======
 
-Version 1.0.0b10 (released 2017-09-15)
+Version 1.0.0b11 (released 2017-12-13)
 --------------------------------------
 
 - Module rewrite using Flask-Security(-Fork).
