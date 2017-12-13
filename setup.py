@@ -98,7 +98,7 @@ install_requires = [
     # Not using 'ipaddress' extras for SQLALchemy-Utils in favor of
     # direct 'ipaddr' version marker (issues with Python3 builds on Travis).
     'SQLAlchemy-Utils>=0.31.0',
-    'cryptography>=1.3',
+    'cryptography>=2.1.4',
     'invenio-i18n>=1.0.0b4',
     'maxminddb-geolite2>=2017.404',
     'passlib>=1.7.1',
