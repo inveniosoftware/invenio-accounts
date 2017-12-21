@@ -48,7 +48,7 @@ def _ip2country(ip):
     """Get user country."""
     if ip:
         match = geolite2.reader().get(ip)
-        return match['country']['iso_code'] if match else None
+        return match.get('country', {}).get('iso_code') if match else None
 
 
 def _extract_info_from_useragent(user_agent):

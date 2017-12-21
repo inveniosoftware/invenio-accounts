@@ -290,3 +290,23 @@ def test_session_extra_info_on_login(app, users):
         assert session.os == 'Linux'
         assert session.country == 'CH'
         assert session.ip == '188.184.9.234'
+
+
+def test_session_ip_no_country(app, users):
+    """Test session with an IP without country information."""
+    ua = 'Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0'
+
+    with app.test_client() as client:
+        res = client.post(
+            url_for_security('login'),
+            data={
+                'email': users[0]['email'],
+                'password': users[0]['password']
+            },
+            environ_base={'REMOTE_ADDR': '139.191.247.1'},
+            headers={'User-Agent': ua}
+        )
+        assert res.status_code == 302
+        [session] = SessionActivity.query.all()
+        assert session.country is None
+        assert session.ip == '139.191.247.1'
