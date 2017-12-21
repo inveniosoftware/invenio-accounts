@@ -24,10 +24,10 @@
 Changes
 =======
 
-Version 1.0.0b11 (released 2017-12-13)
+Version 1.0.0b12 (released 2017-12-21)
 --------------------------------------
 
-- Module rewrite using Flask-Security(-Fork).
+- Module rewrite using Flask-Security.
 
 Version 0.2.0 (released 2015-10-05)
 -----------------------------------
