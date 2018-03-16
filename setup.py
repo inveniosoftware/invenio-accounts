@@ -23,7 +23,6 @@ tests_require = [
     'isort>=4.2.2',
     'mock>=2.0.0',
     'pydocstyle>=1.0.0',
-    'pytest-cache>=1.0',
     'pytest-cov>=1.8.0',
     'pytest-flask>=0.10.0',
     'pytest-pep8>=1.0.6',
