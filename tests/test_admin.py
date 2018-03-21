@@ -10,7 +10,6 @@ import pytest
 from flask import current_app, session, url_for
 from flask_admin import menu
 from flask_security.utils import hash_password
-from invenio_admin import InvenioAdmin
 from invenio_db import db
 from werkzeug.local import LocalProxy
 
