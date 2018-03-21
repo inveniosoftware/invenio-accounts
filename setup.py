@@ -16,11 +16,9 @@ readme = open('README.rst').read()
 history = open('CHANGES.rst').read()
 
 tests_require = [
-    'Flask-CeleryExt>=0.2.2',
-    'Flask-Mail>=0.9.1',
     'check-manifest>=0.25',
     'coverage>=4.0',
-    'isort>=4.2.2',
+    'isort>=4.3.0',
     'mock>=2.0.0',
     'pydocstyle>=1.0.0',
     'pytest-cov>=1.8.0',
@@ -49,9 +47,6 @@ extras_require = {
     'sqlite': [
         'invenio-db[versioning]>=1.0.0b8',
     ],
-    'admin': [
-        'invenio-admin>=1.0.0b3',
-    ],
     'tests': tests_require,
 }
 
@@ -69,10 +64,13 @@ setup_requires = [
 ]
 
 install_requires = [
+    'Flask-Admin>=1.3.0',
     'Flask-BabelEx>=0.9.3',
     'Flask-Breadcrumbs>=0.3.0',
+    'Flask-CeleryExt>=0.3.0',
     'Flask-KVSession>=0.6.1',
     'Flask-Login>=0.3.0',
+    'Flask-Mail>=0.9.1',
     'Flask-Menu>=0.4.0',
     'Flask-Security>=3.0.0',
     'Flask-WTF>=0.13.1',
