@@ -9,6 +9,9 @@
  Invenio-Accounts
 ==================
 
+.. image:: https://img.shields.io/github/license/inveniosoftware/invenio-accounts.svg
+        :target: https://github.com/inveniosoftware/invenio-accounts/blob/master/LICENSE
+
 .. image:: https://img.shields.io/travis/inveniosoftware/invenio-accounts.svg
         :target: https://travis-ci.org/inveniosoftware/invenio-accounts
 
