@@ -13,6 +13,7 @@ include *.txt
 include .dockerignore
 include .editorconfig
 include .tx/config
+prune docs/_build
 include LICENSE
 include babel.ini
 include config
