@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 1.0.1 (released 2018-05-25)
+
+- Bumped Flask-CeleryExt from v0.3.0 to v0.3.1 to fix issue with Celery version
+  string not being parsable and thus causing problems with installing Celery.
+
 Version 1.0.0 (released 2018-03-23)
 
 - Initial public release.
