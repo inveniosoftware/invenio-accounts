@@ -10,6 +10,8 @@
 
 from __future__ import absolute_import, print_function
 
+import os
+
 import pytest
 from flask import Flask
 from flask_babelex import Babel
@@ -181,3 +183,14 @@ def test_cookies(cookie_app, users):
             assert c.domain_specified is True, 'no domain in {}'.format(c.name)
             assert c.has_nonstandard_attr('HttpOnly')
             assert c.secure is True
+
+
+def test_kvsession_store_init(app):
+    """Test KV session configuration was loaded correctly."""
+    if os.environ.get('CI', 'false') == 'true':
+        from simplekv.memory.redisstore import \
+            RedisStore as kvsession_store_class
+    else:
+        from simplekv.memory import DictStore as kvsession_store_class
+
+    assert isinstance(app.kvsession_store, kvsession_store_class)

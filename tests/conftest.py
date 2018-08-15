@@ -55,6 +55,13 @@ def _app_factory(config=None):
         TESTING=True,
         WTF_CSRF_ENABLED=False,
     )
+
+    # Set key value session store to use Redis when running on TravisCI.
+    if os.environ.get('CI', 'false') == 'true':
+        app.config.update(
+            ACCOUNTS_SESSION_REDIS_URL='redis://localhost:6379/0',
+        )
+
     app.config.update(config or {})
     Menu(app)
     Babel(app)
