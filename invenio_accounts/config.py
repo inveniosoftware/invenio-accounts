@@ -16,10 +16,13 @@ ACCOUNTS = True
 If False, you won't be able to login via the web UI.
 """
 
-ACCOUNTS_SESSION_REDIS_URL = 'redis://localhost:6379/0'
+ACCOUNTS_SESSION_REDIS_URL = ''
 """Redis URL used by the module as a cache system for sessions.
 
 It should be in the form ``redis://username:password@host:port/db_index``.
+When set, Invenio-Accounts will use Redis as KV session store
+:class:`simplekv.memory.redisstore.RedisStore`, otherwise it will default to
+in memory backend :class:`simplekv.memory.DictStore`.
 """
 
 ACCOUNTS_REGISTER_BLUEPRINT = None

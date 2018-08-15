@@ -152,20 +152,6 @@ class InvenioAccounts(object):
             self.datastore = SessionAwareSQLAlchemyUserDatastore(
                 db, User, Role)
 
-        # Create sessionstore
-        if sessionstore is None:
-            if app.testing and \
-                    os.environ.get('CI', 'false') == 'false':
-                from simplekv.memory import DictStore
-
-                sessionstore = DictStore()
-            else:
-                import redis
-                from simplekv.memory.redisstore import RedisStore
-
-                sessionstore = RedisStore(redis.StrictRedis.from_url(
-                    app.config['ACCOUNTS_SESSION_REDIS_URL']))
-
         if app.config['ACCOUNTS_SESSION_ACTIVITY_ENABLED']:
             self._enable_session_activity(app=app)
 
@@ -176,7 +162,6 @@ class InvenioAccounts(object):
 
         state = self.security.init_app(app, datastore=self.datastore,
                                        register_blueprint=register_blueprint)
-        self.kvsession_extension = KVSessionExtension(sessionstore, app)
 
         app.extensions['security'].register_form = register_form_factory(
             app.extensions['security'].register_form, app)
@@ -244,6 +229,21 @@ class InvenioAccounts(object):
         for k in dir(config):
             if any([k.startswith(prefix) for prefix in config_apps]):
                 app.config.setdefault(k, getattr(config, k))
+
+        # Set Session KV store
+        if app.config.get('ACCOUNTS_SESSION_REDIS_URL'):
+            import redis
+            from simplekv.memory.redisstore import RedisStore
+
+            session_kvstore = RedisStore(redis.StrictRedis.from_url(
+                app.config['ACCOUNTS_SESSION_REDIS_URL']))
+        else:
+            from simplekv.memory import DictStore
+
+            session_kvstore = DictStore()
+
+        self.kvsession_extension = KVSessionExtension(
+            session_kvstore, app)
 
     def _enable_session_activity(self, app):
         """Enable session activity."""
