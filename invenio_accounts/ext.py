@@ -17,6 +17,7 @@ import six
 from flask import current_app, session
 from flask_kvsession import KVSessionExtension
 from flask_login import LoginManager, user_logged_in, user_logged_out
+from flask_principal import AnonymousIdentity
 from flask_security import Security, changeable, recoverable, registerable, \
     utils
 from invenio_db import db
@@ -118,6 +119,14 @@ class InvenioAccounts(object):
             'ACCOUNTS_JWT_CREATION_FACTORY'
         )
 
+    def register_anonymous_identity_loader(self, state):
+        """Registers a loader for AnonymousIdentity.
+
+        Additional loader is necessary for applying a need 'any-user' to
+        AnonymousUser in the invenio-access module
+        """
+        state.principal.identity_loader(AnonymousIdentity)
+
     def init_app(self, app, sessionstore=None, register_blueprint=True):
         """Flask application initialization.
 
@@ -162,6 +171,8 @@ class InvenioAccounts(object):
 
         state = self.security.init_app(app, datastore=self.datastore,
                                        register_blueprint=register_blueprint)
+
+        self.register_anonymous_identity_loader(state)
 
         app.extensions['security'].register_form = register_form_factory(
             app.extensions['security'].register_form, app)
