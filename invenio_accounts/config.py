@@ -90,6 +90,20 @@ SECURITY_LOGIN_WITHOUT_CONFIRMATION = True
 SECURITY_PASSWORD_SALT = None
 """Salt for storing passwords."""
 
+SECURITY_CONFIRM_EMAIL_WITHIN = '30 minutes'
+"""Amount of time the email confirmation link is active.
+
+Note, since the confirmation link will also login the associated user we expire
+the link fast.
+"""
+
+SECURITY_RESET_PASSWORD_WITHIN = '30 minutes'
+"""Amount of time the password reset link is active.
+
+Note, since the confirmation link will also login the associated user we expire
+the link fast.
+"""
+
 # Change default templates
 SECURITY_FORGOT_PASSWORD_TEMPLATE = 'invenio_accounts/forgot_password.html'
 """Default template for password recovery (asking for email)."""
