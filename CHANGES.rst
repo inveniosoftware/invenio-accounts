@@ -7,6 +7,11 @@
 
 Changes
 =======
+Version 1.0.2 (released 2018-10-31)
+
+- added AnonymousIdentity loader to app initialisation,
+  fixes the any-user need functionality of invenio-access
+
 
 Version 1.0.1 (released 2018-05-25)
 
