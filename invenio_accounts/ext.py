@@ -125,7 +125,9 @@ class InvenioAccounts(object):
         Additional loader is necessary for applying a need 'any-user' to
         AnonymousUser in the invenio-access module
         """
-        state.principal.identity_loader(AnonymousIdentity)
+        # Attention: the order of the loaders is important
+        # append is used here instead of decorator to enforce the order
+        state.principal.identity_loaders.append(AnonymousIdentity)
 
     def init_app(self, app, sessionstore=None, register_blueprint=True):
         """Flask application initialization.
