@@ -238,6 +238,12 @@ class InvenioAccounts(object):
             )
         )
 
+        # Follow SETTINGS_TEMPLATE pattern
+        app.config.setdefault(
+            'ACCOUNTS_SETTINGS_TEMPLATE',
+            app.config.get('SETTINGS_TEMPLATE',
+                           'invenio_accounts/settings/base.html'))
+
         config_apps = ['ACCOUNTS', 'SECURITY_']
         for k in dir(config):
             if any([k.startswith(prefix) for prefix in config_apps]):
