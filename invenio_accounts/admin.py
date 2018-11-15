@@ -78,7 +78,9 @@ class UserView(ModelView):
     def on_model_change(self, form, User, is_created):
         """Hash password when saving."""
         if form.password.data is not None:
-            User.password = hash_password(form.password.data)
+            pwd_ctx = current_app.extensions['security'].pwd_context
+            if pwd_ctx.identify(form.password.data) is None:
+                User.password = hash_password(form.password.data)
 
     def after_model_change(self, form, User, is_created):
         """Send password instructions if desired."""
