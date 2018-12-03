@@ -18,6 +18,7 @@ history = open('CHANGES.rst').read()
 tests_require = [
     'check-manifest>=0.25',
     'coverage>=4.0',
+    'invenio-db>=1.0.0',
     'isort>=4.3.0',
     'mock>=2.0.0',
     'pydocstyle>=1.0.0',

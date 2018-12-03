@@ -60,6 +60,12 @@ def test_send_message_through_security(task_app):
 
 def test_clean_session_table(task_app):
     """Test clean session table."""
+    # protected page
+    @task_app.route('/test', methods=['GET'])
+    @login_required
+    def test():
+        return 'test'
+
     # set session lifetime
     task_app.permanent_session_lifetime = timedelta(seconds=20)
     with task_app.test_request_context():
@@ -75,12 +81,6 @@ def test_clean_session_table(task_app):
         sleep(15)
 
         with task_app.test_client() as client:
-            # protected page
-            @task_app.route('/test', methods=['GET'])
-            @login_required
-            def test():
-                return 'test'
-
             client.post(url_for_security('login'), data=dict(
                 email=user2.email,
                 password=user2.password_plaintext,
