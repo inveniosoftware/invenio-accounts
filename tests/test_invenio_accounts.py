@@ -13,13 +13,14 @@ from __future__ import absolute_import, print_function
 import os
 
 import pytest
+import requests
 from flask import Flask
 from flask_babelex import Babel
 from flask_mail import Mail
 from flask_security import url_for_security
 from invenio_db import InvenioDB, db
 
-from invenio_accounts import InvenioAccounts, InvenioAccountsREST
+from invenio_accounts import InvenioAccounts, InvenioAccountsREST, testutils
 from invenio_accounts.models import Role, User
 
 
@@ -194,3 +195,20 @@ def test_kvsession_store_init(app):
         from simplekv.memory import DictStore as kvsession_store_class
 
     assert isinstance(app.kvsession_store, kvsession_store_class)
+
+
+def test_headers_info(app, users):
+    """Test if session and user id is set response header."""
+    u = users[0]
+    url = url_for_security('change_password')
+    app.config['ACCOUNTS_USERINFO_HEADERS'] = True
+    with app.app_context():
+        with app.test_client() as client:
+            assert not testutils.client_authenticated(client)
+            testutils.login_user_via_session(client, email=u['email'])
+            assert testutils.client_authenticated(client)
+            response = client.get(url)
+            cookie = requests.utils.dict_from_cookiejar(client.cookie_jar)
+            assert response.headers['X-Session-ID'] == \
+                cookie['session'].split('.')[0]
+            assert int(response.headers['X-User-ID']) == u['id']

@@ -14,7 +14,7 @@ import os
 
 import pkg_resources
 import six
-from flask import current_app, session
+from flask import current_app, request_finished, session
 from flask_kvsession import KVSessionExtension
 from flask_login import LoginManager, user_logged_in, user_logged_out
 from flask_principal import AnonymousIdentity
@@ -32,6 +32,7 @@ from .datastore import SessionAwareSQLAlchemyUserDatastore
 from .hash import InvenioAesEncryptedEmail, _to_binary
 from .models import Role, User
 from .sessions import login_listener, logout_listener
+from .utils import set_session_info
 
 
 def get_hmac(password):
@@ -199,6 +200,10 @@ class InvenioAccounts(object):
             from invenio_accounts.context_processors.jwt import \
                 jwt_proccessor
             app.context_processor(jwt_proccessor)
+
+        # Register signal receiver
+        if app.config.get('ACCOUNTS_USERINFO_HEADERS'):
+            request_finished.connect(set_session_info, app)
 
         app.extensions['invenio-accounts'] = self
 
