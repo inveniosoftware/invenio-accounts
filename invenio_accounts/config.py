@@ -206,3 +206,6 @@ RECAPTCHA_PUBLIC_KEY = None
 
 RECAPTCHA_PRIVATE_KEY = None
 """reCAPTCHA private key."""
+
+ACCOUNTS_USERINFO_HEADERS = False
+"""If True, add X-Session-ID and X-User-ID to the HTTP response."""

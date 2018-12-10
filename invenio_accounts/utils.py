@@ -11,8 +11,8 @@
 import uuid
 from datetime import datetime
 
-from flask import current_app
-from flask_login import current_user
+from flask import current_app, session
+from flask_security import current_user
 from future.utils import raise_from
 from jwt import DecodeError, ExpiredSignatureError, decode, encode
 
@@ -76,3 +76,10 @@ def jwt_decode_token(token):
         raise_from(JWTDecodeError(), exc)
     except ExpiredSignatureError as exc:
         raise_from(JWTExpiredToken(), exc)
+
+
+def set_session_info(app, response, **extra):
+    """Add X-Session-ID and X-User-ID to http response."""
+    response.headers['X-Session-ID'] = getattr(session, 'sid_s', None)
+    response.headers['X-User-ID'] =  \
+        current_user.get_id() if current_user.is_authenticated else None

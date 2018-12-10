@@ -103,6 +103,7 @@ def base_app(request):
 def app(request):
     """Flask application fixture with Invenio Accounts."""
     app = _app_factory()
+    app.config.update(ACCOUNTS_USERINFO_HEADERS=True)
     InvenioAccounts(app)
 
     from invenio_accounts.views.settings import blueprint
