@@ -16,7 +16,6 @@ from flask_mail import Message
 from invenio_db import db
 
 from .models import SessionActivity
-from .proxies import current_accounts
 from .sessions import delete_session
 
 

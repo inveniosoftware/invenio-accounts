@@ -6,8 +6,7 @@
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
-
-"""Module tests."""
+"""Test cli."""
 
 from __future__ import absolute_import, print_function
 
@@ -139,20 +138,14 @@ def test_cli_activate_deactivate(script_info):
     assert result.exit_code == 0
 
     # Activate
-    result = runner.invoke(users_activate, ['in@valid.org'],
-                           obj=script_info)
+    result = runner.invoke(users_activate, ['in@valid.org'], obj=script_info)
     assert result.exit_code != 0
-    result = runner.invoke(users_deactivate, ['in@valid.org'],
-                           obj=script_info)
+    result = runner.invoke(users_deactivate, ['in@valid.org'], obj=script_info)
     assert result.exit_code != 0
-
-    result = runner.invoke(users_activate, ['a@example.org'],
-                           obj=script_info)
+    result = runner.invoke(users_activate, ['a@example.org'], obj=script_info)
     assert result.exit_code == 0
-    result = runner.invoke(users_activate, ['a@example.org'],
-                           obj=script_info)
+    result = runner.invoke(users_activate, ['a@example.org'], obj=script_info)
     assert result.exit_code == 0
-
     # Deactivate
     result = runner.invoke(users_deactivate,
                            ['a@example.org'], obj=script_info)

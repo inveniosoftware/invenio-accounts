@@ -124,7 +124,7 @@ class UserView(ModelView):
                 if _datastore.activate_user(user):
                     count += 1
             if count > 0:
-                flash(_('User(s) were successfully inactivated.'), 'success')
+                flash(_('User(s) were successfully activated.'), 'success')
         except Exception as exc:
             if not self.handle_view_exception(exc):
                 raise

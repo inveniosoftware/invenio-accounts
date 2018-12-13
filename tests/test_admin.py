@@ -6,15 +6,13 @@
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
+"""Test admin."""
+
 import pytest
-from flask import current_app, session, url_for
-from flask_admin import menu
+from flask import current_app, url_for
 from flask_security.utils import hash_password
-from invenio_db import db
 from werkzeug.local import LocalProxy
 
-from invenio_accounts import InvenioAccounts
-from invenio_accounts.cli import users_create
 from invenio_accounts.models import SessionActivity
 from invenio_accounts.testutils import login_user_via_view
 
@@ -25,7 +23,6 @@ _datastore = LocalProxy(
 
 def test_admin(app, admin_view):
     """Test flask-admin interace."""
-
     # Test activation and deactivation
 
     with app.app_context():
@@ -66,8 +63,7 @@ def test_admin(app, admin_view):
 
 
 def test_admin_createuser(app, admin_view):
-    """Test flask-admin user creation"""
-
+    """Test flask-admin user creation."""
     with app.test_client() as client:
         # Test empty mail form
 
@@ -136,7 +132,6 @@ def test_admin_sessions(app, admin_view, users):
         assert res.status_code == 200
 
         # simulate login as user 1
-        datastore = app.extensions['security'].datastore
         login_user_via_view(client=client, email=users[0]['email'],
                             password=users[0]['password'])
         from flask import session

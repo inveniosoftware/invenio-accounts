@@ -10,8 +10,6 @@
 
 from __future__ import absolute_import, print_function
 
-import os
-
 import pkg_resources
 import six
 from flask import current_app, request_finished, session
@@ -182,8 +180,7 @@ class InvenioAccounts(object):
 
         app.extensions['security'].confirm_register_form = \
             confirm_register_form_factory(
-                app.extensions['security'].confirm_register_form, app
-            )
+                app.extensions['security'].confirm_register_form, app)
 
         app.extensions['security'].login_form = login_form_factory(
             app.extensions['security'].login_form, app)
