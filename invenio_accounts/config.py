@@ -81,6 +81,20 @@ SECURITY_RECOVERABLE = True
 SECURITY_REGISTERABLE = True
 """Allow users to register."""
 
+SECURITY_CONFIRM_EMAIL_WITHIN = '30 minutes'
+"""Amount of time the email confirmation link is active.
+
+Note, since the confirmation link will also login the associated user we expire
+the link fast.
+"""
+
+SECURITY_RESET_PASSWORD_WITHIN = '30 minutes'
+"""Amount of time the password reset link is active.
+
+Note, since the confirmation link will also login the associated user we expire
+the link fast.
+"""
+
 SECURITY_TRACKABLE = True
 """Enable user tracking on login."""
 

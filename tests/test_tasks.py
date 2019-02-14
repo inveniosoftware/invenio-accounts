@@ -62,6 +62,13 @@ def test_clean_session_table(task_app):
     """Test clean session table."""
     # set session lifetime
     task_app.permanent_session_lifetime = timedelta(seconds=20)
+
+    # protected page
+    @task_app.route('/test', methods=['GET'])
+    @login_required
+    def test():
+        return 'test'
+
     with task_app.test_request_context():
         user1 = create_test_user(email='user1@invenio-software.org')
         user2 = create_test_user(email='user2@invenio-software.org')
@@ -75,12 +82,6 @@ def test_clean_session_table(task_app):
         sleep(15)
 
         with task_app.test_client() as client:
-            # protected page
-            @task_app.route('/test', methods=['GET'])
-            @login_required
-            def test():
-                return 'test'
-
             client.post(url_for_security('login'), data=dict(
                 email=user2.email,
                 password=user2.password_plaintext,
