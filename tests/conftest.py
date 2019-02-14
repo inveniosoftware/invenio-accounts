@@ -49,6 +49,8 @@ def _app_factory(config=None):
         MAIL_SUPPRESS_SEND=True,
         SECRET_KEY="CHANGE_ME",
         SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
+        SECURITY_CONFIRM_EMAIL_WITHIN="2 seconds",
+        SECURITY_RESET_PASSWORD_WITHIN="2 seconds",
         SQLALCHEMY_DATABASE_URI=os.environ.get(
             'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
         SERVER_NAME='example.com',
@@ -187,7 +189,7 @@ def users(app):
 
     return [
         {'email': user1.email, 'id': user1.id,
-         'password': user1.password_plaintext},
+         'password': user1.password_plaintext, 'obj': user1},
         {'email': user2.email, 'id': user2.id,
-         'password': user2.password_plaintext},
+         'password': user2.password_plaintext, 'obj': user2},
     ]
