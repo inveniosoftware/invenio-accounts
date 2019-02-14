@@ -49,6 +49,8 @@ def _app_factory(config=None):
         MAIL_SUPPRESS_SEND=True,
         SECRET_KEY="CHANGE_ME",
         SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
+        SECURITY_CONFIRM_EMAIL_WITHIN="2 seconds",
+        SECURITY_RESET_PASSWORD_WITHIN="2 seconds",
         SQLALCHEMY_DATABASE_URI=os.environ.get(
             'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
         SERVER_NAME='example.com',
