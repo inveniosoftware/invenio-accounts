@@ -7,11 +7,32 @@
 
 Changes
 =======
+
+Version 1.1.0 (released 2019-02-15)
+
+- Added support for for adding the user id and session id of the current user
+  into the HTTP headers (``X-User-ID`` and ``X-Session-ID``) for upstream
+  servers to use. For instance, this way current user/session ids can be logged
+  by Nginx into the web server access logs. The feature is off by default and
+  can be enabled via the ``ACCOUNTS_USERINFO_HEADERS`` configuration variable.
+  Note: The upstream server should strip the two headers from the response
+  returned to the client. The purpose is purely to allow upstream proxies like
+  Nginx to log the user/session id for a specific request.
+
+- Changed token expiration from 5 days to 30 minutes for the password reset
+  token and email confirmation token. Using the tokens will as a side-effect
+  login in the user, which means that if the link is leaked (e.g. forwarded by
+  the users themselves), then another person can use the link to access the
+  account. Flask-Security v3.1.0 addresses this issue, but has not yet been
+  released.
+
+- Fixes issue that could rehash the user password in the adminstration
+  interface.
+
 Version 1.0.2 (released 2018-10-31)
 
-- added AnonymousIdentity loader to app initialisation,
-  fixes the any-user need functionality of invenio-access
-
+- Added AnonymousIdentity loader to app initialisation to fix the ``any_user``
+  Need in Invenio-Access.
 
 Version 1.0.1 (released 2018-05-25)
 
