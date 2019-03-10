@@ -201,12 +201,15 @@ def test_headers_info(app, users):
     """Test if session and user id is set response header."""
     u = users[0]
     url = url_for_security('change_password')
-    app.config['ACCOUNTS_USERINFO_HEADERS'] = True
     with app.app_context():
         with app.test_client() as client:
+            response = client.get(url)
+            # Not logged in, so only session id available
             assert not testutils.client_authenticated(client)
+            assert 'X-Session-ID' in response.headers
+            assert 'X-User-ID' not in response.headers
+            # Login
             testutils.login_user_via_session(client, email=u['email'])
-            assert testutils.client_authenticated(client)
             response = client.get(url)
             cookie = requests.utils.dict_from_cookiejar(client.cookie_jar)
             assert response.headers['X-Session-ID'] == \

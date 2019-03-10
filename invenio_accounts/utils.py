@@ -80,6 +80,8 @@ def jwt_decode_token(token):
 
 def set_session_info(app, response, **extra):
     """Add X-Session-ID and X-User-ID to http response."""
-    response.headers['X-Session-ID'] = getattr(session, 'sid_s', None)
-    response.headers['X-User-ID'] =  \
-        current_user.get_id() if current_user.is_authenticated else None
+    session_id = getattr(session, 'sid_s', None)
+    if session_id:
+        response.headers['X-Session-ID'] = session_id
+    if current_user.is_authenticated:
+        response.headers['X-User-ID'] = current_user.get_id()
