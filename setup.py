@@ -88,6 +88,7 @@ install_requires = [
     'redis>=2.10.5',
     'simplekv>=0.11.2',
     'ua-parser>=0.7.3',
+    'werkzeug>=0.14.1',
 ]
 
 packages = find_packages()
