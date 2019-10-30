@@ -32,7 +32,7 @@ from .datastore import SessionAwareSQLAlchemyUserDatastore
 from .hash import InvenioAesEncryptedEmail, _to_binary
 from .models import Role, User
 from .sessions import login_listener, logout_listener
-from .utils import set_session_info
+from .utils import obj_or_import_string, set_session_info
 
 
 def get_hmac(password):
@@ -93,32 +93,17 @@ class InvenioAccounts(object):
         LoginManager._load_from_header = patch_reload_anonym
         LoginManager._load_from_request = patch_reload_anonym
 
-    def load_obj_or_import_string(self, value):
-        """Import string or return object.
-
-        :params value: Import path or class object to instantiate.
-        :params default: Default object to return if the import fails.
-        :returns: The imported object.
-        """
-        imp = current_app.config.get(value)
-        if isinstance(imp, six.string_types):
-            return import_string(imp)
-        elif imp:
-            return imp
-
     @cached_property
     def jwt_decode_factory(self):
         """Load default JWT veryfication factory."""
-        return self.load_obj_or_import_string(
-            'ACCOUNTS_JWT_DECODE_FACTORY'
-        )
+        return obj_or_import_string(
+            current_app.config.get('ACCOUNTS_JWT_DECODE_FACTORY'))
 
     @cached_property
     def jwt_creation_factory(self):
         """Load default JWT creation factory."""
-        return self.load_obj_or_import_string(
-            'ACCOUNTS_JWT_CREATION_FACTORY'
-        )
+        return obj_or_import_string(
+            current_app.config.get('ACCOUNTS_JWT_CREATION_FACTORY'))
 
     def register_anonymous_identity_loader(self, state):
         """Registers a loader for AnonymousIdentity.
@@ -205,6 +190,22 @@ class InvenioAccounts(object):
         if app.config.get('ACCOUNTS_USERINFO_HEADERS'):
             request_finished.connect(set_session_info, app)
 
+        # Set Session KV store
+        if app.config.get('ACCOUNTS_SESSION_STORE_FACTORY'):
+            factory = obj_or_import_string(
+                app.config.get('ACCOUNTS_SESSION_STORE_FACTORY'))
+            if callable(factory):
+                session_kvstore = factory()
+        elif app.config.get('ACCOUNTS_SESSION_REDIS_URL'):
+            import redis
+            from simplekv.memory.redisstore import RedisStore
+
+            session_kvstore = RedisStore(redis.StrictRedis.from_url(
+                app.config['ACCOUNTS_SESSION_REDIS_URL']))
+
+        self.kvsession_extension = KVSessionExtension(
+            session_kvstore, app)
+
         app.extensions['invenio-accounts'] = self
 
     def init_config(self, app):
@@ -247,21 +248,6 @@ class InvenioAccounts(object):
         for k in dir(config):
             if any([k.startswith(prefix) for prefix in config_apps]):
                 app.config.setdefault(k, getattr(config, k))
-
-        # Set Session KV store
-        if app.config.get('ACCOUNTS_SESSION_REDIS_URL'):
-            import redis
-            from simplekv.memory.redisstore import RedisStore
-
-            session_kvstore = RedisStore(redis.StrictRedis.from_url(
-                app.config['ACCOUNTS_SESSION_REDIS_URL']))
-        else:
-            from simplekv.memory import DictStore
-
-            session_kvstore = DictStore()
-
-        self.kvsession_extension = KVSessionExtension(
-            session_kvstore, app)
 
     def _enable_session_activity(self, app):
         """Enable session activity."""

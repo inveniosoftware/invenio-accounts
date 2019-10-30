@@ -16,6 +16,16 @@ ACCOUNTS = True
 If False, you won't be able to login via the web UI.
 """
 
+ACCOUNTS_SESSION_STORE_FACTORY = 'simplekv.memory.DictStore'
+"""Import path or function of factory used to generate the session store
+object.
+
+When set, ``ACCOUNTS_SESSION_REDIS_URL`` will not have effect and
+Invenio-Accounts will use the returned object as the KV session
+store, otherwise it will default to the in-memory backend
+:class:`simplekv.memory.DictStore`.
+"""
+
 ACCOUNTS_SESSION_REDIS_URL = ''
 """Redis URL used by the module as a cache system for sessions.
 
@@ -23,6 +33,7 @@ It should be in the form ``redis://username:password@host:port/db_index``.
 When set, Invenio-Accounts will use Redis as KV session store
 :class:`simplekv.memory.redisstore.RedisStore`, otherwise it will default to
 in memory backend :class:`simplekv.memory.DictStore`.
+In order to have effect, ``ACCOUNTS_SESSION_STORE_FACTORY`` must be ``None``.
 """
 
 ACCOUNTS_REGISTER_BLUEPRINT = None
