@@ -31,8 +31,10 @@ the secret key is leaked, it is imperative that a new secret key is created.
 
 Sessions
 --------
-Server-side session data is currently stored in Redis, you must therefore
-configure where your Redis instance is located using:
+Server-side session data can be saved in different data stores (e.g. Redis),
+you must therefore provide a factory that returns the KV session store object:
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_SESSION_STORE_FACTORY
 
 .. autodata:: invenio_accounts.config.ACCOUNTS_SESSION_REDIS_URL
 
