@@ -32,6 +32,9 @@ extras_require = {
     ':python_version=="2.7"': [
         'ipaddr>=2.1.11',
     ],
+    'admin': [
+        'Flask-Admin>=1.3.0',
+    ],
     'celery': [
         # Needed for building the documentation until v4.2 is released.
         'celery>=3.1.0,<4.0',
@@ -65,7 +68,6 @@ setup_requires = [
 ]
 
 install_requires = [
-    'Flask-Admin>=1.3.0',
     'Flask-BabelEx>=0.9.3',
     'Flask-Breadcrumbs>=0.3.0',
     'Flask-CeleryExt>=0.3.1',
