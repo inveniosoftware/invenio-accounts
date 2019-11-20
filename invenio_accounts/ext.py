@@ -191,17 +191,9 @@ class InvenioAccounts(object):
             request_finished.connect(set_session_info, app)
 
         # Set Session KV store
-        if app.config.get('ACCOUNTS_SESSION_STORE_FACTORY'):
-            factory = obj_or_import_string(
-                app.config.get('ACCOUNTS_SESSION_STORE_FACTORY'))
-            if callable(factory):
-                session_kvstore = factory()
-        elif app.config.get('ACCOUNTS_SESSION_REDIS_URL'):
-            import redis
-            from simplekv.memory.redisstore import RedisStore
-
-            session_kvstore = RedisStore(redis.StrictRedis.from_url(
-                app.config['ACCOUNTS_SESSION_REDIS_URL']))
+        session_kvstore_factory = obj_or_import_string(
+            app.config['ACCOUNTS_SESSION_STORE_FACTORY'])
+        session_kvstore = session_kvstore_factory(app)
 
         self.kvsession_extension = KVSessionExtension(
             session_kvstore, app)

@@ -135,3 +135,20 @@ def delete_user_sessions(user):
         SessionActivity.query.filter_by(user=user).delete()
 
     return True
+
+
+def default_session_store_factory(app):
+    """Session store factory.
+
+    If ``ACCOUNTS_SESSION_REDIS_URL`` is set, it returns a
+    :class:`simplekv.memory.redisstore.RedisStore` otherwise
+    a :class:`simplekv.memory.DictStore`.
+    """
+    accounts_session_redis_url = app.config.get('ACCOUNTS_SESSION_REDIS_URL')
+    if accounts_session_redis_url:
+        import redis
+        from simplekv.memory.redisstore import RedisStore
+        return RedisStore(redis.StrictRedis.from_url(
+            accounts_session_redis_url))
+    from simplekv.memory import DictStore
+    return DictStore()
