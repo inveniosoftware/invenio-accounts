@@ -35,15 +35,6 @@ from invenio_accounts.admin import role_adminview, session_adminview, \
 from invenio_accounts.testutils import create_test_user
 
 
-def _my_redis_session_store():
-    import redis
-    from simplekv.memory.redisstore import RedisStore
-
-    return RedisStore(
-        redis.StrictRedis.from_url('redis://localhost:6379/0')
-    )
-
-
 def _app_factory(config=None):
     """Application factory."""
     instance_path = tempfile.mkdtemp()
@@ -66,12 +57,6 @@ def _app_factory(config=None):
         TESTING=True,
         WTF_CSRF_ENABLED=False,
     )
-
-    # Set key value session store to use Redis when running on TravisCI.
-    if os.environ.get('CI', 'false') == 'true':
-        app.config.update(
-            ACCOUNTS_SESSION_STORE_FACTORY=_my_redis_session_store,
-        )
 
     app.config.update(config or {})
     Menu(app)
@@ -114,6 +99,22 @@ def base_app(request):
 def app(request):
     """Flask application fixture with Invenio Accounts."""
     app = _app_factory()
+    app.config.update(ACCOUNTS_USERINFO_HEADERS=True)
+    InvenioAccounts(app)
+
+    from invenio_accounts.views.settings import blueprint
+    app.register_blueprint(blueprint)
+
+    _database_setup(app, request)
+    yield app
+
+
+@pytest.yield_fixture()
+def app_with_redis_url(request):
+    """Flask application fixture with Invenio Accounts."""
+    app = _app_factory(dict(
+        ACCOUNTS_SESSION_REDIS_URL='redis://localhost:6379/0'
+    ))
     app.config.update(ACCOUNTS_USERINFO_HEADERS=True)
     InvenioAccounts(app)
 

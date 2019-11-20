@@ -101,13 +101,3 @@ def obj_or_import_string(value, default=None):
     elif value:
         return value
     return default
-
-
-def load_or_import_from_config(key, app=None, default=None):
-    """Load or import value from config.
-
-    :returns: The loaded value.
-    """
-    app = app or current_app
-    imp = app.config.get(key)
-    return obj_or_import_string(imp, default=default)

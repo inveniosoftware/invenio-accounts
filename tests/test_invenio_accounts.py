@@ -186,15 +186,15 @@ def test_cookies(cookie_app, users):
             assert c.secure is True
 
 
-def test_kvsession_store_init(app):
-    """Test KV session configuration was loaded correctly."""
-    if os.environ.get('CI', 'false') == 'true':
-        from simplekv.memory.redisstore import \
-            RedisStore as kvsession_store_class
-    else:
-        from simplekv.memory import DictStore as kvsession_store_class
-
+def test_kvsession_store_init_with_default_factory(app):
+    from simplekv.memory import DictStore as kvsession_store_class
     assert isinstance(app.kvsession_store, kvsession_store_class)
+
+
+def test_kvsession_store_init_with_redis_url(app_with_redis_url):
+    from simplekv.memory.redisstore import RedisStore as kvsession_store_class
+    assert isinstance(
+        app_with_redis_url.kvsession_store, kvsession_store_class)
 
 
 def test_headers_info(app, users):
