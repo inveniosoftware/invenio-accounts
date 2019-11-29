@@ -15,3 +15,10 @@ current_accounts = LocalProxy(
     lambda: current_app.extensions['invenio-accounts']
 )
 """Proxy to the current Invenio-Accounts extension."""
+
+current_security = LocalProxy(lambda: current_app.extensions['security'])
+"""Proxy to the Flask-Security extension."""
+
+current_datastore = LocalProxy(
+    lambda: current_app.extensions['security'].datastore)
+"""Proxy to the current Flask-Security user datastore."""

@@ -14,11 +14,15 @@ from datetime import datetime
 import six
 from flask import current_app, session
 from flask_security import current_user
+from flask_security.confirmable import generate_confirmation_token
+from flask_security.utils import config_value as security_config_value
+from flask_security.utils import hash_password
 from future.utils import raise_from
 from jwt import DecodeError, ExpiredSignatureError, decode, encode
 from werkzeug.utils import import_string
 
 from .errors import JWTDecodeError, JWTExpiredToken
+from .proxies import current_datastore, current_security
 
 
 def jwt_create_token(user_id=None, additional_data=None):
@@ -101,3 +105,30 @@ def obj_or_import_string(value, default=None):
     elif value:
         return value
     return default
+
+
+def default_confirmation_link_func(user, token):
+    """Return the confirmation link that will be sent to a user via email."""
+    return confirmation_link = url_for('.confirm_email', token=token, _external=True)
+
+
+def register_user(confirmation_link_func=default_confirmation_link_func,
+                  **user_data):
+    """Register a user."""
+    user_data['password'] = hash_password(user_data['password'])
+    user = current_datastore.create_user(**user_data)
+    current_datastore.commit()
+
+    token = None
+    if current_security.confirmable:
+        token = generate_confirmation_token(user)
+        confirmation_link = confirmation_link_func(user, token)
+
+    user_registered.send(
+        current_app._get_current_object(), user=user, confirm_token=token)
+
+    if security_config_value('SEND_REGISTER_EMAIL')
+        send_mail(security_config_value('EMAIL_SUBJECT_REGISTER'), user.email,
+                'welcome', user=user, confirmation_link=confirmation_link)
+
+    return user
