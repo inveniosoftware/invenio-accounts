@@ -264,6 +264,11 @@ class InvenioAccountsREST(InvenioAccounts):
         :param register_blueprint: If ``True``, the application registers the
             blueprints. (Default: ``True``)
         """
+        # Register the Flask-Security blueprint for the email templates
+        if not register_blueprint:
+            security_bp = Blueprint(
+                'security', 'flask_security.core', template_folder='templates')
+            app.register_blueprint(security_bp)
         return super(InvenioAccountsREST, self).init_app(
             app, sessionstore=sessionstore,
             register_blueprint=register_blueprint,
