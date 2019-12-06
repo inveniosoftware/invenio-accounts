@@ -84,6 +84,7 @@ install_requires = [
     'SQLAlchemy-Utils>=0.31.0',
     'cryptography>=2.1.4',
     'invenio-i18n>=1.0.0',
+    'invenio-rest>=1.1.0',
     'maxminddb-geolite2>=2017.404',
     'passlib>=1.7.1',
     'pyjwt>=1.5.0',
@@ -134,6 +135,10 @@ setup(
         ],
         'invenio_base.blueprints': [
             'invenio_accounts = invenio_accounts.views.settings:blueprint',
+        ],
+        'invenio_base.api_blueprints': [
+            'invenio_accounts_rest_auth = '
+            'invenio_accounts.views.rest:create_blueprint',
         ],
         'invenio_celery.tasks': [
             'invenio_accounts = invenio_accounts.tasks',

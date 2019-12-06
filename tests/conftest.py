@@ -23,16 +23,19 @@ from flask_babelex import Babel
 from flask_celeryext import FlaskCeleryExt
 from flask_mail import Mail
 from flask_menu import Menu
+from invenio_access import InvenioAccess
 from invenio_db import InvenioDB, db
 from invenio_i18n import InvenioI18N
+from invenio_rest import InvenioREST
 from simplekv.memory.redisstore import RedisStore
 from sqlalchemy_utils.functions import create_database, database_exists, \
     drop_database
 
-from invenio_accounts import InvenioAccounts
+from invenio_accounts import InvenioAccounts, InvenioAccountsREST
 from invenio_accounts.admin import role_adminview, session_adminview, \
     user_adminview
 from invenio_accounts.testutils import create_test_user
+from invenio_accounts.views.rest import create_blueprint
 
 
 def _app_factory(config=None):
@@ -107,6 +110,27 @@ def app(request):
 
     _database_setup(app, request)
     yield app
+
+
+@pytest.yield_fixture()
+def api(request):
+    """Flask application fixture."""
+    api_app = _app_factory(
+        dict(
+            SQLALCHEMY_DATABASE_URI=os.environ.get(
+            'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
+            SERVER_NAME='localhost',
+            TESTING=True,
+        ))
+
+    InvenioAccess(api_app)
+    InvenioREST(api_app)
+    InvenioAccountsREST(api_app)
+    api_app.register_blueprint(create_blueprint(api_app))
+
+    _database_setup(app, request)
+
+    yield api_app
 
 
 @pytest.yield_fixture()

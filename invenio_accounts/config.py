@@ -48,6 +48,47 @@ ACCOUNTS_SESSION_ACTIVITY_ENABLED = True
 ACCOUNTS_SETTINGS_SECURITY_TEMPLATE = 'invenio_accounts/settings/security.html'
 """Template for the account security page."""
 
+ACCOUNTS_CONFIRM_EMAIL_ENDPOINT = None
+"""Value to be used for the confirmation email link in the UI application."""
+
+ACCOUNTS_REST_CONFIRM_EMAIL_ENDPOINT = '/confirm-email'
+"""Value to be used for the confirmation email link in the API application.
+
+Can be a Flask endpoint (e.g. "invenio_accounts_rest_auth.confirm_email"), or
+a URL part (e.g. "https://ui.example.com/confirm-email", "/confirm-email").
+
+This will be used to build an absolute URL, thus if e.g. a hostname isn't
+included, the one from the current request's context will be used.
+"""
+
+ACCOUNTS_RESET_PASSWORD_ENDPOINT = None
+"""Value to be used for the confirmation email link in the UI application."""
+
+ACCOUNTS_REST_RESET_PASSWORD_ENDPOINT = '/reset-password'
+"""Value to be used for the reset password link in the API application.
+
+Can be a Flask endpoint (e.g. "invenio_accounts_rest_auth.reset_password"), or
+a URL part (e.g. "https://ui.example.com/reset-password", "/reset-password").
+
+This will be used to build an absolute URL, thus if e.g. a hostname isn't
+included, the one from the current request's context will be used.
+"""
+
+ACCOUNTS_REST_AUTH_VIEWS = {
+    "login": "invenio_accounts.views.rest:LoginView",
+    "logout": "invenio_accounts.views.rest:LogoutView",
+    "user_info": "invenio_accounts.views.rest:UserInfoView",
+    "register": "invenio_accounts.views.rest:RegisterView",
+    "forgot_password": "invenio_accounts.views.rest:ForgotPasswordView",
+    "reset_password": "invenio_accounts.views.rest:ResetPasswordView",
+    "change_password": "invenio_accounts.views.rest:ChangePasswordView",
+    "send_confirmation":
+        "invenio_accounts.views.rest:SendConfirmationEmailView",
+    "confirm_email": "invenio_accounts.views.rest:ConfirmEmailView",
+    "revoke_session": "invenio_accounts.views.rest:RevokeSessionView"
+}
+"""List of REST API authentication views."""
+
 # Change Flask-Security defaults
 SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
 """Default password hashing algorithm for new passwords."""
