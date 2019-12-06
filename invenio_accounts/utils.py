@@ -12,13 +12,18 @@ import uuid
 from datetime import datetime
 
 import six
-from flask import current_app, session
+from flask import current_app, request, session, url_for
 from flask_security import current_user
 from flask_security.confirmable import generate_confirmation_token
+from flask_security.recoverable import generate_reset_password_token
+from flask_security.signals import user_registered
 from flask_security.utils import config_value as security_config_value
-from flask_security.utils import hash_password
+from flask_security.utils import get_security_endpoint_name, hash_password, \
+    send_mail
 from future.utils import raise_from
 from jwt import DecodeError, ExpiredSignatureError, decode, encode
+from six.moves.urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
+from werkzeug.routing import BuildError
 from werkzeug.utils import import_string
 
 from .errors import JWTDecodeError, JWTExpiredToken
@@ -107,28 +112,55 @@ def obj_or_import_string(value, default=None):
     return default
 
 
-def default_confirmation_link_func(user, token):
+def _generate_token_url(endpoint, token):
+    try:
+        url = url_for(endpoint, token=token, _external=True)
+    except BuildError:
+        # Try to parse URL and build
+        scheme, netloc, path, query, fragment = urlsplit(endpoint)
+        scheme = scheme or request.scheme
+        netloc = netloc or request.host
+        assert netloc
+        qs = parse_qs(query)
+        qs['token'] = token
+        query = urlencode(qs)
+        url = urlunsplit((scheme, netloc, path, query, fragment))
+    return url
+
+
+def default_reset_password_link_func(user):
     """Return the confirmation link that will be sent to a user via email."""
-    return confirmation_link = url_for('.confirm_email', token=token, _external=True)
+    token = generate_reset_password_token(user)
+    endpoint = current_app.config['ACCOUNTS_RESET_PASSWORD_ENDPOINT'] or \
+        get_security_endpoint_name('reset_password')
+    return token, _generate_token_url(endpoint, token)
 
 
-def register_user(confirmation_link_func=default_confirmation_link_func,
-                  **user_data):
+def default_confirmation_link_func(user):
+    """Return the confirmation link that will be sent to a user via email."""
+    token = generate_confirmation_token(user)
+    endpoint = current_app.config['ACCOUNTS_CONFIRM_EMAIL_ENDPOINT'] or \
+        get_security_endpoint_name('confirm_email')
+    return token, _generate_token_url(endpoint, token)
+
+
+def register_user(_confirmation_link_func=None, **user_data):
     """Register a user."""
+    confirmation_link_func = _confirmation_link_func or \
+        default_confirmation_link_func
     user_data['password'] = hash_password(user_data['password'])
     user = current_datastore.create_user(**user_data)
     current_datastore.commit()
 
-    token = None
-    if current_security.confirmable:
-        token = generate_confirmation_token(user)
-        confirmation_link = confirmation_link_func(user, token)
+    token, confirmation_link = None, None
+    if current_security.confirmable and user.confirmed_at is None:
+        token, confirmation_link = confirmation_link_func(user)
 
     user_registered.send(
         current_app._get_current_object(), user=user, confirm_token=token)
 
-    if security_config_value('SEND_REGISTER_EMAIL')
+    if security_config_value('SEND_REGISTER_EMAIL'):
         send_mail(security_config_value('EMAIL_SUBJECT_REGISTER'), user.email,
-                'welcome', user=user, confirmation_link=confirmation_link)
+                  'welcome', user=user, confirmation_link=confirmation_link)
 
     return user

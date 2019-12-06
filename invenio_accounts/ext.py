@@ -14,7 +14,7 @@ import os
 
 import pkg_resources
 import six
-from flask import current_app, request_finished, session
+from flask import Blueprint, abort, current_app, request_finished, session
 from flask_kvsession import KVSessionExtension
 from flask_login import LoginManager, user_logged_in, user_logged_out
 from flask_principal import AnonymousIdentity
@@ -267,12 +267,24 @@ class InvenioAccountsREST(InvenioAccounts):
         # Register the Flask-Security blueprint for the email templates
         if not register_blueprint:
             security_bp = Blueprint(
-                'security', 'flask_security.core', template_folder='templates')
+                'security_email_templates',  # name differently to avoid misuse
+                'flask_security.core', template_folder='templates')
             app.register_blueprint(security_bp)
-        return super(InvenioAccountsREST, self).init_app(
+
+        super(InvenioAccountsREST, self).init_app(
             app, sessionstore=sessionstore,
             register_blueprint=register_blueprint,
         )
+        app.config['ACCOUNTS_CONFIRM_EMAIL_ENDPOINT'] = \
+            app.config['ACCOUNTS_REST_CONFIRM_EMAIL_ENDPOINT']
+        app.config['ACCOUNTS_RESET_PASSWORD_ENDPOINT'] = \
+            app.config['ACCOUNTS_REST_RESET_PASSWORD_ENDPOINT']
+
+        if app.config.get("ACCOUNTS_REGISTER_UNAUTHORIZED_CALLBACK", True):
+            def _unauthorized_callback():
+                """Callback to abort when user is unauthorized."""
+                abort(401)
+            app.login_manager.unauthorized_handler(_unauthorized_callback)
 
 
 class InvenioAccountsUI(InvenioAccounts):
