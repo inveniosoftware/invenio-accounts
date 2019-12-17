@@ -43,7 +43,7 @@ def create_test_user(email, password='123456', **kwargs):
     :returns: A :class:`invenio_accounts.models.User` instance.
     """
     assert flask.current_app.testing
-    hashed_password = hash_password(password)
+    hashed_password = hash_password(password) if password else None
     user = _datastore.create_user(email=email, password=hashed_password,
                                   **kwargs)
     _datastore.commit()
