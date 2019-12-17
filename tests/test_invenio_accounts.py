@@ -10,8 +10,6 @@
 
 from __future__ import absolute_import, print_function
 
-import os
-
 import pytest
 import requests
 from flask import Flask
@@ -61,6 +59,7 @@ def test_init_rest():
     ext = InvenioAccountsREST(app)
     assert 'invenio-accounts' in app.extensions
     assert 'security' not in app.blueprints.keys()
+    assert 'security_email_templates' in app.blueprints.keys()
 
     app = Flask('testapp')
     Babel(app)
@@ -72,6 +71,7 @@ def test_init_rest():
     ext.init_app(app)
     assert 'invenio-accounts' in app.extensions
     assert 'security' not in app.blueprints.keys()
+    assert 'security_email_templates' in app.blueprints.keys()
 
     app = Flask('testapp')
     app.config['ACCOUNTS_REGISTER_BLUEPRINT'] = True
@@ -84,6 +84,7 @@ def test_init_rest():
     ext.init_app(app)
     assert 'invenio-accounts' in app.extensions
     assert 'security' in app.blueprints.keys()
+    assert 'security_email_templates' in app.blueprints.keys()
 
 
 def test_alembic(app):

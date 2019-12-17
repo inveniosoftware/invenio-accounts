@@ -23,7 +23,6 @@ from flask_babelex import Babel
 from flask_celeryext import FlaskCeleryExt
 from flask_mail import Mail
 from flask_menu import Menu
-from invenio_access import InvenioAccess
 from invenio_db import InvenioDB, db
 from invenio_i18n import InvenioI18N
 from invenio_rest import InvenioREST
@@ -90,7 +89,7 @@ def _database_setup(app, request):
     return app
 
 
-@pytest.yield_fixture()
+@pytest.fixture()
 def base_app(request):
     """Flask application fixture."""
     app = _app_factory()
@@ -98,7 +97,7 @@ def base_app(request):
     yield app
 
 
-@pytest.yield_fixture()
+@pytest.fixture()
 def app(request):
     """Flask application fixture with Invenio Accounts."""
     app = _app_factory()
@@ -112,28 +111,27 @@ def app(request):
     yield app
 
 
-@pytest.yield_fixture()
+@pytest.fixture()
 def api(request):
     """Flask application fixture."""
     api_app = _app_factory(
         dict(
             SQLALCHEMY_DATABASE_URI=os.environ.get(
-            'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
+                'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
             SERVER_NAME='localhost',
             TESTING=True,
         ))
 
-    InvenioAccess(api_app)
     InvenioREST(api_app)
     InvenioAccountsREST(api_app)
     api_app.register_blueprint(create_blueprint(api_app))
 
-    _database_setup(app, request)
+    _database_setup(api_app, request)
 
     yield api_app
 
 
-@pytest.yield_fixture()
+@pytest.fixture()
 def app_with_redis_url(request):
     """Flask application fixture with Invenio Accounts."""
     app = _app_factory(dict(
