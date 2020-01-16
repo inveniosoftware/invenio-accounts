@@ -10,6 +10,8 @@
 
 from __future__ import absolute_import, print_function
 
+from functools import wraps
+
 from flask import Blueprint, after_this_request, current_app, jsonify
 from flask.views import MethodView
 from flask_login import login_required
@@ -17,7 +19,6 @@ from flask_security import current_user
 from flask_security.changeable import change_user_password
 from flask_security.confirmable import confirm_email_token_status, \
     confirm_user, requires_confirmation
-from flask_security.decorators import anonymous_user_required
 from flask_security.recoverable import reset_password_token_status, \
     update_password
 from flask_security.signals import reset_password_instructions_sent
@@ -34,6 +35,16 @@ from invenio_accounts.sessions import delete_session
 from ..proxies import current_datastore, current_security
 from ..utils import default_confirmation_link_func, \
     default_reset_password_link_func, obj_or_import_string, register_user
+
+
+def user_already_authenticated(f):
+    """Return user if already authenticated."""
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if current_user.is_authenticated:
+            return jsonify(default_user_payload(current_user))
+        return f(*args, **kwargs)
+    return wrapper
 
 
 def role_to_dict(role):
@@ -177,7 +188,7 @@ def _commit(response=None):
 class LoginView(MethodView):
     """View to login a user."""
 
-    decorators = [anonymous_user_required]
+    decorators = [user_already_authenticated]
 
     post_args = {
         'email': fields.Email(required=True, validate=[user_exists]),
@@ -252,7 +263,7 @@ class LogoutView(MethodView):
 class RegisterView(MethodView):
     """View to register a new user."""
 
-    decorators = [anonymous_user_required]
+    decorators = [user_already_authenticated]
 
     post_args = {
         'email': fields.Email(required=True, validate=[unique_user_email]),
@@ -282,7 +293,7 @@ class RegisterView(MethodView):
 class ForgotPasswordView(MethodView):
     """."""
 
-    decorators = [anonymous_user_required]
+    decorators = [user_already_authenticated]
 
     reset_password_link_func = default_reset_password_link_func
 
@@ -319,7 +330,7 @@ class ForgotPasswordView(MethodView):
 class ResetPasswordView(MethodView):
     """."""
 
-    decorators = [anonymous_user_required]
+    decorators = [user_already_authenticated]
 
     post_args = {
         'token': fields.String(required=True),
