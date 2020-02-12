@@ -68,6 +68,7 @@ setup_requires = [
 ]
 
 install_requires = [
+    'cryptography>=2.1.4',
     'Flask-BabelEx>=0.9.3',
     'Flask-Breadcrumbs>=0.3.0',
     'Flask-CeleryExt>=0.3.1',
@@ -79,16 +80,15 @@ install_requires = [
     'Flask-WTF>=0.13.1',
     'Flask>=0.11.1',
     'future>=0.16.0',
-    # Not using 'ipaddress' extras for SQLALchemy-Utils in favor of
-    # direct 'ipaddr' version marker (issues with Python3 builds on Travis).
-    'SQLAlchemy-Utils>=0.31.0',
-    'cryptography>=2.1.4',
     'invenio-i18n>=1.0.0',
     'maxminddb-geolite2>=2017.404',
     'passlib>=1.7.1',
     'pyjwt>=1.5.0',
     'redis>=2.10.5',
     'simplekv>=0.11.2',
+    # Not using 'ipaddress' extras for SQLALchemy-Utils in favor of
+    # direct 'ipaddr' version marker (issues with Python3 builds on Travis).
+    'SQLAlchemy-Utils>=0.31.0',
     'ua-parser>=0.7.3',
     'werkzeug>=0.14.1',
 ]
