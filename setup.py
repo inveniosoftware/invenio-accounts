@@ -73,12 +73,12 @@ install_requires = [
     'Flask-Breadcrumbs>=0.3.0',
     'Flask-CeleryExt>=0.3.1',
     'Flask-KVSession>=0.6.1',
-    'Flask-Login>=0.3.0',
+    'Flask-Login>=0.3.0,<0.5.0',
     'Flask-Mail>=0.9.1',
     'Flask-Menu>=0.4.0',
     'Flask-Security>=3.0.0',
     'Flask-WTF>=0.13.1',
-    'Flask>=0.11.1',
+    'Flask>=1.0.4',
     'future>=0.16.0',
     'invenio-i18n>=1.0.0',
     'maxminddb-geolite2>=2017.404',
@@ -90,7 +90,7 @@ install_requires = [
     # direct 'ipaddr' version marker (issues with Python3 builds on Travis).
     'SQLAlchemy-Utils>=0.31.0',
     'ua-parser>=0.7.3',
-    'werkzeug>=0.14.1',
+    'werkzeug>=0.15',
 ]
 
 packages = find_packages()
