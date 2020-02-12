@@ -8,10 +8,16 @@
 Changes
 =======
 
+Version 1.1.2 (released 2020-02-12)
+
+- Fixes requirements for Flask, Werkzeug and Flask-Login due to
+  incompatibilities of latest released modules.
+
 Version 1.1.1 (released 2019-03-10)
 
 - Fixes an issue where the HTTP headers X-Session-ID and X-User-ID are added
-  even if the value is not known. This causes 'None' to be logged in Nginx, instead of simply '-'.
+  even if the value is not known. This causes 'None' to be logged in Nginx,
+  instead of simply '-'.
 
 Version 1.1.0 (released 2019-02-15)
 
