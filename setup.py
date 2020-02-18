@@ -35,10 +35,6 @@ extras_require = {
     'admin': [
         'Flask-Admin>=1.3.0',
     ],
-    'celery': [
-        # Needed for building the documentation until v4.2 is released.
-        'celery>=3.1.0,<4.0',
-    ],
     'docs': [
         'Sphinx>=1.4.2,<1.6',
     ],
@@ -69,9 +65,7 @@ setup_requires = [
 
 install_requires = [
     'cryptography>=2.1.4',
-    'Flask-BabelEx>=0.9.3',
     'Flask-Breadcrumbs>=0.4.0',
-    'Flask-CeleryExt>=0.3.1',
     'Flask-KVSession>=0.6.1',
     'Flask-Login>=0.3.0,<0.5.0',
     'Flask-Mail>=0.9.1',
@@ -81,6 +75,7 @@ install_requires = [
     'Flask>=1.0.4',
     'future>=0.16.0',
     'invenio-i18n>=1.0.0',
+    'invenio-celery>=1.1.2',
     'maxminddb-geolite2>=2017.404',
     'passlib>=1.7.1',
     'pyjwt>=1.5.0',
