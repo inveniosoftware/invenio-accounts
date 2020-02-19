@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 1.1.3 (released 2020-02-19)
+
+- Replaces Flask-CeleryExt to invenio-celery due to version incompatibilities
+  with celery, kombu. Removes Flask-BabelExt already provided by invenio-i18n
+
 Version 1.1.2 (released 2020-02-12)
 
 - Fixes requirements for Flask, Werkzeug and Flask-Login due to
