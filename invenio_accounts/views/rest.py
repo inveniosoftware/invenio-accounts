@@ -118,9 +118,14 @@ def create_blueprint(app):
         # TODO: Check this
         if app.config['ACCOUNTS_SESSION_ACTIVITY_ENABLED']:
             blueprint.add_url_rule(
-                '/revoke-session',
-                view_func=authentication_views['revoke_session'].as_view(
-                    'revoke_session'))
+                '/sessions',
+                view_func=authentication_views['sessions_list'].as_view(
+                    'sessions_list'))
+
+            blueprint.add_url_rule(
+                '/sessions/<sid_s>',
+                view_func=authentication_views['sessions_item'].as_view(
+                    'sessions_item'))
     return blueprint
 
 
@@ -487,27 +492,45 @@ class ConfirmEmailView(MethodView):
             return jsonify({'message': get_message('ALREADY_CONFIRMED')[0]})
 
 
-class RevokeSessionView(MethodView):
-    """."""
+class SessionsListView(MethodView):
+    """View that returns the list of user sessions."""
 
     decorators = [login_required]
 
-    post_args = {
-        'sid_s': fields.String(required=True),
-    }
+    def get(self, sid_s=None, **kwargs):
+        """Return user sessions info."""
+        sessions = SessionActivity.query.filter_by(
+            user_id=current_user.get_id())
+        results = [{
+            'created': s.created,
+            'current': s.is_current(s.sid_s),
+            'browser': s.browser,
+            'browser_version':  s.browser_version,
+            'os': s.os,
+            'device': s.device,
+            'country': s.country} for s in sessions]
 
-    @use_kwargs(post_args)
-    def post(self, sid_s=None, **kwargs):
-        """."""
+        return jsonify({'total': sessions.count(), 'results': results})
+
+
+class SessionsItemView(MethodView):
+    """View for operations related to user session."""
+
+    decorators = [login_required]
+
+    def delete(self, sid_s=None, **kwargs):
+        """Revoke the given user session."""
         if SessionActivity.query.filter_by(
                 user_id=current_user.get_id(), sid_s=sid_s).count() == 1:
+            import wdb; wdb.set_trace()
             delete_session(sid_s=sid_s)
             db.session.commit()
-            if not SessionActivity.is_current(sid_s=sid_s):
-                return jsonify({
-                    'message':
-                        'Session {0} successfully removed.'.format(sid_s)
-                })
+            message = 'Session {0} successfully removed. {1}.'
+            if SessionActivity.is_current(sid_s=sid_s):
+                message = message.format(sid_s, "Logged out")
+            else:
+                message = message.format(sid_s, "Revoked")
+            return jsonify({'message': message})
         else:
             return jsonify({
                 'message': 'Unable to remove session {0}.'.format(sid_s)}), 400
