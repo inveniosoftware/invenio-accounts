@@ -51,7 +51,7 @@ ACCOUNTS_SETTINGS_SECURITY_TEMPLATE = 'invenio_accounts/settings/security.html'
 ACCOUNTS_CONFIRM_EMAIL_ENDPOINT = None
 """Value to be used for the confirmation email link in the UI application."""
 
-ACCOUNTS_REST_CONFIRM_EMAIL_ENDPOINT = '/confirm-email'
+ACCOUNTS_REST_CONFIRM_EMAIL_ENDPOINT = '/confirm/{token}'
 """Value to be used for the confirmation email link in the API application.
 
 Can be a Flask endpoint (e.g. "invenio_accounts_rest_auth.confirm_email"), or
@@ -64,7 +64,7 @@ included, the one from the current request's context will be used.
 ACCOUNTS_RESET_PASSWORD_ENDPOINT = None
 """Value to be used for the confirmation email link in the UI application."""
 
-ACCOUNTS_REST_RESET_PASSWORD_ENDPOINT = '/reset-password'
+ACCOUNTS_REST_RESET_PASSWORD_ENDPOINT = '/lost-password/{token}'
 """Value to be used for the reset password link in the API application.
 
 Can be a Flask endpoint (e.g. "invenio_accounts_rest_auth.reset_password"), or

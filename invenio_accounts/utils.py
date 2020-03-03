@@ -122,7 +122,10 @@ def _generate_token_url(endpoint, token):
         netloc = netloc or request.host
         assert netloc
         qs = parse_qs(query)
-        qs['token'] = token
+        if '{token}' in path:
+            path = path.format(token=token)
+        else:
+            qs['token'] = token
         query = urlencode(qs)
         url = urlunsplit((scheme, netloc, path, query, fragment))
     return url
