@@ -126,6 +126,8 @@ login, logout, email confirmations etc. Here are some few of the possiblities:
 
 .. autodata:: invenio_accounts.config.SECURITY_RESET_PASSWORD_TEMPLATE
 
+.. autodata:: invenio_accounts.config.SECURITY_CHANGE_PASSWORD_TEMPLATE
+
 .. autodata:: invenio_accounts.config.SECURITY_FORGOT_PASSWORD_TEMPLATE
 
 .. autodata:: invenio_accounts.config.SECURITY_SEND_CONFIRMATION_TEMPLATE

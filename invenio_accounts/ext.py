@@ -269,7 +269,11 @@ class InvenioAccountsREST(InvenioAccounts):
             security_bp = Blueprint(
                 'security_email_templates',  # name differently to avoid misuse
                 'flask_security.core', template_folder='templates')
+            security_rest_overrides = Blueprint(
+                'security_email_overrides',  # overrides
+                __name__, template_folder='templates')
             app.register_blueprint(security_bp)
+            app.register_blueprint(security_rest_overrides)
 
         super(InvenioAccountsREST, self).init_app(
             app, sessionstore=sessionstore,
