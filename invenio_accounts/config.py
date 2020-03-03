@@ -85,7 +85,8 @@ ACCOUNTS_REST_AUTH_VIEWS = {
     "send_confirmation":
         "invenio_accounts.views.rest:SendConfirmationEmailView",
     "confirm_email": "invenio_accounts.views.rest:ConfirmEmailView",
-    "revoke_session": "invenio_accounts.views.rest:RevokeSessionView"
+    "sessions_list": "invenio_accounts.views.rest:SessionsListView",
+    "sessions_item": "invenio_accounts.views.rest:SessionsItemView"
 }
 """List of REST API authentication views."""
 
