@@ -16,7 +16,7 @@ from flask import current_app, request, session, url_for
 from flask_security import current_user
 from flask_security.confirmable import generate_confirmation_token
 from flask_security.recoverable import generate_reset_password_token
-from flask_security.signals import user_registered
+from flask_security.signals import password_changed, user_registered
 from flask_security.utils import config_value as security_config_value
 from flask_security.utils import get_security_endpoint_name, hash_password, \
     send_mail
@@ -164,3 +164,21 @@ def register_user(_confirmation_link_func=None, **user_data):
                   'welcome', user=user, confirmation_link=confirmation_link)
 
     return user
+
+
+def change_user_password(_reset_password_link_func=None, **user_data):
+    """Change user password."""
+    reset_password_link_func = _reset_password_link_func or \
+        default_reset_password_link_func
+    user = user_data['user']
+    user.password = hash_password(user_data['password'])
+    current_datastore.put(user)
+    if security_config_value('SEND_PASSWORD_CHANGE_EMAIL'):
+        reset_password_link = None
+        if current_security.recoverable:
+            _, reset_password_link = reset_password_link_func(user)
+        subject = security_config_value('EMAIL_SUBJECT_PASSWORD_CHANGE_NOTICE')
+        send_mail(subject, user.email, 'change_notice_rest', user=user,
+                  reset_password_link=reset_password_link)
+    password_changed.send(current_app._get_current_object(),
+                          user=user)

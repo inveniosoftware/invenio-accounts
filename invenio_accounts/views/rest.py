@@ -16,7 +16,6 @@ from flask import Blueprint, after_this_request, current_app, jsonify
 from flask.views import MethodView
 from flask_login import login_required
 from flask_security import current_user
-from flask_security.changeable import change_user_password
 from flask_security.confirmable import confirm_email_token_status, \
     confirm_user, requires_confirmation
 from flask_security.recoverable import reset_password_token_status, \
@@ -33,7 +32,7 @@ from invenio_accounts.models import SessionActivity
 from invenio_accounts.sessions import delete_session
 
 from ..proxies import current_datastore, current_security
-from ..utils import default_confirmation_link_func, \
+from ..utils import change_user_password, default_confirmation_link_func, \
     default_reset_password_link_func, obj_or_import_string, register_user
 
 
@@ -366,7 +365,7 @@ class ResetPasswordView(MethodView):
 
 
 class ChangePasswordView(MethodView):
-    """."""
+    """View to change the user password."""
 
     decorators = [login_required]
 
@@ -378,24 +377,25 @@ class ChangePasswordView(MethodView):
     }
 
     def verify_password(self, password=None, new_password=None, **kwargs):
-        """."""
+        """Verify password is not invalid."""
         if not verify_and_update_password(password, current_user):
             _abort(get_message('INVALID_PASSWORD')[0], 'password')
-        if password.data == new_password:
+        if password == new_password:
             _abort(get_message('PASSWORD_IS_THE_SAME')[0], 'password')
 
     def change_password(self, new_password=None, **kwargs):
-        """."""
+        """Perform any change password actions."""
         after_this_request(_commit)
-        change_user_password(current_user._get_current_object(), new_password)
+        change_user_password(user=current_user._get_current_object(),
+                             password=new_password)
 
     def success_response(self):
-        """."""
+        """Return a successful change password response."""
         return jsonify({'message': get_message('PASSWORD_CHANGE')[0]})
 
     @use_kwargs(post_args)
     def post(self, **kwargs):
-        """."""
+        """Change user password."""
         self.verify_password(**kwargs)
         self.change_password(**kwargs)
         return self.success_response()
