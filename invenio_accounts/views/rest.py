@@ -228,33 +228,33 @@ class LoginView(MethodView):
 
 
 class UserInfoView(MethodView):
-    """."""
+    """View to fetch info from current user."""
 
     decorators = [login_required]
 
-    def response(self, user):
-        """."""
+    def success_response(self, user):
+        """Return a successful user info response."""
         return jsonify(default_user_payload(user))
 
     def get(self):
-        """."""
-        return self.response(current_user)
+        """Return user info."""
+        return self.success_response(current_user)
 
 
 class LogoutView(MethodView):
-    """."""
+    """View to logout a user."""
 
     def logout_user(self):
-        """."""
+        """Perform any logout actions."""
         if current_user.is_authenticated:
             logout_user()
 
     def success_response(self):
-        """."""
+        """Return a successful logout response."""
         return jsonify({'message': 'User logged out.'})
 
     def post(self):
-        """."""
+        """Logout a user."""
         self.logout_user()
         return self.success_response()
 
@@ -271,26 +271,26 @@ class RegisterView(MethodView):
     }
 
     def login_user(self, user):
-        """."""
+        """Perform any login actions."""
         if not current_security.confirmable or \
                 current_security.login_without_confirmation:
             after_this_request(_commit)
             login_user(user)
 
     def success_response(self, user):
-        """."""
+        """Return a successful register response."""
         return jsonify(default_user_payload(user))
 
     @use_kwargs(post_args)
     def post(self, **kwargs):
-        """."""
+        """Register a user."""
         user = register_user(**kwargs)
         self.login_user(user)
         return self.success_response(user)
 
 
 class ForgotPasswordView(MethodView):
-    """."""
+    """View to get a link to reset the user password."""
 
     decorators = [user_already_authenticated]
 
@@ -304,9 +304,10 @@ class ForgotPasswordView(MethodView):
         """Retrieve a user by the provided arguments."""
         return current_datastore.get_user(email)
 
-    def send_reset_password_instructions(self, user):
-        """."""
-        token, reset_link = self.reset_password_link_func(user)
+    @classmethod
+    def send_reset_password_instructions(cls, user):
+        """Send email containing instructions to reset password."""
+        token, reset_link = cls.reset_password_link_func(user)
         if config_value('SEND_PASSWORD_RESET_EMAIL'):
             send_mail(config_value('EMAIL_SUBJECT_PASSWORD_RESET'), user.email,
                       'reset_instructions', user=user, reset_link=reset_link)
@@ -314,20 +315,20 @@ class ForgotPasswordView(MethodView):
                 current_app._get_current_object(), user=user, token=token)
 
     def success_response(self, user):
-        """."""
+        """Return a response containing reset password instructions."""
         return jsonify({'message': get_message(
             'PASSWORD_RESET_REQUEST', email=user.email)[0]})
 
     @use_kwargs(post_args)
     def post(self, **kwargs):
-        """."""
+        """Send reset password instructions."""
         user = self.get_user(**kwargs)
         self.send_reset_password_instructions(user)
         return self.success_response(user)
 
 
 class ResetPasswordView(MethodView):
-    """."""
+    """View to reset the user password."""
 
     decorators = [user_already_authenticated]
 
@@ -338,7 +339,7 @@ class ResetPasswordView(MethodView):
     }
 
     def get_user(self, token=None, **kwargs):
-        """."""
+        """Retrieve a user by the provided arguments."""
         # Verify the token
         expired, invalid, user = reset_password_token_status(token)
         if invalid:
@@ -351,12 +352,12 @@ class ResetPasswordView(MethodView):
         return user
 
     def success_response(self, user):
-        """."""
+        """Return a successful reset password response."""
         return jsonify({'message': get_message('PASSWORD_RESET')[0]})
 
     @use_kwargs(post_args)
     def post(self, **kwargs):
-        """."""
+        """Reset user password."""
         user = self.get_user(**kwargs)
         after_this_request(_commit)
         update_password(user, kwargs['password'])
@@ -417,31 +418,32 @@ class SendConfirmationEmailView(MethodView):
         return current_datastore.get_user(email)
 
     def verify(self, user):
-        """."""
+        """Verify that user is not confirmed."""
         if user.confirmed_at is not None:
             _abort(get_message('ALREADY_CONFIRMED')[0])
 
-    def send_confirmation_link(self, user):
-        """."""
+    @classmethod
+    def send_confirmation_link(cls, user):
+        """Send confirmation link."""
         send_email_enabled = current_security.confirmable and \
             config_value('SEND_REGISTER_EMAIL')
         if send_email_enabled:
-            token, confirmation_link = self.confirmation_link_func(user)
-            # TODO: check if there's another template for the confirmation link
+            token, confirmation_link = cls.confirmation_link_func(user)
             send_mail(
                 config_value('EMAIL_SUBJECT_REGISTER'), user.email,
-                'welcome', user=user, confirmation_link=confirmation_link)
+                'confirmation_instructions', user=user,
+                confirmation_link=confirmation_link)
             return token
 
     def success_response(self, user):
-        """."""
+        """Return a successful confirmation email sent response."""
         return jsonify({
             'message': get_message('CONFIRMATION_REQUEST', email=user.email)[0]
         })
 
     @use_kwargs(post_args)
     def post(self, **kwargs):
-        """."""
+        """Send confirmation email."""
         user = self.get_user(**kwargs)
         self.verify(user)
         self.send_confirmation_link(user)
@@ -449,10 +451,14 @@ class SendConfirmationEmailView(MethodView):
 
 
 class ConfirmEmailView(MethodView):
-    """."""
+    """View that handles a email confirmation request."""
+
+    post_args = {
+        'token': fields.String(required=True),
+    }
 
     def get_user(self, token=None, **kwargs):
-        """."""
+        """Retrieve a user by the provided arguments."""
         expired, invalid, user = confirm_email_token_status(token)
 
         if not user or invalid:
@@ -466,9 +472,9 @@ class ConfirmEmailView(MethodView):
                 within=current_security.confirm_email_within))
         return user
 
-    @use_kwargs({'token': fields.String(required=True)})
+    @use_kwargs(post_args)
     def post(self, **kwargs):
-        """View function which handles a email confirmation request."""
+        """Confirm user email."""
         user = self.get_user(**kwargs)
 
         if user != current_user:
