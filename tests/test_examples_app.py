@@ -17,7 +17,7 @@ from os.path import abspath, dirname, join
 import pytest
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def example_app():
     """Example app fixture."""
     current_dir = os.getcwd()
