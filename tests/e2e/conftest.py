@@ -30,7 +30,7 @@ from invenio_accounts import InvenioAccounts
 from invenio_accounts.views.settings import blueprint
 
 
-@pytest.fixture()
+@pytest.fixture(scope='session')
 def app(request):
     """Flask application fixture for E2E/integration/selenium tests.
 

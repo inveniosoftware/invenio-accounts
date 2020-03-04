@@ -71,10 +71,10 @@ install_requires = [
     'Flask-Mail>=0.9.1',
     'Flask-Menu>=0.5.0',
     'Flask-Security>=3.0.0',
-    'Flask-WTF>=0.13.1',
-    'Flask>=1.0.4',
+    'Flask-WTF>=0.14.3',
     'future>=0.16.0',
-    'invenio-i18n>=1.0.0',
+    'invenio-base>=1.2.2',
+    'invenio-i18n>=1.2.0',
     'invenio-celery>=1.1.2',
     'maxminddb-geolite2>=2017.404',
     'passlib>=1.7.1',
@@ -85,7 +85,6 @@ install_requires = [
     # direct 'ipaddr' version marker (issues with Python3 builds on Travis).
     'SQLAlchemy-Utils>=0.31.0',
     'ua-parser>=0.7.3',
-    'werkzeug>=0.15',
 ]
 
 packages = find_packages()

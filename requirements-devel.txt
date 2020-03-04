@@ -8,3 +8,4 @@
 
 -e git+https://github.com/inveniosoftware/invenio-db.git#egg=invenio-db
 -e git+https://github.com/maxcountryman/flask-security.git#egg=flask-security
+-e git+https://github.com/inveniosoftware/invenio-base.git#egg=invenio-base

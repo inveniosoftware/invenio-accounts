@@ -26,7 +26,7 @@ cd static
 npm install
 cd ..
 flask collect
-flask assets build
+flask webpack buildall
 
 # Create the database
 flask db init
