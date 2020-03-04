@@ -522,7 +522,6 @@ class SessionsItemView(MethodView):
         """Revoke the given user session."""
         if SessionActivity.query.filter_by(
                 user_id=current_user.get_id(), sid_s=sid_s).count() == 1:
-            import wdb; wdb.set_trace()
             delete_session(sid_s=sid_s)
             db.session.commit()
             message = 'Session {0} successfully removed. {1}.'

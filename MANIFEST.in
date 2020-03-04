@@ -30,6 +30,7 @@ recursive-include examples *.py
 recursive-include examples *.sh
 recursive-include examples *.txt
 recursive-include invenio_accounts *.html
+recursive-include invenio_accounts *.txt
 recursive-include invenio_accounts *.po *.pot *.mo
 recursive-include invenio_accounts *.py
 recursive-include tests *.py
