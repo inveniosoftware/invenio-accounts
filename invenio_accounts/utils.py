@@ -132,7 +132,7 @@ def _generate_token_url(endpoint, token):
 
 
 def default_reset_password_link_func(user):
-    """Return the confirmation link that will be sent to a user via email."""
+    """Return the reset password link that will be sent to a user via email."""
     token = generate_reset_password_token(user)
     endpoint = current_app.config['ACCOUNTS_RESET_PASSWORD_ENDPOINT'] or \
         get_security_endpoint_name('reset_password')

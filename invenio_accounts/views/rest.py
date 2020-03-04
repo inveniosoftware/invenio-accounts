@@ -115,7 +115,6 @@ def create_blueprint(app):
                 view_func=authentication_views['confirm_email'].as_view(
                     'confirm_email'))
 
-        # TODO: Check this
         if app.config['ACCOUNTS_SESSION_ACTIVITY_ENABLED']:
             blueprint.add_url_rule(
                 '/sessions',
@@ -130,11 +129,11 @@ def create_blueprint(app):
 
 
 class FlaskParser(FlaskParserBase):
-    """."""
+    """Parser to add FieldError to validation errors."""
 
     # TODO: Add error codes to all messages (e.g. 'user-already-exists')
     def handle_error(self, error, *args, **kwargs):
-        """."""
+        """Handle errors during parsing."""
         if isinstance(error, ValidationError):
             _errors = []
             for field, messages in error.messages.items():
@@ -165,7 +164,7 @@ def unique_user_email(email):
 
 
 def default_user_payload(user):
-    """."""
+    """Parse user payload."""
     return {
         'id': user.id,
         'email': user.email,
@@ -173,7 +172,6 @@ def default_user_payload(user):
             user.confirmed_at.isoformat() if user.confirmed_at else None,
         'last_login_at':
             user.last_login_at.isoformat() if user.last_login_at else None,
-        # TODO: Check roles
         'roles': [role_to_dict(role) for role in user.roles],
     }
 
@@ -189,7 +187,15 @@ def _commit(response=None):
     return response
 
 
-class LoginView(MethodView):
+class UserViewMixin(object):
+    """Mixin class for get user operations."""
+
+    def get_user(self, email=None, **kwargs):
+        """Retrieve a user by the provided arguments."""
+        return current_datastore.get_user(email)
+
+
+class LoginView(MethodView, UserViewMixin):
     """View to login a user."""
 
     decorators = [user_already_authenticated]
@@ -214,10 +220,6 @@ class LoginView(MethodView):
             _abort(get_message('CONFIRMATION_REQUIRED')[0])
         if not user.is_active:
             _abort(get_message('DISABLED_ACCOUNT')[0])
-
-    def get_user(self, email=None, **kwargs):
-        """Retrieve a user by the provided arguments."""
-        return current_datastore.get_user(email)
 
     def login_user(self, user):
         """Perform any login actions."""
@@ -294,7 +296,7 @@ class RegisterView(MethodView):
         return self.success_response(user)
 
 
-class ForgotPasswordView(MethodView):
+class ForgotPasswordView(MethodView, UserViewMixin):
     """View to get a link to reset the user password."""
 
     decorators = [user_already_authenticated]
@@ -304,10 +306,6 @@ class ForgotPasswordView(MethodView):
     post_args = {
         'email': fields.Email(required=True, validate=[user_exists]),
     }
-
-    def get_user(self, email=None, **kwargs):
-        """Retrieve a user by the provided arguments."""
-        return current_datastore.get_user(email)
 
     @classmethod
     def send_reset_password_instructions(cls, user):
@@ -407,7 +405,7 @@ class ChangePasswordView(MethodView):
         return self.success_response()
 
 
-class SendConfirmationEmailView(MethodView):
+class SendConfirmationEmailView(MethodView, UserViewMixin):
     """View function which sends confirmation instructions."""
 
     decorators = [login_required]
@@ -417,10 +415,6 @@ class SendConfirmationEmailView(MethodView):
     post_args = {
         'email': fields.Email(required=True, validate=[user_exists]),
     }
-
-    def get_user(self, email=None, **kwargs):
-        """Retrieve a user by the provided arguments."""
-        return current_datastore.get_user(email)
 
     def verify(self, user):
         """Verify that user is not confirmed."""
@@ -497,13 +491,13 @@ class SessionsListView(MethodView):
 
     decorators = [login_required]
 
-    def get(self, sid_s=None, **kwargs):
+    def get(self, **kwargs):
         """Return user sessions info."""
-        sessions = SessionActivity.query.filter_by(
+        sessions = SessionActivity.query_by_user(
             user_id=current_user.get_id())
         results = [{
             'created': s.created,
-            'current': s.is_current(s.sid_s),
+            'current': SessionActivity.is_current(s.sid_s),
             'browser': s.browser,
             'browser_version':  s.browser_version,
             'os': s.os,
@@ -520,8 +514,8 @@ class SessionsItemView(MethodView):
 
     def delete(self, sid_s=None, **kwargs):
         """Revoke the given user session."""
-        if SessionActivity.query.filter_by(
-                user_id=current_user.get_id(), sid_s=sid_s).count() == 1:
+        if SessionActivity.query_by_user(current_user.get_id()) \
+                .filter_by(sid_s=sid_s).count() == 1:
             delete_session(sid_s=sid_s)
             db.session.commit()
             message = 'Session {0} successfully removed. {1}.'
