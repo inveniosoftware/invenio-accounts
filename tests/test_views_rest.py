@@ -57,39 +57,37 @@ def test_login_view(api):
             ))
 
             # Invalid fields
-            res = client.post(url, data=json.dumps(
-                {'email': 'invalid-email', 'password': 'short'}))
+            res = client.post(url, data=dict(
+                email='invalid-email', password='short'))
             assert_error_resp(res, (
                 ('password', 'length'),
                 ('email', 'not a valid email'),
-                # TODO: probably shouldn't be here...
-                ('email', 'user does not exist'),
             ))
 
             # Invalid credentials
-            res = client.post(url, data=json.dumps(
-                {'email': 'not@exists.com', 'password': '123456'}))
+            res = client.post(url, data=dict(
+                email='not@exists.com', password='123456'))
             assert_error_resp(res, (
                 ('email', 'user does not exist'),
             ))
 
             # No-password user
-            res = client.post(url, data=json.dumps(
-                {'email': 'nopass@test.com', 'password': '123456'}))
+            res = client.post(url, data=dict(
+                email='nopass@test.com', password='123456'))
             assert_error_resp(res, (
                 ('password', 'no password is set'),
             ))
 
             # Disabled account
-            res = client.post(url, data=json.dumps(
-                {'email': 'disabled@test.com', 'password': '123456'}))
+            res = client.post(url, data=dict(
+                email='disabled@test.com', password='123456'))
             assert_error_resp(res, (
                 (None, 'account is disabled'),
             ))
 
             # Successful login
-            res = client.post(url, data=json.dumps(
-                {'email': 'normal@test.com', 'password': '123456'}))
+            res = client.post(url, data=dict(
+                email='normal@test.com', password='123456'))
             payload = get_json(res)
             assert res.status_code == 200
             assert payload['id'] == normal_user.id
@@ -99,6 +97,7 @@ def test_login_view(api):
             assert session_cookie is not None
             assert session_cookie.value
 
+            # User info view
             res = client.get(url_for('invenio_accounts_rest_auth.user_info'))
             payload = get_json(res)
             assert res.status_code == 200
@@ -121,23 +120,23 @@ def test_registration_view(api):
             ))
 
             # Invalid fields
-            res = client.post(url, data=json.dumps(
-                {'email': 'invalid-email', 'password': 'short'}))
+            res = client.post(url, data=dict(
+                email='invalid-email', password='short'))
             assert_error_resp(res, (
                 ('password', 'length'),
                 ('email', 'not a valid email'),
             ))
 
             # Existing user
-            res = client.post(url, data=json.dumps(
-                {'email': 'old@test.com', 'password': '123456'}))
+            res = client.post(url, data=dict(
+                email='old@test.com', password='123456'))
             assert_error_resp(res, (
                 ('email', 'old@test.com is already associated'),
             ))
 
             # Successful registration
-            res = client.post(url, data=json.dumps(
-                {'email': 'new@test.com', 'password': '123456'}))
+            res = client.post(url, data=dict(
+                email='new@test.com', password='123456'))
             payload = get_json(res)
             assert res.status_code == 200
             assert payload['id'] == 2
