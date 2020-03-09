@@ -147,6 +147,36 @@ def app_with_redis_url(request):
     yield app
 
 
+@pytest.fixture()
+def app_with_flexible_registration(request):
+    """Flask application fixture with Invenio Accounts."""
+    from webargs import fields
+    from invenio_accounts.views.rest import RegisterView, use_kwargs
+
+    class MyRegisterView(RegisterView):
+
+        post_args = {
+            **RegisterView.post_args,
+            'active': fields.Boolean(required=True)
+        }
+
+        @use_kwargs(post_args)
+        def post(self, **kwargs):
+            """Register a user."""
+            return super(MyRegisterView, self).post(**kwargs)
+
+    api_app = _app_factory()
+    InvenioREST(api_app)
+    InvenioAccountsREST(api_app)
+
+    api_app.config['ACCOUNTS_REST_AUTH_VIEWS']['register'] = MyRegisterView
+
+    api_app.register_blueprint(create_blueprint(api_app))
+
+    _database_setup(api_app, request)
+    yield api_app
+
+
 @pytest.fixture
 def script_info(app):
     """Get ScriptInfo object for testing CLI."""
