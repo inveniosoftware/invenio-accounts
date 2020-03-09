@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.2.0 (released 2020-03-09)
+
+- Replaces Flask dependency with centrally managed invenio-base
+
 Version 1.1.3 (released 2020-02-19)
 
 - Replaces Flask-CeleryExt to invenio-celery due to version incompatibilities
