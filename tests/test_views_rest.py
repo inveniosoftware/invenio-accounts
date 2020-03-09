@@ -174,6 +174,27 @@ def test_registration_view(api):
             assert res.status_code == 200
 
 
+def test_custom_registration_view(app_with_flexible_registration):
+    app = app_with_flexible_registration
+    with app.app_context():
+        create_test_user(email='old@test.com')
+        db.session.commit()
+        with app.test_client() as client:
+            url = url_for('invenio_accounts_rest_auth.register')
+
+            # Missing custom field
+            res = client.post(url, data=dict(
+                email='new@test.com', password='123456'))
+            assert_error_resp(res, (
+                ('active', 'required'),
+            ))
+
+            # Successful registration
+            res = client.post(url, data=dict(
+                email='new@test.com', password='123456', active=True))
+            assert res.status_code == 200
+
+
 def test_logout_view(api):
     app = api
     with app.app_context():

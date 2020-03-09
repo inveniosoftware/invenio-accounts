@@ -131,7 +131,6 @@ def create_blueprint(app):
 class FlaskParser(FlaskParserBase):
     """Parser to add FieldError to validation errors."""
 
-    # TODO: Add error codes to all messages (e.g. 'user-already-exists')
     def handle_error(self, error, *args, **kwargs):
         """Handle errors during parsing."""
         if isinstance(error, ValidationError):
