@@ -151,7 +151,8 @@ def register_user(_confirmation_link_func=None, **user_data):
     """Register a user."""
     confirmation_link_func = _confirmation_link_func or \
         default_confirmation_link_func
-    user_data['password'] = hash_password(user_data['password'])
+    if user_data['password'] is not None:
+        user_data['password'] = hash_password(user_data['password'])
     user = current_datastore.create_user(**user_data)
     current_datastore.commit()
 
@@ -174,7 +175,9 @@ def change_user_password(_reset_password_link_func=None, **user_data):
     reset_password_link_func = _reset_password_link_func or \
         default_reset_password_link_func
     user = user_data['user']
-    user.password = hash_password(user_data['password'])
+    user.password = None
+    if user_data['password'] is not None:
+        user.password = hash_password(user_data['password'])
     current_datastore.put(user)
     if security_config_value('SEND_PASSWORD_CHANGE_EMAIL'):
         reset_password_link = None
