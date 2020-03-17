@@ -107,6 +107,16 @@ def logout_listener(app, user):
         return response
 
 
+def csrf_token_reset(app, user):
+    """Connect to the user_logged_in signal to reset the csrf token.
+
+    :param app: The Flask application.
+    :param user: The :class:`invenio_accounts.models.User` instance.
+    """
+    from invenio_rest.csrf import reset_token
+    reset_token()
+
+
 def delete_session(sid_s):
     """Delete entries in the data- and kvsessionstore with the given sid_s.
 
