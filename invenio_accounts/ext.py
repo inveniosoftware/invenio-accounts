@@ -31,7 +31,7 @@ from . import config
 from .datastore import SessionAwareSQLAlchemyUserDatastore
 from .hash import InvenioAesEncryptedEmail, _to_binary
 from .models import Role, User
-from .sessions import login_listener, logout_listener
+from .sessions import csrf_token_reset, login_listener, logout_listener
 from .utils import obj_or_import_string, set_session_info
 
 
@@ -244,7 +244,9 @@ class InvenioAccounts(object):
     def _enable_session_activity(self, app):
         """Enable session activity."""
         user_logged_in.connect(login_listener, app)
+        user_logged_in.connect(csrf_token_reset, app)
         user_logged_out.connect(logout_listener, app)
+        user_logged_out.connect(csrf_token_reset, app)
         from .views.settings import blueprint
         from .views.security import security, revoke_session
         blueprint.route('/security/', methods=['GET'])(security)
