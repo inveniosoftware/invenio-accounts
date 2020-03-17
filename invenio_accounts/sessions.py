@@ -19,6 +19,7 @@ from __future__ import absolute_import, print_function
 from flask import after_this_request, current_app, request, session
 from geolite2 import geolite2
 from invenio_db import db
+from invenio_rest.csrf import reset_token
 from ua_parser import user_agent_parser
 from werkzeug.local import LocalProxy
 
@@ -103,6 +104,15 @@ def logout_listener(app, user):
         session.regenerate()
         current_accounts.datastore.commit()
         return response
+
+
+def csrf_token_reset(app, user):
+    """Connect to the user_logged_in signal to reset the csrf token.
+
+    :param app: The Flask application.
+    :param user: The :class:`invenio_accounts.models.User` instance.
+    """
+    reset_token()
 
 
 def delete_session(sid_s):
