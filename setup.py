@@ -22,7 +22,7 @@ tests_require = [
     'mock>=2.0.0',
     'pydocstyle>=1.0.0',
     'pytest-cov>=1.8.0',
-    'pytest-flask>=0.10.0',
+    'pytest-flask>=0.10.0,<1.0.0',
     'pytest-pep8>=1.0.6',
     'pytest>=4.0.0,<5.0.0',
     'selenium>=3.0.1',
@@ -72,6 +72,7 @@ install_requires = [
     'Flask-Menu>=0.5.0',
     'Flask-Security>=3.0.0',
     'Flask-WTF>=0.14.3',
+    'email-validator>=1.0.5',
     'future>=0.16.0',
     'invenio-base>=1.2.2',
     'invenio-i18n>=1.2.0',
@@ -85,7 +86,7 @@ install_requires = [
     # Not using 'ipaddress' extras for SQLALchemy-Utils in favor of
     # direct 'ipaddr' version marker (issues with Python3 builds on Travis).
     'SQLAlchemy-Utils>=0.31.0',
-    'ua-parser>=0.7.3',
+    'ua-parser>=0.7.3'
 ]
 
 packages = find_packages()
