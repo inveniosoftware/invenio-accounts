@@ -22,7 +22,7 @@ tests_require = [
     'mock>=2.0.0',
     'pydocstyle>=1.0.0',
     'pytest-cov>=1.8.0',
-    'pytest-flask>=0.10.0',
+    'pytest-flask>=0.10.0,<1.0.0',
     'pytest-pep8>=1.0.6',
     'pytest>=4.0.0,<5.0.0',
     'selenium>=3.0.1',
@@ -65,6 +65,7 @@ setup_requires = [
 
 install_requires = [
     'cryptography>=2.1.4',
+    'email-validator>=1.0.5',
     'Flask-Breadcrumbs>=0.4.0',
     'Flask-KVSession>=0.6.1',
     'Flask-Login>=0.3.0,<0.5.0',
