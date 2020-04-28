@@ -53,6 +53,7 @@ env:
 python:
   - "3.6"
   - "3.7"
+  - "3.8"
 
 before_install:
   - "pip uninstall -y six"
@@ -83,5 +84,4 @@ deploy:
   skip_existing: true
   on:
     tags: true
-    python: "3.6"
-    condition: $REQUIREMENTS = release
+  skip_existing: true
