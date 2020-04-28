@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 1.1.4 (released 2020-04-28)
+
+- Fixes issue with the latest WTForms v2.3.x release which now requires an
+  extra library for email validation.
+- Removes Python 2 support.
+
 Version 1.1.3 (released 2020-02-19)
 
 - Replaces Flask-CeleryExt to invenio-celery due to version incompatibilities
