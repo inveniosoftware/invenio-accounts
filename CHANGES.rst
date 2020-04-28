@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 1.1.3 (released 2020-02-12)
+
+- Fixes issue with the latest WTForms v2.3.x release which now requires an
+  extra library for email validation.
+
 Version 1.1.2 (released 2020-02-12)
 
 - Fixes requirements for Flask, Werkzeug and Flask-Login due to
