@@ -29,9 +29,6 @@ tests_require = [
 ]
 
 extras_require = {
-    ':python_version=="2.7"': [
-        'ipaddr>=2.1.11',
-    ],
     'admin': [
         'Flask-Admin>=1.3.0',
     ],

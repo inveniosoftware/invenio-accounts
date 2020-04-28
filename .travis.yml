@@ -54,8 +54,7 @@ env:
   - REQUIREMENTS=devel E2E_WEBDRIVER_BROWSERS="" EXTRAS=all,postgresql SQLALCHEMY_DATABASE_URI="postgresql+psycopg2://postgres@localhost:5432/invenio"
 
 python:
-  - "2.7"
-  - "3.5"
+  - "3.6"
 
 before_install:
   - "travis_retry pip install --upgrade pip setuptools py"
@@ -89,5 +88,4 @@ deploy:
   distributions: "compile_catalog sdist bdist_wheel"
   on:
     tags: true
-    python: "2.7"
-    condition: $REQUIREMENTS = release
+  skip_existing: true
