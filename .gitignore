@@ -61,6 +61,3 @@ target/
 # Vim swapfiles
 .*.sw?
 
-examples/instance/
-examples/static/
-examples/node_modules
