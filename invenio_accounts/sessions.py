@@ -156,12 +156,12 @@ def default_session_store_factory(app):
     return DictStore()
 
 
-class KVSessionInterfaceWithAnonymousSessions(KVSessionInterface):
+class KVSessionInterfaceStoreAuthenticated(KVSessionInterface):
     """Session interface to avoid storing anonymous sessions."""
 
     def store_session(self, session):
         """Store session only when user is authenticated."""
         if current_user.is_authenticated:
-            super(KVSessionInterfaceWithAnonymousSessions, self).store_session(
+            super(KVSessionInterfaceStoreAuthenticated, self).store_session(
                 session
             )
