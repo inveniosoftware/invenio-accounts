@@ -8,6 +8,13 @@
 Changes
 =======
 
+Version 1.2.2 (released 2020-05-13)
+
+- Refreshes the csrf token on login and logout.
+- Removes the example app.
+- Migrate from `Flask-KVSession` to `Flask-KVSession-Invenio`, fork of
+  the former.
+
 Version 1.2.1 (released 2020-04-28)
 
 - Fixes issue with the latest WTForms v2.3.x release which now requires an
