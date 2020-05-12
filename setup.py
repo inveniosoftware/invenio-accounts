@@ -83,9 +83,6 @@ install_requires = [
     'pyjwt>=1.5.0',
     'redis>=2.10.5',
     'simplekv>=0.11.2',
-    # Not using 'ipaddress' extras for SQLALchemy-Utils in favor of
-    # direct 'ipaddr' version marker (issues with Python3 builds on Travis).
-    'SQLAlchemy-Utils>=0.31.0',
     'ua-parser>=0.7.3'
 ]
 
