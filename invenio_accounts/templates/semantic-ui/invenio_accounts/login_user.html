@@ -1,0 +1,54 @@
+{# -*- coding: utf-8 -*-
+
+  This file is part of Invenio.
+  Copyright (C) 2017-2018 CERN.
+
+  Invenio is free software; you can redistribute it and/or modify it
+  under the terms of the MIT License; see LICENSE file for more details.
+#}
+{%- extends "invenio_theme/page_cover.html" %}
+{% from "invenio_accounts/_macros.html" import render_field, form_errors %}
+
+{% block page_body %}
+<div class="ui stacked padded segments big form">
+  <div class="ui segment">
+
+    {%- block form_header %}
+    <h3 class="ui header">{{_('Log in to account') }}</h3>
+    {%- endblock form_header %}
+
+    {%- block form_outer %}
+      {%- with form = login_user_form %}
+      <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
+        {{ form.hidden_tag() }}
+        {{ form_errors(form) }}
+        {{ render_field(form.email, icon="user icon", autofocus=True, errormsg=False) }}
+        {{ render_field(form.password, icon="lock icon", errormsg=False) }}
+        <button type="submit" class="ui fluid large submit primary button">
+          <i class="ui sign-in icon"></i>{{_('Log In')}}
+        </button>
+      </form>
+      {%- endwith %}
+    {%- endblock form_outer %}
+
+  </div>
+
+  {%- block registerable %}
+    {%- if security.registerable %}
+    <div class="ui secondary segment">
+      <h4>
+        {% trans sitename=config.ACCOUNTS_SITENAME %}New to {{ sitename }}?{%
+        endtrans %}
+        <a href="{{url_for('security.register')}}">{{_('Sign Up')}}</a>
+      </h4>
+    </div>
+    {%- endif %}
+  {%- endblock registerable %}
+</div>
+
+{%- block recoverable %}
+  {%- if security.recoverable %}
+  <a class="ui inverted header tiny" href="{{url_for('security.forgot_password')}}">{{_('Forgot password?')}}</a>
+  {%- endif %}
+{%- endblock recoverable %}
+{% endblock page_body %}
