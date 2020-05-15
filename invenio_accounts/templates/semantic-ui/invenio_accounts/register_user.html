@@ -11,42 +11,46 @@
 
 {% block page_body %}
 
-<div class="ui stacked padded segments big form">
-  <div class="ui segment">
+  <div class="ui stacked padded segments big form">
+    <div class="ui segment padded relaxed">
+      <div class="divider hidden"></div>
 
-    {%- block form_header %}
-    <h3 class="ui header">
-      {% trans sitename=config.ACCOUNTS_SITENAME %}Sign up for a {{ sitename }} account!{% endtrans %}
-    </h3>
-    {%- endblock form_header %}
+      {%- block form_header %}
+        <h3 class="ui header">
+          {% trans sitename=config.ACCOUNTS_SITENAME %}Sign up for a
+            {{ sitename }} account!{% endtrans %}
+        </h3>
+      {%- endblock form_header %}
 
-    {%- with form = register_user_form %}
-    <form action="{{ url_for_security('register') }}" method="POST" name="register_user_form">
-      {{ form_errors(form) }}
-      {{ form.hidden_tag() }}
-      {%- block registration_form_fields scoped %}
-        {{ render_field(form.email, icon="user icon", autofocus=True, errormsg=False) }}
-        {{ render_field(form.password, icon="lock icon", errormsg=False) }}
-        {%- if form.password_confirm %}
-          {{ render_field(form.password_confirm, icon="lock icon", errormsg=False) }}
-        {%- endif %}
-      {%- endblock registration_form_fields %}
+      {%- with form = register_user_form %}
+        <form action="{{ url_for_security('register') }}" method="POST"
+              name="register_user_form">
+          {{ form_errors(form) }}
+          {{ form.hidden_tag() }}
+          {%- block registration_form_fields scoped %}
+            {{ render_field(form.email, icon="user icon", autofocus=True, errormsg=False) }}
+            {{ render_field(form.password, icon="lock icon", errormsg=False) }}
+            {%- if form.password_confirm %}
+              {{ render_field(form.password_confirm, icon="lock icon", errormsg=False) }}
+            {%- endif %}
+          {%- endblock registration_form_fields %}
 
-      {%- if form.recaptcha %}
-        <div class="grouped fields">{{ form.recaptcha() }}</div>
-      {%- endif %}
+          {%- if form.recaptcha %}
+            <div class="grouped fields">{{ form.recaptcha() }}</div>
+          {%- endif %}
 
-      <button type="submit" class="ui fluid large positive submit button">
-        <i class="ui edit icon"></i>{{ _('Sign Up') }}
-      </button>
-    </form>
-    {%- endwith %}
+          <button type="submit" class="ui fluid large orange submit button">
+            <i class="ui edit icon"></i>{{ _('Sign Up') }}
+          </button>
+        </form>
+      {%- endwith %}
+      <div class="divider hidden"></div>
+    </div>
+
+    <div class="ui secondary segment padded">
+      {{ _('Already have an account?') }}
+      <a href="{{ url_for_security('login') }}">{{ _('Log In') }}</a>
+    </div>
   </div>
-
-  <div class="ui secondary segment">
-    {{ _('Already have an account?') }}
-    <a href="{{ url_for_security('login') }}">{{ _('Log In') }}</a>
-  </div>
-</div>
 
 {% endblock page_body %}
