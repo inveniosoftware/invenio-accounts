@@ -8,12 +8,17 @@
 Changes
 =======
 
-Version 1.2.2 (released 2020-05-13)
+Version 1.3.0 (released 2020-05-15)
 
-- Refreshes the csrf token on login and logout.
+- Refreshes the CSRF token on login and logout.
 - Removes the example app.
 - Migrate from `Flask-KVSession` to `Flask-KVSession-Invenio`, fork of
   the former.
+
+Version 1.2.2 (released 2020-05-13)
+
+*This release was removed from PyPI on 2020-05-15 due to issues with the
+release.*
 
 Version 1.2.1 (released 2020-04-28)
 
