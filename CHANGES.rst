@@ -8,13 +8,9 @@
 Changes
 =======
 
-Version 1.4.0a2 (released 2020-05-15)
+Version 1.4.0a3 (released 2020-05-29)
 
-- styling fixes
-
-Version 1.4.0a1 (released 2020-05-15)
-
-- Integrates Semantic-UI templates and assets
+- Integrates Semantic-UI templates and assets.
 
 Version 1.3.0 (released 2020-05-15)
 
