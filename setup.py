@@ -33,7 +33,7 @@ extras_require = {
         'Flask-Admin>=1.3.0',
     ],
     'docs': [
-        'Sphinx>=1.4.2,<1.6',
+        'Sphinx>=2.4.0,<3',
     ],
     'mysql': [
         'invenio-db[versioning,mysql]>=1.0.0',

@@ -17,8 +17,7 @@
 
       {%- block form_header %}
         <h3 class="ui header">
-          {% trans sitename=config.ACCOUNTS_SITENAME %}Sign up for a
-            {{ sitename }} account!{% endtrans %}
+          {% trans sitename=config.ACCOUNTS_SITENAME %}Sign up for an {{ sitename }} account!{% endtrans %}
         </h3>
       {%- endblock form_header %}
 
@@ -39,8 +38,8 @@
             <div class="grouped fields">{{ form.recaptcha() }}</div>
           {%- endif %}
 
-          <button type="submit" class="ui fluid large orange submit button">
-            <i class="ui edit icon"></i>{{ _('Sign Up') }}
+          <button type="submit" class="ui fluid large signup submit button">
+            <i class="ui edit outline icon"></i>{{ _('Sign Up') }}
           </button>
         </form>
       {%- endwith %}

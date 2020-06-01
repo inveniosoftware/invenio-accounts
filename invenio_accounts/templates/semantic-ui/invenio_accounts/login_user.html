@@ -37,12 +37,9 @@
 
     {%- block registerable %}
       {%- if security.registerable %}
-        <div class="ui secondary segment">
-          <h4>
-            {% trans sitename=config.ACCOUNTS_SITENAME %}New to {{ sitename }}
-              ?{% endtrans %}
+        <div class="ui primary segment padded">
+            {% trans sitename=config.ACCOUNTS_SITENAME %}New to {{ sitename }}?{% endtrans %}
             <a href="{{ url_for('security.register') }}">{{ _('Sign Up') }}</a>
-          </h4>
         </div>
       {%- endif %}
     {%- endblock registerable %}
