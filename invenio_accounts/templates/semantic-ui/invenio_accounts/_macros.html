@@ -14,7 +14,7 @@
       {%- if icon %}
       <i class="{{icon}}" aria-hidden="true" ></i>
       {%- endif%}
-      {{field(class_="form-control", placeholder=_(field.label.text | string), **extras)}}
+      {{field(class_="", placeholder=_(field.label.text | string), **extras)}}
     </div>
     {%- if field.errors and errormsg %} -->
       <div class="ui pointing red basic label">
