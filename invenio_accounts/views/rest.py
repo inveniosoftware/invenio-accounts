@@ -201,8 +201,7 @@ class LoginView(MethodView, UserViewMixin):
 
     post_args = {
         'email': fields.Email(required=True, validate=[user_exists]),
-        'password': fields.String(
-            required=True, validate=[validate.Length(min=6, max=128)])
+        'password': fields.String(required=True)
     }
 
     def success_response(self, user):
