@@ -91,9 +91,9 @@ def test_login_view(api):
 
             # Invalid fields
             res = client.post(url, data=dict(
-                email='invalid-email', password='short'))
+                email='invalid-email', password=None))
             assert_error_resp(res, (
-                ('password', 'length'),
+                ('password', 'required field'),
                 ('email', 'not a valid email'),
             ))
 
