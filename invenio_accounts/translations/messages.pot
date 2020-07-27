@@ -1,9 +1,8 @@
 # Translations template for invenio-accounts.
-# Copyright (C) 2020 CERN
+# Copyright (C) 2017-2020 CERN
 # Copyright (C) 2020 TUBITAK
 # This file is distributed under the same license as the invenio-accounts
 # project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
 #
 #, fuzzy
 msgid ""
