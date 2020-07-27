@@ -3,7 +3,6 @@
 # Copyright (C) 2020 TUBITAK
 # This file is distributed under the same license as the invenio-accounts
 # project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
 # 
 # Translators:
 # Berat Aldemir <berataldemir@gmail.com>, 2020
