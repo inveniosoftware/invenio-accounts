@@ -8,8 +8,10 @@
 Changes
 =======
 
-Version 1.4.0a5 (released 2020-06-22)
+Version 1.4.0a6 (released 2020-07-28)
 
+- Added Turkish translation
+- Marked strings for translation
 - Includes Semantic-UI stylings fixes.
 - Integrates Semantic-UI templates and assets.
 
