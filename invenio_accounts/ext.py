@@ -182,8 +182,7 @@ class InvenioAccounts(object):
 
         # Register context processor
         if app.config['ACCOUNTS_JWT_DOM_TOKEN']:
-            from invenio_accounts.context_processors.jwt import \
-                jwt_proccessor
+            from invenio_accounts.context_processors.jwt import jwt_proccessor
             app.context_processor(jwt_proccessor)
 
         # Register signal receiver
@@ -247,8 +246,8 @@ class InvenioAccounts(object):
         user_logged_in.connect(csrf_token_reset, app)
         user_logged_out.connect(logout_listener, app)
         user_logged_out.connect(csrf_token_reset, app)
+        from .views.security import revoke_session, security
         from .views.settings import blueprint
-        from .views.security import security, revoke_session
         blueprint.route('/security/', methods=['GET'])(security)
         blueprint.route('/sessions/revoke/', methods=['POST'])(revoke_session)
 

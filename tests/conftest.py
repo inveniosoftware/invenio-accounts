@@ -151,6 +151,7 @@ def app_with_redis_url(request):
 def app_with_flexible_registration(request):
     """Flask application fixture with Invenio Accounts."""
     from webargs import fields
+
     from invenio_accounts.views.rest import RegisterView, use_kwargs
 
     class MyRegisterView(RegisterView):
