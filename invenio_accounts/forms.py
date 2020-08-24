@@ -10,7 +10,9 @@
 
 Currently supported: recaptcha
 """
+from flask import request
 from flask_babelex import gettext as _
+from flask_security.forms import NextFormMixin
 from flask_wtf import FlaskForm, Recaptcha, RecaptchaField
 from wtforms import FormField, HiddenField
 
@@ -30,14 +32,22 @@ class RevokeForm(FlaskForm):
 
 def confirm_register_form_factory(Form, app):
     """Return confirmation for extended registration form."""
+    class ConfirmRegisterForm(Form, NextFormMixin):
+
+        def __init__(self, *args, **kwargs):
+            """Adds next parameter from URL."""
+            super(ConfirmRegisterForm, self).__init__(*args, **kwargs)
+            if not self.next.data:
+                self.next.data = request.args.get('next', '')
+
     if app.config.get('RECAPTCHA_PUBLIC_KEY') and \
             app.config.get('RECAPTCHA_PRIVATE_KEY'):
-        class ConfirmRegisterForm(Form):
+        class ConfirmRegisterWithCaptchaForm(ConfirmRegisterForm):
             recaptcha = FormField(RegistrationFormRecaptcha, separator='.')
 
-        return ConfirmRegisterForm
+        return ConfirmRegisterWithCaptchaForm
 
-    return Form
+    return ConfirmRegisterForm
 
 
 def register_form_factory(Form, app):

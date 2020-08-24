@@ -39,7 +39,7 @@
       {%- if security.registerable %}
         <div class="ui primary segment padded">
             {% trans sitename=config.ACCOUNTS_SITENAME %}New to {{ sitename }}?{% endtrans %}
-            <a href="{{ url_for('security.register') }}">{{ _('Sign Up') }}</a>
+            <a href="{{ url_for_security('register', next=request.args.get('next')) }}">{{ _('Sign Up') }}</a>
         </div>
       {%- endif %}
     {%- endblock registerable %}
@@ -48,7 +48,7 @@
   {%- block recoverable %}
     {%- if security.recoverable %}
       <a class="ui inverted header tiny"
-         href="{{ url_for('security.forgot_password') }}">{{ _('Forgot password?') }}</a>
+         href="{{ url_for_security('forgot_password') }}">{{ _('Forgot password?') }}</a>
     {%- endif %}
   {%- endblock recoverable %}
 {% endblock page_body %}

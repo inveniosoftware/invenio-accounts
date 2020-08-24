@@ -48,7 +48,7 @@
 
     <div class="ui secondary segment padded">
       {{ _('Already have an account?') }}
-      <a href="{{ url_for_security('login') }}">{{ _('Log In') }}</a>
+      <a href="{{ url_for_security('login', next=request.args.get('next')) }}">{{ _('Log In') }}</a>
     </div>
   </div>
 
