@@ -8,7 +8,7 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 
 pydocstyle invenio_accounts tests docs && \
-isort -rc -c -df && \
+isort invenio_accounts tests --check-only --diff && \
 check-manifest --ignore ".travis-*" && \
 sphinx-build -qnNW docs docs/_build/html && \
 python setup.py test && \
