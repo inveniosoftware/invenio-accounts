@@ -23,6 +23,7 @@ from flask_security.recoverable import reset_password_token_status, \
 from flask_security.signals import reset_password_instructions_sent
 from flask_security.utils import config_value, get_message, login_user, \
     logout_user, send_mail, verify_and_update_password
+from flask_security.views import logout
 from invenio_db import db
 from invenio_rest.errors import FieldError, RESTValidationError
 from webargs import ValidationError, fields, validate
@@ -250,7 +251,7 @@ class UserInfoView(MethodView):
 class LogoutView(MethodView):
     """View to logout a user."""
 
-    def logout_user(self):
+    def logout_user_without_post_redirect(self):
         """Perform any logout actions."""
         if current_user.is_authenticated:
             logout_user()
@@ -261,8 +262,12 @@ class LogoutView(MethodView):
 
     def post(self):
         """Logout a user."""
-        self.logout_user()
+        self.logout_user_without_post_redirect()
         return self.success_response()
+
+    def get(self):
+        """Logout user."""
+        return logout()
 
 
 class RegisterView(MethodView):
