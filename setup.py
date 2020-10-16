@@ -21,10 +21,7 @@ tests_require = [
     'isort>=4.3.0',
     'mock>=2.0.0',
     'pydocstyle>=1.0.0',
-    'pytest-cov>=1.8.0',
-    'pytest-flask>=0.10.0,<1.0.0',
-    'pytest-pep8>=1.0.6',
-    'pytest>=4.0.0,<5.0.0',
+    'pytest-invenio>=1.4.0',
     'selenium>=3.0.1',
 ]
 
@@ -36,7 +33,7 @@ extras_require = {
         'Flask-Admin>=1.3.0',
     ],
     'docs': [
-        'Sphinx>=1.4.2,<1.6',
+        'Sphinx>=3',
     ],
     'mysql': [
         'invenio-db[versioning,mysql]>=1.0.0',
@@ -59,7 +56,7 @@ for name, reqs in extras_require.items():
     extras_require['all'].extend(reqs)
 
 setup_requires = [
-    'Babel>=1.3',
+    'Babel>=2.8',
     'pytest-runner>=2.6.2',
 ]
 
