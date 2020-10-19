@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 1.3.1 (released 2020-10-19)
+
+- adds the GET method for logout view
+- updates pytest-invenio to newest version
+
+
 Version 1.3.0 (released 2020-05-15)
 
 - Refreshes the CSRF token on login and logout.
