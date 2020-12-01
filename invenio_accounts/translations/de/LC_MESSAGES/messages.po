@@ -120,7 +120,7 @@ msgstr ""
 #: invenio_accounts/templates/invenio_accounts/login_user.html:43
 #: invenio_accounts/templates/invenio_accounts/register_user.html:54
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:54
-msgid "Log In"
+msgid "Sign In"
 msgstr "Anmelden"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:53
@@ -136,7 +136,7 @@ msgid "Sign Up"
 msgstr "Registrieren"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:34
-msgid "Log in to account"
+msgid "Sign in to account"
 msgstr "Anmeldung bei Ihrem Account"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:51
