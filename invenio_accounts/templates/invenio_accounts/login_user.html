@@ -15,7 +15,7 @@
   <div class="panel panel-default">
     <div class="panel-body">
       {%- block form_header %}
-      <h3 class="text-center panel-free-title">{{_('Log in to account') }}</h3>
+      <h3 class="text-center panel-free-title">{{_('Sign in to account') }}</h3>
       {%- endblock form_header %}
       {%- block form_outer %}
       {%- with form = login_user_form %}
@@ -24,7 +24,7 @@
       {{form_errors(form)}}
       {{ render_field(form.email, icon="fa fa-user", autofocus=True, errormsg=False) }}
       {{ render_field(form.password, icon="fa fa-lock", errormsg=False) }}
-      <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="fa fa-sign-in"></i> {{_('Log In')}}</button>
+      <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="fa fa-sign-in"></i> {{_('Sign In')}}</button>
       </form>
       {%- endwith %}
       {%- endblock form_outer %}

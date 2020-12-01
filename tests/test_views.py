@@ -32,7 +32,7 @@ def test_no_log_in_message_for_logged_in_users(app):
         forgot_password_url = url_for_security('forgot_password')
 
     with app.test_client() as client:
-        log_in_message = _('Log In').encode('utf-8')
+        log_in_message = _('Sign In').encode('utf-8')
         sign_up_message = _('Sign Up').encode('utf-8')
 
         resp = client.get(forgot_password_url)

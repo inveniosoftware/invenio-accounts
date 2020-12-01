@@ -118,7 +118,7 @@ msgstr ""
 #: invenio_accounts/templates/invenio_accounts/login_user.html:43
 #: invenio_accounts/templates/invenio_accounts/register_user.html:54
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:54
-msgid "Log In"
+msgid "Sign In"
 msgstr "Přihlásit se"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:53
@@ -134,7 +134,7 @@ msgid "Sign Up"
 msgstr "Registrace"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:34
-msgid "Log in to account"
+msgid "Sign in to account"
 msgstr "Přihlášení k účtu"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:51

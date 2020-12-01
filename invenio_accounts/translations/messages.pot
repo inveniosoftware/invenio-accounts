@@ -119,7 +119,7 @@ msgstr ""
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:23
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:37
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:24
-msgid "Log In"
+msgid "Sign In"
 msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:28
@@ -142,7 +142,7 @@ msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:16
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:15
-msgid "Log in to account"
+msgid "Sign in to account"
 msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:26

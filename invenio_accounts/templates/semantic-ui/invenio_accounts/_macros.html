@@ -16,7 +16,7 @@
       {%- endif%}
       {{field(class_="", placeholder=_(field.label.text | string), **extras)}}
     </div>
-    {%- if field.errors and errormsg %} -->
+    {%- if field.errors and errormsg %}
       <div class="ui pointing red basic label">
         {%- for error in field.errors %}
         <p>{{error}}</p>
