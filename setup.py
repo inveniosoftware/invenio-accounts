@@ -16,30 +16,24 @@ readme = open('README.rst').read()
 history = open('CHANGES.rst').read()
 
 tests_require = [
-    'check-manifest>=0.25',
-    'coverage>=4.0',
-    'isort>=4.3.0',
-    'mock>=2.0.0',
-    'pydocstyle>=1.0.0',
     'pytest-invenio>=1.4.0',
-    'selenium>=3.0.1',
 ]
 
 extras_require = {
     'admin': [
-        'Flask-Admin>=1.3.0',
+        'invenio-admin>=1.2.1',
     ],
     'docs': [
         'Sphinx>=3',
     ],
     'mysql': [
-        'invenio-db[versioning,mysql]>=1.0.0',
+        'invenio-db[versioning,mysql]>=1.0.8',
     ],
     'postgresql': [
-        'invenio-db[versioning,postgresql]>=1.0.0',
+        'invenio-db[versioning,postgresql]>=1.0.8',
     ],
     'sqlite': [
-        'invenio-db[versioning]>=1.0.0',
+        'invenio-db[versioning]>=1.0.8',
     ],
     'tests': tests_require,
 }
@@ -54,11 +48,10 @@ for name, reqs in extras_require.items():
 
 setup_requires = [
     'Babel>=2.8',
-    'pytest-runner>=2.6.2',
 ]
 
 install_requires = [
-    'cryptography>=2.1.4',
+    'cryptography>=3.0.0',
     'Flask-Breadcrumbs>=0.4.0',
     'Flask-KVSession-Invenio>=0.6.3',
     'Flask-Login>=0.3.0,<0.5.0',
@@ -68,7 +61,7 @@ install_requires = [
     'Flask-WTF>=0.14.3',
     'email-validator>=1.0.5',
     'future>=0.16.0',
-    'invenio-base>=1.2.2',
+    'invenio-base>=1.2.3',
     'invenio-i18n>=1.2.0',
     'invenio-celery>=1.1.2',
     'invenio-rest>=1.2.1',

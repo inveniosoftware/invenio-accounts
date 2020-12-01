@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
           python-version: [3.6, 3.7, 3.8]
-          python-requirements: [min, pypi, dev]
+          python-requirements: [min, pypi]
           db-service: [postgresql9, postgresql11, mysql5, mysql8]
           exclude:
           - python-version: 3.8
@@ -57,10 +57,6 @@ jobs:
             MYSQL_VERSION: MYSQL_8_LATEST
             SQLALCHEMY_DATABASE_URI: "mysql+pymysql://invenio:invenio@localhost:3306/invenio"
             EXTRAS: "all,mysql"
-
-          - python-requirements: dev
-            experimental: true
-
     env:
       SQLALCHEMY_DATABASE_URI: ${{matrix.SQLALCHEMY_DATABASE_URI}}
       POSTGRESQL_VERSION: ${{matrix.POSTGRESQL_VERSION}}
@@ -77,16 +73,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Generate dependencies
-        if: ${{ matrix.python-requirements != 'dev' }}
         run: |
           python -m pip install --upgrade pip setuptools py wheel requirements-builder
           requirements-builder -e ${{ matrix.EXTRAS }} --level=${{ matrix.python-requirements }} setup.py > .${{ matrix.python-requirements }}-${{ matrix.python-version }}-requirements.txt
-
-      - name: Generate dependencies devel
-        if: ${{ matrix.python-requirements == 'dev' }}
-        run: |
-          python -m pip install --upgrade pip setuptools py wheel requirements-builder
-          requirements-builder -e ${{ matrix.EXTRAS }} --level=${{ matrix.python-requirements }} --req requirements-devel.txt setup.py > .${{ matrix.python-requirements }}-${{ matrix.python-version }}-requirements.txt
 
       - name: Cache pip
         uses: actions/cache@v2
@@ -103,7 +92,5 @@ jobs:
           docker-compose --version
 
       - name: Run tests
-        # You must change the ignore command for the manifest check.
-        # Remove `.travis-*` and add `.*-requirements.txt`
         run: |
           ./run-tests.sh

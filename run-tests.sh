@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
@@ -16,11 +16,16 @@ set -o errexit
 # Quit on unbound symbols
 set -o nounset
 
+# Always bring down docker services
+function cleanup {
+    docker-services-cli down
+}
+trap cleanup EXIT
+
 python -m check_manifest --ignore ".*-requirements.txt"
 python -m sphinx.cmd.build -qnNW docs docs/_build/html
-docker-services-cli up redis ${DB}
+docker-services-cli up redis ${DB:-}
 python -m pytest
 python -m sphinx.cmd.build -qnNW -b doctest docs docs/_build/doctest
 tests_exit_code=$?
-docker-services-cli down
 exit "$tests_exit_code"

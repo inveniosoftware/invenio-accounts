@@ -12,8 +12,8 @@ from __future__ import absolute_import, print_function
 
 import datetime
 import json
+from unittest import mock
 
-import mock
 from flask import url_for
 from flask_security import current_user
 from invenio_db import db
