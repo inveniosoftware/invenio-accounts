@@ -9,8 +9,8 @@
 """Test account views."""
 
 import base64
+from unittest import mock
 
-import mock
 from flask import url_for
 from flask_babelex import gettext as _
 from flask_login import COOKIE_NAME, LoginManager
