@@ -38,7 +38,7 @@
           {%- endif %}
 
           <button type="submit" class="ui fluid large signup submit button">
-            <i class="ui edit outline icon"></i>{{ _('Sign Up') }}
+            <i class="ui edit outline icon"></i>{{ _('Sign up') }}
           </button>
         </form>
       {%- endwith %}
@@ -47,7 +47,7 @@
 
     <div class="ui primary segment padded text-muted">
       {{ _('Already have an account?') }}
-      <a href="{{ url_for_security('login', next=request.args.get('next')) }}">{{ _('Sign In') }}</a>
+      <a href="{{ url_for_security('login', next=request.args.get('next')) }}">{{ _('Log in') }}</a>
     </div>
   </div>
 
