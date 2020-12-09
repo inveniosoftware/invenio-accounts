@@ -8,15 +8,13 @@
 Changes
 =======
 
-Version 1.4.0a9 (released 2020-12-07)
+Version 1.4.0 (released 2020-12-09)
 
-- Added Turkish translation
-- Fixes ``next`` parameter being used in sign-up form.
+- Major: adds new Semantic UI theme.
+- Adds Turkish translations.
+- Fixes ``next`` parameter being used in the sign-up form.
 - Fixes issue with translation files causing translations not to be picked up.
 - Fixes wording from sign in to log in.
-- Includes Semantic-UI stylings fixes.
-- Integrates Semantic-UI templates and assets.
-- Marked strings for translation
 - Removes password length validation during login.
 
 Version 1.3.0 (released 2020-05-15)
