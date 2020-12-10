@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.4.1 (released 2020-12-10)
+
+- Fixes styling of forgot password form in semantic ui theme.
+
 Version 1.4.0 (released 2020-12-09)
 
 - Major: adds new Semantic UI theme.
