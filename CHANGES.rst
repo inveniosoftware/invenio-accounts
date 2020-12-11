@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.4.2 (released 2020-12-11)
+
+- Fixes logout from security view.
+
 Version 1.4.1 (released 2020-12-10)
 
 - Fixes styling of forgot password form in semantic ui theme.
