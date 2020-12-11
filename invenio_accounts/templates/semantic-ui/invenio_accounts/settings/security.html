@@ -44,7 +44,10 @@
         </small>
       </div>
       <div>
-        <form action="{{url_for('invenio_accounts.revoke_session')}}" method="POST">
+        <form
+          action="{{url_for('invenio_accounts.revoke_session') if not is_current_sid else url_for_security('logout')}}"
+          method="{{'POST' if not is_current_sid else 'GET'}}"
+        >
           {{ form.csrf_token }}
           {{ form.sid_s }}
           <button type="submit" class="ui right floated basic secondary button" title="{{remove_action}}">
