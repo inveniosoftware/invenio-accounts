@@ -65,6 +65,7 @@ install_requires = [
     'invenio-i18n>=1.2.0',
     'invenio-celery>=1.1.2',
     'invenio-rest>=1.2.1',
+    'invenio-theme>=1.3.4',
     'maxminddb-geolite2>=2017.404',
     'passlib>=1.7.1',
     'pyjwt>=1.5.0',

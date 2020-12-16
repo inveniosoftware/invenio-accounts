@@ -12,7 +12,9 @@ from __future__ import absolute_import, print_function
 
 from flask import Blueprint, current_app
 from flask_babelex import lazy_gettext as _
+from flask_breadcrumbs import register_breadcrumb
 from flask_menu import current_menu
+from invenio_theme.proxies import current_theme_icons
 
 blueprint = Blueprint(
     'invenio_accounts',
@@ -48,34 +50,37 @@ def post_ext_init(state):
 @blueprint.before_app_first_request
 def init_menu():
     """Initialize menu before first request."""
-    # Register breadcrumb root
+    # Register root breadcrumbs
     item = current_menu.submenu('breadcrumbs.settings')
-    item.register('', _('Account'))
-    item = current_menu.submenu('breadcrumbs.{0}'.format(
-        current_app.config['SECURITY_BLUEPRINT_NAME']))
+    item.register('invenio_userprofiles.profile', _('Account'))
 
+    ### Register menu ###
+    # - Change password
     if current_app.config.get('SECURITY_CHANGEABLE', True):
-        item.register('', _('Change password'))
+        view_name = '{}.change_password'.format(
+            current_app.config['SECURITY_BLUEPRINT_NAME'])
 
-        # Register settings menu
         item = current_menu.submenu('settings.change_password')
         item.register(
-            "{0}.change_password".format(
-                current_app.config['SECURITY_BLUEPRINT_NAME']),
-            # NOTE: Menu item text (icon replaced by a user icon).
+            view_name,
+            # NOTE: Menu item text (icon replaced by a key icon).
             _('%(icon)s Change password',
-                icon='<i class="fa fa-key fa-fw"></i>'),
+                icon=f'<i class="{current_theme_icons.key}"></i>'),
             order=1)
 
-        # Register breadcrumb
-        item = current_menu.submenu('breadcrumbs.{0}.change_password'.format(
-            current_app.config['SECURITY_BLUEPRINT_NAME']))
-        item.register(
-            "{0}.change_password".format(
-                current_app.config['SECURITY_BLUEPRINT_NAME']),
-            _("Change password"),
-            order=0,
+        # Breadcrumb for change password
+        #
+        # The breadcrumbs works by decorating the view functions with a
+        # __breadcrumb__ field. Since the change password view is defined in
+        # Flask-Security, we need to this hack to in order to decorate the view
+        # function with the __breadcrumb__ field.
+        decorator = register_breadcrumb(
+            current_app,
+            'breadcrumbs.settings.change_password',
+            _('Change password')
         )
+        current_app.view_functions[view_name] = decorator(
+            current_app.view_functions[view_name])
 
 
 @blueprint.before_app_first_request

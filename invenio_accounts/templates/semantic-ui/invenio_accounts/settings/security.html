@@ -9,7 +9,7 @@
 {%- extends config.ACCOUNTS_SETTINGS_TEMPLATE %}
 
 {% set panel_title = _('Sessions') %}
-{% set panel_icon = 'shield alternate icon' %}
+{% set panel_icon = current_theme_icons.shield %}
 {% from "invenio_accounts/_macros.html" import render_field, form_errors %}
 
 {% block settings_form %}
@@ -50,8 +50,8 @@
         >
           {{ form.csrf_token }}
           {{ form.sid_s }}
-          <button type="submit" class="ui right floated basic secondary button" title="{{remove_action}}">
-            {{_("Revoke") if not is_current_sid else _('Logout')}}
+          <button type="submit" class="ui right floated button" title="{{remove_action}}">
+            <i class="{{'times' if not is_current_sid else 'sign-out'}} icon"></i> {{_("Revoke") if not is_current_sid else _('Logout')}}
           </button>
         </form>
       </div>

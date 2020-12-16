@@ -10,4 +10,4 @@
 
 from .settings import blueprint
 
-__all__ = ('blueprint')
+__all__ = ('blueprint', )
