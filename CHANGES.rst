@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.4.3 (released 2020-12-17)
+
+- Adds theme dependent icons.
+
 Version 1.4.2 (released 2020-12-11)
 
 - Fixes logout from security view.
