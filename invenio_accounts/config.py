@@ -268,3 +268,7 @@ RECAPTCHA_PRIVATE_KEY = None
 
 ACCOUNTS_USERINFO_HEADERS = False
 """If True, add X-Session-ID and X-User-ID to the HTTP response."""
+
+SESSION_INTERFACE_FACTORY = \
+    'invenio_accounts.sessions:KVSessionInterfaceWithAnonymousSessions'
+"""Set the session interface factory for KVSession"""

@@ -17,6 +17,8 @@ created.
 from __future__ import absolute_import, print_function
 
 from flask import after_this_request, current_app, request, session
+from flask_kvsession import KVSessionInterface
+from flask_login import current_user
 from geolite2 import geolite2
 from invenio_db import db
 from invenio_rest.csrf import reset_token
@@ -162,3 +164,14 @@ def default_session_store_factory(app):
             accounts_session_redis_url))
     from simplekv.memory import DictStore
     return DictStore()
+
+
+class KVSessionInterfaceWithAnonymousSessions(KVSessionInterface):
+    """Session interface to avoid storing anonymous sessions."""
+
+    def store_session(self, session):
+        """Store session only when user is authenticated."""
+        if current_user.is_authenticated:
+            super(KVSessionInterfaceWithAnonymousSessions, self).store_session(
+                session
+            )
