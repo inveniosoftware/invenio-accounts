@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C)      2021 TU Wien.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -11,6 +12,7 @@
 from __future__ import absolute_import, print_function
 
 import os
+from warnings import warn
 
 import pkg_resources
 import six
@@ -115,6 +117,23 @@ class InvenioAccounts(object):
         # append is used here instead of decorator to enforce the order
         state.principal.identity_loaders.append(AnonymousIdentity)
 
+    def check_configuration_consistency(self, app):
+        """Check if the config is consistent and issue a warning if not."""
+        # Warn if inconsistent configuration is detected
+        sec = app.extensions["security"]
+        local_login = app.config.get("ACCOUNTS_LOCAL_LOGIN_ENABLED", True)
+        local_account_editable = (
+            sec.registerable or sec.changeable or sec.recoverable
+        )
+
+        if local_account_editable and not local_login:
+            warning_message = (
+                "ACCOUNTS_LOCAL_LOGIN_ENABLED is False, while at least one "
+                "of SECURITY_REGISTERABLE, SECURITY_RECOVERABLE and "
+                "SECURITY_CHANGEABLE is True"
+            )
+            warn(warning_message, Warning, stacklevel=2)
+
     def init_app(self, app, sessionstore=None, register_blueprint=True):
         """Flask application initialization.
 
@@ -131,6 +150,10 @@ class InvenioAccounts(object):
         #. Initialize the extension, the forms to register users and
            confirms their emails, the CLI and, if ``ACCOUNTS_USE_CELERY`` is
            ``True``, register a celery task to send emails.
+
+        #. Override Flask-Security's default login view function.
+
+        #. Warn if inconsistent configuration is detected
 
         :param app: The Flask application.
         :param sessionstore: store for sessions. Passed to
@@ -159,6 +182,13 @@ class InvenioAccounts(object):
 
         state = self.security.init_app(app, datastore=self.datastore,
                                        register_blueprint=register_blueprint)
+
+        # Override Flask-Security's default login view function
+        new_login_view = obj_or_import_string(
+            app.config.get("ACCOUNTS_LOGIN_VIEW_FUNCTION")
+        )
+        if new_login_view is not None:
+            app.view_functions["security.login"] = new_login_view
 
         self.register_anonymous_identity_loader(state)
 
@@ -196,6 +226,8 @@ class InvenioAccounts(object):
 
         self.kvsession_extension = KVSessionExtension(
             session_kvstore, app)
+
+        self.check_configuration_consistency(app)
 
         app.extensions['invenio-accounts'] = self
 

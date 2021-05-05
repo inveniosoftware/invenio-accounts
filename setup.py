@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C)      2021 TU Wien.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -122,6 +123,9 @@ setup(
         ],
         'invenio_celery.tasks': [
             'invenio_accounts = invenio_accounts.tasks',
+        ],
+        'invenio_config.module': [
+            'invenio_accounts = invenio_accounts.config',
         ],
         'invenio_db.alembic': [
             'invenio_accounts = invenio_accounts:alembic',

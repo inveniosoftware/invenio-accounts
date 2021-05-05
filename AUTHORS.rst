@@ -33,3 +33,4 @@ Contributors
 - Sami Hiltunen
 - Sebastian Witowski
 - Tibor Simko
+- Maximilian Moser
