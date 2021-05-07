@@ -64,7 +64,12 @@ def jwt_create_token(user_id=None, additional_data=None):
         token_data,
         current_app.config['ACCOUNTS_JWT_SECRET_KEY'],
         current_app.config['ACCOUNTS_JWT_ALOGORITHM']
-    ).decode('utf-8')
+    )
+
+    if not isinstance(encoded_token, str):
+        # the token only needs to be decoded if it isn't a string already...
+        encoded_token = encoded_token.decode('utf-8')
+
     return encoded_token
 
 

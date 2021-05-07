@@ -41,8 +41,32 @@ def _app_factory(config=None):
     """Application factory."""
     instance_path = tempfile.mkdtemp()
     app = Flask('testapp', instance_path=instance_path)
+    icons = {
+        'semantic-ui': {
+            'key': 'key icon',
+            'link': 'linkify icon',
+            'shield': 'shield alternate icon',
+            'user': 'user icon',
+            'codepen': 'codepen icon',
+            'cogs': 'cogs icon',
+            '*': '{} icon'
+        },
+        'bootstrap3': {
+            'key': 'fa fa-key fa-fw',
+            'link': 'fa fa-link fa-fw',
+            'shield': 'fa fa-shield fa-fw',
+            'user': 'fa fa-user fa-fw',
+            'codepen': 'fa fa-codepen fa-fw',
+            'cogs': 'fa fa-cogs fa-fw',
+            '*': 'fa fa-{} fa-fw',
+        }
+    }
+
     app.config.update(
         ACCOUNTS_USE_CELERY=False,
+        ACCOUNTS_LOCAL_LOGIN_ENABLED=True,
+        APP_THEME=["semantic-ui"],
+        THEME_ICONS=icons,
         CELERY_ALWAYS_EAGER=True,
         CELERY_CACHE_BACKEND="memory",
         CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
@@ -53,6 +77,9 @@ def _app_factory(config=None):
         SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
         SECURITY_CONFIRM_EMAIL_WITHIN="2 seconds",
         SECURITY_RESET_PASSWORD_WITHIN="2 seconds",
+        SECURITY_CHANGEABLE=True,
+        SECURITY_RECOVERABLE=True,
+        SECURITY_REGISTERABLE=True,
         SQLALCHEMY_DATABASE_URI=os.environ.get(
             'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
         SERVER_NAME='example.com',

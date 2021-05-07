@@ -28,13 +28,13 @@ extras_require = {
         'Sphinx>=3',
     ],
     'mysql': [
-        'invenio-db[versioning,mysql]>=1.0.8',
+        'invenio-db[versioning,mysql]>=1.0.9',
     ],
     'postgresql': [
-        'invenio-db[versioning,postgresql]>=1.0.8',
+        'invenio-db[versioning,postgresql]>=1.0.9',
     ],
     'sqlite': [
-        'invenio-db[versioning]>=1.0.8',
+        'invenio-db[versioning]>=1.0.9',
     ],
     'tests': tests_require,
 }
