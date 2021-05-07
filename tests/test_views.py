@@ -151,6 +151,26 @@ def test_login_from_headers_disabled(app, users):
         assert '<a href="/login/' in res.data.decode('utf-8')
 
 
+def test_disabled_login(app, users):
+    """Test login from headers is disabled."""
+    app.config["ACCOUNTS_LOCAL_LOGIN_ENABLED"] = False
+    email = users[0]['email']
+    password = users[0]['password']
+    _security.login_form = LoginForm
+
+    with app.test_client() as client:
+        url = url_for_security('login')
+        data = {'email': email, 'password': password, 'remember': True}
+
+        res = client.post(
+            url,
+            data=data,
+            environ_base={'REMOTE_ADDR': '127.0.0.1'}
+        )
+
+        assert res.status_code == 404
+
+
 def test_flask_login_disabled_function_exist():
     """Test flask login still has disabled functions."""
     # in case one of them fails, it means that flask-login has changed

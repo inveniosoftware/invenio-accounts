@@ -39,6 +39,7 @@ from invenio_accounts.views.rest import create_blueprint
 
 def _app_factory(config=None):
     """Application factory."""
+    # TODO use the fixtures from pytest-invenio instead
     instance_path = tempfile.mkdtemp()
     app = Flask('testapp', instance_path=instance_path)
     icons = {
