@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2017-2019 CERN.
+# Copyright (C)      2021 TU Wien.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -227,6 +228,9 @@ class LoginView(MethodView, UserViewMixin):
     @use_kwargs(post_args)
     def post(self, **kwargs):
         """Verify and login a user."""
+        if not current_app.config.get("ACCOUNTS_LOCAL_LOGIN_ENABLED"):
+            _abort(get_message("LOCAL_LOGIN_DISABLED")[0])
+
         user = self.get_user(**kwargs)
         self.verify_login(user, **kwargs)
         self.login_user(user)
@@ -294,6 +298,9 @@ class RegisterView(MethodView):
     @use_kwargs(post_args)
     def post(self, **kwargs):
         """Register a user."""
+        if not current_security.registerable:
+            _abort(get_message("REGISTRATION_DISABLED")[0])
+
         user = register_user(**kwargs)
         self.login_user(user)
         return self.success_response(user)
@@ -328,6 +335,9 @@ class ForgotPasswordView(MethodView, UserViewMixin):
     @use_kwargs(post_args)
     def post(self, **kwargs):
         """Send reset password instructions."""
+        if not current_security.recoverable:
+            _abort(get_message("PASSWORD_RECOVERY_DISABLED")[0])
+
         user = self.get_user(**kwargs)
         self.send_reset_password_instructions(user)
         return self.success_response(user)
@@ -364,6 +374,10 @@ class ResetPasswordView(MethodView):
     @use_kwargs(post_args)
     def post(self, **kwargs):
         """Reset user password."""
+        # TODO there doesn't seem to be a `.resettable` or similar?
+        if not current_security.recoverable:
+            _abort(get_message("PASSWORD_RESET_DISABLED")[0])
+
         user = self.get_user(**kwargs)
         after_this_request(_commit)
         update_password(user, kwargs['password'])
@@ -403,6 +417,9 @@ class ChangePasswordView(MethodView):
     @use_kwargs(post_args)
     def post(self, **kwargs):
         """Change user password."""
+        if not current_security.changeable:
+            _abort(get_message("PASSWORD_CHANGE_DISABLED")[0])
+
         self.verify_password(**kwargs)
         self.change_password(**kwargs)
         return self.success_response()

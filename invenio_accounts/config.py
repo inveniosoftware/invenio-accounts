@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2016-2018 CERN.
+# Copyright (C)      2021 TU Wien.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -9,6 +10,8 @@
 """Default configuration for ACCOUNTS."""
 
 from datetime import timedelta
+
+from .views import login
 
 ACCOUNTS = True
 """Tells if the templates should use the accounts module.
@@ -187,6 +190,25 @@ SECURITY_LOGOUT_URL = '/logout/'
 SECURITY_CHANGE_URL = '/account/settings/password/'
 """URL endpoint for password change."""
 
+SECURITY_MSG_LOCAL_LOGIN_DISABLED = ("Local login is disabled.", "error")
+"""The error to be displayed in REST login when local login is disabled."""
+
+SECURITY_MSG_REGISTRATION_DISABLED = ("Registration is disabled.", "error")
+"""The error to be displayed in REST registration when it is disabled."""
+
+SECURITY_MSG_PASSWORD_CHANGE_DISABLED = (
+    "Password change is disabled.", "error"
+)
+"""The error to be displayed in REST password change when it is disabled."""
+
+SECURITY_MSG_PASSWORD_RECOVERY_DISABLED = (
+    "Password recovery is disabled.", "error"
+)
+"""The error to be displayed in REST password recovery when it is disabled."""
+
+SECURITY_MSG_PASSWORD_RESET_DISABLED = ("Password reset is disabled.", "error")
+"""The error to be displayed in REST password reset when it is disabled."""
+
 REMEMBER_COOKIE_DURATION = timedelta(days=90)
 """Remember me cookie life time changed to 90 days instead of 365 days."""
 
@@ -268,3 +290,14 @@ RECAPTCHA_PRIVATE_KEY = None
 
 ACCOUNTS_USERINFO_HEADERS = False
 """If True, add X-Session-ID and X-User-ID to the HTTP response."""
+
+ACCOUNTS_LOGIN_VIEW_FUNCTION = login
+"""The view function to use for the login endpoint.
+
+This can be either an import string, or the view function itself.
+If set to None, the default login view function from Flask-Security will be
+left as is.
+"""
+
+ACCOUNTS_LOCAL_LOGIN_ENABLED = True
+"""Whether or not login with local account credentials should be enabled."""

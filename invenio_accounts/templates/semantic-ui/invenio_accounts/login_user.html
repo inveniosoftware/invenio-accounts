@@ -2,6 +2,7 @@
 
   This file is part of Invenio.
   Copyright (C) 2015-2020 CERN.
+  Copyright (C)      2021 TU Wien.
 
   Invenio is free software; you can redistribute it and/or modify it
   under the terms of the MIT License; see LICENSE file for more details.
@@ -18,17 +19,19 @@
       {%- endblock form_header %}
 
       {%- block form_outer %}
-        {%- with form = login_user_form %}
-          <form action="{{ url_for_security('login') }}" method="POST"
-                name="login_user_form" class="ui big form">
-            {{ form.hidden_tag() }}
-            {{ render_field(form.email, icon="user icon", autofocus=True, errormsg='email' in form.errors) }}
-            {{ render_field(form.password, icon="lock icon", errormsg='password' in form.errors) }}
-            <button type="submit" class="ui fluid large submit primary button">
-              <i class="ui sign-in icon"></i>{{ _('Log in') }}
-            </button>
-          </form>
-        {%- endwith %}
+        {%- if config.ACCOUNTS_LOCAL_LOGIN_ENABLED %}
+          {%- with form = login_user_form %}
+            <form action="{{ url_for_security('login') }}" method="POST"
+                  name="login_user_form" class="ui big form">
+              {{ form.hidden_tag() }}
+              {{ render_field(form.email, icon="user icon", autofocus=True, errormsg='email' in form.errors) }}
+              {{ render_field(form.password, icon="lock icon", errormsg='password' in form.errors) }}
+              <button type="submit" class="ui fluid large submit primary button">
+                <i class="ui sign-in icon"></i>{{ _('Log in') }}
+              </button>
+            </form>
+          {%- endwith %}
+        {%- endif %}
       {%- endblock form_outer %}
       <div class="divider hidden"></div>
 

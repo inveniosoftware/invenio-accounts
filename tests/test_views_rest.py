@@ -129,6 +129,28 @@ def test_login_view(api):
             assert payload['id'] == normal_user.id
 
 
+def test_disabled_login_view(api):
+    app = api
+    app.config["ACCOUNTS_LOCAL_LOGIN_ENABLED"] = False
+
+    with app.app_context():
+        user = create_test_user(email='normal@test.com')
+        db.session.commit()
+        with app.test_client() as client:
+            url = url_for('invenio_accounts_rest_auth.login')
+            data = {
+                "email": user.email,
+                "password": "123456"
+            }
+
+            res = client.post(url, data=data)
+            payload = get_json(res)
+
+            assert res.status_code != 200
+            expected_msg = app.config["SECURITY_MSG_LOCAL_LOGIN_DISABLED"][0]
+            assert payload["message"] == expected_msg
+
+
 def test_registration_view(api):
     app = api
     with app.app_context():
@@ -240,6 +262,26 @@ def test_forgot_password_view(api):
             assert 'Instructions to reset your password' in payload['message']
 
 
+def test_disabled_forgot_password_view(api):
+    from flask_security.recoverable import generate_reset_password_token
+    app = api
+    app.config["SECURITY_RECOVERABLE"] = False
+    app.extensions["security"].recoverable = False
+
+    with app.app_context():
+        user = create_test_user(email='normal@test.com')
+        token = generate_reset_password_token(user)
+        db.session.commit()
+        with app.test_client() as client:
+            url = url_for('invenio_accounts_rest_auth.forgot_password')
+            res = client.post(url, data={"email": user.email})
+            payload = get_json(res)
+
+            assert res.status_code != 200
+            expected = app.config["SECURITY_MSG_PASSWORD_RECOVERY_DISABLED"][0]
+            assert payload["message"] == expected
+
+
 def test_reset_password_view(api):
     from flask_security.recoverable import generate_reset_password_token
     app = api
@@ -267,6 +309,31 @@ def test_reset_password_view(api):
                 c for c in client.cookie_jar if c.name == 'session')
             assert session_cookie is not None
             assert session_cookie.value
+
+
+def test_disabled_reset_password_view(api):
+    from flask_security.recoverable import generate_reset_password_token
+    app = api
+    app.config["SECURITY_RECOVERABLE"] = False
+    app.extensions["security"].recoverable = False
+
+    with app.app_context():
+        user = create_test_user(email='normal@test.com')
+        token = generate_reset_password_token(user)
+        db.session.commit()
+        with app.test_client() as client:
+            url = url_for('invenio_accounts_rest_auth.reset_password')
+            data = {
+                "token": token,
+                "password": "123456",
+            }
+
+            res = client.post(url, data=data)
+            payload = get_json(res)
+
+            assert res.status_code != 200
+            expected = app.config["SECURITY_MSG_PASSWORD_RESET_DISABLED"][0]
+            assert payload["message"] == expected
 
 
 def test_change_password_view(api):
@@ -301,6 +368,30 @@ def test_change_password_view(api):
             assert 'successfully changed your password' in payload['message']
             # Log in using new password
             _login_user(client, normal_user, password='new-password')
+
+
+def test_disabled_change_password_view(api):
+    app = api
+    app.config["SECURITY_CHANGEABLE"] = False
+    app.extensions["security"].changeable = False
+
+    with app.app_context():
+        user = create_test_user(email='normal@test.com')
+        db.session.commit()
+        with app.test_client() as client:
+            _login_user(client, user)
+            url = url_for('invenio_accounts_rest_auth.change_password')
+            data = {
+                "password": user.password_plaintext,
+                "new_password": "1234567",
+            }
+
+            res = client.post(url, data=data)
+            payload = get_json(res)
+
+            assert res.status_code != 200
+            expected = app.config["SECURITY_MSG_PASSWORD_CHANGE_DISABLED"][0]
+            assert payload["message"] == expected
 
 
 @mock.patch('invenio_accounts.views.rest.send_mail',

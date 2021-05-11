@@ -54,7 +54,7 @@ def init_menu():
     item = current_menu.submenu('breadcrumbs.settings')
     item.register('invenio_userprofiles.profile', _('Account'))
 
-    ### Register menu ###
+    # - Register menu
     # - Change password
     if current_app.config.get('SECURITY_CHANGEABLE', True):
         view_name = '{}.change_password'.format(

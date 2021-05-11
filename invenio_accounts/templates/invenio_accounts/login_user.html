@@ -2,6 +2,7 @@
 
   This file is part of Invenio.
   Copyright (C) 2015-2018 CERN.
+  Copyright (C)      2021 TU Wien.
 
   Invenio is free software; you can redistribute it and/or modify it
   under the terms of the MIT License; see LICENSE file for more details.
@@ -18,6 +19,7 @@
       <h3 class="text-center panel-free-title">{{_('Log in to account') }}</h3>
       {%- endblock form_header %}
       {%- block form_outer %}
+      {%- if config.ACCOUNTS_LOCAL_LOGIN_ENABLED %}
       {%- with form = login_user_form %}
       <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
       {{form.hidden_tag()}}
@@ -27,6 +29,7 @@
       <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="fa fa-sign-in"></i> {{_('Log in')}}</button>
       </form>
       {%- endwith %}
+      {%- endif %}
       {%- endblock form_outer %}
     </div>
     {%- block registerable %}
