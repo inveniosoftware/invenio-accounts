@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 1.4.4 (released 2021-05-11)
+
+- Enables login view function overridability.
+- Allows to disable local login via configuration variable.
+
 Version 1.4.3 (released 2020-12-17)
 
 - Adds theme dependent icons.
