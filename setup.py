@@ -52,6 +52,7 @@ setup_requires = [
 ]
 
 install_requires = [
+    'Flask>=1.1.4,<2.0.0',
     'cryptography>=3.0.0',
     'Flask-Breadcrumbs>=0.4.0',
     'Flask-KVSession-Invenio>=0.6.3',
@@ -62,7 +63,7 @@ install_requires = [
     'Flask-WTF>=0.14.3',
     'email-validator>=1.0.5',
     'future>=0.16.0',
-    'invenio-base>=1.2.3',
+    'invenio-base>=1.2.4',
     'invenio-i18n>=1.2.0',
     'invenio-celery>=1.1.2',
     'invenio-rest>=1.2.1',
