@@ -125,9 +125,6 @@ setup(
         'invenio_celery.tasks': [
             'invenio_accounts = invenio_accounts.tasks',
         ],
-        'invenio_config.module': [
-            'invenio_accounts = invenio_accounts.config',
-        ],
         'invenio_db.alembic': [
             'invenio_accounts = invenio_accounts:alembic',
         ],
