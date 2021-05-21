@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 1.4.4 (released 2021-05-21)
+
+- Removes config entrypoint.
+- Bump module versions.
+
 Version 1.4.4 (released 2021-05-11)
 
 - Enables login view function overridability.
