@@ -34,3 +34,4 @@ Contributors
 - Sebastian Witowski
 - Tibor Simko
 - Maximilian Moser
+- Mojib Wali
