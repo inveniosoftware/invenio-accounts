@@ -8,7 +8,11 @@
 Changes
 =======
 
-Version 1.4.4 (released 2021-05-21)
+Version 1.4.6 (released 2021-07-12)
+
+- Adds german translations
+
+Version 1.4.5 (released 2021-05-21)
 
 - Removes config entrypoint.
 - Bump module versions.
