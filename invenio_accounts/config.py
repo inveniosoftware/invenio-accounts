@@ -19,6 +19,8 @@ ACCOUNTS = True
 If False, you won't be able to login via the web UI.
 """
 
+ACCOUNTS_RETENTION_PERIOD = timedelta(days=30)
+
 ACCOUNTS_SESSION_STORE_FACTORY = \
     'invenio_accounts.sessions:default_session_store_factory'
 """Import path or function of factory used to generate the session store

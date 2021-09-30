@@ -113,6 +113,10 @@ by configuring a Celery Beat schedule similar to this:
             'task': 'invenio_accounts.tasks.clean_session_table',
             'schedule': timedelta(days=1),
         },
+        'delete_login_ips': {
+            'task': 'invenio_accounts.tasks.delete_ips',
+            'schedule': timedelta(days=30),
+        }
     }
 
 Templates
