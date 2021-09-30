@@ -11,7 +11,7 @@
 
 from __future__ import absolute_import, print_function
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 from time import sleep
 
 from flask import url_for
@@ -19,8 +19,9 @@ from flask_login import login_required
 from flask_mail import Message
 from flask_security import url_for_security
 
-from invenio_accounts.models import SessionActivity
-from invenio_accounts.tasks import clean_session_table, send_security_email
+from invenio_accounts.models import SessionActivity, User
+from invenio_accounts.tasks import clean_session_table, delete_ips, \
+    send_security_email
 from invenio_accounts.testutils import create_test_user
 
 
@@ -104,3 +105,43 @@ def test_clean_session_table(task_app):
             res = client.get(protected_url)
             # check if the user is really logout
             assert res.status_code == 302
+
+
+def test_delete_ips(task_app):
+    """Test if ips are deleted after 30 days."""
+    last_login_at1 = datetime.utcnow() - \
+        task_app.config['ACCOUNTS_RETENTION_PERIOD'] - timedelta(days=1)
+    last_login_at2 = datetime.utcnow()
+
+    with task_app.app_context():
+        user1 = create_test_user(email='user1@invenio-software.org',
+                                 last_login_ip='127.0.0.1',
+                                 current_login_ip='127.0.0.1',
+                                 last_login_at=last_login_at1,
+                                 current_login_at=last_login_at1)
+
+        user2 = create_test_user(email='user2@invenio-software.org',
+                                 last_login_ip='127.0.0.1',
+                                 current_login_ip='127.0.0.1',
+                                 last_login_at=last_login_at2,
+                                 current_login_at=last_login_at2)
+
+        user3 = create_test_user(email='user3@invenio-software.org',
+                                 last_login_ip='127.0.0.1',
+                                 current_login_ip='127.0.0.1',
+                                 last_login_at=last_login_at1,
+                                 current_login_at=last_login_at2)
+
+        delete_ips()
+
+        user = User.query.filter(User.id == user1.id).one()
+        assert user.last_login_ip is None
+        assert user.current_login_ip is None
+
+        user = User.query.filter(User.id == user2.id).one()
+        assert user.last_login_ip is not None
+        assert user.current_login_ip is not None
+
+        user = User.query.filter(User.id == user3.id).one()
+        assert user.last_login_ip is None
+        assert user.current_login_ip is not None
