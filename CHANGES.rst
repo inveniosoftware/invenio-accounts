@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 1.4.7 (released 2021-10-06)
+
+- Adds celery task to remove IP addresses from user table after a specified
+  retention period (defaults to 30 days).
+
 Version 1.4.6 (released 2021-07-12)
 
 - Adds german translations
