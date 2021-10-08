@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2021      TU Wien.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -31,6 +32,7 @@ def test_version():
 def test_init():
     """Test extension initialization."""
     app = Flask('testapp')
+    app.config['SECRET_KEY'] = 'CHANGEME'
     Babel(app)
     Mail(app)
     InvenioDB(app)
@@ -39,6 +41,7 @@ def test_init():
     assert 'security' in app.blueprints.keys()
 
     app = Flask('testapp')
+    app.config['SECRET_KEY'] = 'CHANGEME'
     Babel(app)
     Mail(app)
     InvenioDB(app)
@@ -53,6 +56,7 @@ def test_init():
 def test_init_rest():
     """Test REST extension initialization."""
     app = Flask('testapp')
+    app.config['SECRET_KEY'] = 'CHANGEME'
     Babel(app)
     Mail(app)
     InvenioDB(app)
@@ -62,6 +66,7 @@ def test_init_rest():
     assert 'security_email_templates' in app.blueprints.keys()
 
     app = Flask('testapp')
+    app.config['SECRET_KEY'] = 'CHANGEME'
     Babel(app)
     Mail(app)
     InvenioDB(app)
@@ -74,6 +79,7 @@ def test_init_rest():
     assert 'security_email_templates' in app.blueprints.keys()
 
     app = Flask('testapp')
+    app.config['SECRET_KEY'] = 'CHANGEME'
     app.config['ACCOUNTS_REGISTER_BLUEPRINT'] = True
     Babel(app)
     Mail(app)
