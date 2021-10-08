@@ -52,7 +52,6 @@ setup_requires = [
 ]
 
 install_requires = [
-    'Flask>=1.1.4,<2.0.0',
     'cryptography>=3.0.0',
     'Flask-Breadcrumbs>=0.4.0',
     'Flask-KVSession-Invenio>=0.6.3',
