@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.4.8 (released 2021-10-18)
+
+- Unpin Flask requirement.
+
 Version 1.4.7 (released 2021-10-06)
 
 - Adds celery task to remove IP addresses from user table after a specified
