@@ -25,7 +25,7 @@ extras_require = {
         'invenio-admin>=1.2.1',
     ],
     'docs': [
-        'Sphinx>=3',
+        'Sphinx==4.2.0',
     ],
     'mysql': [
         'invenio-db[versioning,mysql]>=1.0.9',
@@ -63,9 +63,9 @@ install_requires = [
     'email-validator>=1.0.5',
     'future>=0.16.0',
     'invenio-base>=1.2.5',
-    'invenio-i18n>=1.2.0',
-    'invenio-celery>=1.1.2',
-    'invenio-rest>=1.2.1',
+    'invenio-i18n>=1.3.1',
+    'invenio-celery>=1.2.3',
+    'invenio-rest>=1.2.4',
     'invenio-theme>=1.3.4',
     'maxminddb-geolite2>=2017.404',
     'passlib>=1.7.1',
