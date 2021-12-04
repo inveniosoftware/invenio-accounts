@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 1.4.9 (released 2021-12-04)
+
+- Fixed issue with account creation via CLI due to issue with changed API in
+  Flask-WTF.
+
 Version 1.4.8 (released 2021-10-18)
 
 - Unpin Flask requirement.
