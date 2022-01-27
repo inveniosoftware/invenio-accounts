@@ -8,8 +8,6 @@
 
 """Test test utilities."""
 
-from __future__ import absolute_import, print_function
-
 from datetime import datetime
 
 import flask_login

@@ -9,13 +9,9 @@
 
 """Invenio user management and authentication."""
 
-from __future__ import absolute_import, print_function
-
-import os
 from warnings import warn
 
 import pkg_resources
-import six
 from flask import Blueprint, abort, current_app, request_finished, session
 from flask_kvsession import KVSessionExtension
 from flask_login import LoginManager, user_logged_in, user_logged_out

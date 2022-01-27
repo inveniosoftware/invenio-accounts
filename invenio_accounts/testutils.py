@@ -15,8 +15,6 @@ of an application context. If pytest-flask is installed you don't have to worry
 about this.
 """
 
-from __future__ import absolute_import, print_function
-
 import flask
 import flask_login
 from flask import current_app

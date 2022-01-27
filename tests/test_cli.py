@@ -9,8 +9,6 @@
 
 """Module tests."""
 
-from __future__ import absolute_import, print_function
-
 from click.testing import CliRunner
 
 from invenio_accounts.cli import roles_add, roles_create, roles_remove, \

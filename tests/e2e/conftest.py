@@ -8,8 +8,6 @@
 
 """Pytest configuration."""
 
-from __future__ import absolute_import, print_function
-
 import multiprocessing
 import os
 import shutil

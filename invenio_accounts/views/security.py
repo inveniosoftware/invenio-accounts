@@ -8,8 +8,6 @@
 
 """Invenio user management and authentication."""
 
-from __future__ import absolute_import, print_function
-
 from flask import abort, current_app, flash, redirect, render_template, \
     request, url_for
 from flask_babelex import lazy_gettext as _

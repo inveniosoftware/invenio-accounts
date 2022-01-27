@@ -8,8 +8,6 @@
 
 """Test password hashing."""
 
-from __future__ import absolute_import, print_function
-
 from binascii import hexlify, unhexlify
 
 import flask

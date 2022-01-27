@@ -14,8 +14,6 @@ This module provides management functionality and populates the
 created.
 """
 
-from __future__ import absolute_import, print_function
-
 from flask import after_this_request, current_app, request, session
 from geolite2 import geolite2
 from invenio_db import db

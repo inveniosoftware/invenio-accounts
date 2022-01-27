@@ -8,8 +8,6 @@
 
 """Session-aware datastore."""
 
-from __future__ import absolute_import, print_function
-
 from flask_security import SQLAlchemyUserDatastore
 
 from .sessions import delete_user_sessions

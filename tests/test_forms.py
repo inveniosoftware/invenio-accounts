@@ -8,8 +8,6 @@
 
 """Test forms."""
 
-from __future__ import absolute_import, print_function
-
 from flask_security.forms import ConfirmRegisterForm, RegisterForm
 
 from invenio_accounts.forms import confirm_register_form_factory, \

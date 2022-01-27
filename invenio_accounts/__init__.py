@@ -33,8 +33,6 @@ You can also e.g. deactive users:
     $ flask users deactivate info@inveniosoftware.org
 """
 
-from __future__ import absolute_import, print_function
-
 from .ext import InvenioAccounts, InvenioAccountsREST, InvenioAccountsUI
 from .proxies import current_accounts
 from .version import __version__

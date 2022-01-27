@@ -9,8 +9,6 @@
 
 """REST API user management and authentication."""
 
-from __future__ import absolute_import, print_function
-
 from functools import wraps
 
 from flask import Blueprint, after_this_request, current_app, jsonify

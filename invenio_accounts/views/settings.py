@@ -8,8 +8,6 @@
 
 """Invenio user management and authentication."""
 
-from __future__ import absolute_import, print_function
-
 from flask import Blueprint, current_app
 from flask_babelex import lazy_gettext as _
 from flask_breadcrumbs import register_breadcrumb

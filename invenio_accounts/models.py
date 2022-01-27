@@ -8,8 +8,6 @@
 
 """Database models for accounts."""
 
-from __future__ import absolute_import, print_function
-
 from datetime import datetime
 
 from flask import current_app, session
