@@ -8,8 +8,6 @@
 
 """Command Line Interface for accounts."""
 
-from __future__ import absolute_import, print_function
-
 from functools import wraps
 
 import click

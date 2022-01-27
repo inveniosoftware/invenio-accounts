@@ -8,8 +8,6 @@
 
 """Test authentication REST API views."""
 
-from __future__ import absolute_import, print_function
-
 import datetime
 import json
 from unittest import mock

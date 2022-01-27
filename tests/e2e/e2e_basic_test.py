@@ -8,8 +8,6 @@
 
 """E2E/integration tests for Invenio-Accounts."""
 
-from __future__ import absolute_import, print_function
-
 from time import sleep
 
 import flask

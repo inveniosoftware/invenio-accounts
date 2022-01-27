@@ -8,8 +8,6 @@
 
 """Test invenio-accounts models."""
 
-from __future__ import absolute_import
-
 from invenio_db import db
 from sqlalchemy import inspect
 
