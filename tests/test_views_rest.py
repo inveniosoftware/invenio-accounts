@@ -39,7 +39,7 @@ def assert_error_resp(res, expected_errors, expected_status_code=400):
 
 
 def _mock_send_mail(subject, recipient, template, **context):
-    from six.moves.urllib.parse import urlsplit
+    from urllib.parse import urlsplit
 
     from invenio_accounts.config import SECURITY_RESET_URL
 

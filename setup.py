@@ -53,6 +53,7 @@ setup_requires = [
 
 install_requires = [
     'cryptography>=3.0.0',
+    'email-validator>=1.0.5',
     'Flask-Breadcrumbs>=0.4.0',
     'Flask-KVSession-Invenio>=0.6.3',
     'Flask-Login>=0.3.0,<0.5.0',
@@ -60,11 +61,9 @@ install_requires = [
     'Flask-Menu>=0.5.0',
     'Flask-Security>=3.0.0',
     'Flask-WTF>=0.14.3',
-    'email-validator>=1.0.5',
-    'future>=0.16.0',
     'invenio-base>=1.2.5',
-    'invenio-i18n>=1.3.1',
     'invenio-celery>=1.2.3',
+    'invenio-i18n>=1.3.1',
     'invenio-rest>=1.2.4',
     'invenio-theme>=1.3.4',
     'maxminddb-geolite2>=2017.404',
@@ -72,7 +71,7 @@ install_requires = [
     'pyjwt>=1.5.0',
     'redis>=2.10.5',
     'simplekv>=0.11.2',
-    'ua-parser>=0.7.3'
+    'ua-parser>=0.7.3',
 ]
 
 packages = find_packages()
