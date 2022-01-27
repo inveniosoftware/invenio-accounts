@@ -10,8 +10,8 @@
 
 import uuid
 from datetime import datetime
+from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 
-import six
 from flask import current_app, request, session, url_for
 from flask_security import current_user
 from flask_security.confirmable import generate_confirmation_token
@@ -22,7 +22,6 @@ from flask_security.utils import get_security_endpoint_name, hash_password, \
     send_mail
 from future.utils import raise_from
 from jwt import DecodeError, ExpiredSignatureError, decode, encode
-from six.moves.urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 from werkzeug.routing import BuildError
 from werkzeug.utils import import_string
 
@@ -110,7 +109,7 @@ def obj_or_import_string(value, default=None):
     :params default: Default object to return if the import fails.
     :returns: The imported object.
     """
-    if isinstance(value, six.string_types):
+    if isinstance(value, str):
         return import_string(value)
     elif value:
         return value

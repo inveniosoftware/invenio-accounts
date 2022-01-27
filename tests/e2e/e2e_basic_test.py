@@ -9,9 +9,9 @@
 """E2E/integration tests for Invenio-Accounts."""
 
 from time import sleep
+from urllib.request import urlopen
 
 import flask
-from six.moves.urllib.request import urlopen
 
 from invenio_accounts import testutils
 
