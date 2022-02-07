@@ -16,39 +16,20 @@ from flask import Blueprint, abort, current_app, request_finished, session
 from flask_kvsession import KVSessionExtension
 from flask_login import LoginManager, user_logged_in, user_logged_out
 from flask_principal import AnonymousIdentity
-from flask_security import Security, changeable, recoverable, registerable, \
-    utils
+from flask_security import Security
 from invenio_db import db
 from passlib.registry import register_crypt_handler
-from werkzeug.utils import cached_property, import_string
+from werkzeug.utils import cached_property
 
 from invenio_accounts.forms import confirm_register_form_factory, \
     login_form_factory, register_form_factory
 
 from . import config
 from .datastore import SessionAwareSQLAlchemyUserDatastore
-from .hash import InvenioAesEncryptedEmail, _to_binary
+from .hash import InvenioAesEncryptedEmail
 from .models import Role, User
 from .sessions import csrf_token_reset, login_listener, logout_listener
 from .utils import obj_or_import_string, set_session_info
-
-
-def get_hmac(password):
-    """Override Flask-Security's default MAC signing of plain passwords.
-
-    :param password: The plain password.
-    :returns: The password hmac.
-    """
-    return _to_binary(password)
-
-
-def hash_password(password):
-    """Override Flask-Security's default hashing function.
-
-    :param password: The plain password.
-    :returns: The hashed password.
-    """
-    return current_app.extensions['security'].pwd_context.hash(password)
 
 
 class InvenioAccounts(object):
@@ -69,27 +50,12 @@ class InvenioAccounts(object):
     @staticmethod
     def monkey_patch_flask_security():
         """Monkey-patch Flask-Security."""
-        if utils.get_hmac != get_hmac:
-            utils.get_hmac = get_hmac
-        if utils.hash_password != hash_password:
-            utils.hash_password = hash_password
-            changeable.hash_password = hash_password
-            recoverable.hash_password = hash_password
-            registerable.hash_password = hash_password
-
         # Disable remember me cookie generation as it does not work with
         # session activity tracking (a remember me token will bypass revoking
-        # of  a session).
+        # of a session).
         def patch_do_nothing(*args, **kwargs):
             pass
         LoginManager._set_cookie = patch_do_nothing
-
-        # Disable loading user from headers and object because we want to be
-        # sure we can load user only through the login form.
-        def patch_reload_anonym(self, *args, **kwargs):
-            self.reload_user()
-        LoginManager._load_from_header = patch_reload_anonym
-        LoginManager._load_from_request = patch_reload_anonym
 
     @cached_property
     def jwt_decode_factory(self):

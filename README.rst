@@ -28,8 +28,7 @@ Features:
 - User and role management.
 - User registration, password reset/recovery and email verification.
 - Administration interface and CLI for managing users.
-- Session based authentication with session theft protection as well as
-  "remember me" support.
+- Session based authentication with session theft protection support.
 - Strong cryptographic password hashing with support for migrating password
   hashes (including Invenio v1.x) to new stronger algorithms.
 - Session activity tracking allowing users to e.g. logout of all devices.
