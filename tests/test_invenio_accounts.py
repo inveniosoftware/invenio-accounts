@@ -219,4 +219,4 @@ def test_headers_info(app, users):
             cookie = requests.utils.dict_from_cookiejar(client.cookie_jar)
             assert response.headers['X-Session-ID'] == \
                 cookie['session'].split('.')[0]
-            assert int(response.headers['X-User-ID']) == u['id']
+            assert response.headers['X-User-ID'] == u['id']

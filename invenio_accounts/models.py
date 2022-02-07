@@ -8,6 +8,7 @@
 
 """Database models for accounts."""
 
+import uuid
 from datetime import datetime
 
 from flask import current_app, session
@@ -15,13 +16,13 @@ from flask_security import RoleMixin, UserMixin
 from invenio_db import db
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import validates
-from sqlalchemy_utils import IPAddressType, Timestamp
+from sqlalchemy_utils import IPAddressType, Timestamp, UUIDType
 
 from .errors import AlreadyLinkedError
 
 userrole = db.Table(
     'accounts_userrole',
-    db.Column('user_id', db.Integer(), db.ForeignKey(
+    db.Column('user_id', UUIDType(), db.ForeignKey(
         'accounts_user.id', name='fk_accounts_userrole_user_id')),
     db.Column('role_id', db.Integer(), db.ForeignKey(
         'accounts_role.id', name='fk_accounts_userrole_role_id')),
@@ -60,7 +61,11 @@ class User(db.Model, Timestamp, UserMixin):
 
     __tablename__ = "accounts_user"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(
+        UUIDType,
+        primary_key=True,
+        default=uuid.uuid4,
+    )
 
     email = db.Column(db.String(255), unique=True)
     """User email."""
@@ -149,6 +154,10 @@ class User(db.Model, Timestamp, UserMixin):
         """Representation."""
         return 'User <id={0.id}, email={0.email}>'.format(self)
 
+    def get_id(self):
+        """Return the unicode representation of the identifier."""
+        return str(self.id)
+
 
 class LoginInformation(db.Model):
     """Login information for a user."""
@@ -205,7 +214,7 @@ class SessionActivity(db.Model, Timestamp):
     Named here as it is in `flask-kvsession` to avoid confusion.
     """
 
-    user_id = db.Column(db.Integer, db.ForeignKey(
+    user_id = db.Column(UUIDType, db.ForeignKey(
         User.id, name='fk_accounts_session_activity_user_id'))
     """ID of user to whom this session belongs."""
 
@@ -254,7 +263,7 @@ class UserIdentity(db.Model, Timestamp):
 
     id = db.Column(db.String(255), primary_key=True, nullable=False)
     method = db.Column(db.String(255), primary_key=True, nullable=False)
-    id_user = db.Column(db.Integer(),
+    id_user = db.Column(UUIDType(),
                         db.ForeignKey(User.id), nullable=False)
 
     user = db.relationship(User, backref='external_identifiers')

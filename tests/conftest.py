@@ -277,8 +277,8 @@ def users(app):
                              password='tester2')
 
     return [
-        {'email': user1.email, 'id': user1.id,
+        {'email': user1.email, 'id': user1.get_id(),
          'password': user1.password_plaintext, 'obj': user1},
-        {'email': user2.email, 'id': user2.id,
+        {'email': user2.email, 'id': user2.get_id(),
          'password': user2.password_plaintext, 'obj': user2},
     ]

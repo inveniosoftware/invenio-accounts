@@ -20,9 +20,11 @@ from flask_security.recoverable import send_reset_password_instructions
 from flask_security.utils import hash_password
 from invenio_db import db
 from passlib import pwd
+from sqlalchemy.exc import StatementError
 from werkzeug.local import LocalProxy
 from wtforms.fields import BooleanField
 from wtforms.validators import DataRequired
+from sqlalchemy.exc import StatementError
 
 from .cli import commit
 from .models import Role, SessionActivity, User, UserIdentity
@@ -82,7 +84,10 @@ class UserView(ModelView):
         try:
             count = 0
             for user_id in ids:
-                user = _datastore.get_user(user_id)
+                try:
+                    user = _datastore.find_user(id=user_id)
+                except StatementError:
+                    user = None
                 if user is None:
                     raise ValueError(_("Cannot find user."))
                 if _datastore.deactivate_user(user):
@@ -105,7 +110,10 @@ class UserView(ModelView):
         try:
             count = 0
             for user_id in ids:
-                user = _datastore.get_user(user_id)
+                try:
+                    user = _datastore.find_user(id=user_id)
+                except StatementError:
+                    user = None
                 if user is None:
                     raise ValueError(_("Cannot find user."))
                 if _datastore.activate_user(user):

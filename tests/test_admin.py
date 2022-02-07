@@ -35,7 +35,7 @@ def test_admin(app, admin_view):
                       password=hash_password('aafaf4as5fa'))
         _datastore.create_user(**kwargs)
         _datastore.commit()
-        inserted_id = _datastore.get_user('test@test.cern').id
+        inserted_id = _datastore.get_user('test@test.cern').get_id()
 
     with app.test_client() as client:
 

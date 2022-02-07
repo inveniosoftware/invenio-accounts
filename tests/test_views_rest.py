@@ -60,7 +60,7 @@ def _login_user(client, user, email='normal@test.com', password='123456'):
     res = client.post(url, data=dict(email=email, password=password))
     payload = get_json(res)
     assert res.status_code == 200
-    assert payload['id'] == user.id
+    assert payload['id'] == user.get_id()
     assert payload['email'] == user.email
     session_cookie = next(
         c for c in client.cookie_jar if c.name == 'session')
@@ -124,7 +124,7 @@ def test_login_view(api):
             res = client.get(url_for('invenio_accounts_rest_auth.user_info'))
             payload = get_json(res)
             assert res.status_code == 200
-            assert payload['id'] == normal_user.id
+            assert payload['id'] == normal_user.get_id()
 
 
 def test_disabled_login_view(api):
@@ -184,7 +184,7 @@ def test_registration_view(api):
                 email='new@test.com', password='123456'))
             payload = get_json(res)
             assert res.status_code == 200
-            assert payload['id'] == 2
+            assert isinstance(payload['id'], str)
             assert payload['email'] == 'new@test.com'
             session_cookie = next(
                 c for c in client.cookie_jar if c.name == 'session')
@@ -301,7 +301,7 @@ def test_reset_password_view(api):
                 email='normal@test.com', password='new-password'))
             payload = get_json(res)
             assert res.status_code == 200
-            assert payload['id'] == normal_user.id
+            assert payload['id'] == normal_user.get_id()
             assert payload['email'] == normal_user.email
             session_cookie = next(
                 c for c in client.cookie_jar if c.name == 'session')
