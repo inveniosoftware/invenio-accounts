@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2015-2022 CERN.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -13,8 +13,11 @@ from datetime import datetime
 from flask import current_app, session
 from flask_security import RoleMixin, UserMixin
 from invenio_db import db
-from sqlalchemy.orm import backref, validates
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import validates
 from sqlalchemy_utils import IPAddressType, Timestamp
+
+from .errors import AlreadyLinkedError
 
 userrole = db.Table(
     'accounts_userrole',
@@ -242,3 +245,62 @@ class SessionActivity(db.Model, Timestamp):
     def is_current(cls, sid_s):
         """Check if the session is the current one."""
         return session.sid_s == sid_s
+
+
+class UserIdentity(db.Model, Timestamp):
+    """Represent a UserIdentity record."""
+
+    __tablename__ = 'accounts_useridentity'
+
+    id = db.Column(db.String(255), primary_key=True, nullable=False)
+    method = db.Column(db.String(255), primary_key=True, nullable=False)
+    id_user = db.Column(db.Integer(),
+                        db.ForeignKey(User.id), nullable=False)
+
+    user = db.relationship(User, backref='external_identifiers')
+
+    __table_args__ = (
+        db.Index('useridentity_id_user_method', id_user, method, unique=True),
+    )
+
+    @classmethod
+    def get_user(cls, method, external_id):
+        """Get the user for a given identity."""
+        identity = cls.query.filter_by(
+            id=external_id, method=method).one_or_none()
+        if identity is not None:
+            return identity.user
+        return None
+
+    @classmethod
+    def create(cls, user, method, external_id):
+        """Link a user to an external id.
+
+        :param user: A :class:`invenio_accounts.models.User` instance.
+        :param method: The identity source (e.g. orcid, github)
+        :param method: The external identifier.
+        :raises AlreadyLinkedError: Raised if already exists a link.
+        """
+        try:
+            with db.session.begin_nested():
+                db.session.add(cls(
+                    id=external_id,
+                    method=method,
+                    id_user=user.id
+                ))
+        except IntegrityError:
+            raise AlreadyLinkedError(
+                # dict used for backward compatibility (came from oauthclient)
+                user, {"id": external_id, "method": method})
+
+    @classmethod
+    def delete_by_external_id(cls, method, external_id):
+        """Unlink a user from an external id."""
+        with db.session.begin_nested():
+            cls.query.filter_by(id=external_id, method=method).delete()
+
+    @classmethod
+    def delete_by_user(cls, method, user):
+        """Unlink a user from an external id."""
+        with db.session.begin_nested():
+            cls.query.filter_by(id_user=user.id, method=method).delete()

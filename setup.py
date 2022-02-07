@@ -106,6 +106,10 @@ setup(
             'invenio_accounts_role = invenio_accounts.admin:role_adminview',
             'invenio_accounts_session = '
             'invenio_accounts.admin:session_adminview',
+            'invenio_accounts_user_identity = '
+            'invenio_accounts.admin:user_identity_adminview',
+        ],
+
         ],
         'invenio_base.api_apps': [
             'invenio_accounts_rest = invenio_accounts:InvenioAccountsREST',

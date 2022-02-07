@@ -12,4 +12,4 @@ This file is imported by ``invenio_accounts.__init__``,
 and parsed by ``setup.py``.
 """
 
-__version__ = '1.4.9'
+__version__ = '2.0.0dev0'

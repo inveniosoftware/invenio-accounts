@@ -25,7 +25,7 @@ from wtforms.fields import BooleanField
 from wtforms.validators import DataRequired
 
 from .cli import commit
-from .models import Role, SessionActivity, User
+from .models import Role, SessionActivity, User, UserIdentity
 from .sessions import delete_session
 
 _datastore = LocalProxy(lambda: current_app.extensions['security'].datastore)
@@ -198,6 +198,36 @@ class SessionActivityView(ModelView):
         db.session.commit()
 
 
+class UserIdentityView(ModelView):
+    """Flask-Admin view to manage user identities from invenio-accounts."""
+
+    can_view_details = True
+    can_create = False
+
+    column_list = (
+        'id',
+        'method',
+        'id_user',
+        'user.email',
+    )
+
+    column_searchable_list = \
+        column_sortable_list = \
+        column_list
+
+    column_filters = (
+        'id',
+        'method',
+        'id_user',
+        'user.email',
+    )
+
+    column_labels = {
+        'user.email': _("Email"),
+        'id_user': _("User ID"),
+    }
+
+
 session_adminview = {
     'model': SessionActivity,
     'modelview': SessionActivityView,
@@ -216,11 +246,19 @@ role_adminview = {
     'category': _('User Management')
 }
 
+user_identity_adminview = {
+    'model': UserIdentity,
+    'modelview': UserIdentityView,
+    'category': _('User Management'),
+    'name': _('Linked account identities'),
+}
+
 __all__ = (
     'role_adminview',
     'RoleView',
     'session_adminview',
     'SessionActivityView',
     'user_adminview',
+    'user_identity_adminview',
     'UserView',
 )
