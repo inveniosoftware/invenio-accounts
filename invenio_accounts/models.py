@@ -26,7 +26,7 @@ userrole = db.Table(
 """Relationship between users and roles."""
 
 
-class Role(db.Model, RoleMixin):
+class Role(db.Model, Timestamp, RoleMixin):
     """Role data model."""
 
     __tablename__ = "accounts_role"
@@ -39,12 +39,20 @@ class Role(db.Model, RoleMixin):
     description = db.Column(db.String(255))
     """Role description."""
 
+    # Enables SQLAlchemy version counter
+    version_id = db.Column(db.Integer, nullable=False)
+    """Used by SQLAlchemy for optimistic concurrency control."""
+
+    __mapper_args__ = {
+        "version_id_col": version_id
+    }
+
     def __str__(self):
         """Return the name and description of the role."""
         return '{0.name} - {0.description}'.format(self)
 
 
-class User(db.Model, UserMixin):
+class User(db.Model, Timestamp, UserMixin):
     """User data model."""
 
     __tablename__ = "accounts_user"
@@ -81,6 +89,14 @@ class User(db.Model, UserMixin):
     roles = db.relationship('Role', secondary=userrole,
                             backref=db.backref('users', lazy='dynamic'))
     """List of the user's roles."""
+
+    # Enables SQLAlchemy version counter
+    version_id = db.Column(db.Integer, nullable=False)
+    """Used by SQLAlchemy for optimistic concurrency control."""
+
+    __mapper_args__ = {
+        "version_id_col": version_id
+    }
 
     @validates('last_login_ip', 'current_login_ip')
     def validate_ip(self, key, value):
