@@ -20,7 +20,6 @@ from flask_security.signals import password_changed, user_registered
 from flask_security.utils import config_value as security_config_value
 from flask_security.utils import get_security_endpoint_name, hash_password, \
     send_mail
-from future.utils import raise_from
 from jwt import DecodeError, ExpiredSignatureError, decode, encode
 from werkzeug.routing import BuildError
 from werkzeug.utils import import_string
@@ -88,9 +87,9 @@ def jwt_decode_token(token):
             ]
         )
     except DecodeError as exc:
-        raise_from(JWTDecodeError(), exc)
+        raise JWTDecodeError() from exc
     except ExpiredSignatureError as exc:
-        raise_from(JWTExpiredToken(), exc)
+        raise JWTExpiredToken() from exc
 
 
 def set_session_info(app, response, **extra):
