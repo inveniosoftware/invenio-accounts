@@ -15,7 +15,7 @@ from flask import current_app
 from flask_mail import Message
 from invenio_db import db
 
-from .models import SessionActivity, User
+from .models import LoginInformation, SessionActivity
 from .proxies import current_accounts
 from .sessions import delete_session
 
@@ -59,21 +59,21 @@ def clean_session_table():
 
 @shared_task
 def delete_ips():
-    """Automatically remove user.last_login_ip older than 30 days."""
+    """Automatically remove login_info.last_login_ip older than 30 days."""
     expiration_date = datetime.utcnow() - \
         current_app.config['ACCOUNTS_RETENTION_PERIOD']
 
-    User.query.filter(
-        User.last_login_ip.isnot(None),
-        User.last_login_at < expiration_date
+    LoginInformation.query.filter(
+        LoginInformation.last_login_ip.isnot(None),
+        LoginInformation.last_login_at < expiration_date
     ).update({
-        User.last_login_ip: None
+        LoginInformation.last_login_ip: None
     })
 
-    User.query.filter(
-        User.current_login_ip.isnot(None),
-        User.current_login_at < expiration_date
+    LoginInformation.query.filter(
+        LoginInformation.current_login_ip.isnot(None),
+        LoginInformation.current_login_at < expiration_date
     ).update({
-        User.current_login_ip: None
+        LoginInformation.current_login_ip: None
     })
     db.session.commit()

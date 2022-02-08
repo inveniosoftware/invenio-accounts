@@ -13,7 +13,7 @@ from datetime import datetime
 from flask import current_app, session
 from flask_security import RoleMixin, UserMixin
 from invenio_db import db
-from sqlalchemy.orm import validates
+from sqlalchemy.orm import backref, validates
 from sqlalchemy_utils import IPAddressType, Timestamp
 
 userrole = db.Table(
@@ -71,6 +71,97 @@ class User(db.Model, Timestamp, UserMixin):
     confirmed_at = db.Column(db.DateTime)
     """When the user confirmed the email address."""
 
+    roles = db.relationship('Role', secondary=userrole,
+                            backref=db.backref('users', lazy='dynamic'))
+    """List of the user's roles."""
+
+    # Enables SQLAlchemy version counter
+    version_id = db.Column(db.Integer, nullable=False)
+    """Used by SQLAlchemy for optimistic concurrency control."""
+
+    __mapper_args__ = {
+        "version_id_col": version_id
+    }
+
+    login_info = db.relationship(
+        "LoginInformation", back_populates="user", uselist=False, lazy="joined"
+    )
+
+    def _get_login_info_attr(self, attr_name):
+        if self.login_info is None:
+            return None
+        return getattr(self.login_info, attr_name)
+
+    def _set_login_info_attr(self, attr_name, value):
+        if self.login_info is None:
+            self.login_info = LoginInformation()
+        setattr(self.login_info, attr_name, value)
+
+    @property
+    def current_login_at(self):
+        """When user logged into the current session."""
+        return self._get_login_info_attr("current_login_at")
+
+    @property
+    def current_login_ip(self):
+        """Current user IP address."""
+        return self._get_login_info_attr("current_login_ip")
+
+    @property
+    def last_login_at(self):
+        """When the user logged-in for the last time."""
+        return self._get_login_info_attr("last_login_at")
+
+    @property
+    def last_login_ip(self):
+        """Last user IP address."""
+        return self._get_login_info_attr("last_login_ip")
+
+    @property
+    def login_count(self):
+        """Count how many times the user logged in."""
+        return self._get_login_info_attr("login_count")
+
+    @current_login_at.setter
+    def current_login_at(self, value):
+        return self._set_login_info_attr("current_login_at", value)
+
+    @current_login_ip.setter
+    def current_login_ip(self, value):
+        return self._set_login_info_attr("current_login_ip", value)
+
+    @last_login_at.setter
+    def last_login_at(self, value):
+        return self._set_login_info_attr("last_login_at", value)
+
+    @last_login_ip.setter
+    def last_login_ip(self, value):
+        return self._set_login_info_attr("last_login_ip", value)
+
+    @login_count.setter
+    def login_count(self, value):
+        return self._set_login_info_attr("login_count", value)
+
+    def __str__(self):
+        """Representation."""
+        return 'User <id={0.id}, email={0.email}>'.format(self)
+
+
+class LoginInformation(db.Model):
+    """Login information for a user."""
+
+    __tablename__ = "accounts_user_login_information"
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey(User.id, name='fk_accounts_login_information_user_id'),
+        primary_key=True,
+    )
+    """ID of user to whom this information belongs."""
+
+    user = db.relationship("User", back_populates="login_info")
+    """User to whom this information belongs."""
+
     last_login_at = db.Column(db.DateTime)
     """When the user logged-in for the last time."""
 
@@ -86,18 +177,6 @@ class User(db.Model, Timestamp, UserMixin):
     login_count = db.Column(db.Integer)
     """Count how many times the user logged in."""
 
-    roles = db.relationship('Role', secondary=userrole,
-                            backref=db.backref('users', lazy='dynamic'))
-    """List of the user's roles."""
-
-    # Enables SQLAlchemy version counter
-    version_id = db.Column(db.Integer, nullable=False)
-    """Used by SQLAlchemy for optimistic concurrency control."""
-
-    __mapper_args__ = {
-        "version_id_col": version_id
-    }
-
     @validates('last_login_ip', 'current_login_ip')
     def validate_ip(self, key, value):
         """Hack untrackable IP addresses."""
@@ -107,10 +186,6 @@ class User(db.Model, Timestamp, UserMixin):
         if value == 'untrackable':  # pragma: no cover
             value = None
         return value
-
-    def __str__(self):
-        """Representation."""
-        return 'User <id={0.id}, email={0.email}>'.format(self)
 
 
 class SessionActivity(db.Model, Timestamp):

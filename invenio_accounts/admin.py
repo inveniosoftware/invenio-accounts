@@ -37,10 +37,7 @@ class UserView(ModelView):
     can_view_details = True
     can_delete = False
 
-    list_all = (
-        'id', 'email', 'active', 'confirmed_at', 'last_login_at',
-        'current_login_at', 'last_login_ip', 'current_login_ip', 'login_count'
-    )
+    list_all = ('id', 'email', 'active', 'confirmed_at')
 
     column_list = \
         column_searchable_list = \
@@ -61,19 +58,9 @@ class UserView(ModelView):
             description='Send the new user an email about their account.')
     }
 
-    column_filters = ('id', 'email', 'active', 'confirmed_at', 'last_login_at',
-                      'current_login_at', 'login_count')
+    column_filters = ('id', 'email', 'active', 'confirmed_at')
 
-    column_default_sort = ('last_login_at', True)
-
-    form_overrides = {
-        'last_login_at': DateTimeField
-    }
-
-    column_labels = {
-        'current_login_ip': _('Current Login IP'),
-        'last_login_ip': _('Last Login IP')
-    }
+    column_default_sort = ('email', True)
 
     def on_model_change(self, form, User, is_created):
         """Hash password when saving."""

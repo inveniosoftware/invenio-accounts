@@ -164,13 +164,16 @@ def unique_user_email(email):
 
 def default_user_payload(user):
     """Parse user payload."""
+    fmt_last_login_at = None
+    if user.login_info and user.login_info.last_login_at:
+        fmt_last_login_at = user.login_info.last_login_at.isoformat()
+
     return {
         'id': user.id,
         'email': user.email,
         'confirmed_at':
             user.confirmed_at.isoformat() if user.confirmed_at else None,
-        'last_login_at':
-            user.last_login_at.isoformat() if user.last_login_at else None,
+        'last_login_at': fmt_last_login_at,
         'roles': [role_to_dict(role) for role in user.roles],
     }
 
