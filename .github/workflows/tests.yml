@@ -23,8 +23,11 @@ jobs:
           python-version: [3.7, 3.8, 3.9]
           requirements-level: [min, pypi]
           cache-service: [redis]
-          db-service: [postgresql10, postgresql13, mysql8]
+          db-service: [postgresql10, postgresql13]
           exclude:
+          - python-version: 3.7
+            requirements-level: pypi
+
           - python-version: 3.8
             requirements-level: min
 
@@ -32,10 +35,10 @@ jobs:
             requirements-level: min
 
           - db-service: postgresql13
-            python-version: 3.6
+            python-version: 3.7
 
           - db-service: mysql8
-            python-version: 3.6
+            python-version: 3.7
 
           include:
           - db-service: postgresql10
@@ -71,9 +74,12 @@ jobs:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('.${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt') }}
 
+      # TODO: Circular dependency. Invenio-Admin brings on Invenio-Accounts
+      # v1.x which brings Flask-Security which conflicts with
+      # Flask-Security-Invenio.
+      # pip install -r .${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt
       - name: Install dependencies
         run: |
-          pip install -r .${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt
           pip install ".[$EXTRAS]"
           pip freeze
           docker --version

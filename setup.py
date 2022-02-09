@@ -53,14 +53,11 @@ setup_requires = [
 
 install_requires = [
     'cryptography>=3.0.0',
-    'email-validator>=1.0.5',
     'Flask-Breadcrumbs>=0.4.0',
     'Flask-KVSession-Invenio>=0.6.3',
-    'Flask-Login>=0.3.0,<0.5.0',
     'Flask-Mail>=0.9.1',
     'Flask-Menu>=0.5.0',
-    'Flask-Security-Invenio>=3.1.0',
-    'Flask-WTF>=0.14.3',
+    'Flask-Security-Invenio>=3.1.1',
     'invenio-base>=1.2.5',
     'invenio-celery>=1.2.3',
     'invenio-i18n>=1.3.1',
@@ -108,8 +105,6 @@ setup(
             'invenio_accounts.admin:session_adminview',
             'invenio_accounts_user_identity = '
             'invenio_accounts.admin:user_identity_adminview',
-        ],
-
         ],
         'invenio_base.api_apps': [
             'invenio_accounts_rest = invenio_accounts:InvenioAccountsREST',

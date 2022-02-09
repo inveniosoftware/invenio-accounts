@@ -50,9 +50,9 @@ def add_session(session=None):
 
     :param session: Flask Session object to add. If None, ``session``
         is used. The object is expected to have a dictionary entry named
-        ``"user_id"`` and a field ``sid_s``
+        ``"_user_id"`` and a field ``sid_s``
     """
-    user_id, sid_s = session['user_id'], session.sid_s
+    user_id, sid_s = session['_user_id'], session.sid_s
     with db.session.begin_nested():
         session_activity = SessionActivity(
             user_id=user_id,

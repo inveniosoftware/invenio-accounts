@@ -60,7 +60,7 @@ def login_user_via_session(client, user=None, email=None):
     if not user:
         user = _datastore.find_user(email=email)
     with client.session_transaction() as sess:
-        sess['user_id'] = user.get_id()
+        sess['_user_id'] = user.get_id()
 
 
 def login_user_via_view(client, email=None, password=None, user=None,
