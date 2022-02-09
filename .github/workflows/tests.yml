@@ -20,10 +20,10 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-          python-version: [3.6, 3.7, 3.8, 3.9]
+          python-version: [3.7, 3.8, 3.9]
           requirements-level: [min, pypi]
           cache-service: [redis]
-          db-service: [postgresql9, postgresql11, mysql5, mysql8]
+          db-service: [postgresql10, postgresql13, mysql8]
           exclude:
           - python-version: 3.8
             requirements-level: min
@@ -31,21 +31,18 @@ jobs:
           - python-version: 3.9
             requirements-level: min
 
-          - db-service: postgresql11
+          - db-service: postgresql13
             python-version: 3.6
 
           - db-service: mysql8
             python-version: 3.6
 
           include:
-          - db-service: postgresql9
+          - db-service: postgresql10
             DB_EXTRAS: "postgresql"
 
-          - db-service: postgresql11
+          - db-service: postgresql13
             DB_EXTRAS: "postgresql"
-
-          - db-service: mysql5
-            DB_EXTRAS: "mysql"
 
           - db-service: mysql8
             DB_EXTRAS: "mysql"
