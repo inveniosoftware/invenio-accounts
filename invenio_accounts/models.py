@@ -260,7 +260,12 @@ class UserIdentity(db.Model, Timestamp):
     user = db.relationship(User, backref='external_identifiers')
 
     __table_args__ = (
-        db.Index('useridentity_id_user_method', id_user, method, unique=True),
+        db.Index(
+            'accounts_useridentity_id_user_method',
+            id_user,
+            method,
+            unique=True
+        ),
     )
 
     @classmethod

@@ -12,7 +12,7 @@ from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = '62efc52773d4'
-down_revision = 'e12419831262'
+down_revision = 'dfbdf43a3e96'
 branch_labels = ()
 depends_on = None
 
@@ -38,7 +38,7 @@ def upgrade():
         )
     )
     op.create_index(
-        'useridentity_id_user_method',
+        'accounts_useridentity_id_user_method',
         'accounts_useridentity',
         ['id_user', 'method'],
         unique=True
@@ -48,7 +48,7 @@ def upgrade():
 def downgrade():
     """Downgrade database."""
     op.drop_index(
-        'useridentity_id_user_method',
+        'accounts_useridentity_id_user_method',
         table_name='accounts_useridentity'
     )
     op.drop_table('accounts_useridentity')
