@@ -47,8 +47,4 @@ def upgrade():
 
 def downgrade():
     """Downgrade database."""
-    op.drop_index(
-        'accounts_useridentity_id_user_method',
-        table_name='accounts_useridentity'
-    )
     op.drop_table('accounts_useridentity')
