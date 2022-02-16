@@ -103,7 +103,7 @@ msgstr "Modifier le mot de passe"
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:36
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:46
 msgid "Reset Password"
-msgstr "Réinitailiser le mot de passe"
+msgstr "Réinitialiser le mot de passe"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:41
 msgid ""
