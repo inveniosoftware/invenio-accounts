@@ -8,11 +8,13 @@
 
 """Utility function for ACCOUNTS."""
 
+import re
 import uuid
 from datetime import datetime
 from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 
 from flask import current_app, request, session, url_for
+from flask_babelex import lazy_gettext as _
 from flask_security import current_user
 from flask_security.confirmable import generate_confirmation_token
 from flask_security.recoverable import generate_reset_password_token
@@ -191,3 +193,18 @@ def change_user_password(_reset_password_link_func=None, **user_data):
                   reset_password_link=reset_password_link)
     password_changed.send(current_app._get_current_object(),
                           user=user)
+
+
+def validate_username(username):
+    """Validate the username.
+
+    :param username: The username to validate.
+    :raises ValueError: If validation fails.
+    """
+    username_regex = current_app.config["ACCOUNTS_USERNAME_REGEX"]
+
+    if not re.fullmatch(username_regex, username):
+        # if validation fails, we raise a ValueError with the configured
+        # text explaining the validation rules.
+        message = _(current_app.config["ACCOUNTS_USERNAME_RULES_TEXT"])
+        raise ValueError(message)

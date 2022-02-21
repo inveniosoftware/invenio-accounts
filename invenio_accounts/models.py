@@ -13,11 +13,33 @@ from datetime import datetime
 from flask import current_app, session
 from flask_security import RoleMixin, UserMixin
 from invenio_db import db
+from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import validates
 from sqlalchemy_utils import IPAddressType, Timestamp
+from sqlalchemy_utils.types import JSONType
 
 from .errors import AlreadyLinkedError
+from .profiles import UserPreferenceDict, UserProfileDict
+from .utils import validate_username
+
+json_field = (
+    db.JSON()
+    .with_variant(
+        postgresql.JSONB(none_as_null=True),
+        'postgresql',
+    )
+    .with_variant(
+        JSONType(),
+        'sqlite',
+    )
+    .with_variant(
+        JSONType(),
+        'mysql',
+    )
+)
+
 
 userrole = db.Table(
     'accounts_userrole',
@@ -62,6 +84,12 @@ class User(db.Model, Timestamp, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
 
+    _username = db.Column('username', db.String(255), unique=True)
+    """Lower-case version of the username, to assert uniqueness."""
+
+    _displayname = db.Column('displayname', db.String(255))
+    """Case-preserving version of the username."""
+
     email = db.Column(db.String(255), unique=True)
     """User email."""
 
@@ -82,6 +110,16 @@ class User(db.Model, Timestamp, UserMixin):
     version_id = db.Column(db.Integer, nullable=False)
     """Used by SQLAlchemy for optimistic concurrency control."""
 
+    _user_profile = db.Column(
+        "profile", json_field, default=lambda: dict(), nullable=True,
+    )
+    """The user profile as a JSON field."""
+
+    _preferences = db.Column(
+        "preferences", json_field, default=lambda: dict(), nullable=True,
+    )
+    """The user's preferences stored in a JSON field."""
+
     __mapper_args__ = {
         "version_id_col": version_id
     }
@@ -89,6 +127,61 @@ class User(db.Model, Timestamp, UserMixin):
     login_info = db.relationship(
         "LoginInformation", back_populates="user", uselist=False, lazy="joined"
     )
+
+    @hybrid_property
+    def username(self):
+        """Get username."""
+        return self._displayname
+
+    @username.setter
+    def username(self, username):
+        """Set username.
+
+        .. note:: The username will be converted to lowercase.
+                  The display name will contain the original version.
+        """
+        # if the username can't be validated, a ValueError will be raised
+        validate_username(username)
+        self._displayname = username
+        self._username = username.lower()
+
+    @hybrid_property
+    def user_profile(self):
+        """Get the user profile."""
+        # NOTE: accessing this property requires an initialized app for config
+        if self._user_profile is None:
+            return None
+        elif not isinstance(self._user_profile, UserProfileDict):
+            return UserProfileDict(**self._user_profile)
+
+        return self._user_profile
+
+    @user_profile.setter
+    def user_profile(self, value):
+        """Set the user profile."""
+        if value is None:
+            self._user_profile = None
+        else:
+            self._user_profile = UserProfileDict(**value)
+
+    @hybrid_property
+    def preferences(self):
+        """Get the user preferences."""
+        # NOTE: accessing this property requires an initialized app for config
+        if self._preferences is None:
+            return None
+        elif not isinstance(self._preferences, UserPreferenceDict):
+            self._preferences = UserPreferenceDict(**self._preferences)
+
+        return self._preferences
+
+    @preferences.setter
+    def preferences(self, value):
+        """Set the user preferences."""
+        if value is None:
+            self._preferences = None
+        else:
+            self._preferences = UserPreferenceDict(**value)
 
     def _get_login_info_attr(self, attr_name):
         if self.login_info is None:

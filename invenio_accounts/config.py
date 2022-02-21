@@ -11,6 +11,7 @@
 
 from datetime import timedelta
 
+from .profiles import UserPreferencesSchema, UserProfileSchema
 from .views import login
 
 ACCOUNTS = True
@@ -306,3 +307,26 @@ left as is.
 
 ACCOUNTS_LOCAL_LOGIN_ENABLED = True
 """Whether or not login with local account credentials should be enabled."""
+
+ACCOUNTS_USER_PREFERENCES_SCHEMA = UserPreferencesSchema()
+"""The schema to use for validation of the user preferences."""
+
+ACCOUNTS_USER_PROFILE_SCHEMA = UserProfileSchema()
+"""The schema to use for validation of the user profile."""
+
+ACCOUNTS_USERNAME_REGEX = r"^[a-zA-Z][a-zA-Z0-9-_]{2,255}$"
+"""The regular expression used for validating usernames.
+
+.. note:: When this configuration value is overridden, the value for
+          ``ACCOUNTS_USERNAME_RULES_TEXT`` should be updated as well,
+          to reflect the changes.
+"""
+
+ACCOUNTS_USERNAME_RULES_TEXT = (
+    'Username must start with a letter, be at least three characters long and'
+    ' only contain alphanumeric characters, dashes and underscores.'
+)
+"""Description of username validation rules.
+
+.. note:: Used for both form help text and for form validation error.
+"""
