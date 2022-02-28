@@ -9,7 +9,16 @@
 """Schemas for user profiles and preferences."""
 
 
-from marshmallow import Schema, fields
+from flask_babelex import lazy_gettext as _
+from marshmallow import Schema, ValidationError, fields
+
+
+def validate_visibility(value):
+    """Check if the value is a valid visibility setting."""
+    if value not in ["public", "restricted"]:
+        raise ValidationError(
+            message=str(_("Value must be either 'public' or 'restricted'."))
+        )
 
 
 class UserProfileSchema(Schema):
@@ -20,3 +29,6 @@ class UserProfileSchema(Schema):
 
 class UserPreferencesSchema(Schema):
     """The default schema for user preferences."""
+
+    visibility = fields.String(validate=validate_visibility)
+    email_visibility = fields.String(validate=validate_visibility)
