@@ -52,6 +52,11 @@ def add_session(session=None):
         is used. The object is expected to have a dictionary entry named
         ``"_user_id"`` and a field ``sid_s``
     """
+    if '_user_id' not in session and 'user_id' in session:
+        # this is to support both flask-login 0.4.x as well as 0.5+,
+        # where 'user_id' was renamed to '_user_id'
+        session['_user_id'] = session['user_id']
+
     user_id, sid_s = session['_user_id'], session.sid_s
     with db.session.begin_nested():
         session_activity = SessionActivity(
