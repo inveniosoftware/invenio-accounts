@@ -58,6 +58,7 @@ install_requires = [
     'Flask-Mail>=0.9.1',
     'Flask-Menu>=0.5.0',
     'Flask-Security-Invenio>=3.1.1',
+    'Jinja2>=3.1.0,<4.0.0',
     'invenio-base>=1.2.5',
     'invenio-celery>=1.2.3',
     'invenio-i18n>=1.3.1',
