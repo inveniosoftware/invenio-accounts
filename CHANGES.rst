@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 1.4.12 (released 2022-03-25)
+
+- Fixed imports of `Markup` from Jinja2, including bumping flask-wtf dependency
+- Fixed Celery configuration variables' names in tests
+- Remove Python 3.6 from the test matrix and classifiers
+
 Version 1.4.11 (released 2022-02-28)
 
 - Fixed an issue related to the removal of the future dependency.
