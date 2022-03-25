@@ -61,6 +61,7 @@ install_requires = [
     'Flask-Menu>=0.5.0',
     'Flask-Security>=3.0.0',
     'Flask-WTF>=0.14.3',
+    'Jinja2>=3.1.0,<4.0.0',
     'invenio-base>=1.2.9',
     'invenio-celery>=1.2.3',
     'invenio-i18n>=1.3.1',
