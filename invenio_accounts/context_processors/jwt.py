@@ -9,7 +9,7 @@
 """JWT context processors."""
 
 from flask import current_app, render_template
-from jinja2 import Markup
+from markupsafe import Markup
 
 from ..proxies import current_accounts
 
