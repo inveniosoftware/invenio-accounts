@@ -39,9 +39,9 @@ def app(request):
     app = Flask('testapp', instance_path=instance_path)
     app.config.update(
         ACCOUNTS_USE_CELERY=False,
-        CELERY_ALWAYS_EAGER=True,
+        CELERY_TASK_ALWAYS_EAGER=True,
         CELERY_CACHE_BACKEND="memory",
-        CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
+        CELERY_TASK_EAGER_PROPAGATES=True,
         CELERY_RESULT_BACKEND="cache",
         LOGIN_DISABLED=False,
         MAIL_SUPPRESS_SEND=True,
