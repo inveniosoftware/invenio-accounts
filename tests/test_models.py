@@ -76,7 +76,7 @@ def test_session_activity_model(app):
         assert user.active_sessions[0].sid_s != session_to_delete.sid_s
 
 
-def test_user_profiles(app):
+def test_profiles(app):
     """Test the user profile."""
     user = User(email="admin@inveniosoftware.org")
     profile = {
@@ -85,49 +85,49 @@ def test_user_profiles(app):
 
     with pytest.raises(ValueError):
         # the profile doesn't expect an 'email' value
-        user.user_profile = {
+        user.profile = {
             **profile, "email": "admin@inveniosoftware.org",
         }
 
-    assert user.user_profile is None
+    assert user.profile is None
 
     # a valid profile should be accepted
-    user.user_profile = profile
-    assert dict(user.user_profile) == profile
+    user.profile = profile
+    assert dict(user.profile) == profile
 
     # setting expected properties should work
-    assert len(user.user_profile) == 1
-    assert user.user_profile["full_name"] == "Invenio Admin"
+    assert len(user.profile) == 1
+    assert user.profile["full_name"] == "Invenio Admin"
 
     # but setting unexpected properties should not work
     with pytest.raises(ValueError):
-        user.user_profile["invalid"] = "value"
+        user.profile["invalid"] = "value"
 
     # similar with wrong types for expected fields
     with pytest.raises(ValueError):
-        user.user_profile["email"] = 1
+        user.profile["email"] = 1
 
-    assert len(user.user_profile) == 1
-    assert user.user_profile["full_name"] == "Invenio Admin"
+    assert len(user.profile) == 1
+    assert user.profile["full_name"] == "Invenio Admin"
 
 
-def test_custom_user_profiles(app):
+def test_custom_profiles(app):
     """Test if the customization mechanism for user profiles works."""
     app.config["ACCOUNTS_USER_PROFILE_SCHEMA"] = CustomProfile()
     user = User(email="admin@inveniosoftware.org")
 
     # the default fields aren't allowed in the custom schema
     with pytest.raises(ValueError):
-        user.user_profile = {
+        user.profile = {
             "full_name": "Invenio Admin",
         }
 
     # the expected properties should work...
-    user.user_profile = {"file_descriptor": 1}
-    assert dict(user.user_profile) == {"file_descriptor": 1}
+    user.profile = {"file_descriptor": 1}
+    assert dict(user.profile) == {"file_descriptor": 1}
 
     # ... but not with unexpected types!
     with pytest.raises(ValueError):
-        user.user_profile["file_descriptor"] = "1"
+        user.profile["file_descriptor"] = "1"
 
-    assert dict(user.user_profile) == {"file_descriptor": 1}
+    assert dict(user.profile) == {"file_descriptor": 1}

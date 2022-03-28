@@ -84,10 +84,11 @@ class User(db.Model, Timestamp, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    _username = db.Column('username', db.String(255), unique=True)
+    _username = db.Column(
+        'username', db.String(255), nullable=True, unique=True)
     """Lower-case version of the username, to assert uniqueness."""
 
-    _displayname = db.Column('displayname', db.String(255))
+    _displayname = db.Column('displayname', db.String(255), nullable=True)
     """Case-preserving version of the username."""
 
     email = db.Column(db.String(255), unique=True)
@@ -110,7 +111,7 @@ class User(db.Model, Timestamp, UserMixin):
     version_id = db.Column(db.Integer, nullable=False)
     """Used by SQLAlchemy for optimistic concurrency control."""
 
-    _user_profile = db.Column(
+    _profile = db.Column(
         "profile", json_field, default=lambda: dict(), nullable=True,
     )
     """The user profile as a JSON field."""
@@ -140,29 +141,33 @@ class User(db.Model, Timestamp, UserMixin):
         .. note:: The username will be converted to lowercase.
                   The display name will contain the original version.
         """
-        # if the username can't be validated, a ValueError will be raised
-        validate_username(username)
-        self._displayname = username
-        self._username = username.lower()
+        if username is None:
+            # if the username can't be validated, a ValueError will be raised
+            self._displayname = None
+            self._username = None
+        else:
+            validate_username(username)
+            self._displayname = username
+            self._username = username.lower()
 
     @hybrid_property
-    def user_profile(self):
+    def profile(self):
         """Get the user profile."""
         # NOTE: accessing this property requires an initialized app for config
-        if self._user_profile is None:
+        if self._profile is None:
             return None
-        elif not isinstance(self._user_profile, UserProfileDict):
-            return UserProfileDict(**self._user_profile)
+        elif not isinstance(self._profile, UserProfileDict):
+            return UserProfileDict(**self._profile)
 
-        return self._user_profile
+        return self._profile
 
-    @user_profile.setter
-    def user_profile(self, value):
+    @profile.setter
+    def profile(self, value):
         """Set the user profile."""
         if value is None:
-            self._user_profile = None
+            self._profile = None
         else:
-            self._user_profile = UserProfileDict(**value)
+            self._profile = UserProfileDict(**value)
 
     @hybrid_property
     def preferences(self):
