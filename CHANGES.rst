@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.4.13 (released 2022-03-30)
+
+- Adds support for Flask 2.1 and Click 8.1.
+
 Version 1.4.12 (released 2022-03-25)
 
 - Fixed imports of `Markup` from Jinja2, including bumping flask-wtf dependency
