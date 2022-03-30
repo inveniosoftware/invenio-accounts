@@ -28,13 +28,13 @@ extras_require = {
         'Sphinx==4.2.0',
     ],
     'mysql': [
-        'invenio-db[versioning,mysql]>=1.0.9',
+        'invenio-db[versioning,mysql]>=1.0.14',
     ],
     'postgresql': [
-        'invenio-db[versioning,postgresql]>=1.0.9',
+        'invenio-db[versioning,postgresql]>=1.0.14',
     ],
     'sqlite': [
-        'invenio-db[versioning]>=1.0.9',
+        'invenio-db[versioning]>=1.0.14',
     ],
     'tests': tests_require,
 }
@@ -62,9 +62,9 @@ install_requires = [
     'Flask-Security>=3.0.0',
     'Flask-WTF>=0.15.0',
     'Jinja2>=3.1.0,<4.0.0',
-    'invenio-base>=1.2.9',
+    'invenio-base>=1.2.11',
     'invenio-celery>=1.2.3',
-    'invenio-i18n>=1.3.1',
+    'invenio-i18n>=1.3.2',
     'invenio-rest>=1.2.4',
     'invenio-theme>=1.3.4',
     'maxminddb-geolite2>=2017.404',
