@@ -15,7 +15,6 @@ import tempfile
 
 import pytest
 from flask import Flask
-from flask.cli import ScriptInfo
 from flask_admin import Admin
 from flask_babelex import Babel
 from flask_celeryext import FlaskCeleryExt
@@ -91,6 +90,7 @@ def _app_factory(config=None):
     Babel(app)
     Mail(app)
     InvenioDB(app)
+    InvenioI18N(app)
     return app
 
 
@@ -205,12 +205,6 @@ def app_with_flexible_registration(request):
 
 
 @pytest.fixture
-def script_info(app):
-    """Get ScriptInfo object for testing CLI."""
-    return ScriptInfo(create_app=lambda info: app)
-
-
-@pytest.fixture
 def task_app(request):
     """Flask application with Celery enabled."""
     app = _app_factory(dict(
@@ -259,13 +253,6 @@ def admin_view(app):
     admin.add_view(session_adminview['modelview'](
         session_adminview['model'], db.session,
         category=session_adminview['category']))
-
-
-@pytest.fixture()
-def app_i18n(app):
-    """Init invenio-i18n."""
-    InvenioI18N(app)
-    return app
 
 
 @pytest.fixture()
