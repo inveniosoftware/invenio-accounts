@@ -17,7 +17,7 @@ readme = open('README.rst').read()
 history = open('CHANGES.rst').read()
 
 tests_require = [
-    "pytest-invenio>=1.4.2"
+    "pytest-invenio>=1.4.6"
 ]
 
 extras_require = {
@@ -28,13 +28,13 @@ extras_require = {
         'Sphinx==4.2.0',
     ],
     'mysql': [
-        'invenio-db[versioning,mysql]>=1.0.11',
+        'invenio-db[versioning,mysql]>=1.0.14',
     ],
     'postgresql': [
-        'invenio-db[versioning,postgresql]>=1.0.11',
+        'invenio-db[versioning,postgresql]>=1.0.14',
     ],
     'sqlite': [
-        'invenio-db[versioning]>=1.0.11',
+        'invenio-db[versioning]>=1.0.14',
     ],
     'tests': tests_require,
 }
@@ -53,21 +53,14 @@ setup_requires = [
 
 install_requires = [
     'cryptography>=3.0.0',
-    'Flask-Breadcrumbs>=0.4.0',
     'Flask-KVSession-Invenio>=0.6.3',
-    'Flask-Mail>=0.9.1',
-    'Flask-Menu>=0.5.0',
-    'Flask-Security-Invenio>=3.1.1',
-    'Jinja2>=3.1.0,<4.0.0',
-    'invenio-base>=1.2.5',
+    'Flask-Security-Invenio>=3.1.2',
     'invenio-celery>=1.2.3',
-    'invenio-i18n>=1.3.1',
+    'invenio-mail>=1.0.2',
     'invenio-rest>=1.2.4',
     'invenio-theme>=1.3.4',
     'maxminddb-geolite2>=2017.404',
-    'passlib>=1.7.1',
     'pyjwt>=1.5.0',
-    'redis>=2.10.5',
     'simplekv>=0.11.2',
     'ua-parser>=0.7.3',
 ]

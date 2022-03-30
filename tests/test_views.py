@@ -65,54 +65,54 @@ def test_no_log_in_message_for_logged_in_users(app):
                 app.config['SECURITY_POST_LOGIN_VIEW']).data
 
 
-def test_view_list_sessions(app, app_i18n):
+def test_view_list_sessions(app):
     """Test view list sessions."""
     with app.test_request_context():
         user1 = create_test_user(email='user1@invenio-software.org')
         user2 = create_test_user(email='user2@invenio-software.org')
 
-        with app.test_client() as client:
-            client.post(url_for_security('login'), data=dict(
-                email=user1.email,
-                password=user1.password_plaintext,
-            ))
+    with app.test_client() as client:
+        client.post(url_for_security('login'), data=dict(
+            email=user1.email,
+            password=user1.password_plaintext,
+        ))
 
-        with app.test_client() as client:
-            client.post(url_for_security('login'), data=dict(
-                email=user2.email,
-                password=user2.password_plaintext,
-            ))
+    with app.test_client() as client:
+        client.post(url_for_security('login'), data=dict(
+            email=user2.email,
+            password=user2.password_plaintext,
+        ))
 
-            # get the list of user 2 sessions
-            url = url_for('invenio_accounts.security')
-            res = client.get(url)
-            assert res.status_code == 200
+        # get the list of user 2 sessions
+        url = url_for('invenio_accounts.security')
+        res = client.get(url)
+        assert res.status_code == 200
 
-            # check session for user 1 is not in the list
-            sessions_1 = SessionActivity.query.filter_by(
-                user_id=user1.id).all()
-            assert len(sessions_1) == 1
-            assert sessions_1[0].sid_s not in res.data.decode('utf-8')
+        # check session for user 1 is not in the list
+        sessions_1 = SessionActivity.query.filter_by(
+            user_id=user1.id).all()
+        assert len(sessions_1) == 1
+        assert sessions_1[0].sid_s not in res.data.decode('utf-8')
 
-            # check session for user 2 is in the list
-            sessions_2 = SessionActivity.query.filter_by(
-                user_id=user2.id).all()
-            assert len(sessions_2) == 1
-            assert sessions_2[0].sid_s in res.data.decode('utf-8')
+        # check session for user 2 is in the list
+        sessions_2 = SessionActivity.query.filter_by(
+            user_id=user2.id).all()
+        assert len(sessions_2) == 1
+        assert sessions_2[0].sid_s in res.data.decode('utf-8')
 
-            # test user 2 to delete user 1 session
-            url = url_for('invenio_accounts.revoke_session')
-            res = client.post(url, data={'sid_s': sessions_1[0].sid_s})
-            assert res.status_code == 302
-            assert SessionActivity.query.filter_by(
-                user_id=user1.id, sid_s=sessions_1[0].sid_s).count() == 1
+        # test user 2 to delete user 1 session
+        url = url_for('invenio_accounts.revoke_session')
+        res = client.post(url, data={'sid_s': sessions_1[0].sid_s})
+        assert res.status_code == 302
+        assert SessionActivity.query.filter_by(
+            user_id=user1.id, sid_s=sessions_1[0].sid_s).count() == 1
 
-            # test user 2 to delete user 1 session
-            url = url_for('invenio_accounts.revoke_session')
-            res = client.post(url, data={'sid_s': sessions_2[0].sid_s})
-            assert res.status_code == 302
-            assert SessionActivity.query.filter_by(
-                user_id=user1.id, sid_s=sessions_2[0].sid_s).count() == 0
+        # test user 2 to delete user 1 session
+        url = url_for('invenio_accounts.revoke_session')
+        res = client.post(url, data={'sid_s': sessions_2[0].sid_s})
+        assert res.status_code == 302
+        assert SessionActivity.query.filter_by(
+            user_id=user1.id, sid_s=sessions_2[0].sid_s).count() == 0
 
 
 def test_login_remember_me_disabled(app, users):
@@ -136,7 +136,6 @@ def test_login_remember_me_disabled(app, users):
 
 def test_login_from_headers_disabled(app, users):
     """Test login from headers is disabled."""
-    app.login_manager.request_callback = None
     email = users[0]['email']
     basic_fmt = 'Basic {0}'
     decoded = bytes.decode(base64.b64encode(str.encode(str(email))))
