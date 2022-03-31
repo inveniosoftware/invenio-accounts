@@ -35,7 +35,8 @@ You can also e.g. deactive users:
 
 from .ext import InvenioAccounts, InvenioAccountsREST, InvenioAccountsUI
 from .proxies import current_accounts
-from .version import __version__
+
+__version__ = '2.0.0.dev5'
 
 __all__ = (
     '__version__',
