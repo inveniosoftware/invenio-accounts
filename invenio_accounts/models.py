@@ -111,7 +111,7 @@ class User(db.Model, Timestamp, UserMixin):
     version_id = db.Column(db.Integer, nullable=False)
     """Used by SQLAlchemy for optimistic concurrency control."""
 
-    _profile = db.Column(
+    _user_profile = db.Column(
         "profile", json_field, default=lambda: dict(), nullable=True,
     )
     """The user profile as a JSON field."""
@@ -151,23 +151,23 @@ class User(db.Model, Timestamp, UserMixin):
             self._username = username.lower()
 
     @hybrid_property
-    def profile(self):
+    def user_profile(self):
         """Get the user profile."""
         # NOTE: accessing this property requires an initialized app for config
-        if self._profile is None:
+        if self._user_profile is None:
             return None
-        elif not isinstance(self._profile, UserProfileDict):
-            return UserProfileDict(**self._profile)
+        elif not isinstance(self._user_profile, UserProfileDict):
+            return UserProfileDict(**self._user_profile)
 
-        return self._profile
+        return self._user_profile
 
-    @profile.setter
-    def profile(self, value):
+    @user_profile.setter
+    def user_profile(self, value):
         """Set the user profile."""
         if value is None:
-            self._profile = None
+            self._user_profile = None
         else:
-            self._profile = UserProfileDict(**value)
+            self._user_profile = UserProfileDict(**value)
 
     @hybrid_property
     def preferences(self):

@@ -25,6 +25,7 @@ class UserProfileSchema(Schema):
     """The default user profile schema."""
 
     full_name = fields.String()
+    affiliations = fields.String()
 
 
 class UserPreferencesSchema(Schema):
