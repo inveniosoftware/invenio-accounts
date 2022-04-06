@@ -60,6 +60,9 @@ def login_user_via_session(client, user=None, email=None):
     if not user:
         user = _datastore.find_user(email=email)
     with client.session_transaction() as sess:
+        # Flask-Login <0.5
+        sess['user_id'] = user.get_id()
+        # Flask-Login >=0.5
         sess['_user_id'] = user.get_id()
 
 
