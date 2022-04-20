@@ -129,6 +129,14 @@ class User(db.Model, Timestamp, UserMixin):
         "LoginInformation", back_populates="user", uselist=False, lazy="joined"
     )
 
+    def __init__(self, *args, **kwargs):
+        """Constructor."""
+        user_profile = kwargs.pop('user_profile', {})
+        preferences = kwargs.pop('preferences', {})
+        super().__init__(*args, **kwargs)
+        self.user_profile = user_profile
+        self.preferences = preferences
+
     @hybrid_property
     def username(self):
         """Get username."""
