@@ -89,7 +89,7 @@ def test_profiles(app):
             **profile, "email": "admin@inveniosoftware.org",
         }
 
-    assert user.user_profile is None
+    assert user.user_profile == {}
 
     # a valid profile should be accepted
     user.user_profile = profile
