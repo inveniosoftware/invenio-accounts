@@ -52,7 +52,7 @@ except AttributeError:
 from .ext import InvenioAccounts, InvenioAccountsREST, InvenioAccountsUI
 from .proxies import current_accounts
 
-__version__ = '2.0.0.dev7'
+__version__ = '2.0.0.dev8'
 
 __all__ = (
     '__version__',
