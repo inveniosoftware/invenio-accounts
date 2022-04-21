@@ -133,6 +133,8 @@ class User(db.Model, Timestamp, UserMixin):
         """Constructor."""
         user_profile = kwargs.pop('user_profile', {})
         preferences = kwargs.pop('preferences', {})
+        preferences.setdefault('visibility', 'restricted')
+        preferences.setdefault('email_visibility', 'restricted')
         super().__init__(*args, **kwargs)
         self.user_profile = user_profile
         self.preferences = preferences
