@@ -10,6 +10,7 @@
 
 from flask_security import SQLAlchemyUserDatastore
 
+from .proxies import current_db_change_history
 from .sessions import delete_user_sessions
 from .signals import datastore_post_commit, datastore_pre_commit
 
@@ -34,3 +35,10 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
         datastore_pre_commit.send(session=self.db.session)
         super().commit()
         datastore_post_commit.send(session=self.db.session)
+
+    def mark_changed(self, sid, uid=None, rid=None):
+        """Save a user to the changed history."""
+        if uid:
+            current_db_change_history.updated_users[sid].append(uid)
+        elif rid:
+            current_db_change_history.updated_roles[sid].append(uid)
