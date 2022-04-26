@@ -28,7 +28,7 @@ def test_client_authenticated(app):
     authenticated/logged in.
     """
     ds = app.extensions['security'].datastore
-    email = 'test@example.org'
+    email = 'test@test.org'
     password = '123456'
 
     with app.app_context():
@@ -75,12 +75,12 @@ def test_client_authenticated(app):
 
 
 def test_create_test_user(app):
-    """Test for testutils.py:create_test_user('test@example.org').
+    """Test for testutils.py:create_test_user('test@test.org').
 
     Demonstrates basic usage and context requirements.
     """
     ds = app.extensions['security'].datastore
-    email = 'test@example.org'
+    email = 'test@test.org'
     password = '1234'
 
     with app.app_context():
@@ -106,7 +106,7 @@ def test_create_test_user(app):
 def test_create_test_user_defaults(app):
     """Test the default values for testutils.py:create_test_user."""
     with app.app_context():
-        user = testutils.create_test_user('test@example.org')
+        user = testutils.create_test_user('test@test.org')
         with app.test_client() as client:
             testutils.login_user_via_view(client, user.email,
                                           user.password_plaintext)
@@ -115,7 +115,7 @@ def test_create_test_user_defaults(app):
 
 def test_login_user_via_view(app):
     """Test the login-via-view function/hack."""
-    email = 'test@example.org'
+    email = 'test@test.org'
     password = '1234'
 
     with app.app_context():
@@ -129,7 +129,7 @@ def test_login_user_via_view(app):
 
 def test_login_user_via_session(app):
     """Test the login-via-view function/hack."""
-    email = 'test@example.org'
+    email = 'test@test.org'
     password = '1234'
 
     with app.app_context():

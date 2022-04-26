@@ -62,7 +62,7 @@ def test_cli_addremove_role(app):
     # Create a user and a role
     result = runner.invoke(
         users_create,
-        ['a@example.org', '--password', '123456']
+        ['a@test.org', '--password', '123456']
     )
     assert result.exit_code == 0
     result = runner.invoke(roles_create, ['superuser'])
@@ -70,43 +70,43 @@ def test_cli_addremove_role(app):
 
     # User not found
     result = runner.invoke(
-        roles_add, ['inval@example.org', 'superuser'])
+        roles_add, ['inval@test.org', 'superuser'])
     assert result.exit_code != 0
 
     # Add:
     result = runner.invoke(
-        roles_add, ['a@example.org', 'invalid'])
+        roles_add, ['a@test.org', 'invalid'])
     assert result.exit_code != 0
 
     result = runner.invoke(
-        roles_remove, ['inval@example.org', 'superuser'])
+        roles_remove, ['inval@test.org', 'superuser'])
     assert result.exit_code != 0
 
     # Remove:
     result = runner.invoke(
-        roles_remove, ['a@example.org', 'invalid'])
+        roles_remove, ['a@test.org', 'invalid'])
     assert result.exit_code != 0
 
     result = runner.invoke(
-        roles_remove, ['b@example.org', 'superuser'])
+        roles_remove, ['b@test.org', 'superuser'])
     assert result.exit_code != 0
 
     result = runner.invoke(
-        roles_remove, ['a@example.org', 'superuser'])
+        roles_remove, ['a@test.org', 'superuser'])
     assert result.exit_code != 0
 
     # Add:
     result = runner.invoke(roles_add,
-                           ['a@example.org', 'superuser'])
+                           ['a@test.org', 'superuser'])
     assert result.exit_code == 0
     result = runner.invoke(
         roles_add,
-        ['a@example.org', 'superuser'])
+        ['a@test.org', 'superuser'])
     assert result.exit_code != 0
 
     # Remove:
     result = runner.invoke(
-        roles_remove, ['a@example.org', 'superuser'])
+        roles_remove, ['a@test.org', 'superuser'])
     assert result.exit_code == 0
 
 
@@ -117,7 +117,7 @@ def test_cli_activate_deactivate(app):
     # Create a user
     result = runner.invoke(
         users_create,
-        ['a@example.org', '--password', '123456']
+        ['a@test.org', '--password', '123456']
     )
     assert result.exit_code == 0
 
@@ -127,13 +127,13 @@ def test_cli_activate_deactivate(app):
     result = runner.invoke(users_deactivate, ['in@valid.org'])
     assert result.exit_code != 0
 
-    result = runner.invoke(users_activate, ['a@example.org'])
+    result = runner.invoke(users_activate, ['a@test.org'])
     assert result.exit_code == 0
-    result = runner.invoke(users_activate, ['a@example.org'])
+    result = runner.invoke(users_activate, ['a@test.org'])
     assert result.exit_code == 0
 
     # Deactivate
-    result = runner.invoke(users_deactivate, ['a@example.org'])
+    result = runner.invoke(users_deactivate, ['a@test.org'])
     assert result.exit_code == 0
-    result = runner.invoke(users_deactivate, ['a@example.org'])
+    result = runner.invoke(users_deactivate, ['a@test.org'])
     assert result.exit_code == 0

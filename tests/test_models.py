@@ -31,7 +31,7 @@ def test_session_activity_model(app):
         inspector = inspect(db.engine)
         assert 'accounts_user_session_activity' in inspector.get_table_names()
 
-        user = testutils.create_test_user('test@example.org')
+        user = testutils.create_test_user('test@test.org')
 
         # Create a new SessionActivity object, put it in the db
         session_activity = SessionActivity(user_id=user.get_id(),
