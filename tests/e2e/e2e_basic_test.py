@@ -57,7 +57,7 @@ def test_user_registration(live_server, env_browser):
     input_password = signup_form.find_element_by_name('password')
     # input w/ name "email"
     # input w/ name "password"
-    user_email = 'test@example.org'
+    user_email = 'test@test.org'
     user_password = '12345_SIx'
     input_email.send_keys(user_email)
     input_password.send_keys(user_password)
