@@ -152,7 +152,7 @@ the link fast.
 SECURITY_TRACKABLE = True
 """Enable user tracking on login."""
 
-SECURITY_LOGIN_WITHOUT_CONFIRMATION = True
+SECURITY_LOGIN_WITHOUT_CONFIRMATION = False
 """Allow users to login without first confirming their email address."""
 
 SECURITY_PASSWORD_SALT = None
