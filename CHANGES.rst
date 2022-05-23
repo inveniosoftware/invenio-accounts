@@ -8,6 +8,27 @@
 Changes
 =======
 
+Version 2.0.0 (released 2022-05-23)
+
+- Adds customizable user profiles and user preferences fields to the user
+  data model.
+
+- Adds version counter to the user table to enable optimistic concurrency
+  control on the user table.
+
+- Moves login information fields from user table to a separate login
+  information table.
+
+- Moves the external user identity table from Invenio-OAuthclient to
+  Invenio-Accounts.
+
+- Adds support for tracking changed users within a transaction to allow for
+  updating the related indexes.
+
+- Changes from using Flask-Security to using a private fork named
+  Flask-Security-Invenio. Flask-Security-Too was evaluated but was found to
+  have significantly increased scope with features not needed.
+
 Version 1.4.9 (released 2021-12-04)
 
 - Fixed issue with account creation via CLI due to issue with changed API in
