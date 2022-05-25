@@ -30,7 +30,7 @@ from .settings import blueprint
     blueprint, 'settings.security',
     # NOTE: Menu item text (icon replaced by a user icon).
     _('%(icon)s Security', icon=make_lazy_string(
-        lambda: f'<i class="{current_theme_icons.shield}"></i>')),
+        lambda: '<i class="{shield}".format(shield=current_theme_icons.shield)></i>')),
     order=2)
 @register_breadcrumb(blueprint, 'breadcrumbs.settings.security', _('Security'))
 def security():

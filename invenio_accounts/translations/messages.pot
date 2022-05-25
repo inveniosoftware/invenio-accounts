@@ -7,16 +7,16 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: invenio-accounts 2.0.0.dev0\n"
+"Project-Id-Version: invenio-accounts 2.0.0\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2022-02-15 13:22+0100\n"
+"POT-Creation-Date: 2022-05-25 11:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.1\n"
 
 #: invenio_accounts/admin.py:77
 msgid "Inactivate"
@@ -69,6 +69,14 @@ msgstr ""
 
 #: invenio_accounts/forms.py:24
 msgid "Please complete the reCAPTCHA."
+msgstr ""
+
+#: invenio_accounts/utils.py:209
+msgid "ACCOUNTS_USERNAME_RULES_TEXT"
+msgstr ""
+
+#: invenio_accounts/profiles/schemas.py:20
+msgid "Value must be either 'public' or 'restricted'."
 msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:13
@@ -193,32 +201,32 @@ msgid "Sessions"
 msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:16
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:53
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:54
 msgid "Revoke"
 msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:20
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:15
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:16
 msgid "This is a list of devices that have logged into your account."
 msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:36
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:33
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:34
 msgid "Signed in"
 msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:35
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:36
 msgid "current session"
 msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:46
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:41
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:42
 msgid "Location"
 msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:55
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:53
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:54
 msgid "Logout"
 msgstr ""
 

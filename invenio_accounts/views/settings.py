@@ -63,7 +63,7 @@ def init_menu():
             view_name,
             # NOTE: Menu item text (icon replaced by a key icon).
             _('%(icon)s Change password',
-                icon=f'<i class="{current_theme_icons.key}"></i>'),
+                icon='<i class="{key}".format(key=current_theme_icons.key)></i>'),
             order=1)
 
         # Breadcrumb for change password
