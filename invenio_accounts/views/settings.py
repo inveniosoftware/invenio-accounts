@@ -56,15 +56,21 @@ def init_menu():
     # - Change password
     if current_app.config.get('SECURITY_CHANGEABLE', True):
         view_name = '{}.change_password'.format(
-            current_app.config['SECURITY_BLUEPRINT_NAME'])
+            current_app.config['SECURITY_BLUEPRINT_NAME']
+        )
 
         item = current_menu.submenu('settings.change_password')
         item.register(
             view_name,
             # NOTE: Menu item text (icon replaced by a key icon).
-            _('%(icon)s Change password',
-                icon='<i class="{key}".format(key=current_theme_icons.key)></i>'),
-            order=1)
+            _(
+                '%(icon)s Change password',
+                icon=(
+                    '<i class="{key}".format(key=current_theme_icons.key)></i>'
+                ),
+            ),
+            order=1,
+        )
 
         # Breadcrumb for change password
         #
