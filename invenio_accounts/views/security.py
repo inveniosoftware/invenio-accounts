@@ -33,7 +33,9 @@ from .settings import blueprint
     _(
         '%(icon)s Security',
         icon=make_lazy_string(
-            lambda: '<i class="{shield}".format(shield=current_theme_icons.shield)></i>'
+            lambda:
+            '<i class="{shield}".format(\
+            shield=current_theme_icons.shield)></i>'
         ),
     ),
     order=2,
