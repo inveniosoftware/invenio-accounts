@@ -20,11 +20,9 @@ from .settings import blueprint
 @blueprint.route("/login")
 def login(*args, **kwargs):
     """Disable login credential submission if local login is disabled."""
-    local_login_enabled = current_app.config.get(
-        "ACCOUNTS_LOCAL_LOGIN_ENABLED", True
-    )
+    local_login_enabled = current_app.config.get("ACCOUNTS_LOCAL_LOGIN_ENABLED", True)
 
-    login_form_submitted = (request.method == "POST")
+    login_form_submitted = request.method == "POST"
     if login_form_submitted and not local_login_enabled:
         # only allow GET requests,
         # avoid credential submission/login via POST
@@ -33,4 +31,4 @@ def login(*args, **kwargs):
     return base_login(*args, **kwargs)
 
 
-__all__ = ('blueprint', 'login')
+__all__ = ("blueprint", "login")

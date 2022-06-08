@@ -12,27 +12,32 @@ import time
 
 import pytest
 from flask_security import url_for_security
-from flask_security.confirmable import confirm_email_token_status, \
-    generate_confirmation_token
+from flask_security.confirmable import (
+    confirm_email_token_status,
+    generate_confirmation_token,
+)
 from flask_security.recoverable import generate_reset_password_token
 
 
-@pytest.mark.parametrize("sleep,expired", [
-    (0, False),
-    (4, True),
-])
+@pytest.mark.parametrize(
+    "sleep,expired",
+    [
+        (0, False),
+        (4, True),
+    ],
+)
 def test_forgot_password_token(app, users, sleep, expired):
     """Test expiration of token for password reset."""
-    token = generate_reset_password_token(users[0]['obj'])
-    reset_link = url_for_security('reset_password', token=token)
+    token = generate_reset_password_token(users[0]["obj"])
+    reset_link = url_for_security("reset_password", token=token)
 
     with app.test_client() as client:
         res = client.get(reset_link, follow_redirects=True)
         time.sleep(sleep)
         if expired:
-            app.config['SECURITY_MSG_PASSWORD_RESET_EXPIRED'][0] % {
-                'within': app.config['SECURITY_RESET_PASSWORD_WITHIN'],
-                'email': users[0]['email']
+            app.config["SECURITY_MSG_PASSWORD_RESET_EXPIRED"][0] % {
+                "within": app.config["SECURITY_RESET_PASSWORD_WITHIN"],
+                "email": users[0]["email"],
             } in res.get_data(as_text=True)
         else:
             assert (
@@ -46,7 +51,7 @@ def test_confirmation_token(app, users):
 
     Test to ensures that the configuration option is respected.
     """
-    user = users[0]['obj']
+    user = users[0]["obj"]
     token = generate_confirmation_token(user)
     # Valid
     expired, invalid, token_user = confirm_email_token_status(token)

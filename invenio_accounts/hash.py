@@ -13,16 +13,15 @@ import hashlib
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from passlib.utils.compat import str_to_uascii
-from passlib.utils.handlers import GenericHandler, HasSalt, parse_mc2, \
-    render_mc2
+from passlib.utils.handlers import GenericHandler, HasSalt, parse_mc2, render_mc2
 
-__all__ = ('InvenioAesEncryptedEmail', )
+__all__ = ("InvenioAesEncryptedEmail",)
 
 
 def _to_binary(val):
     """Convert to binary."""
     if isinstance(val, str):
-        return val.encode('utf-8')
+        return val.encode("utf-8")
     assert isinstance(val, bytes)
     return val
 
@@ -30,7 +29,7 @@ def _to_binary(val):
 def _to_string(val):
     """Convert to text."""
     if isinstance(val, bytes):
-        return val.decode('utf-8')
+        return val.decode("utf-8")
     assert isinstance(val, str)
     return val
 
@@ -47,7 +46,7 @@ def _mysql_aes_pad(val):
     """Padding."""
     val = _to_string(val)
     pad_value = 16 - (len(val) % 16)
-    return _to_binary('{0}{1}'.format(val, chr(pad_value) * pad_value))
+    return _to_binary("{0}{1}".format(val, chr(pad_value) * pad_value))
 
 
 def _mysql_aes_unpad(val):
@@ -85,8 +84,7 @@ def mysql_aes_decrypt(encrypted_val, key):
     :param key: The AES key.
     :returns: The AES value decrypted.
     """
-    assert isinstance(encrypted_val, bytes) \
-        or isinstance(encrypted_val, str)
+    assert isinstance(encrypted_val, bytes) or isinstance(encrypted_val, str)
     assert isinstance(key, bytes) or isinstance(key, str)
     k = _mysql_aes_key(_to_binary(key))
     d = _mysql_aes_engine(_to_binary(k)).decryptor()
@@ -109,7 +107,7 @@ class InvenioAesEncryptedEmail(HasSalt, GenericHandler):
 
     name = "invenio_aes_encrypted_email"
     setting_kwds = "salt"
-    ident = u"$invenio-aes$"
+    ident = "$invenio-aes$"
 
     @classmethod
     def from_string(cls, hash, **context):

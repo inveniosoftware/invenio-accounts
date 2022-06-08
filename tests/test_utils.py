@@ -27,19 +27,20 @@ def test_client_authenticated(app):
     We want to verify that it doesn't return True when the client isn't
     authenticated/logged in.
     """
-    ds = app.extensions['security'].datastore
-    email = 'test@test.org'
-    password = '123456'
+    ds = app.extensions["security"].datastore
+    email = "test@test.org"
+    password = "123456"
 
     with app.app_context():
-        change_password_url = url_for_security('change_password')
-        login_url = url_for_security('login')
+        change_password_url = url_for_security("change_password")
+        login_url = url_for_security("login")
 
         with app.test_client() as client:
             # At this point we should not be authenticated/logged in as a user
             # assert flask_login.current_user.is_anonymous
             assert not testutils.client_authenticated(
-                client, test_url=change_password_url)
+                client, test_url=change_password_url
+            )
 
             # Test HTTP status code of view when not logged in.
             response = client.get(change_password_url)
@@ -57,9 +58,11 @@ def test_client_authenticated(app):
             db.session.commit()
 
             # Manual login via view
-            response = client.post(login_url,
-                                   data={'email': email, 'password': password},
-                                   environ_base={'REMOTE_ADDR': '127.0.0.1'})
+            response = client.post(
+                login_url,
+                data={"email": email, "password": password},
+                environ_base={"REMOTE_ADDR": "127.0.0.1"},
+            )
 
             # Client gets redirected after logging in
             assert response.status_code == 302
@@ -79,9 +82,9 @@ def test_create_test_user(app):
 
     Demonstrates basic usage and context requirements.
     """
-    ds = app.extensions['security'].datastore
-    email = 'test@test.org'
-    password = '1234'
+    ds = app.extensions["security"].datastore
+    email = "test@test.org"
+    password = "1234"
 
     with app.app_context():
         user = testutils.create_test_user(email, password)
@@ -106,31 +109,29 @@ def test_create_test_user(app):
 def test_create_test_user_defaults(app):
     """Test the default values for testutils.py:create_test_user."""
     with app.app_context():
-        user = testutils.create_test_user('test@test.org')
+        user = testutils.create_test_user("test@test.org")
         with app.test_client() as client:
-            testutils.login_user_via_view(client, user.email,
-                                          user.password_plaintext)
+            testutils.login_user_via_view(client, user.email, user.password_plaintext)
             assert testutils.client_authenticated(client)
 
 
 def test_login_user_via_view(app):
     """Test the login-via-view function/hack."""
-    email = 'test@test.org'
-    password = '1234'
+    email = "test@test.org"
+    password = "1234"
 
     with app.app_context():
         user = testutils.create_test_user(email, password)
         with app.test_client() as client:
             assert not testutils.client_authenticated(client)
-            testutils.login_user_via_view(client, user.email,
-                                          user.password_plaintext)
+            testutils.login_user_via_view(client, user.email, user.password_plaintext)
             assert testutils.client_authenticated(client)
 
 
 def test_login_user_via_session(app):
     """Test the login-via-view function/hack."""
-    email = 'test@test.org'
-    password = '1234'
+    email = "test@test.org"
+    password = "1234"
 
     with app.app_context():
         user = testutils.create_test_user(email, password)
@@ -144,15 +145,13 @@ def test_jwt_token(app):
     """Test jwt creation."""
     with app.app_context():
         # Extra parameters
-        extra = dict(
-            defenders=['jessica', 'luke', 'danny', 'matt']
-        )
+        extra = dict(defenders=["jessica", "luke", "danny", "matt"])
         # Create token normally
         token = jwt_create_token(user_id=22, additional_data=extra)
         decode = jwt_decode_token(token)
         # Decode
-        assert 'jessica' in decode.get('defenders')
-        assert 22 == decode.get('sub')
+        assert "jessica" in decode.get("defenders")
+        assert 22 == decode.get("sub")
 
 
 def test_jwt_expired_token(app):
@@ -169,4 +168,4 @@ def test_jwt_expired_token(app):
             jwt_decode_token(token)
         # Random token
         with pytest.raises(JWTDecodeError):
-            jwt_decode_token('Roadster SV')
+            jwt_decode_token("Roadster SV")

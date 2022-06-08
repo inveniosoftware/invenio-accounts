@@ -21,8 +21,11 @@ from invenio_db import db
 from passlib.registry import register_crypt_handler
 from werkzeug.utils import cached_property
 
-from invenio_accounts.forms import confirm_register_form_factory, \
-    login_form_factory, register_form_factory
+from invenio_accounts.forms import (
+    confirm_register_form_factory,
+    login_form_factory,
+    register_form_factory,
+)
 
 from . import config
 from .datastore import SessionAwareSQLAlchemyUserDatastore
@@ -55,19 +58,22 @@ class InvenioAccounts(object):
         # of a session).
         def patch_do_nothing(*args, **kwargs):
             pass
+
         LoginManager._set_cookie = patch_do_nothing
 
     @cached_property
     def jwt_decode_factory(self):
         """Load default JWT veryfication factory."""
         return obj_or_import_string(
-            current_app.config.get('ACCOUNTS_JWT_DECODE_FACTORY'))
+            current_app.config.get("ACCOUNTS_JWT_DECODE_FACTORY")
+        )
 
     @cached_property
     def jwt_creation_factory(self):
         """Load default JWT creation factory."""
         return obj_or_import_string(
-            current_app.config.get('ACCOUNTS_JWT_CREATION_FACTORY'))
+            current_app.config.get("ACCOUNTS_JWT_CREATION_FACTORY")
+        )
 
     def register_anonymous_identity_loader(self, state):
         """Registers a loader for AnonymousIdentity.
@@ -84,9 +90,7 @@ class InvenioAccounts(object):
         # Warn if inconsistent configuration is detected
         sec = app.extensions["security"]
         local_login = app.config.get("ACCOUNTS_LOCAL_LOGIN_ENABLED", True)
-        local_account_editable = (
-            sec.registerable or sec.changeable or sec.recoverable
-        )
+        local_account_editable = sec.registerable or sec.changeable or sec.recoverable
 
         if local_account_editable and not local_login:
             warning_message = (
@@ -131,19 +135,19 @@ class InvenioAccounts(object):
 
         # Create user datastore
         if not self.datastore:
-            self.datastore = SessionAwareSQLAlchemyUserDatastore(
-                db, User, Role)
+            self.datastore = SessionAwareSQLAlchemyUserDatastore(db, User, Role)
 
-        if app.config['ACCOUNTS_SESSION_ACTIVITY_ENABLED']:
+        if app.config["ACCOUNTS_SESSION_ACTIVITY_ENABLED"]:
             self._enable_session_activity(app=app)
 
         # Initialize extension.
-        _register_blueprint = app.config.get('ACCOUNTS_REGISTER_BLUEPRINT')
+        _register_blueprint = app.config.get("ACCOUNTS_REGISTER_BLUEPRINT")
         if _register_blueprint is not None:
             register_blueprint = _register_blueprint
 
-        state = self.security.init_app(app, datastore=self.datastore,
-                                       register_blueprint=register_blueprint)
+        state = self.security.init_app(
+            app, datastore=self.datastore, register_blueprint=register_blueprint
+        )
 
         # Override Flask-Security's default login view function
         new_login_view = obj_or_import_string(
@@ -154,18 +158,21 @@ class InvenioAccounts(object):
 
         self.register_anonymous_identity_loader(state)
 
-        app.extensions['security'].register_form = register_form_factory(
-            app.extensions['security'].register_form, app)
+        app.extensions["security"].register_form = register_form_factory(
+            app.extensions["security"].register_form, app
+        )
 
-        app.extensions['security'].confirm_register_form = \
-            confirm_register_form_factory(
-                app.extensions['security'].confirm_register_form, app
-            )
+        app.extensions[
+            "security"
+        ].confirm_register_form = confirm_register_form_factory(
+            app.extensions["security"].confirm_register_form, app
+        )
 
-        app.extensions['security'].login_form = login_form_factory(
-            app.extensions['security'].login_form, app)
+        app.extensions["security"].login_form = login_form_factory(
+            app.extensions["security"].login_form, app
+        )
 
-        if app.config['ACCOUNTS_USE_CELERY']:
+        if app.config["ACCOUNTS_USE_CELERY"]:
             from invenio_accounts.tasks import send_security_email
 
             @state.send_mail_task
@@ -173,25 +180,26 @@ class InvenioAccounts(object):
                 send_security_email.delay(msg.__dict__)
 
         # Register context processor
-        if app.config['ACCOUNTS_JWT_DOM_TOKEN']:
+        if app.config["ACCOUNTS_JWT_DOM_TOKEN"]:
             from invenio_accounts.context_processors.jwt import jwt_proccessor
+
             app.context_processor(jwt_proccessor)
 
         # Register signal receiver
-        if app.config.get('ACCOUNTS_USERINFO_HEADERS'):
+        if app.config.get("ACCOUNTS_USERINFO_HEADERS"):
             request_finished.connect(set_session_info, app)
 
         # Set Session KV store
         session_kvstore_factory = obj_or_import_string(
-            app.config['ACCOUNTS_SESSION_STORE_FACTORY'])
+            app.config["ACCOUNTS_SESSION_STORE_FACTORY"]
+        )
         session_kvstore = session_kvstore_factory(app)
 
-        self.kvsession_extension = KVSessionExtension(
-            session_kvstore, app)
+        self.kvsession_extension = KVSessionExtension(session_kvstore, app)
 
         self.check_configuration_consistency(app)
 
-        app.extensions['invenio-accounts'] = self
+        app.extensions["invenio-accounts"] = self
 
     def init_config(self, app):
         """Initialize configuration.
@@ -199,9 +207,8 @@ class InvenioAccounts(object):
         :param app: The Flask application.
         """
         try:
-            pkg_resources.get_distribution('celery')
-            app.config.setdefault(
-                "ACCOUNTS_USE_CELERY", not (app.debug or app.testing))
+            pkg_resources.get_distribution("celery")
+            app.config.setdefault("ACCOUNTS_USE_CELERY", not (app.debug or app.testing))
         except pkg_resources.DistributionNotFound:  # pragma: no cover
             app.config.setdefault("ACCOUNTS_USE_CELERY", False)
 
@@ -209,27 +216,18 @@ class InvenioAccounts(object):
         register_crypt_handler(InvenioAesEncryptedEmail)
 
         # Change Flask defaults
-        app.config.setdefault(
-            'SESSION_COOKIE_SECURE',
-            not app.debug
-        )
+        app.config.setdefault("SESSION_COOKIE_SECURE", not app.debug)
 
         # Change Flask-Security defaults
-        app.config.setdefault(
-            'SECURITY_PASSWORD_SALT',
-            app.config['SECRET_KEY']
-        )
+        app.config.setdefault("SECURITY_PASSWORD_SALT", app.config["SECRET_KEY"])
 
         # Set JWT secret key
         app.config.setdefault(
-            'ACCOUNTS_JWT_SECRET_KEY',
-            app.config.get(
-                'ACCOUNTS_JWT_SECRET_KEY',
-                app.config.get('SECRET_KEY')
-            )
+            "ACCOUNTS_JWT_SECRET_KEY",
+            app.config.get("ACCOUNTS_JWT_SECRET_KEY", app.config.get("SECRET_KEY")),
         )
 
-        config_apps = ['ACCOUNTS', 'SECURITY_']
+        config_apps = ["ACCOUNTS", "SECURITY_"]
         for k in dir(config):
             if any([k.startswith(prefix) for prefix in config_apps]):
                 app.config.setdefault(k, getattr(config, k))
@@ -242,8 +240,9 @@ class InvenioAccounts(object):
         user_logged_out.connect(csrf_token_reset, app)
         from .views.security import revoke_session, security
         from .views.settings import blueprint
-        blueprint.route('/security/', methods=['GET'])(security)
-        blueprint.route('/sessions/revoke/', methods=['POST'])(revoke_session)
+
+        blueprint.route("/security/", methods=["GET"])(security)
+        blueprint.route("/sessions/revoke/", methods=["POST"])(revoke_session)
 
 
 class InvenioAccountsREST(InvenioAccounts):
@@ -262,27 +261,36 @@ class InvenioAccountsREST(InvenioAccounts):
         # Register the Flask-Security blueprint for the email templates
         if not register_blueprint:
             security_bp = Blueprint(
-                'security_email_templates',  # name differently to avoid misuse
-                'flask_security.core', template_folder='templates')
+                "security_email_templates",  # name differently to avoid misuse
+                "flask_security.core",
+                template_folder="templates",
+            )
             security_rest_overrides = Blueprint(
-                'security_email_overrides',  # overrides
-                __name__, template_folder='templates')
+                "security_email_overrides",  # overrides
+                __name__,
+                template_folder="templates",
+            )
             app.register_blueprint(security_bp)
             app.register_blueprint(security_rest_overrides)
 
         super(InvenioAccountsREST, self).init_app(
-            app, sessionstore=sessionstore,
+            app,
+            sessionstore=sessionstore,
             register_blueprint=register_blueprint,
         )
-        app.config['ACCOUNTS_CONFIRM_EMAIL_ENDPOINT'] = \
-            app.config['ACCOUNTS_REST_CONFIRM_EMAIL_ENDPOINT']
-        app.config['ACCOUNTS_RESET_PASSWORD_ENDPOINT'] = \
-            app.config['ACCOUNTS_REST_RESET_PASSWORD_ENDPOINT']
+        app.config["ACCOUNTS_CONFIRM_EMAIL_ENDPOINT"] = app.config[
+            "ACCOUNTS_REST_CONFIRM_EMAIL_ENDPOINT"
+        ]
+        app.config["ACCOUNTS_RESET_PASSWORD_ENDPOINT"] = app.config[
+            "ACCOUNTS_REST_RESET_PASSWORD_ENDPOINT"
+        ]
 
         if app.config.get("ACCOUNTS_REGISTER_UNAUTHORIZED_CALLBACK", True):
+
             def _unauthorized_callback():
                 """Callback to abort when user is unauthorized."""
                 abort(401)
+
             app.login_manager.unauthorized_handler(_unauthorized_callback)
 
 
@@ -301,8 +309,7 @@ class InvenioAccountsUI(InvenioAccounts):
         """
         self.make_session_permanent(app)
         return super(InvenioAccountsUI, self).init_app(
-            app, sessionstore=sessionstore,
-            register_blueprint=register_blueprint
+            app, sessionstore=sessionstore, register_blueprint=register_blueprint
         )
 
     def make_session_permanent(self, app):
@@ -310,6 +317,7 @@ class InvenioAccountsUI(InvenioAccounts):
 
         Set `PERMANENT_SESSION_LIFETIME` to specify time-to-live
         """
+
         @app.before_request
         def make_session_permanent():
             session.permanent = True

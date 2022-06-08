@@ -29,13 +29,12 @@ def test_session_activity_model(app):
     with app.app_context():
         # SessionActivity table is in the database
         inspector = inspect(db.engine)
-        assert 'accounts_user_session_activity' in inspector.get_table_names()
+        assert "accounts_user_session_activity" in inspector.get_table_names()
 
-        user = testutils.create_test_user('test@test.org')
+        user = testutils.create_test_user("test@test.org")
 
         # Create a new SessionActivity object, put it in the db
-        session_activity = SessionActivity(user_id=user.get_id(),
-                                           sid_s="teststring")
+        session_activity = SessionActivity(user_id=user.get_id(), sid_s="teststring")
         database = db
 
         # the `created` field is magicked in via the Timestamp mixin class
@@ -49,8 +48,7 @@ def test_session_activity_model(app):
         # Now how does this look on the user object?
         assert session_activity == user.active_sessions[0]
 
-        session_two = SessionActivity(user_id=user.get_id(),
-                                      sid_s="testring_2")
+        session_two = SessionActivity(user_id=user.get_id(), sid_s="testring_2")
         database.session.add(session_two)
         # Commit it to the books.
         database.session.commit()
@@ -61,8 +59,7 @@ def test_session_activity_model(app):
         assert queried.count() == 2
         active_sessions = queried.all()
         assert session_activity.sid_s in [x.sid_s for x in active_sessions]
-        assert session_two in queried.filter(
-            SessionActivity.sid_s == session_two.sid_s)
+        assert session_two in queried.filter(SessionActivity.sid_s == session_two.sid_s)
         assert queried.count() == 2  # `.filter` doesn't change the query
 
         # Test session deletion
@@ -86,7 +83,8 @@ def test_profiles(app):
     with pytest.raises(ValueError):
         # the profile doesn't expect an 'email' value
         user.user_profile = {
-            **profile, "email": "admin@inveniosoftware.org",
+            **profile,
+            "email": "admin@inveniosoftware.org",
         }
 
     assert user.user_profile == {}

@@ -22,8 +22,9 @@ If False, you won't be able to login via the web UI.
 
 ACCOUNTS_RETENTION_PERIOD = timedelta(days=30)
 
-ACCOUNTS_SESSION_STORE_FACTORY = \
-    'invenio_accounts.sessions:default_session_store_factory'
+ACCOUNTS_SESSION_STORE_FACTORY = (
+    "invenio_accounts.sessions:default_session_store_factory"
+)
 """Import path or function of factory used to generate the session store
 object.
 
@@ -51,13 +52,13 @@ By default, it uses Celery if it can find it.
 ACCOUNTS_SESSION_ACTIVITY_ENABLED = True
 """Enable session activity tracking."""
 
-ACCOUNTS_SETTINGS_SECURITY_TEMPLATE = 'invenio_accounts/settings/security.html'
+ACCOUNTS_SETTINGS_SECURITY_TEMPLATE = "invenio_accounts/settings/security.html"
 """Template for the account security page."""
 
 ACCOUNTS_CONFIRM_EMAIL_ENDPOINT = None
 """Value to be used for the confirmation email link in the UI application."""
 
-ACCOUNTS_REST_CONFIRM_EMAIL_ENDPOINT = '/confirm/{token}'
+ACCOUNTS_REST_CONFIRM_EMAIL_ENDPOINT = "/confirm/{token}"
 """Value to be used for the confirmation email link in the API application.
 
 Can be a Flask endpoint (e.g. "invenio_accounts_rest_auth.confirm_email"), or
@@ -70,7 +71,7 @@ included, the one from the current request's context will be used.
 ACCOUNTS_RESET_PASSWORD_ENDPOINT = None
 """Value to be used for the confirmation email link in the UI application."""
 
-ACCOUNTS_REST_RESET_PASSWORD_ENDPOINT = '/lost-password/{token}'
+ACCOUNTS_REST_RESET_PASSWORD_ENDPOINT = "/lost-password/{token}"
 """Value to be used for the reset password link in the API application.
 
 Can be a Flask endpoint (e.g. "invenio_accounts_rest_auth.reset_password"), or
@@ -88,32 +89,31 @@ ACCOUNTS_REST_AUTH_VIEWS = {
     "forgot_password": "invenio_accounts.views.rest:ForgotPasswordView",
     "reset_password": "invenio_accounts.views.rest:ResetPasswordView",
     "change_password": "invenio_accounts.views.rest:ChangePasswordView",
-    "send_confirmation":
-        "invenio_accounts.views.rest:SendConfirmationEmailView",
+    "send_confirmation": "invenio_accounts.views.rest:SendConfirmationEmailView",
     "confirm_email": "invenio_accounts.views.rest:ConfirmEmailView",
     "sessions_list": "invenio_accounts.views.rest:SessionsListView",
-    "sessions_item": "invenio_accounts.views.rest:SessionsItemView"
+    "sessions_item": "invenio_accounts.views.rest:SessionsItemView",
 }
 """List of REST API authentication views."""
 
 # Change Flask-Security defaults
-SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
+SECURITY_PASSWORD_HASH = "pbkdf2_sha512"
 """Default password hashing algorithm for new passwords."""
 
-SECURITY_PASSWORD_SCHEMES = ['pbkdf2_sha512', 'invenio_aes_encrypted_email']
+SECURITY_PASSWORD_SCHEMES = ["pbkdf2_sha512", "invenio_aes_encrypted_email"]
 """Supported password hashing algorithms (for passwords already stored).
 
 You should include both the default, supported and any deprecated schemes.
 """
 
-SECURITY_DEPRECATED_PASSWORD_SCHEMES = ['invenio_aes_encrypted_email']
+SECURITY_DEPRECATED_PASSWORD_SCHEMES = ["invenio_aes_encrypted_email"]
 """Deprecated password hashing algorithms.
 
 Password hashes in a deprecated scheme are automatically migrated to the
 new default algorithm the next time the user login.
 """
 
-SECURITY_PASSWORD_SINGLE_HASH = ['invenio_aes_encrypted_email']
+SECURITY_PASSWORD_SINGLE_HASH = ["invenio_aes_encrypted_email"]
 """Password hashing algorithms requiring single hasing only."""
 
 SECURITY_DEFAULT_REMEMBER_ME = False
@@ -135,14 +135,14 @@ SECURITY_RECOVERABLE = True
 SECURITY_REGISTERABLE = True
 """Allow users to register."""
 
-SECURITY_CONFIRM_EMAIL_WITHIN = '30 minutes'
+SECURITY_CONFIRM_EMAIL_WITHIN = "30 minutes"
 """Amount of time the email confirmation link is active.
 
 Note, since the confirmation link will also login the associated user we expire
 the link fast.
 """
 
-SECURITY_RESET_PASSWORD_WITHIN = '30 minutes'
+SECURITY_RESET_PASSWORD_WITHIN = "30 minutes"
 """Amount of time the password reset link is active.
 
 Note, since the confirmation link will also login the associated user we expire
@@ -159,41 +159,40 @@ SECURITY_PASSWORD_SALT = None
 """Salt for storing passwords."""
 
 # Change default templates
-SECURITY_FORGOT_PASSWORD_TEMPLATE = 'invenio_accounts/forgot_password.html'
+SECURITY_FORGOT_PASSWORD_TEMPLATE = "invenio_accounts/forgot_password.html"
 """Default template for password recovery (asking for email)."""
 
-SECURITY_LOGIN_USER_TEMPLATE = 'invenio_accounts/login_user.html'
+SECURITY_LOGIN_USER_TEMPLATE = "invenio_accounts/login_user.html"
 """Default template for login."""
 
-SECURITY_REGISTER_USER_TEMPLATE = 'invenio_accounts/register_user.html'
+SECURITY_REGISTER_USER_TEMPLATE = "invenio_accounts/register_user.html"
 """Default template for user registration."""
 
-SECURITY_RESET_PASSWORD_TEMPLATE = 'invenio_accounts/reset_password.html'
+SECURITY_RESET_PASSWORD_TEMPLATE = "invenio_accounts/reset_password.html"
 """Default template for password recovery (reset of the password)."""
 
-SECURITY_CHANGE_PASSWORD_TEMPLATE = 'invenio_accounts/change_password.html'
+SECURITY_CHANGE_PASSWORD_TEMPLATE = "invenio_accounts/change_password.html"
 """Default template for change password."""
 
-SECURITY_SEND_CONFIRMATION_TEMPLATE = \
-    'invenio_accounts/send_confirmation.html'
+SECURITY_SEND_CONFIRMATION_TEMPLATE = "invenio_accounts/send_confirmation.html"
 """Default template for email confirmation."""
 
-SECURITY_SEND_LOGIN_TEMPLATE = 'invenio_accounts/send_login.html'
+SECURITY_SEND_LOGIN_TEMPLATE = "invenio_accounts/send_login.html"
 """Default template for email confirmation."""
 
-SECURITY_REGISTER_URL = '/signup/'
+SECURITY_REGISTER_URL = "/signup/"
 """URL endpoint for user registation."""
 
-SECURITY_RESET_URL = '/lost-password/'
+SECURITY_RESET_URL = "/lost-password/"
 """URL endpoint for password recovery."""
 
-SECURITY_LOGIN_URL = '/login/'
+SECURITY_LOGIN_URL = "/login/"
 """URL endpoint for login."""
 
-SECURITY_LOGOUT_URL = '/logout/'
+SECURITY_LOGOUT_URL = "/logout/"
 """URL endpoint for logout."""
 
-SECURITY_CHANGE_URL = '/account/settings/password/'
+SECURITY_CHANGE_URL = "/account/settings/password/"
 """URL endpoint for password change."""
 
 SECURITY_MSG_LOCAL_LOGIN_DISABLED = ("Local login is disabled.", "error")
@@ -202,14 +201,10 @@ SECURITY_MSG_LOCAL_LOGIN_DISABLED = ("Local login is disabled.", "error")
 SECURITY_MSG_REGISTRATION_DISABLED = ("Registration is disabled.", "error")
 """The error to be displayed in REST registration when it is disabled."""
 
-SECURITY_MSG_PASSWORD_CHANGE_DISABLED = (
-    "Password change is disabled.", "error"
-)
+SECURITY_MSG_PASSWORD_CHANGE_DISABLED = ("Password change is disabled.", "error")
 """The error to be displayed in REST password change when it is disabled."""
 
-SECURITY_MSG_PASSWORD_RECOVERY_DISABLED = (
-    "Password recovery is disabled.", "error"
-)
+SECURITY_MSG_PASSWORD_RECOVERY_DISABLED = ("Password recovery is disabled.", "error")
 """The error to be displayed in REST password recovery when it is disabled."""
 
 SECURITY_MSG_PASSWORD_RESET_DISABLED = ("Password reset is disabled.", "error")
@@ -259,7 +254,7 @@ On your API call you can use it with simple javascript, an example using
     });
 """
 
-ACCOUNTS_JWT_DOM_TOKEN_TEMPLATE = 'invenio_accounts/jwt.html'
+ACCOUNTS_JWT_DOM_TOKEN_TEMPLATE = "invenio_accounts/jwt.html"
 """Template for the context processor."""
 
 ACCOUNTS_JWT_SECRET_KEY = None
@@ -273,7 +268,7 @@ ACCOUNTS_JWT_SECRET_KEY = None
 ACCOUNTS_JWT_EXPIRATION_DELTA = timedelta(days=1)
 """Token expiration period for JWT."""
 
-ACCOUNTS_JWT_ALOGORITHM = 'HS256'
+ACCOUNTS_JWT_ALOGORITHM = "HS256"
 """Set JWT encryption alogirthm.
 
 .. note::
@@ -282,10 +277,10 @@ ACCOUNTS_JWT_ALOGORITHM = 'HS256'
    <https://pyjwt.readthedocs.io/en/latest/algorithms.html>`_
 """
 
-ACCOUNTS_JWT_DECODE_FACTORY = 'invenio_accounts.utils:jwt_decode_token'
+ACCOUNTS_JWT_DECODE_FACTORY = "invenio_accounts.utils:jwt_decode_token"
 """Import path of factory used to decode JWT."""
 
-ACCOUNTS_JWT_CREATION_FACTORY = 'invenio_accounts.utils:jwt_create_token'
+ACCOUNTS_JWT_CREATION_FACTORY = "invenio_accounts.utils:jwt_create_token"
 """Import path of factory used to generate JWT."""
 
 RECAPTCHA_PUBLIC_KEY = None
@@ -323,8 +318,8 @@ ACCOUNTS_USERNAME_REGEX = r"^[a-zA-Z][a-zA-Z0-9-_]{2,255}$"
 """
 
 ACCOUNTS_USERNAME_RULES_TEXT = (
-    'Username must start with a letter, be at least three characters long and'
-    ' only contain alphanumeric characters, dashes and underscores.'
+    "Username must start with a letter, be at least three characters long and"
+    " only contain alphanumeric characters, dashes and underscores."
 )
 """Description of username validation rules.
 
