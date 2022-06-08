@@ -13,16 +13,13 @@ from werkzeug.local import LocalProxy
 
 from .api import DBUsersChangeHistory
 
-current_accounts = LocalProxy(
-    lambda: current_app.extensions['invenio-accounts']
-)
+current_accounts = LocalProxy(lambda: current_app.extensions["invenio-accounts"])
 """Proxy to the current Invenio-Accounts extension."""
 
-current_security = LocalProxy(lambda: current_app.extensions['security'])
+current_security = LocalProxy(lambda: current_app.extensions["security"])
 """Proxy to the Flask-Security extension."""
 
-current_datastore = LocalProxy(
-    lambda: current_app.extensions['security'].datastore)
+current_datastore = LocalProxy(lambda: current_app.extensions["security"].datastore)
 """Proxy to the current Flask-Security user datastore."""
 
 
@@ -35,7 +32,7 @@ def get_db_change_history():
     context. This matches up with the database session is also tied to the
     app context.
     """
-    if 'db_change_history' not in g:
+    if "db_change_history" not in g:
         g.db_change_history = DBUsersChangeHistory()
 
     return g.db_change_history

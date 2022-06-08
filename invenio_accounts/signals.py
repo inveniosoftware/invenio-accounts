@@ -13,7 +13,7 @@ from blinker import Namespace
 _signals = Namespace()
 
 
-datastore_pre_commit = _signals.signal('datastore-pre-commit')
+datastore_pre_commit = _signals.signal("datastore-pre-commit")
 """Signal sent before the session has been commited.
 
 Parameters:
@@ -28,7 +28,7 @@ Example receiver:
 """
 
 
-datastore_post_commit = _signals.signal('datastore-post-commit')
+datastore_post_commit = _signals.signal("datastore-post-commit")
 """Signal sent after the session has been commited.
 
 Parameters:

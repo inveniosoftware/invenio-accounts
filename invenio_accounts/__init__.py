@@ -41,23 +41,25 @@ You can also e.g. deactive users:
 try:
     # Werkzeug <2.1
     from werkzeug import security
+
     security.safe_str_cmp
 except AttributeError:
     # Werkzeug >=2.1
     import hmac
 
     from werkzeug import security
+
     security.safe_str_cmp = hmac.compare_digest
 
 from .ext import InvenioAccounts, InvenioAccountsREST, InvenioAccountsUI
 from .proxies import current_accounts
 
-__version__ = '2.0.0'
+__version__ = "2.0.0"
 
 __all__ = (
-    '__version__',
-    'current_accounts',
-    'InvenioAccounts',
-    'InvenioAccountsUI',
-    'InvenioAccountsREST',
+    "__version__",
+    "current_accounts",
+    "InvenioAccounts",
+    "InvenioAccountsUI",
+    "InvenioAccountsREST",
 )

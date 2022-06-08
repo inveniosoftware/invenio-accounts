@@ -19,7 +19,7 @@ def test_context_processor_jwt(app):
     """
     with app.test_request_context():
         html = render_template_string(template)
-        assert 'authorized_token' in html
+        assert "authorized_token" in html
 
 
 def test_context_processor_jwt_token(app):

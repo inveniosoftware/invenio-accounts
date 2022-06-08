@@ -20,8 +20,9 @@ from wtforms import FormField, HiddenField
 class RegistrationFormRecaptcha(FlaskForm):
     """Form for editing user profile."""
 
-    recaptcha = RecaptchaField(validators=[
-        Recaptcha(message=_("Please complete the reCAPTCHA."))])
+    recaptcha = RecaptchaField(
+        validators=[Recaptcha(message=_("Please complete the reCAPTCHA."))]
+    )
 
 
 class RevokeForm(FlaskForm):
@@ -32,18 +33,20 @@ class RevokeForm(FlaskForm):
 
 def confirm_register_form_factory(Form, app):
     """Return confirmation for extended registration form."""
-    class ConfirmRegisterForm(Form, NextFormMixin):
 
+    class ConfirmRegisterForm(Form, NextFormMixin):
         def __init__(self, *args, **kwargs):
             """Adds next parameter from URL."""
             super(ConfirmRegisterForm, self).__init__(*args, **kwargs)
             if not self.next.data:
-                self.next.data = request.args.get('next', '')
+                self.next.data = request.args.get("next", "")
 
-    if app.config.get('RECAPTCHA_PUBLIC_KEY') and \
-            app.config.get('RECAPTCHA_PRIVATE_KEY'):
+    if app.config.get("RECAPTCHA_PUBLIC_KEY") and app.config.get(
+        "RECAPTCHA_PRIVATE_KEY"
+    ):
+
         class ConfirmRegisterWithCaptchaForm(ConfirmRegisterForm):
-            recaptcha = FormField(RegistrationFormRecaptcha, separator='.')
+            recaptcha = FormField(RegistrationFormRecaptcha, separator=".")
 
         return ConfirmRegisterWithCaptchaForm
 
@@ -52,10 +55,12 @@ def confirm_register_form_factory(Form, app):
 
 def register_form_factory(Form, app):
     """Return extended registration form."""
-    if app.config.get('RECAPTCHA_PUBLIC_KEY') and \
-            app.config.get('RECAPTCHA_PRIVATE_KEY'):
+    if app.config.get("RECAPTCHA_PUBLIC_KEY") and app.config.get(
+        "RECAPTCHA_PRIVATE_KEY"
+    ):
+
         class RegisterForm(Form):
-            recaptcha = FormField(RegistrationFormRecaptcha, separator='.')
+            recaptcha = FormField(RegistrationFormRecaptcha, separator=".")
 
         return RegisterForm
 
@@ -64,6 +69,7 @@ def register_form_factory(Form, app):
 
 def login_form_factory(Form, app):
     """Return extended login form."""
+
     class LoginForm(Form):
         pass
 

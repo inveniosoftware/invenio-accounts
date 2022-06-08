@@ -24,8 +24,7 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
         :param user: A :class:`invenio_accounts.models.User` instance.
         :returns: The datastore instance.
         """
-        res = super(SessionAwareSQLAlchemyUserDatastore, self).deactivate_user(
-            user)
+        res = super(SessionAwareSQLAlchemyUserDatastore, self).deactivate_user(user)
         if res:
             delete_user_sessions(user)
         return res

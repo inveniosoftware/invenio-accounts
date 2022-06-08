@@ -32,8 +32,12 @@ def upgrade():
     op.add_column(user_tbl, Column("version_id", Integer(), nullable=True))
 
     # populate the columns of existing rows
-    op.execute("UPDATE accounts_role SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;")  # noqa
-    op.execute("UPDATE accounts_user SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;")  # noqa
+    op.execute(
+        "UPDATE accounts_role SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;"
+    )  # noqa
+    op.execute(
+        "UPDATE accounts_user SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;"
+    )  # noqa
 
     # make the columns not nullable
     dt_args = {"existing_type": DateTime(), "nullable": False}

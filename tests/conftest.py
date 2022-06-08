@@ -24,12 +24,10 @@ from invenio_db import InvenioDB, db
 from invenio_i18n import InvenioI18N
 from invenio_rest import InvenioREST
 from simplekv.memory.redisstore import RedisStore
-from sqlalchemy_utils.functions import create_database, database_exists, \
-    drop_database
+from sqlalchemy_utils.functions import create_database, database_exists, drop_database
 
 from invenio_accounts import InvenioAccounts, InvenioAccountsREST
-from invenio_accounts.admin import role_adminview, session_adminview, \
-    user_adminview
+from invenio_accounts.admin import role_adminview, session_adminview, user_adminview
 from invenio_accounts.testutils import create_test_user
 from invenio_accounts.views.rest import create_blueprint
 
@@ -38,26 +36,26 @@ def _app_factory(config=None):
     """Application factory."""
     # TODO use the fixtures from pytest-invenio instead
     instance_path = tempfile.mkdtemp()
-    app = Flask('testapp', instance_path=instance_path)
+    app = Flask("testapp", instance_path=instance_path)
     icons = {
-        'semantic-ui': {
-            'key': 'key icon',
-            'link': 'linkify icon',
-            'shield': 'shield alternate icon',
-            'user': 'user icon',
-            'codepen': 'codepen icon',
-            'cogs': 'cogs icon',
-            '*': '{} icon'
+        "semantic-ui": {
+            "key": "key icon",
+            "link": "linkify icon",
+            "shield": "shield alternate icon",
+            "user": "user icon",
+            "codepen": "codepen icon",
+            "cogs": "cogs icon",
+            "*": "{} icon",
         },
-        'bootstrap3': {
-            'key': 'fa fa-key fa-fw',
-            'link': 'fa fa-link fa-fw',
-            'shield': 'fa fa-shield fa-fw',
-            'user': 'fa fa-user fa-fw',
-            'codepen': 'fa fa-codepen fa-fw',
-            'cogs': 'fa fa-cogs fa-fw',
-            '*': 'fa fa-{} fa-fw',
-        }
+        "bootstrap3": {
+            "key": "fa fa-key fa-fw",
+            "link": "fa fa-link fa-fw",
+            "shield": "fa fa-shield fa-fw",
+            "user": "fa fa-user fa-fw",
+            "codepen": "fa fa-codepen fa-fw",
+            "cogs": "fa fa-cogs fa-fw",
+            "*": "fa fa-{} fa-fw",
+        },
     }
 
     app.config.update(
@@ -79,8 +77,9 @@ def _app_factory(config=None):
         SECURITY_RECOVERABLE=True,
         SECURITY_REGISTERABLE=True,
         SQLALCHEMY_DATABASE_URI=os.environ.get(
-            'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
-        SERVER_NAME='example.com',
+            "SQLALCHEMY_DATABASE_URI", "sqlite:///test.db"
+        ),
+        SERVER_NAME="example.com",
         TESTING=True,
         WTF_CSRF_ENABLED=False,
     )
@@ -106,8 +105,9 @@ def _database_setup(app, request):
             if database_exists(str(db.engine.url)):
                 drop_database(str(db.engine.url))
             # Delete sessions in kvsession store
-            if hasattr(app, 'kvsession_store') and \
-                    isinstance(app.kvsession_store, RedisStore):
+            if hasattr(app, "kvsession_store") and isinstance(
+                app.kvsession_store, RedisStore
+            ):
                 app.kvsession_store.redis.flushall()
         shutil.rmtree(app.instance_path)
 
@@ -131,6 +131,7 @@ def app(request):
     InvenioAccounts(app)
 
     from invenio_accounts.views.settings import blueprint
+
     app.register_blueprint(blueprint)
 
     _database_setup(app, request)
@@ -143,10 +144,12 @@ def api(request):
     api_app = _app_factory(
         dict(
             SQLALCHEMY_DATABASE_URI=os.environ.get(
-                'SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db'),
-            SERVER_NAME='localhost',
+                "SQLALCHEMY_DATABASE_URI", "sqlite:///test.db"
+            ),
+            SERVER_NAME="localhost",
             TESTING=True,
-        ))
+        )
+    )
 
     InvenioREST(api_app)
     InvenioAccountsREST(api_app)
@@ -160,13 +163,12 @@ def api(request):
 @pytest.fixture()
 def app_with_redis_url(request):
     """Flask application fixture with Invenio Accounts."""
-    app = _app_factory(dict(
-        ACCOUNTS_SESSION_REDIS_URL='redis://localhost:6379/0'
-    ))
+    app = _app_factory(dict(ACCOUNTS_SESSION_REDIS_URL="redis://localhost:6379/0"))
     app.config.update(ACCOUNTS_USERINFO_HEADERS=True)
     InvenioAccounts(app)
 
     from invenio_accounts.views.settings import blueprint
+
     app.register_blueprint(blueprint)
 
     _database_setup(app, request)
@@ -182,10 +184,7 @@ def app_with_flexible_registration(request):
 
     class MyRegisterView(RegisterView):
 
-        post_args = {
-            **RegisterView.post_args,
-            'active': fields.Boolean(required=True)
-        }
+        post_args = {**RegisterView.post_args, "active": fields.Boolean(required=True)}
 
         @use_kwargs(post_args)
         def post(self, **kwargs):
@@ -196,7 +195,7 @@ def app_with_flexible_registration(request):
     InvenioREST(api_app)
     InvenioAccountsREST(api_app)
 
-    api_app.config['ACCOUNTS_REST_AUTH_VIEWS']['register'] = MyRegisterView
+    api_app.config["ACCOUNTS_REST_AUTH_VIEWS"]["register"] = MyRegisterView
 
     api_app.register_blueprint(create_blueprint(api_app))
 
@@ -207,10 +206,12 @@ def app_with_flexible_registration(request):
 @pytest.fixture
 def task_app(request):
     """Flask application with Celery enabled."""
-    app = _app_factory(dict(
-        ACCOUNTS_USE_CELERY=True,
-        MAIL_SUPPRESS_SEND=True,
-    ))
+    app = _app_factory(
+        dict(
+            ACCOUNTS_USE_CELERY=True,
+            MAIL_SUPPRESS_SEND=True,
+        )
+    )
     FlaskCeleryExt(app)
     InvenioAccounts(app)
     _database_setup(app, request)
@@ -220,10 +221,12 @@ def task_app(request):
 @pytest.fixture
 def cookie_app(request):
     """Flask application  enabled."""
-    app = _app_factory(dict(
-        SESSION_COOKIE_SECURE=True,
-        SESSION_COOKIE_DOMAIN='example.com',
-    ))
+    app = _app_factory(
+        dict(
+            SESSION_COOKIE_SECURE=True,
+            SESSION_COOKIE_DOMAIN="example.com",
+        )
+    )
     InvenioAccounts(app)
     _database_setup(app, request)
     return app
@@ -236,36 +239,46 @@ def admin_view(app):
     assert isinstance(user_adminview, dict)
     assert isinstance(session_adminview, dict)
 
-    assert 'model' in role_adminview
-    assert 'modelview' in role_adminview
-    assert 'model' in user_adminview
-    assert 'modelview' in user_adminview
-    assert 'model' in session_adminview
-    assert 'modelview' in session_adminview
+    assert "model" in role_adminview
+    assert "modelview" in role_adminview
+    assert "model" in user_adminview
+    assert "modelview" in user_adminview
+    assert "model" in session_adminview
+    assert "modelview" in session_adminview
 
     admin = Admin(app, name="Test")
 
     user_adminview_copy = dict(user_adminview)
-    user_model = user_adminview_copy.pop('model')
-    user_view = user_adminview_copy.pop('modelview')
+    user_model = user_adminview_copy.pop("model")
+    user_view = user_adminview_copy.pop("modelview")
     admin.add_view(user_view(user_model, db.session, **user_adminview_copy))
 
-    admin.add_view(session_adminview['modelview'](
-        session_adminview['model'], db.session,
-        category=session_adminview['category']))
+    admin.add_view(
+        session_adminview["modelview"](
+            session_adminview["model"],
+            db.session,
+            category=session_adminview["category"],
+        )
+    )
 
 
 @pytest.fixture()
 def users(app):
     """Create users."""
-    user1 = create_test_user(email='info@inveniosoftware.org',
-                             password='tester')
-    user2 = create_test_user(email='info2@inveniosoftware.org',
-                             password='tester2')
+    user1 = create_test_user(email="info@inveniosoftware.org", password="tester")
+    user2 = create_test_user(email="info2@inveniosoftware.org", password="tester2")
 
     return [
-        {'email': user1.email, 'id': user1.id,
-         'password': user1.password_plaintext, 'obj': user1},
-        {'email': user2.email, 'id': user2.id,
-         'password': user2.password_plaintext, 'obj': user2},
+        {
+            "email": user1.email,
+            "id": user1.id,
+            "password": user1.password_plaintext,
+            "obj": user1,
+        },
+        {
+            "email": user2.email,
+            "id": user2.id,
+            "password": user2.password_plaintext,
+            "obj": user2,
+        },
     ]

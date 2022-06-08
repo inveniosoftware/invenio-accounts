@@ -31,17 +31,17 @@ def _ip2country(ip):
     """Get user country."""
     if ip:
         match = geolite2.reader().get(ip)
-        return match.get('country', {}).get('iso_code') if match else None
+        return match.get("country", {}).get("iso_code") if match else None
 
 
 def _extract_info_from_useragent(user_agent):
     """Extract extra informations from user."""
     parsed_string = user_agent_parser.Parse(user_agent)
     return {
-        'os': parsed_string.get('os', {}).get('family'),
-        'browser': parsed_string.get('user_agent', {}).get('family'),
-        'browser_version': parsed_string.get('user_agent', {}).get('major'),
-        'device': parsed_string.get('device', {}).get('family'),
+        "os": parsed_string.get("os", {}).get("family"),
+        "browser": parsed_string.get("user_agent", {}).get("family"),
+        "browser_version": parsed_string.get("user_agent", {}).get("major"),
+        "device": parsed_string.get("device", {}).get("family"),
     }
 
 
@@ -52,21 +52,19 @@ def add_session(session=None):
         is used. The object is expected to have a dictionary entry named
         ``"_user_id"`` and a field ``sid_s``
     """
-    if '_user_id' not in session and 'user_id' in session:
+    if "_user_id" not in session and "user_id" in session:
         # this is to support both flask-login 0.4.x as well as 0.5+,
         # where 'user_id' was renamed to '_user_id'
-        session['_user_id'] = session['user_id']
+        session["_user_id"] = session["user_id"]
 
-    user_id, sid_s = session['_user_id'], session.sid_s
+    user_id, sid_s = session["_user_id"], session.sid_s
     with db.session.begin_nested():
         session_activity = SessionActivity(
             user_id=user_id,
             sid_s=sid_s,
             ip=request.remote_addr,
             country=_ip2country(request.remote_addr),
-            **_extract_info_from_useragent(
-                request.headers.get('User-Agent', '')
-            )
+            **_extract_info_from_useragent(request.headers.get("User-Agent", ""))
         )
         db.session.merge(session_activity)
 
@@ -77,6 +75,7 @@ def login_listener(app, user):
     :param app: The Flask application.
     :param user: The :class:`invenio_accounts.models.User` instance.
     """
+
     @after_this_request
     def add_user_session(response):
         """Regenerate current session and add to the SessionActivity table.
@@ -99,9 +98,10 @@ def logout_listener(app, user):
     :param app: The Flask application.
     :param user: The :class:`invenio_accounts.models.User` instance.
     """
+
     @after_this_request
     def _commit(response=None):
-        if hasattr(session, 'sid_s'):
+        if hasattr(session, "sid_s"):
             delete_session(session.sid_s)
         # Regenerate the session to avoid session fixation vulnerabilities.
         session.regenerate()
@@ -157,11 +157,12 @@ def default_session_store_factory(app):
     :class:`simplekv.memory.redisstore.RedisStore` otherwise
     a :class:`simplekv.memory.DictStore`.
     """
-    accounts_session_redis_url = app.config.get('ACCOUNTS_SESSION_REDIS_URL')
+    accounts_session_redis_url = app.config.get("ACCOUNTS_SESSION_REDIS_URL")
     if accounts_session_redis_url:
         import redis
         from simplekv.memory.redisstore import RedisStore
-        return RedisStore(redis.StrictRedis.from_url(
-            accounts_session_redis_url))
+
+        return RedisStore(redis.StrictRedis.from_url(accounts_session_redis_url))
     from simplekv.memory import DictStore
+
     return DictStore()

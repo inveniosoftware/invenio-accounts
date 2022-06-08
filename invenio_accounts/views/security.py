@@ -8,8 +8,7 @@
 
 """Invenio user management and authentication."""
 
-from flask import abort, current_app, flash, redirect, render_template, \
-    request, url_for
+from flask import abort, current_app, flash, redirect, render_template, request, url_for
 from flask_babelex import lazy_gettext as _
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import login_required
@@ -28,34 +27,31 @@ from .settings import blueprint
 @login_required
 @register_menu(
     blueprint,
-    'settings.security',
+    "settings.security",
     # NOTE: Menu item text (icon replaced by a user icon).
     _(
-        '%(icon)s Security',
+        "%(icon)s Security",
         icon=make_lazy_string(
-            lambda:
-            '<i class="{shield}".format(\
+            lambda: '<i class="{shield}".format(\
             shield=current_theme_icons.shield)></i>'
         ),
     ),
     order=2,
 )
-@register_breadcrumb(blueprint, 'breadcrumbs.settings.security', _('Security'))
+@register_breadcrumb(blueprint, "breadcrumbs.settings.security", _("Security"))
 def security():
     """View for security page."""
-    sessions = SessionActivity.query_by_user(
-        user_id=current_user.get_id()
-    ).all()
+    sessions = SessionActivity.query_by_user(user_id=current_user.get_id()).all()
     master_session = None
     for index, session in enumerate(sessions):
         if SessionActivity.is_current(session.sid_s):
             master_session = session
             del sessions[index]
     return render_template(
-        current_app.config['ACCOUNTS_SETTINGS_SECURITY_TEMPLATE'],
+        current_app.config["ACCOUNTS_SETTINGS_SECURITY_TEMPLATE"],
         formclass=RevokeForm,
         sessions=[master_session] + sessions,
-        is_current=SessionActivity.is_current
+        is_current=SessionActivity.is_current,
     )
 
 
@@ -66,15 +62,19 @@ def revoke_session():
     if not form.validate_on_submit():
         abort(403)
 
-    sid_s = form.data['sid_s']
-    if SessionActivity.query.filter_by(
-            user_id=current_user.get_id(), sid_s=sid_s).count() == 1:
+    sid_s = form.data["sid_s"]
+    if (
+        SessionActivity.query.filter_by(
+            user_id=current_user.get_id(), sid_s=sid_s
+        ).count()
+        == 1
+    ):
         delete_session(sid_s=sid_s)
         db.session.commit()
         if not SessionActivity.is_current(sid_s=sid_s):
             # if it's the same session doesn't show the message, otherwise
             # the session will be still open without the database record
-            flash('Session {0} successfully removed.'.format(sid_s), 'success')
+            flash("Session {0} successfully removed.".format(sid_s), "success")
     else:
-        flash('Unable to remove the session {0}.'.format(sid_s), 'error')
-    return redirect(url_for('invenio_accounts.security'))
+        flash("Unable to remove the session {0}.".format(sid_s), "error")
+    return redirect(url_for("invenio_accounts.security"))

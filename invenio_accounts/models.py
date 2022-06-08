@@ -28,25 +28,31 @@ json_field = (
     db.JSON()
     .with_variant(
         postgresql.JSONB(none_as_null=True),
-        'postgresql',
+        "postgresql",
     )
     .with_variant(
         JSONType(),
-        'sqlite',
+        "sqlite",
     )
     .with_variant(
         JSONType(),
-        'mysql',
+        "mysql",
     )
 )
 
 
 userrole = db.Table(
-    'accounts_userrole',
-    db.Column('user_id', db.Integer(), db.ForeignKey(
-        'accounts_user.id', name='fk_accounts_userrole_user_id')),
-    db.Column('role_id', db.Integer(), db.ForeignKey(
-        'accounts_role.id', name='fk_accounts_userrole_role_id')),
+    "accounts_userrole",
+    db.Column(
+        "user_id",
+        db.Integer(),
+        db.ForeignKey("accounts_user.id", name="fk_accounts_userrole_user_id"),
+    ),
+    db.Column(
+        "role_id",
+        db.Integer(),
+        db.ForeignKey("accounts_role.id", name="fk_accounts_userrole_role_id"),
+    ),
 )
 """Relationship between users and roles."""
 
@@ -68,13 +74,11 @@ class Role(db.Model, Timestamp, RoleMixin):
     version_id = db.Column(db.Integer, nullable=False)
     """Used by SQLAlchemy for optimistic concurrency control."""
 
-    __mapper_args__ = {
-        "version_id_col": version_id
-    }
+    __mapper_args__ = {"version_id_col": version_id}
 
     def __str__(self):
         """Return the name and description of the role."""
-        return '{0.name} - {0.description}'.format(self)
+        return "{0.name} - {0.description}".format(self)
 
 
 class User(db.Model, Timestamp, UserMixin):
@@ -84,11 +88,10 @@ class User(db.Model, Timestamp, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    _username = db.Column(
-        'username', db.String(255), nullable=True, unique=True)
+    _username = db.Column("username", db.String(255), nullable=True, unique=True)
     """Lower-case version of the username, to assert uniqueness."""
 
-    _displayname = db.Column('displayname', db.String(255), nullable=True)
+    _displayname = db.Column("displayname", db.String(255), nullable=True)
     """Case-preserving version of the username."""
 
     email = db.Column(db.String(255), unique=True)
@@ -97,14 +100,15 @@ class User(db.Model, Timestamp, UserMixin):
     password = db.Column(db.String(255))
     """User password."""
 
-    active = db.Column(db.Boolean(name='active'))
+    active = db.Column(db.Boolean(name="active"))
     """Flag to say if the user is active or not ."""
 
     confirmed_at = db.Column(db.DateTime)
     """When the user confirmed the email address."""
 
-    roles = db.relationship('Role', secondary=userrole,
-                            backref=db.backref('users', lazy='dynamic'))
+    roles = db.relationship(
+        "Role", secondary=userrole, backref=db.backref("users", lazy="dynamic")
+    )
     """List of the user's roles."""
 
     # Enables SQLAlchemy version counter
@@ -112,18 +116,22 @@ class User(db.Model, Timestamp, UserMixin):
     """Used by SQLAlchemy for optimistic concurrency control."""
 
     _user_profile = db.Column(
-        "profile", json_field, default=lambda: dict(), nullable=True,
+        "profile",
+        json_field,
+        default=lambda: dict(),
+        nullable=True,
     )
     """The user profile as a JSON field."""
 
     _preferences = db.Column(
-        "preferences", json_field, default=lambda: dict(), nullable=True,
+        "preferences",
+        json_field,
+        default=lambda: dict(),
+        nullable=True,
     )
     """The user's preferences stored in a JSON field."""
 
-    __mapper_args__ = {
-        "version_id_col": version_id
-    }
+    __mapper_args__ = {"version_id_col": version_id}
 
     login_info = db.relationship(
         "LoginInformation", back_populates="user", uselist=False, lazy="joined"
@@ -131,10 +139,10 @@ class User(db.Model, Timestamp, UserMixin):
 
     def __init__(self, *args, **kwargs):
         """Constructor."""
-        user_profile = kwargs.pop('user_profile', {})
-        preferences = kwargs.pop('preferences', {})
-        preferences.setdefault('visibility', 'restricted')
-        preferences.setdefault('email_visibility', 'restricted')
+        user_profile = kwargs.pop("user_profile", {})
+        preferences = kwargs.pop("preferences", {})
+        preferences.setdefault("visibility", "restricted")
+        preferences.setdefault("email_visibility", "restricted")
         super().__init__(*args, **kwargs)
         self.user_profile = user_profile
         self.preferences = preferences
@@ -255,7 +263,7 @@ class User(db.Model, Timestamp, UserMixin):
 
     def __str__(self):
         """Representation."""
-        return 'User <id={0.id}, email={0.email}>'.format(self)
+        return "User <id={0.id}, email={0.email}>".format(self)
 
 
 class LoginInformation(db.Model):
@@ -265,7 +273,7 @@ class LoginInformation(db.Model):
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey(User.id, name='fk_accounts_login_information_user_id'),
+        db.ForeignKey(User.id, name="fk_accounts_login_information_user_id"),
         primary_key=True,
     )
     """ID of user to whom this information belongs."""
@@ -288,13 +296,13 @@ class LoginInformation(db.Model):
     login_count = db.Column(db.Integer)
     """Count how many times the user logged in."""
 
-    @validates('last_login_ip', 'current_login_ip')
+    @validates("last_login_ip", "current_login_ip")
     def validate_ip(self, key, value):
         """Hack untrackable IP addresses."""
         # NOTE Flask-Security stores 'untrackable' value to IPAddressType
         #      field. This incorrect value causes ValueError on loading
         #      user object.
-        if value == 'untrackable':  # pragma: no cover
+        if value == "untrackable":  # pragma: no cover
             value = None
         return value
 
@@ -313,11 +321,12 @@ class SessionActivity(db.Model, Timestamp):
     Named here as it is in `flask-kvsession` to avoid confusion.
     """
 
-    user_id = db.Column(db.Integer, db.ForeignKey(
-        User.id, name='fk_accounts_session_activity_user_id'))
+    user_id = db.Column(
+        db.Integer, db.ForeignKey(User.id, name="fk_accounts_session_activity_user_id")
+    )
     """ID of user to whom this session belongs."""
 
-    user = db.relationship(User, backref='active_sessions')
+    user = db.relationship(User, backref="active_sessions")
 
     ip = db.Column(db.String(80), nullable=True)
     """IP address."""
@@ -358,29 +367,22 @@ class SessionActivity(db.Model, Timestamp):
 class UserIdentity(db.Model, Timestamp):
     """Represent a UserIdentity record."""
 
-    __tablename__ = 'accounts_useridentity'
+    __tablename__ = "accounts_useridentity"
 
     id = db.Column(db.String(255), primary_key=True, nullable=False)
     method = db.Column(db.String(255), primary_key=True, nullable=False)
-    id_user = db.Column(db.Integer(),
-                        db.ForeignKey(User.id), nullable=False)
+    id_user = db.Column(db.Integer(), db.ForeignKey(User.id), nullable=False)
 
-    user = db.relationship(User, backref='external_identifiers')
+    user = db.relationship(User, backref="external_identifiers")
 
     __table_args__ = (
-        db.Index(
-            'accounts_useridentity_id_user_method',
-            id_user,
-            method,
-            unique=True
-        ),
+        db.Index("accounts_useridentity_id_user_method", id_user, method, unique=True),
     )
 
     @classmethod
     def get_user(cls, method, external_id):
         """Get the user for a given identity."""
-        identity = cls.query.filter_by(
-            id=external_id, method=method).one_or_none()
+        identity = cls.query.filter_by(id=external_id, method=method).one_or_none()
         if identity is not None:
             return identity.user
         return None
@@ -396,15 +398,13 @@ class UserIdentity(db.Model, Timestamp):
         """
         try:
             with db.session.begin_nested():
-                db.session.add(cls(
-                    id=external_id,
-                    method=method,
-                    id_user=user.id
-                ))
+                db.session.add(cls(id=external_id, method=method, id_user=user.id))
         except IntegrityError:
             raise AlreadyLinkedError(
                 # dict used for backward compatibility (came from oauthclient)
-                user, {"id": external_id, "method": method})
+                user,
+                {"id": external_id, "method": method},
+            )
 
     @classmethod
     def delete_by_external_id(cls, method, external_id):

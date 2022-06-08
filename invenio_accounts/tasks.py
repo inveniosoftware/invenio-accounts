@@ -28,7 +28,7 @@ def send_security_email(data):
     """
     msg = Message()
     msg.__dict__.update(data)
-    current_app.extensions['mail'].send(msg)
+    current_app.extensions["mail"].send(msg)
 
 
 @shared_task
@@ -60,20 +60,17 @@ def clean_session_table():
 @shared_task
 def delete_ips():
     """Automatically remove login_info.last_login_ip older than 30 days."""
-    expiration_date = datetime.utcnow() - \
-        current_app.config['ACCOUNTS_RETENTION_PERIOD']
+    expiration_date = (
+        datetime.utcnow() - current_app.config["ACCOUNTS_RETENTION_PERIOD"]
+    )
 
     LoginInformation.query.filter(
         LoginInformation.last_login_ip.isnot(None),
-        LoginInformation.last_login_at < expiration_date
-    ).update({
-        LoginInformation.last_login_ip: None
-    })
+        LoginInformation.last_login_at < expiration_date,
+    ).update({LoginInformation.last_login_ip: None})
 
     LoginInformation.query.filter(
         LoginInformation.current_login_ip.isnot(None),
-        LoginInformation.current_login_at < expiration_date
-    ).update({
-        LoginInformation.current_login_ip: None
-    })
+        LoginInformation.current_login_at < expiration_date,
+    ).update({LoginInformation.current_login_ip: None})
     db.session.commit()
