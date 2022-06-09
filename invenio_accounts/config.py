@@ -11,6 +11,8 @@
 
 from datetime import timedelta
 
+from flask_babelex import lazy_gettext as _
+
 from .profiles import UserPreferencesSchema, UserProfileSchema
 from .views import login
 
@@ -317,7 +319,7 @@ ACCOUNTS_USERNAME_REGEX = r"^[a-zA-Z][a-zA-Z0-9-_]{2,255}$"
           to reflect the changes.
 """
 
-ACCOUNTS_USERNAME_RULES_TEXT = (
+ACCOUNTS_USERNAME_RULES_TEXT = _(
     "Username must start with a letter, be at least three characters long and"
     " only contain alphanumeric characters, dashes and underscores."
 )
