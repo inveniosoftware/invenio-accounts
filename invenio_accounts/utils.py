@@ -215,5 +215,5 @@ def validate_username(username):
     if not re.fullmatch(username_regex, username):
         # if validation fails, we raise a ValueError with the configured
         # text explaining the validation rules.
-        message = _(current_app.config["ACCOUNTS_USERNAME_RULES_TEXT"])
+        message = current_app.config["ACCOUNTS_USERNAME_RULES_TEXT"]
         raise ValueError(message)
