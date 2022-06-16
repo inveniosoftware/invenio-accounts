@@ -28,14 +28,8 @@ from .settings import blueprint
 @register_menu(
     blueprint,
     "settings.security",
-    # NOTE: Menu item text (icon replaced by a user icon).
-    _(
-        "%(icon)s Security",
-        icon=make_lazy_string(
-            lambda: '<i class="{shield}".format(\
-            shield=current_theme_icons.shield)></i>'
-        ),
-    ),
+    _("Security"),
+    icon="shield alternate",
     order=2,
 )
 @register_breadcrumb(blueprint, "breadcrumbs.settings.security", _("Security"))

@@ -62,11 +62,8 @@ def init_menu():
         item = current_menu.submenu("settings.change_password")
         item.register(
             view_name,
-            # NOTE: Menu item text (icon replaced by a key icon).
-            _(
-                "%(icon)s Change password",
-                icon=('<i class="{key}".format(key=current_theme_icons.key)></i>'),
-            ),
+            _("Change password"),
+            icon="edit",
             order=1,
         )
 
