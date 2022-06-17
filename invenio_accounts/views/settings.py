@@ -65,7 +65,7 @@ def init_menu():
             # NOTE: Menu item text (icon replaced by a key icon).
             _(
                 "%(icon)s Change password",
-                icon=('<i class="{key}".format(key=current_theme_icons.key)></i>'),
+                icon=('<i class="{icon}"></i>'.format(icon=current_theme_icons.key)),
             ),
             order=1,
         )
