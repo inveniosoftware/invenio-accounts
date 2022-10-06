@@ -30,6 +30,7 @@ Contributors
 - Odd Magnus Trondrud
 - Orestis Melkonian
 - Rémi Ducceschi
+- Sam Arbid (KTH)
 - Sami Hiltunen
 - Sebastian Witowski
 - Tibor Simko
