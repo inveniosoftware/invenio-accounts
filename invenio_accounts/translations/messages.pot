@@ -9,70 +9,72 @@ msgid ""
 msgstr ""
 "Project-Id-Version: invenio-accounts 2.0.0\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2022-05-25 11:29+0200\n"
+"POT-Creation-Date: 2022-10-12 09:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.10.3\n"
 
-#: invenio_accounts/admin.py:77
+#: invenio_accounts/admin.py:78
 msgid "Inactivate"
 msgstr ""
 
-#: invenio_accounts/admin.py:78
+#: invenio_accounts/admin.py:79
 msgid "Are you sure you want to inactivate selected users?"
 msgstr ""
 
-#: invenio_accounts/admin.py:87 invenio_accounts/admin.py:110
+#: invenio_accounts/admin.py:89 invenio_accounts/admin.py:114
 msgid "Cannot find user."
 msgstr ""
 
-#: invenio_accounts/admin.py:91 invenio_accounts/admin.py:114
+#: invenio_accounts/admin.py:93 invenio_accounts/admin.py:118
 msgid "User(s) were successfully inactivated."
 msgstr ""
 
-#: invenio_accounts/admin.py:97
+#: invenio_accounts/admin.py:99
 msgid "Failed to inactivate users."
 msgstr ""
 
-#: invenio_accounts/admin.py:100
+#: invenio_accounts/admin.py:103
 msgid "Activate"
 msgstr ""
 
-#: invenio_accounts/admin.py:101
+#: invenio_accounts/admin.py:104
 msgid "Are you sure you want to activate selected users?"
 msgstr ""
 
-#: invenio_accounts/admin.py:120
+#: invenio_accounts/admin.py:124
 msgid "Failed to activate users."
 msgstr ""
 
-#: invenio_accounts/admin.py:226
+#: invenio_accounts/admin.py:222
 msgid "Email"
 msgstr ""
 
-#: invenio_accounts/admin.py:227
+#: invenio_accounts/admin.py:223
 msgid "User ID"
 msgstr ""
 
-#: invenio_accounts/admin.py:234 invenio_accounts/admin.py:240
-#: invenio_accounts/admin.py:246 invenio_accounts/admin.py:252
+#: invenio_accounts/admin.py:230 invenio_accounts/admin.py:236
+#: invenio_accounts/admin.py:242 invenio_accounts/admin.py:248
 msgid "User Management"
 msgstr ""
 
-#: invenio_accounts/admin.py:253
+#: invenio_accounts/admin.py:249
 msgid "Linked account identities"
+msgstr ""
+
+#: invenio_accounts/config.py:322
+msgid ""
+"Username must start with a letter, be at least three characters long and "
+"only contain alphanumeric characters, dashes and underscores."
 msgstr ""
 
 #: invenio_accounts/forms.py:24
 msgid "Please complete the reCAPTCHA."
-msgstr ""
-
-#: invenio_accounts/utils.py:209
-msgid "ACCOUNTS_USERNAME_RULES_TEXT"
 msgstr ""
 
 #: invenio_accounts/profiles/schemas.py:20
@@ -81,7 +83,7 @@ msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:13
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:13
-#: invenio_accounts/views/settings.py:78
+#: invenio_accounts/views/settings.py:80
 msgid "Change password"
 msgstr ""
 
@@ -239,7 +241,7 @@ msgid "If you did not change your password,"
 msgstr ""
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:3
-msgid "click here to reset it"
+msgid "click here to reset it."
 msgstr ""
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:20
@@ -247,13 +249,12 @@ msgstr ""
 msgid "Sign up for an %(sitename)s account!"
 msgstr ""
 
-#. NOTE: Menu item text (icon replaced by a user icon).
-#: invenio_accounts/views/security.py:32
+#: invenio_accounts/views/security.py:35
 #, python-format
 msgid "%(icon)s Security"
 msgstr ""
 
-#: invenio_accounts/views/security.py:35
+#: invenio_accounts/views/security.py:40
 msgid "Security"
 msgstr ""
 
@@ -262,7 +263,7 @@ msgid "Account"
 msgstr ""
 
 #. NOTE: Menu item text (icon replaced by a key icon).
-#: invenio_accounts/views/settings.py:65
+#: invenio_accounts/views/settings.py:68
 #, python-format
 msgid "%(icon)s Change password"
 msgstr ""
