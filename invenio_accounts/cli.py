@@ -8,6 +8,7 @@
 
 """Command Line Interface for accounts."""
 
+from datetime import date
 from functools import wraps
 
 import click
@@ -46,9 +47,10 @@ def roles():
 @click.argument("email")
 @click.password_option()
 @click.option("-a", "--active", default=False, is_flag=True)
+@click.option("-c", "--confirm", default=False, is_flag=True)
 @with_appcontext
 @commit
-def users_create(email, password, active):
+def users_create(email, password, active, confirm):
     """Create a user."""
     kwargs = dict(email=email, password=password, active="y" if active else "")
 
@@ -57,6 +59,8 @@ def users_create(email, password, active):
     if form.validate():
         kwargs["password"] = hash_password(kwargs["password"])
         kwargs["active"] = active
+        if confirm:
+            kwargs["confirmed_at"] = date.today()
         _datastore.create_user(**kwargs)
         click.secho("User created successfully.", fg="green")
         kwargs["password"] = "****"
