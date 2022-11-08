@@ -5,11 +5,9 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 # 
 # Translators:
-# Lars Holm Nielsen <lars.holm.nielsen@cern.ch>, 2016
-# Tibor Simko <tibor.simko@cern.ch>, 2020
-# Alizee Pace <alizee.pace@gmail.com>, 2022
-# Mojib Wali <mojib.wali@tugraz.at>, 2022
-# chriz_uniba <christina.zeller@uni-bamberg.de>, 2022
+# Tibor Simko <tibor.simko@cern.ch>, 2017
+# Bessem Aamira <bessemamira@gmail.com>, 2022
+# Salaheddine Ben Ali <salaheddine.benali@cnudst.tn>, 2022
 # 
 #, fuzzy
 msgid ""
@@ -18,109 +16,105 @@ msgstr ""
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
 "POT-Creation-Date: 2022-10-12 09:05+0000\n"
 "PO-Revision-Date: 2016-08-18 08:29+0000\n"
-"Last-Translator: chriz_uniba <christina.zeller@uni-bamberg.de>, 2022\n"
-"Language-Team: German (https://www.transifex.com/inveniosoftware/teams/23537/de/)\n"
+"Last-Translator: Salaheddine Ben Ali <salaheddine.benali@cnudst.tn>, 2022\n"
+"Language-Team: Arabic (https://www.transifex.com/inveniosoftware/teams/23537/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
-"Language: de\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: invenio_accounts/admin.py:78
 msgid "Inactivate"
-msgstr "Inaktivieren"
+msgstr "تعطيل"
 
 #: invenio_accounts/admin.py:79
 msgid "Are you sure you want to inactivate selected users?"
-msgstr ""
-"Sind Sie sicher, dass Sie die ausgewählten BenutzerInnen inaktivieren "
-"möchten?"
+msgstr "هل أنت متؤكد من تعطيل المستخدمين الذين إخترتهم؟"
 
 #: invenio_accounts/admin.py:89 invenio_accounts/admin.py:114
 msgid "Cannot find user."
-msgstr "BenutzerIn nicht gefunden."
+msgstr "لم نتمكن من العثور على هذا المستخدم."
 
 #: invenio_accounts/admin.py:93 invenio_accounts/admin.py:118
 msgid "User(s) were successfully inactivated."
-msgstr "Ausgewählte BenutzerInnen erfolgreich inaktiviert."
+msgstr "تم تعطيل المستخدم(ين) بنجاح."
 
 #: invenio_accounts/admin.py:99
 msgid "Failed to inactivate users."
-msgstr "Inaktiverung von BenutzerInnen fehlgeschlagen."
+msgstr "فشل في تعطيل المستخدمين."
 
 #: invenio_accounts/admin.py:103
 msgid "Activate"
-msgstr "Aktivieren"
+msgstr "تفعيل"
 
 #: invenio_accounts/admin.py:104
 msgid "Are you sure you want to activate selected users?"
-msgstr ""
-"Sind Sie sicher, dass Sie die ausgewählten BenutzerInnen aktivieren möchten?"
+msgstr "هل أنت متؤكد من تفعيل المستخدمين الذين إخترتهم؟"
 
 #: invenio_accounts/admin.py:124
 msgid "Failed to activate users."
-msgstr "Aktivierung von BenutzerInnen fehlgeschlagen."
+msgstr "فشل في تفعيل المستخدمين."
 
 #: invenio_accounts/admin.py:222
 msgid "Email"
-msgstr "E-Mail"
+msgstr "البريد الإلكتروني"
 
 #: invenio_accounts/admin.py:223
 msgid "User ID"
-msgstr "BenutzerIn-ID"
+msgstr "معرّف المستخدم"
 
 #: invenio_accounts/admin.py:230 invenio_accounts/admin.py:236
 #: invenio_accounts/admin.py:242 invenio_accounts/admin.py:248
 msgid "User Management"
-msgstr "BenutzerInverwaltung"
+msgstr "إدارة المستخدم"
 
 #: invenio_accounts/admin.py:249
 msgid "Linked account identities"
-msgstr "Verknüpfte Konto-Identitäten"
+msgstr "هويات الحسابات المرتبطة"
 
 #: invenio_accounts/config.py:322
 msgid ""
 "Username must start with a letter, be at least three characters long and "
 "only contain alphanumeric characters, dashes and underscores."
 msgstr ""
-"Der Kontoname muss mit einem Buchstaben beginnen, mindestens drei Zeichen "
-"lang sein und darf nur alphanumerische Zeichen, Bindestriche und "
-"Unterstriche enthalten."
+"إسم المستخدم يتكون من ثلاثة حروف على الأقل. يجب ان يبدأ بحرف هجائي. و تستعمل"
+" فيه الحروف الهجائية، الأرقم و الشّرطات القصيرة و الطويلة."
 
 #: invenio_accounts/forms.py:24
 msgid "Please complete the reCAPTCHA."
-msgstr "Bearbeiten Sie bitte das reCAPTCHA."
+msgstr "يرجى إكمال اختبار reCAPTCHA."
 
 #: invenio_accounts/profiles/schemas.py:20
 msgid "Value must be either 'public' or 'restricted'."
-msgstr "Wert muss entweder \"öffentlich\" oder \"eingeschränkt\" sein."
+msgstr "يجب أن تكون القيمة إما \"عام\" أو \"مقيّد\"."
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:13
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:13
 #: invenio_accounts/views/settings.py:80
 msgid "Change password"
-msgstr "Passwort ändern"
+msgstr "غير كلمة المرور"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:22
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:21
 msgid "Current password"
-msgstr "Aktuelles Passwort"
+msgstr "كلمة المرور الحالية"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:26
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:25
 msgid "New password"
-msgstr "Neues Passwort"
+msgstr "كلمة المرور الجديدة"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:30
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:29
 msgid "Confirm new password"
-msgstr "Neues Passwort bestätigen"
+msgstr "تأكيد كلمة المرور الجديدة"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:34
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:34
 msgid "Change Password"
-msgstr "Passwort ändern"
+msgstr "غير كلمة المرور"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:19
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:29
@@ -131,7 +125,7 @@ msgstr "Passwort ändern"
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:18
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:31
 msgid "Reset Password"
-msgstr "Passwort zurücksetzen"
+msgstr "إعادة ضبط كلمة المرور"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:25
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:28
@@ -139,8 +133,8 @@ msgid ""
 "Enter your email address below and we will send you a link to reset your "
 "password."
 msgstr ""
-"Geben Sie bitte unten Ihre E-Mail-Adresse ein und wir werden Ihnen einen "
-"Link zusenden, mit dem Sie Ihr Passwort zurücksetzen können."
+"أدخل عنوان بريدك الإلكتروني أدناه وسنرسل لك رابطًا لإعادة تعيين كلمة المرور "
+"الخاصة بك."
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
 #: invenio_accounts/templates/invenio_accounts/login_user.html:29
@@ -151,14 +145,14 @@ msgstr ""
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:50
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:39
 msgid "Log in"
-msgstr "Einloggen"
+msgstr "تسجيل الدّخول"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:38
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:44
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:40
 msgid "or"
-msgstr "oder"
+msgstr "أو"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
 #: invenio_accounts/templates/invenio_accounts/login_user.html:38
@@ -169,38 +163,38 @@ msgstr "oder"
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:41
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:40
 msgid "Sign up"
-msgstr "Registrieren"
+msgstr "سجّل"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:19
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:18
 msgid "Log in to account"
-msgstr "Kontoanmeldung"
+msgstr "تسجيل الدخول لحساب"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:38
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:43
 #, python-format
 msgid "New to %(sitename)s?"
-msgstr "Neu bei %(sitename)s?"
+msgstr "أوّل زيارة لـ %(sitename)s؟"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:45
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:54
 msgid "Forgot password?"
-msgstr "Passwort vergessen?"
+msgstr "فقدت كلمة المرور؟"
 
 #: invenio_accounts/templates/invenio_accounts/register_user.html:18
 #, python-format
 msgid "Sign up for a %(sitename)s account!"
-msgstr "Erstellen Sie sich ein %(sitename)s-Konto!"
+msgstr "يمكنك إنشاء حساب الآن في%(sitename)s !"
 
 #: invenio_accounts/templates/invenio_accounts/register_user.html:37
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:49
 msgid "Already have an account?"
-msgstr "Haben Sie bereits ein Konto?"
+msgstr " لديك حساب ؟"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:19
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:43
 msgid "Resend Confirmation Email"
-msgstr "Bestätigungs-E-Mail nochmals zusenden"
+msgstr "أعد إرسال بريد الـتأكيد"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:20
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:45
@@ -208,82 +202,81 @@ msgid ""
 "Enter your email address below and we will send you an email confirmation "
 "link."
 msgstr ""
-"Geben Sie bitte unten Ihre E-Mail-Adresse ein und wir werden Ihnen einen "
-"E-Mail-Bestätigungslink zusenden."
+"أدخل عنوان بريدك الإلكتروني أدناه وسنرسل لك رابط التأكيد عبر البريد "
+"الإلكتروني ."
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:25
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:51
 msgid "Send Confirmation"
-msgstr "Bestätigung senden"
+msgstr "أرسل الـتأكيد"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:11
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:11
 msgid "Sessions"
-msgstr "Sitzungen"
+msgstr "جلسات"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:16
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:54
 msgid "Revoke"
-msgstr "Widerrufen"
+msgstr "إلغاء"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:20
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:16
 msgid "This is a list of devices that have logged into your account."
-msgstr ""
-"Dies ist eine Liste der Geräte, die sich mit Ihrem Konto angemeldet haben."
+msgstr "هذه قائمة بالأجهزة التي سجل منها الدخول إلى حسابك."
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:36
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:34
 msgid "Signed in"
-msgstr "Angemeldet"
+msgstr "تم الدخول"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:38
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:36
 msgid "current session"
-msgstr "Laufende Sitzung"
+msgstr "الجلسة الحالية"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:46
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:42
 msgid "Location"
-msgstr "Ort"
+msgstr "الموضع"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:55
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:54
 msgid "Logout"
-msgstr "Abmelden"
+msgstr "الخروج"
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:1
 msgid "Your password has been changed."
-msgstr "Ihr Passwort wurde geändert."
+msgstr "تم تغيير كلمة العبور الخاصة بك."
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:3
 msgid "If you did not change your password,"
-msgstr "Wenn Sie Ihr Passwort nicht geändert haben,"
+msgstr "إذا لم تقم بتغيير كلمة عبور حسابك،"
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:3
 msgid "click here to reset it."
-msgstr ""
+msgstr "انقر هنا لإعادة ضبطه"
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:20
 #, python-format
 msgid "Sign up for an %(sitename)s account!"
-msgstr "Erstellen Sie sich ein %(sitename)s-Konto!"
+msgstr "قم بإنشاء حساب %(sitename)s !"
 
 #: invenio_accounts/views/security.py:35
 #, python-format
 msgid "%(icon)s Security"
-msgstr "%(icon)sSicherheit"
+msgstr "%(icon)s السلامة"
 
 #: invenio_accounts/views/security.py:40
 msgid "Security"
-msgstr "Sicherheit"
+msgstr "السلامة"
 
 #: invenio_accounts/views/settings.py:53
 msgid "Account"
-msgstr "Konto"
+msgstr "حساب"
 
 #. NOTE: Menu item text (icon replaced by a key icon).
 #: invenio_accounts/views/settings.py:68
 #, python-format
 msgid "%(icon)s Change password"
-msgstr "%(icon)s Passwort ändern"
+msgstr "%(icon)s غير كلمة المرور"
