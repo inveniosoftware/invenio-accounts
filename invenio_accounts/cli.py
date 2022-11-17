@@ -8,7 +8,7 @@
 
 """Command Line Interface for accounts."""
 
-from datetime import date
+from datetime import datetime
 from functools import wraps
 
 import click
@@ -60,7 +60,7 @@ def users_create(email, password, active, confirm):
         kwargs["password"] = hash_password(kwargs["password"])
         kwargs["active"] = active
         if confirm:
-            kwargs["confirmed_at"] = date.today()
+            kwargs["confirmed_at"] = datetime.utcnow()
         _datastore.create_user(**kwargs)
         click.secho("User created successfully.", fg="green")
         kwargs["password"] = "****"
