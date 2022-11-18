@@ -8,6 +8,13 @@
 Changes
 =======
 
+Version 2.0.1 (released 2022-11-18)
+
+- Add translation workflow
+- Add pulled translations
+- Add black
+- Fix icons not appearing
+
 Version 2.0.0 (released 2022-05-23)
 
 - Adds customizable user profiles and user preferences fields to the user
