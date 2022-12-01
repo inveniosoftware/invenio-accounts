@@ -151,7 +151,7 @@ def default_confirmation_link_func(user):
     return token, _generate_token_url(endpoint, token)
 
 
-def register_user(_confirmation_link_func=None, **user_data):
+def register_user(_confirmation_link_func=None, send_register_msg=True, **user_data):
     """Register a user."""
     confirmation_link_func = _confirmation_link_func or default_confirmation_link_func
     if user_data.get("password") is not None:
@@ -167,7 +167,7 @@ def register_user(_confirmation_link_func=None, **user_data):
         current_app._get_current_object(), user=user, confirm_token=token
     )
 
-    if security_config_value("SEND_REGISTER_EMAIL"):
+    if send_register_msg and security_config_value("SEND_REGISTER_EMAIL"):
         send_mail(
             security_config_value("EMAIL_SUBJECT_REGISTER"),
             user.email,

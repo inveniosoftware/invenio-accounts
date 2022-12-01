@@ -11,6 +11,7 @@
 from datetime import datetime
 
 import flask_login
+import mock
 import pytest
 from flask_security import url_for_security
 from flask_security.utils import hash_password
@@ -18,7 +19,7 @@ from invenio_db import db
 
 from invenio_accounts import testutils
 from invenio_accounts.errors import JWTDecodeError, JWTExpiredToken
-from invenio_accounts.utils import jwt_create_token, jwt_decode_token
+from invenio_accounts.utils import jwt_create_token, jwt_decode_token, register_user
 
 
 def test_client_authenticated(app):
@@ -169,3 +170,16 @@ def test_jwt_expired_token(app):
         # Random token
         with pytest.raises(JWTDecodeError):
             jwt_decode_token("Roadster SV")
+
+
+@mock.patch("invenio_accounts.utils.send_mail")
+def test_register_user_send_mail(mock_send_mail, app):
+    """Test register_user send mail."""
+    with app.app_context():
+        register_user(send_register_msg=True, email="test1@test.org", password="1234")
+        mock_send_mail.assert_called_once()
+
+        mock_send_mail.reset_mock()
+
+        register_user(send_register_msg=False, email="test2@test.org", password="1234")
+        mock_send_mail.assert_not_called()
