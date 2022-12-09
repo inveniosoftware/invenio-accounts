@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2022 CERN.
+# Copyright (C) 2022 KTH Royal Institute of Technology
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -141,8 +142,14 @@ class User(db.Model, Timestamp, UserMixin):
         """Constructor."""
         user_profile = kwargs.pop("user_profile", {})
         preferences = kwargs.pop("preferences", {})
-        preferences.setdefault("visibility", "restricted")
-        preferences.setdefault("email_visibility", "restricted")
+        preferences.setdefault(
+            "visibility",
+            current_app.config.get("ACCOUNTS_DEFAULT_USER_VISIBILITY", "restricted"),
+        )
+        preferences.setdefault(
+            "email_visibility",
+            current_app.config.get("ACCOUNTS_DEFAULT_EMAIL_VISIBILITY", "restricted"),
+        )
         super().__init__(*args, **kwargs)
         self.user_profile = user_profile
         self.preferences = preferences

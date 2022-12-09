@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2016-2018 CERN.
 # Copyright (C)      2021 TU Wien.
+# Copyright (C) 2022 KTH Royal Institute of Technology
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -59,6 +60,9 @@ ACCOUNTS_SETTINGS_SECURITY_TEMPLATE = "invenio_accounts/settings/security.html"
 
 ACCOUNTS_CONFIRM_EMAIL_ENDPOINT = None
 """Value to be used for the confirmation email link in the UI application."""
+
+ACCOUNTS_DEFAULT_EMAIL_VISIBILITY = "restricted"
+"""Default Email visibility value can be set to either 'restricted' or 'public'."""
 
 ACCOUNTS_REST_CONFIRM_EMAIL_ENDPOINT = "/confirm/{token}"
 """Value to be used for the confirmation email link in the API application.
@@ -310,6 +314,9 @@ ACCOUNTS_USER_PREFERENCES_SCHEMA = UserPreferencesSchema()
 
 ACCOUNTS_USER_PROFILE_SCHEMA = UserProfileSchema()
 """The schema to use for validation of the user profile."""
+
+ACCOUNTS_DEFAULT_USER_VISIBILITY = "restricted"
+"""Default User visibility value can be set to either 'restricted' or 'public'."""
 
 ACCOUNTS_USERNAME_REGEX = r"^[a-zA-Z][a-zA-Z0-9-_]{2,255}$"
 """The regular expression used for validating usernames.

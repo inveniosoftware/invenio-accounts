@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
 # Copyright (C)      2022 TU Wien.
+# Copyright (C) 2022 KTH Royal Institute of Technology
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -107,6 +108,13 @@ def test_profiles(app):
 
     assert len(user.user_profile) == 1
     assert user.user_profile["full_name"] == "Invenio Admin"
+    assert (
+        app.config["ACCOUNTS_DEFAULT_EMAIL_VISIBILITY"]
+        == user.preferences["email_visibility"]
+    )
+    assert (
+        app.config["ACCOUNTS_DEFAULT_USER_VISIBILITY"] == user.preferences["visibility"]
+    )
 
 
 def test_custom_profiles(app):
