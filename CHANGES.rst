@@ -8,6 +8,14 @@
 Changes
 =======
 
+Version 2.0.2 (released 2022-12-14)
+
+- cli: add `--confirm` flag when creating a user
+- new config variables to set the default user and email visibility
+- register_user: method accepts new argument, `send_register_msg`, to control
+  programmatically the send of registration email independently of the global
+  configuration.
+
 Version 2.0.1 (released 2022-11-18)
 
 - Add translation workflow
