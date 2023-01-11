@@ -16,12 +16,11 @@ import tempfile
 import pytest
 from flask import Flask
 from flask_admin import Admin
-from flask_babelex import Babel
 from flask_celeryext import FlaskCeleryExt
 from flask_mail import Mail
 from flask_menu import Menu
 from invenio_db import InvenioDB, db
-from invenio_i18n import InvenioI18N
+from invenio_i18n import Babel, InvenioI18N
 from invenio_rest import InvenioREST
 from simplekv.memory.redisstore import RedisStore
 from sqlalchemy_utils.functions import create_database, database_exists, drop_database

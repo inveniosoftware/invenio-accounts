@@ -11,9 +11,9 @@
 Currently supported: recaptcha
 """
 from flask import request
-from flask_babelex import gettext as _
 from flask_security.forms import NextFormMixin
 from flask_wtf import FlaskForm, Recaptcha, RecaptchaField
+from invenio_i18n import gettext as _
 from wtforms import FormField, HiddenField
 
 
