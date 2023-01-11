@@ -12,10 +12,10 @@
 import pytest
 import requests
 from flask import Flask
-from flask_babelex import Babel
 from flask_mail import Mail
 from flask_security import url_for_security
 from invenio_db import InvenioDB, db
+from invenio_i18n import Babel
 
 from invenio_accounts import InvenioAccounts, InvenioAccountsREST, testutils
 from invenio_accounts.models import Role, User

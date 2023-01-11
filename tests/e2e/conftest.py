@@ -16,10 +16,10 @@ import time
 
 import pytest
 from flask import Flask
-from flask_babelex import Babel
 from flask_mail import Mail
 from flask_menu import Menu
 from invenio_db import InvenioDB, db
+from invenio_i18n import Babel
 from selenium import webdriver
 from sqlalchemy_utils.functions import create_database, database_exists, drop_database
 
