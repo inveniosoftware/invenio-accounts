@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015-2022 CERN.
+# Copyright (C) 2015-2023 CERN.
 # Copyright (C) 2022 KTH Royal Institute of Technology
 #
 # Invenio is free software; you can redistribute it and/or modify it
@@ -9,6 +9,7 @@
 
 """Database models for accounts."""
 
+import uuid
 from datetime import datetime
 
 from flask import current_app, session
@@ -52,7 +53,7 @@ userrole = db.Table(
     ),
     db.Column(
         "role_id",
-        db.Integer(),
+        db.String(80),
         db.ForeignKey("accounts_role.id", name="fk_accounts_userrole_role_id"),
     ),
 )
@@ -64,13 +65,16 @@ class Role(db.Model, Timestamp, RoleMixin):
 
     __tablename__ = "accounts_role"
 
-    id = db.Column(db.Integer(), primary_key=True)
+    id = db.Column(db.String(80), primary_key=True, default=str(uuid.uuid4()))
 
     name = db.Column(db.String(80), unique=True)
     """Role name."""
 
     description = db.Column(db.String(255))
     """Role description."""
+
+    is_managed = db.Column(db.Boolean(), default=True, nullable=False)
+    """True when the role is managed by Invenio, and not externally provided."""
 
     # Enables SQLAlchemy version counter
     version_id = db.Column(db.Integer, nullable=False)
