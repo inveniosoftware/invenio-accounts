@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2015-2023 CERN.
 # Copyright (C) 2021      TU Wien.
 #
 # Invenio is free software; you can redistribute it and/or modify it
@@ -114,48 +114,65 @@ def test_datastore_usercreate(app):
     """Test create user."""
     ds = app.extensions["invenio-accounts"].datastore
 
-    with app.app_context():
-        u1 = ds.create_user(
-            email="info@inveniosoftware.org", password="1234", active=True
-        )
-        ds.commit()
-        u2 = ds.find_user(email="info@inveniosoftware.org")
-        assert u1 == u2
-        assert 1 == User.query.filter_by(email="info@inveniosoftware.org").count()
+    u1 = ds.create_user(email="info@inveniosoftware.org", password="1234", active=True)
+    ds.commit()
+    u2 = ds.find_user(email="info@inveniosoftware.org")
+    assert u1 == u2
+    assert 1 == User.query.filter_by(email="info@inveniosoftware.org").count()
 
 
 def test_datastore_rolecreate(app):
-    """Test create user."""
+    """Test create role."""
     ds = app.extensions["invenio-accounts"].datastore
 
-    with app.app_context():
-        r1 = ds.create_role(name="superuser", description="1234")
-        ds.commit()
-        r2 = ds.find_role("superuser")
-        assert r1 == r2
-        assert 1 == Role.query.filter_by(name="superuser").count()
+    r1 = ds.create_role(name="superuser", description="1234")
+    ds.commit()
+    r2 = ds.find_role("superuser")
+    assert r1 == r2
+    assert 1 == Role.query.filter_by(name="superuser").count()
+
+
+def test_datastore_update_role(app):
+    """Test update role."""
+    ds = app.extensions["invenio-accounts"].datastore
+
+    r1 = ds.create_role(id="1", name="superuser", description="1234")
+    ds.commit()
+    r2 = ds.find_role("superuser")
+    assert r1 == r2
+    assert 1 == Role.query.filter_by(name="superuser").count()
+    assert r2.is_managed is True
+
+    r1 = ds.update_role(
+        Role(
+            id="1", name="megauser", description="updated description", is_managed=False
+        )
+    )
+    ds.commit()
+    r2 = ds.find_role("megauser")
+    assert r1 == r2
+    assert r2.description == "updated description"
+    assert r2.is_managed is False
+    assert 1 == Role.query.filter_by(name="megauser").count()
+    assert 0 == Role.query.filter_by(name="superuser").count()
 
 
 def test_datastore_assignrole(app):
     """Create and assign user to role."""
     ds = app.extensions["invenio-accounts"].datastore
 
-    with app.app_context():
-        u = ds.create_user(
-            email="info@inveniosoftware.org", password="1234", active=True
-        )
-        r = ds.create_role(name="superuser", description="1234")
-        ds.add_role_to_user(u, r)
-        ds.commit()
-        u = ds.get_user("info@inveniosoftware.org")
-        assert len(u.roles) == 1
-        assert u.roles[0].name == "superuser"
+    u = ds.create_user(email="info@inveniosoftware.org", password="1234", active=True)
+    r = ds.create_role(name="superuser", description="1234")
+    ds.add_role_to_user(u, r)
+    ds.commit()
+    u = ds.get_user("info@inveniosoftware.org")
+    assert len(u.roles) == 1
+    assert u.roles[0].name == "superuser"
 
 
 def test_view(app):
     """Test view."""
-    with app.app_context():
-        login_url = url_for_security("login")
+    login_url = url_for_security("login")
 
     with app.test_client() as client:
         res = client.get(login_url)
@@ -208,16 +225,15 @@ def test_headers_info(app, users):
     """Test if session and user id is set response header."""
     u = users[0]
     url = url_for_security("change_password")
-    with app.app_context():
-        with app.test_client() as client:
-            response = client.get(url)
-            # Not logged in, so only session id available
-            assert not testutils.client_authenticated(client)
-            assert "X-Session-ID" in response.headers
-            assert "X-User-ID" not in response.headers
-            # Login
-            testutils.login_user_via_session(client, email=u["email"])
-            response = client.get(url)
-            cookie = requests.utils.dict_from_cookiejar(client.cookie_jar)
-            assert response.headers["X-Session-ID"] == cookie["session"].split(".")[0]
-            assert int(response.headers["X-User-ID"]) == u["id"]
+    with app.test_client() as client:
+        response = client.get(url)
+        # Not logged in, so only session id available
+        assert not testutils.client_authenticated(client)
+        assert "X-Session-ID" in response.headers
+        assert "X-User-ID" not in response.headers
+        # Login
+        testutils.login_user_via_session(client, email=u["email"])
+        response = client.get(url)
+        cookie = requests.utils.dict_from_cookiejar(client.cookie_jar)
+        assert response.headers["X-Session-ID"] == cookie["session"].split(".")[0]
+        assert int(response.headers["X-User-ID"]) == u["id"]
