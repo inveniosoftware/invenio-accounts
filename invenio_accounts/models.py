@@ -63,13 +63,16 @@ class Role(db.Model, Timestamp, RoleMixin):
 
     __tablename__ = "accounts_role"
 
-    id = db.Column(db.Integer(), primary_key=True)
+    id = db.Column(db.String(80), primary_key=True)
 
     name = db.Column(db.String(80), unique=True)
     """Role name."""
 
     description = db.Column(db.String(255))
     """Role description."""
+
+    is_managed = db.Column(db.Boolean(name="is_managed"), default=True, nullable=False)
+    """True when the role is managed by Invenio, and not externally provided."""
 
     # Enables SQLAlchemy version counter
     version_id = db.Column(db.Integer, nullable=False)
