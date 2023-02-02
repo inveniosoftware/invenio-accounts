@@ -33,6 +33,23 @@ def test_cli_createuser(app):
     result = runner.invoke(users_create, ["not-an-email", "--password", "123456"])
     assert result.exit_code == 2
 
+    # Create use with profile that is not valid JSON
+    result = runner.invoke(
+        users_create, ["test@example.com", "--profile", "<json>profile</json>"]
+    )
+    assert result.exit_code != 0
+
+    # Create use with profile that will not validate
+    result = runner.invoke(
+        users_create,
+        [
+            "test@example.com",
+            "--profile",
+            '{"full_name" : "test_user", "extra_data" : "not_allowed"}',
+        ],
+    )
+    assert result.exit_code != 0
+
     # Create user
     result = runner.invoke(
         users_create, ["info@inveniosoftware.org", "--password", "123456"]
