@@ -203,7 +203,6 @@ def app_with_flexible_registration(request):
     from invenio_accounts.views.rest import RegisterView, use_kwargs
 
     class MyRegisterView(RegisterView):
-
         post_args = {**RegisterView.post_args, "active": fields.Boolean(required=True)}
 
         @use_kwargs(post_args)

@@ -73,7 +73,6 @@ def _login_user(client, user, email="normal@test.com", password="123456"):
 def test_login_view(api):
     app = api
     with app.app_context():
-
         normal_user = create_test_user(email="normal@test.com")
         create_test_user(email="disabled@test.com", active=False)
         create_test_user(email="nopass@test.com", password=None)
@@ -218,7 +217,6 @@ def test_logout_view(api):
         normal_user = create_test_user(email="normal@test.com")
         db.session.commit()
         with app.test_client() as client:
-
             # Login user
             _login_user(client, normal_user)
             old_session_cookie = next(
@@ -241,7 +239,7 @@ def test_logout_view(api):
 def test_forgot_password_view(api):
     app = api
     with app.app_context():
-        normal_user = create_test_user(email="normal@test.com")
+        create_test_user(email="normal@test.com")
         db.session.commit()
         with app.test_client() as client:
             url = url_for("invenio_accounts_rest_auth.forgot_password")
@@ -265,7 +263,7 @@ def test_disabled_forgot_password_view(api):
 
     with app.app_context():
         user = create_test_user(email="normal@test.com")
-        token = generate_reset_password_token(user)
+        generate_reset_password_token(user)
         db.session.commit()
         with app.test_client() as client:
             url = url_for("invenio_accounts_rest_auth.forgot_password")

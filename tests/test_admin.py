@@ -8,13 +8,9 @@
 
 import pytest
 from flask import current_app, session, url_for
-from flask_admin import menu
 from flask_security.utils import hash_password
-from invenio_db import db
 from werkzeug.local import LocalProxy
 
-from invenio_accounts import InvenioAccounts
-from invenio_accounts.cli import users_create
 from invenio_accounts.models import SessionActivity
 from invenio_accounts.testutils import login_user_via_view
 
@@ -37,7 +33,6 @@ def test_admin(app, admin_view):
         inserted_id = _datastore.get_user("test@test.cern").id
 
     with app.test_client() as client:
-
         res = client.post(
             request_url,
             data={"rowid": inserted_id, "action": "activate"},
@@ -140,11 +135,9 @@ def test_admin_sessions(app, admin_view, users):
         assert res.status_code == 200
 
         # simulate login as user 1
-        datastore = app.extensions["security"].datastore
         login_user_via_view(
             client=client, email=users[0]["email"], password=users[0]["password"]
         )
-        from flask import session
 
         sid_s = session.sid_s
         # and try to delete own session sid_s: FAILS
@@ -162,8 +155,10 @@ def test_admin_sessions(app, admin_view, users):
         new_sid_s = session.sid_s
         sessions = SessionActivity.query.all()
         assert len(sessions) == 2
+
         all_sid_s = [session.sid_s for session in sessions]
         assert sorted([sid_s, new_sid_s]) == sorted(all_sid_s)
+
         # and try to delete a session of another user: WORKS
         res = client.post(delete_view_url, data={"id": sid_s}, follow_redirects=True)
         sessions = SessionActivity.query.all()

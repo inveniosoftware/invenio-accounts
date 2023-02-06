@@ -9,10 +9,9 @@
 """Test account views."""
 
 import base64
-from unittest import mock
 
 from flask import url_for
-from flask_login import COOKIE_NAME, LoginManager
+from flask_login import COOKIE_NAME
 from flask_security import url_for_security
 from flask_security.forms import LoginForm
 from flask_security.views import _security
