@@ -20,7 +20,6 @@ from flask_security.recoverable import generate_reset_password_token
 from flask_security.signals import password_changed, user_registered
 from flask_security.utils import config_value as security_config_value
 from flask_security.utils import get_security_endpoint_name, hash_password, send_mail
-from invenio_i18n import lazy_gettext as _
 from jwt import DecodeError, ExpiredSignatureError, decode, encode
 from werkzeug.routing import BuildError
 from werkzeug.utils import import_string

@@ -9,8 +9,6 @@
 
 """Module tests."""
 
-from click.testing import CliRunner
-
 from invenio_accounts.cli import (
     roles_add,
     roles_create,

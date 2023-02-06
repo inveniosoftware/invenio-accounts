@@ -12,7 +12,6 @@ from flask import current_app, flash
 from flask_admin.actions import action
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.sqla.ajax import QueryAjaxModelLoader
-from flask_admin.form.fields import DateTimeField
 from flask_admin.model.fields import AjaxSelectMultipleField
 from flask_security.recoverable import send_reset_password_instructions
 from flask_security.utils import hash_password
