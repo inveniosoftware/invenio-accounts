@@ -53,8 +53,9 @@ class InvenioAccounts(object):
     @staticmethod
     def monkey_patch_flask_security():
         """Monkey-patch Flask-Security."""
+
         # Disable remember me cookie generation as it does not work with
-        # session activity tracking (a remember me token will bypass revoking
+        # session activity tracking (remember me token will bypass revoking
         # of a session).
         def patch_do_nothing(*args, **kwargs):
             pass
