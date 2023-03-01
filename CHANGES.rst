@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 2.1.0 (released 2023-03-01)
+
+- global: replace deprecated babelex imports
+- update invenio-i18n
+
 Version 2.0.2 (released 2022-12-14)
 
 - cli: add `--confirm` flag when creating a user
