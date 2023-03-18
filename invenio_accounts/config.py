@@ -312,6 +312,9 @@ ACCOUNTS_LOCAL_LOGIN_ENABLED = True
 ACCOUNTS_USER_PREFERENCES_SCHEMA = UserPreferencesSchema()
 """The schema to use for validation of the user preferences."""
 
+ACCOUNTS_DEFAULT_LOCALE_PREFERENCES = "ch"
+"""Default Preference for preferences.locale."""
+
 ACCOUNTS_USER_PROFILE_SCHEMA = UserProfileSchema()
 """The schema to use for validation of the user profile."""
 

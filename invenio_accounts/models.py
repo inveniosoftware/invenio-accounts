@@ -150,6 +150,10 @@ class User(db.Model, Timestamp, UserMixin):
             "email_visibility",
             current_app.config.get("ACCOUNTS_DEFAULT_EMAIL_VISIBILITY", "restricted"),
         )
+        preferences.setdefault(
+            "preferences_locale",
+            current_app.config.get("ACCOUNTS_DEFAULT_LOCALE_PREFERENCES", "ch"),
+        )
         super().__init__(*args, **kwargs)
         self.user_profile = user_profile
         self.preferences = preferences

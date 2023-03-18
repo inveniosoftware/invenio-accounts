@@ -21,6 +21,14 @@ def validate_visibility(value):
         )
 
 
+def validate_preferences_locale(value):
+    """Check if the value is a valid locale."""
+    if False:  # TODO upddate this
+        raise ValidationError(
+            message=str(_("Value must be either 'public' or 'restricted'."))
+        )
+
+
 class UserProfileSchema(Schema):
     """The default user profile schema."""
 
@@ -33,3 +41,4 @@ class UserPreferencesSchema(Schema):
 
     visibility = fields.String(validate=validate_visibility)
     email_visibility = fields.String(validate=validate_visibility)
+    preferences_locale = fields.String(validate=validate_preferences_locale)
