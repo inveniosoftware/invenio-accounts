@@ -12,6 +12,7 @@
 from datetime import datetime
 
 from flask import current_app, session
+from flask_babel import refresh
 from flask_security import RoleMixin, UserMixin
 from invenio_db import db
 from sqlalchemy.dialects import postgresql
@@ -150,6 +151,14 @@ class User(db.Model, Timestamp, UserMixin):
             "email_visibility",
             current_app.config.get("ACCOUNTS_DEFAULT_EMAIL_VISIBILITY", "restricted"),
         )
+        preferences.setdefault(
+            "locale",
+            current_app.config.get("BABEL_DEFAULT_LOCALE", "en"),
+        )
+        preferences.setdefault(
+            "timezone",
+            current_app.config.get("BABEL_DEFAULT_TIMEZONE", "Europe/Zurich"),
+        )
         super().__init__(*args, **kwargs)
         self.user_profile = user_profile
         self.preferences = preferences
@@ -212,6 +221,7 @@ class User(db.Model, Timestamp, UserMixin):
             self._preferences = None
         else:
             self._preferences = UserPreferenceDict(**value)
+            refresh()
 
     def _get_login_info_attr(self, attr_name):
         if self.login_info is None:
