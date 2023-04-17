@@ -8,7 +8,8 @@
 
 """Schemas for user profiles and preferences."""
 
-
+import pytz
+from flask import current_app
 from invenio_i18n import lazy_gettext as _
 from marshmallow import Schema, ValidationError, fields
 
@@ -19,6 +20,23 @@ def validate_visibility(value):
         raise ValidationError(
             message=str(_("Value must be either 'public' or 'restricted'."))
         )
+
+
+def validate_locale(value):
+    """Check if the value is a valid locale."""
+    locales = current_app.extensions["invenio-i18n"].get_locales()
+    locales = [locale.language for locale in locales]
+
+    if value not in locales:
+        raise ValidationError(message=str(_("Value must be a valid locale.")))
+    current_app.config["BABEL_DEFAULT_LOCALE"] = value
+
+
+def validate_timezone(value):
+    """Check if the value is a valid timezone."""
+    if value not in pytz.all_timezones:
+        raise ValidationError(message=str(_("Value must be a valid timezone.")))
+    current_app.config["BABEL_DEFAULT_TIMEZONE"] = value
 
 
 class UserProfileSchema(Schema):
@@ -33,3 +51,5 @@ class UserPreferencesSchema(Schema):
 
     visibility = fields.String(validate=validate_visibility)
     email_visibility = fields.String(validate=validate_visibility)
+    locale = fields.String(validate=validate_locale)
+    timezone = fields.String(validate=validate_timezone)
