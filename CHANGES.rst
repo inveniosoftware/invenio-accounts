@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 2.2.0 (released 2023-04-25)
+
+- models: add support for locale in user preferences
+
 Version 2.1.0 (released 2023-03-01)
 
 - global: replace deprecated babelex imports
