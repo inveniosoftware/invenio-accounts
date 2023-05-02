@@ -8,11 +8,11 @@
 
 """Command Line Interface for accounts."""
 
+import json
 from datetime import datetime
 from functools import wraps
 
 import click
-import json
 from flask import current_app
 from flask.cli import with_appcontext
 from flask_security.forms import ConfirmRegisterForm
