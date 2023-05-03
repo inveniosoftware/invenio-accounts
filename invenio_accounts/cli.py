@@ -8,6 +8,7 @@
 
 """Command Line Interface for accounts."""
 
+import json
 from datetime import datetime
 from functools import wraps
 
@@ -48,9 +49,10 @@ def roles():
 @click.password_option()
 @click.option("-a", "--active", default=False, is_flag=True)
 @click.option("-c", "--confirm", default=False, is_flag=True)
+@click.option("-p", "--profile")
 @with_appcontext
 @commit
-def users_create(email, password, active, confirm):
+def users_create(email, password, active, confirm, profile):
     """Create a user."""
     kwargs = dict(email=email, password=password, active="y" if active else "")
 
@@ -61,6 +63,8 @@ def users_create(email, password, active, confirm):
         kwargs["active"] = active
         if confirm:
             kwargs["confirmed_at"] = datetime.utcnow()
+        if profile:
+            kwargs["user_profile"] = json.loads(profile)
         _datastore.create_user(**kwargs)
         click.secho("User created successfully.", fg="green")
         kwargs["password"] = "****"
