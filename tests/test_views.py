@@ -44,19 +44,19 @@ def test_no_log_in_message_for_logged_in_users(app):
         test_password = "test1234"
         resp = client.post(
             url_for_security("register"),
-            data=dict(
-                email=test_email,
-                password=test_password,
-            ),
+            data={
+                "email": test_email,
+                "password": test_password,
+            },
             environ_base={"REMOTE_ADDR": "127.0.0.1"},
         )
 
         resp = client.post(
             url_for_security("login"),
-            data=dict(
-                email=test_email,
-                password=test_password,
-            ),
+            data={
+                "email": test_email,
+                "password": test_password,
+            },
         )
 
         resp = client.get(forgot_password_url, follow_redirects=True)

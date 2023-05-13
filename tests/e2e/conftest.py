@@ -24,7 +24,7 @@ from selenium import webdriver
 from sqlalchemy_utils.functions import create_database, database_exists, drop_database
 
 from invenio_accounts import InvenioAccounts
-from invenio_accounts.views.settings import blueprint
+from invenio_accounts.views.settings import create_settings_blueprint
 
 
 @pytest.fixture(scope="session")
@@ -56,7 +56,7 @@ def app(request):
     Mail(app)
     InvenioDB(app)
     InvenioAccounts(app)
-    app.register_blueprint(blueprint)
+    app.register_blueprint(create_settings_blueprint(app))
 
     with app.app_context():
         if not database_exists(str(db.engine.url)):
