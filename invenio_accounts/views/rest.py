@@ -77,7 +77,7 @@ def role_to_dict(role):
     )
 
 
-def create_blueprint(app):
+def create_rest_blueprint(app):
     """Conditionally creates the blueprint."""
     blueprint = Blueprint("invenio_accounts_rest_auth", __name__)
 

@@ -18,17 +18,49 @@ from flask import Flask
 from flask_admin import Admin
 from flask_celeryext import FlaskCeleryExt
 from flask_mail import Mail
-from flask_menu import Menu
+from flask_webpackext.manifest import (
+    JinjaManifest,
+    JinjaManifestEntry,
+    JinjaManifestLoader,
+)
+from invenio_assets import InvenioAssets
 from invenio_db import InvenioDB, db
 from invenio_i18n import Babel, InvenioI18N
 from invenio_rest import InvenioREST
+from invenio_theme import InvenioTheme
 from simplekv.memory.redisstore import RedisStore
 from sqlalchemy_utils.functions import create_database, database_exists, drop_database
+from webargs import fields
+from werkzeug.exceptions import NotFound
 
 from invenio_accounts import InvenioAccounts, InvenioAccountsREST
 from invenio_accounts.admin import role_adminview, session_adminview, user_adminview
 from invenio_accounts.testutils import create_test_user
-from invenio_accounts.views.rest import create_blueprint
+from invenio_accounts.views.rest import RegisterView, create_rest_blueprint, use_kwargs
+from invenio_accounts.views.settings import create_settings_blueprint
+
+
+#
+# Mock the webpack manifest to avoid having to compile the full assets.
+#
+class MockJinjaManifest(JinjaManifest):
+    """Mock manifest."""
+
+    def __getitem__(self, key):
+        """Get a manifest entry."""
+        return JinjaManifestEntry(key, [key])
+
+    def __getattr__(self, name):
+        """Get a manifest entry."""
+        return JinjaManifestEntry(name, [name])
+
+
+class MockManifestLoader(JinjaManifestLoader):
+    """Manifest loader creating a mocked manifest."""
+
+    def load(self, filepath):
+        """Load the manifest."""
+        return MockJinjaManifest()
 
 
 def _app_factory(config=None):
@@ -81,14 +113,24 @@ def _app_factory(config=None):
         SERVER_NAME="example.com",
         TESTING=True,
         WTF_CSRF_ENABLED=False,
+        ACCOUNTS_SITENAME="invenio",
+        ACCOUNTS_BASE_TEMPLATE="invenio_accounts/base.html",
+        ACCOUNTS_SETTINGS_TEMPLATE="invenio_accounts/settings/base.html",
+        ACCOUNTS_COVER_TEMPLATE="invenio_accounts/base_cover.html",
+        WEBPACKEXT_MANIFEST_LOADER=MockManifestLoader,
     )
 
     app.config.update(config or {})
-    Menu(app)
     Babel(app)
     Mail(app)
     InvenioDB(app)
     InvenioI18N(app)
+    InvenioAssets(app)
+    InvenioTheme(app)
+
+    # it overrides the custom error handler set by InvenioTheme, by setting it
+    # back to the default 404 error handler.
+    app.register_error_handler(404, NotFound)
 
     def delete_user_from_cache(exception):
         """Delete user from `flask.g` when the request is tearing down.
@@ -150,9 +192,7 @@ def app(request):
     app.config.update(ACCOUNTS_USERINFO_HEADERS=True)
     InvenioAccounts(app)
 
-    from invenio_accounts.views.settings import blueprint
-
-    app.register_blueprint(blueprint)
+    app.register_blueprint(create_settings_blueprint(app))
 
     _database_setup(app, request)
     yield app
@@ -173,7 +213,7 @@ def api(request):
 
     InvenioREST(api_app)
     InvenioAccountsREST(api_app)
-    api_app.register_blueprint(create_blueprint(api_app))
+    api_app.register_blueprint(create_rest_blueprint(api_app))
 
     _database_setup(api_app, request)
 
@@ -187,9 +227,7 @@ def app_with_redis_url(request):
     app.config.update(ACCOUNTS_USERINFO_HEADERS=True)
     InvenioAccounts(app)
 
-    from invenio_accounts.views.settings import blueprint
-
-    app.register_blueprint(blueprint)
+    app.register_blueprint(create_settings_blueprint(app))
 
     _database_setup(app, request)
     yield app
@@ -198,9 +236,6 @@ def app_with_redis_url(request):
 @pytest.fixture()
 def app_with_flexible_registration(request):
     """Flask application fixture with Invenio Accounts."""
-    from webargs import fields
-
-    from invenio_accounts.views.rest import RegisterView, use_kwargs
 
     class MyRegisterView(RegisterView):
         post_args = {**RegisterView.post_args, "active": fields.Boolean(required=True)}
@@ -216,7 +251,7 @@ def app_with_flexible_registration(request):
 
     api_app.config["ACCOUNTS_REST_AUTH_VIEWS"]["register"] = MyRegisterView
 
-    api_app.register_blueprint(create_blueprint(api_app))
+    api_app.register_blueprint(create_rest_blueprint(api_app))
 
     _database_setup(api_app, request)
     yield api_app

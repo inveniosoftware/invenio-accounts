@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
 # Copyright (C)      2021 TU Wien.
+# Copyright (C) 2023 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -250,11 +251,6 @@ class InvenioAccounts(object):
         user_logged_in.connect(csrf_token_reset, app)
         user_logged_out.connect(logout_listener, app)
         user_logged_out.connect(csrf_token_reset, app)
-        from .views.security import revoke_session, security
-        from .views.settings import blueprint
-
-        blueprint.route("/security/", methods=["GET"])(security)
-        blueprint.route("/sessions/revoke/", methods=["POST"])(revoke_session)
 
 
 class InvenioAccountsREST(InvenioAccounts):
@@ -333,3 +329,39 @@ class InvenioAccountsUI(InvenioAccounts):
         @app.before_request
         def make_session_permanent():
             session.permanent = True
+
+
+def finalize_app(app):
+    """Finalize app."""
+    set_default_config(app)
+    check_security_settings(app)
+
+
+def set_default_config(app):
+    """Set default values."""
+    app.config.setdefault(
+        "ACCOUNTS_SITENAME", app.config.get("THEME_SITENAME", "Invenio")
+    )
+    app.config.setdefault(
+        "ACCOUNTS_BASE_TEMPLATE",
+        app.config.get("BASE_TEMPLATE", "invenio_accounts/base.html"),
+    )
+    app.config.setdefault(
+        "ACCOUNTS_COVER_TEMPLATE",
+        app.config.get("COVER_TEMPLATE", "invenio_accounts/base_cover.html"),
+    )
+    app.config.setdefault(
+        "ACCOUNTS_SETTINGS_TEMPLATE",
+        app.config.get("SETTINGS_TEMPLATE", "invenio_accounts/settings/base.html"),
+    )
+
+
+def check_security_settings(app):
+    """Warn if session cookie is not secure in production."""
+    in_production = not (app.debug or app.testing)
+    secure = app.config.get("SESSION_COOKIE_SECURE")
+    if in_production and not secure:
+        app.logger.warning(
+            "SESSION_COOKIE_SECURE setting must be set to True to prevent the "
+            "session cookie from being leaked over an insecure channel."
+        )

@@ -2,97 +2,69 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
 """Invenio user management and authentication."""
 
-from flask import Blueprint, current_app
-from flask_breadcrumbs import register_breadcrumb
-from flask_menu import current_menu
+from flask import Blueprint, abort, current_app, request
+from flask_security.views import anonymous_user_required
+from flask_security.views import login as base_login
 from invenio_i18n import lazy_gettext as _
-from invenio_theme.proxies import current_theme_icons
+from invenio_theme import menu
 
-blueprint = Blueprint(
-    "invenio_accounts",
-    __name__,
-    url_prefix="/account/settings",
-    template_folder="../templates",
-    static_folder="static",
-)
+from .security import revoke_session, security
 
 
-@blueprint.record_once
-def post_ext_init(state):
-    """."""
-    app = state.app
+@anonymous_user_required
+def login(*args, **kwargs):
+    """Disable login credential submission if local login is disabled."""
+    local_login_enabled = current_app.config.get("ACCOUNTS_LOCAL_LOGIN_ENABLED", True)
 
-    app.config.setdefault(
-        "ACCOUNTS_SITENAME", app.config.get("THEME_SITENAME", "Invenio")
-    )
-    app.config.setdefault(
-        "ACCOUNTS_BASE_TEMPLATE",
-        app.config.get("BASE_TEMPLATE", "invenio_accounts/base.html"),
-    )
-    app.config.setdefault(
-        "ACCOUNTS_COVER_TEMPLATE",
-        app.config.get("COVER_TEMPLATE", "invenio_accounts/base_cover.html"),
-    )
-    app.config.setdefault(
-        "ACCOUNTS_SETTINGS_TEMPLATE",
-        app.config.get("SETTINGS_TEMPLATE", "invenio_accounts/settings/base.html"),
+    login_form_submitted = request.method == "POST"
+    if login_form_submitted and not local_login_enabled:
+        # only allow GET requests,
+        # avoid credential submission/login via POST
+        abort(404)
+
+    return base_login(*args, **kwargs)
+
+
+def create_settings_blueprint(app):
+    """Create settings blueprint."""
+    blueprint = Blueprint(
+        "invenio_accounts",
+        __name__,
+        url_prefix="/account/settings",
+        template_folder="../templates",
+        static_folder="static",
     )
 
+    icons = app.extensions["invenio-theme"].icons
 
-@blueprint.before_app_first_request
-def init_menu():
-    """Initialize menu before first request."""
-    # Register root breadcrumbs
-    item = current_menu.submenu("breadcrumbs.settings")
-    item.register("invenio_userprofiles.profile", _("Account"))
-    if current_app.config.get("ACCOUNTS_REGISTER_BLUEPRINT") is False:
-        return
+    blueprint.add_url_rule("/login", view_func=login)
+
+    if app.config["ACCOUNTS_SESSION_ACTIVITY_ENABLED"]:
+        blueprint.add_url_rule("/security", view_func=security, methods=["GET"])
+        blueprint.add_url_rule(
+            "/sessions/revoke", view_func=revoke_session, methods=["POST"]
+        )
+
+    menu.submenu("settings.security").register(
+        endpoint="invenio_accounts.security",
+        text=_("%(icon)s Security", icon=f'<i class="{icons.shield}"></i>'),
+        order=2,
+    )
 
     # - Register menu
     # - Change password
-    if current_app.config.get("SECURITY_CHANGEABLE", True):
-        view_name = "{}.change_password".format(
-            current_app.config["SECURITY_BLUEPRINT_NAME"]
-        )
-
-        item = current_menu.submenu("settings.change_password")
-        item.register(
-            view_name,
-            # NOTE: Menu item text (icon replaced by a key icon).
-            _(
-                "%(icon)s Change password",
-                icon=('<i class="{icon}"></i>'.format(icon=current_theme_icons.key)),
-            ),
+    if app.config.get("SECURITY_CHANGEABLE", True):
+        menu.submenu("settings.change_password").register(
+            endpoint=f"{app.config['SECURITY_BLUEPRINT_NAME']}.change_password",
+            text=_("%(icon)s Change password", icon=f'<i class="{icons.key}"></i>'),
             order=1,
         )
 
-        # Breadcrumb for change password
-        #
-        # The breadcrumbs works by decorating the view functions with a
-        # __breadcrumb__ field. Since the change password view is defined in
-        # Flask-Security, we need to this hack to in order to decorate the view
-        # function with the __breadcrumb__ field.
-        decorator = register_breadcrumb(
-            current_app, "breadcrumbs.settings.change_password", _("Change password")
-        )
-        current_app.view_functions[view_name] = decorator(
-            current_app.view_functions[view_name]
-        )
-
-
-@blueprint.before_app_first_request
-def check_security_settings():
-    """Warn if session cookie is not secure in production."""
-    in_production = not (current_app.debug or current_app.testing)
-    secure = current_app.config.get("SESSION_COOKIE_SECURE")
-    if in_production and not secure:
-        current_app.logger.warning(
-            "SESSION_COOKIE_SECURE setting must be set to True to prevent the "
-            "session cookie from being leaked over an insecure channel."
-        )
+    return blueprint

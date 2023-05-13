@@ -9,35 +9,16 @@
 """Invenio user management and authentication."""
 
 from flask import abort, current_app, flash, redirect, render_template, request, url_for
-from flask_breadcrumbs import register_breadcrumb
 from flask_login import login_required
-from flask_menu import register_menu
 from flask_security import current_user
 from invenio_db import db
-from invenio_i18n import lazy_gettext as _
-from invenio_theme.proxies import current_theme_icons
-from speaklater import make_lazy_string
 
 from ..forms import RevokeForm
 from ..models import SessionActivity
 from ..sessions import delete_session
-from .settings import blueprint
 
 
 @login_required
-@register_menu(
-    blueprint,
-    "settings.security",
-    # NOTE: Menu item text (icon replaced by a user icon).
-    _(
-        "%(icon)s Security",
-        icon=make_lazy_string(
-            lambda: '<i class="{icon}"></i>'.format(icon=current_theme_icons.shield)
-        ),
-    ),
-    order=2,
-)
-@register_breadcrumb(blueprint, "breadcrumbs.settings.security", _("Security"))
 def security():
     """View for security page."""
     sessions = SessionActivity.query_by_user(user_id=current_user.get_id()).all()
