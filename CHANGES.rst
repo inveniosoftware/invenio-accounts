@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 3.0.0 (released 2023-06-14)
+
+- models: add managed field to groups
+- models: alter primary key type of group (id)
+- cli: pass id on create role action
+
 Version 2.2.0 (released 2023-04-25)
 
 - models: add support for locale in user preferences
