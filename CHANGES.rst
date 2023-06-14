@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.0.1 (released 2023-06-14)
+
+- alembic: fix upgrade recipes
+
 Version 3.0.0 (released 2023-06-14)
 
 - models: add managed field to groups
