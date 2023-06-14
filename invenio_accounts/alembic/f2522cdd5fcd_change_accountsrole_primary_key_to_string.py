@@ -9,6 +9,9 @@
 
 import sqlalchemy as sa
 from alembic import op
+from sqlalchemy_utils import get_referencing_foreign_keys
+
+from invenio_accounts.models import Role
 
 # revision identifiers, used by Alembic.
 revision = "f2522cdd5fcd"
@@ -20,7 +23,23 @@ depends_on = None
 def upgrade():
     """Upgrade database."""
     # Drop primary key and all foreign keys
-    op.execute("ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role")
+    ctx = op.get_context()
+    if ctx.connection.engine.name == "mysql":
+        # mysql does not support CASCADE on drop constraint command
+        dependent_tables = get_referencing_foreign_keys(Role)
+
+        for fk in dependent_tables:
+            op.drop_constraint(
+                fk.constraint.name, fk.constraint.table.name, type_="foreignkey"
+            )
+
+        op.execute("ALTER TABLE accounts_role MODIFY COLUMN id INT")
+
+        op.drop_constraint("pk_accounts_role", "accounts_role", type_="primary")
+    else:
+        op.execute(
+            "ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role CASCADE;"
+        )
 
     op.alter_column(
         "accounts_userrole",
@@ -47,7 +66,9 @@ def upgrade():
         ),
     )
     op.execute("UPDATE accounts_role SET is_managed = true;")
-    op.alter_column("accounts_role", "is_managed", nullable=False)
+    op.alter_column(
+        "accounts_role", "is_managed", existing_type=sa.Boolean, nullable=False
+    )
 
     # Re-create the foreign key constraint
     op.create_foreign_key(
@@ -63,7 +84,21 @@ def downgrade():
     """Downgrade database."""
     # Drop new column `is_managed`
     op.drop_column("accounts_role", "is_managed")
-    op.execute("ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role;")
+    ctx = op.get_context()
+    if ctx.connection.engine.name == "mysql":
+        # mysql does not support CASCADE on drop constraint command
+        dependent_tables = get_referencing_foreign_keys(Role)
+
+        for fk in dependent_tables:
+            op.drop_constraint(
+                fk.constraint.name, fk.constraint.table.name, type_="foreignkey"
+            )
+
+        op.drop_constraint("pk_accounts_role", "accounts_role", type_="primary")
+    else:
+        op.execute(
+            "ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role CASCADE;"
+        )
 
     op.alter_column(
         "accounts_userrole",
