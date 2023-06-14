@@ -20,7 +20,7 @@ depends_on = None
 def upgrade():
     """Upgrade database."""
     # Drop primary key and all foreign keys
-    op.execute("ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role CASCADE")
+    op.execute("ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role CASCADE;")
 
     op.alter_column(
         "accounts_userrole",
@@ -46,7 +46,7 @@ def upgrade():
             "is_managed", sa.Boolean(name="is_managed"), default=True, nullable=True
         ),
     )
-    op.execute("UPDATE accounts_role SET is_managed = true")
+    op.execute("UPDATE accounts_role SET is_managed = true;")
     op.alter_column("accounts_role", "is_managed", nullable=False)
 
     # Re-create the foreign key constraint
@@ -63,7 +63,7 @@ def downgrade():
     """Downgrade database."""
     # Drop new column `is_managed`
     op.drop_column("accounts_role", "is_managed")
-    op.execute("ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role CASCADE")
+    op.execute("ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role CASCADE;")
 
     op.alter_column(
         "accounts_userrole",
