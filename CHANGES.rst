@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.0.2 (released 2023-06-14)
+
+- alembic: adapt recipe to mysql
+
 Version 3.0.1 (released 2023-06-14)
 
 - alembic: fix upgrade recipes
