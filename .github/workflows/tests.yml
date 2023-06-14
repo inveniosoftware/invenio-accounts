@@ -23,7 +23,7 @@ jobs:
           python-version: [3.7, 3.8, 3.9]
           requirements-level: [min, pypi]
           cache-service: [redis]
-          db-service: [postgresql10, postgresql13]
+          db-service: [postgresql10, postgresql13, mysql8]
           exclude:
           - python-version: 3.7
             requirements-level: pypi
@@ -43,6 +43,9 @@ jobs:
 
           - db-service: postgresql13
             DB_EXTRAS: "postgresql"
+
+          - db-service: mysql8
+            DB_EXTRAS: "mysql"
 
     env:
       CACHE: ${{ matrix.cache-service }}
