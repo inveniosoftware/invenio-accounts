@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.0.3 (released 2023-06-15)
+
+- models: fix autogeneration of role id
+
 Version 3.0.2 (released 2023-06-14)
 
 - alembic: adapt recipe to mysql
