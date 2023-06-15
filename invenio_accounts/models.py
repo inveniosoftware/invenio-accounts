@@ -65,7 +65,7 @@ class Role(db.Model, Timestamp, RoleMixin):
 
     __tablename__ = "accounts_role"
 
-    id = db.Column(db.String(80), primary_key=True, default=str(uuid.uuid4()))
+    id = db.Column(db.String(80), primary_key=True, default=lambda x: str(uuid.uuid4()))
 
     name = db.Column(db.String(80), unique=True)
     """Role name."""
