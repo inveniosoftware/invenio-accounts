@@ -6,7 +6,9 @@
 # 
 # Translators:
 # Tibor Simko <tibor.simko@cern.ch>, 2022
-# Sam Arbid, 2022
+# Sam Arbid, 2023
+# yyones, 2023
+# Rim Sharif, 2023
 # 
 #, fuzzy
 msgid ""
@@ -15,8 +17,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
 "POT-Creation-Date: 2022-10-12 09:05+0000\n"
 "PO-Revision-Date: 2016-08-18 08:29+0000\n"
-"Last-Translator: Sam Arbid, 2022\n"
-"Language-Team: Swedish (https://www.transifex.com/inveniosoftware/teams/23537/sv/)\n"
+"Last-Translator: Rim Sharif, 2023\n"
+"Language-Team: Swedish (https://app.transifex.com/inveniosoftware/teams/23537/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,7 +40,7 @@ msgstr "Kan inte hitta användare."
 
 #: invenio_accounts/admin.py:93 invenio_accounts/admin.py:118
 msgid "User(s) were successfully inactivated."
-msgstr "Användare(s) har inaktiverats."
+msgstr "Användare har inaktiverats."
 
 #: invenio_accounts/admin.py:99
 msgid "Failed to inactivate users."
@@ -46,7 +48,7 @@ msgstr "Det gick inte att inaktivera användare."
 
 #: invenio_accounts/admin.py:103
 msgid "Activate"
-msgstr "Active"
+msgstr "Aktivera"
 
 #: invenio_accounts/admin.py:104
 msgid "Are you sure you want to activate selected users?"
@@ -62,12 +64,12 @@ msgstr "Epost"
 
 #: invenio_accounts/admin.py:223
 msgid "User ID"
-msgstr "Användarid"
+msgstr "AnvändarId"
 
 #: invenio_accounts/admin.py:230 invenio_accounts/admin.py:236
 #: invenio_accounts/admin.py:242 invenio_accounts/admin.py:248
 msgid "User Management"
-msgstr "Användarhantering"
+msgstr "Hantera användare"
 
 #: invenio_accounts/admin.py:249
 msgid "Linked account identities"
@@ -93,7 +95,7 @@ msgstr "Värdet måste vara antingen \"offentligt\" eller \"begränsat\"."
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:13
 #: invenio_accounts/views/settings.py:80
 msgid "Change password"
-msgstr "ändra lösenord"
+msgstr "Ändra lösenord"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:22
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:21
@@ -162,7 +164,7 @@ msgstr "eller"
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:41
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:40
 msgid "Sign up"
-msgstr "Skriva upp"
+msgstr "Registrera konto"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:19
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:18
@@ -193,7 +195,7 @@ msgstr "Har du redan ett konto?"
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:19
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:43
 msgid "Resend Confirmation Email"
-msgstr "Skicka om e-postbekräftelse"
+msgstr "Skicka om bekräftelsemejl"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:20
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:45
@@ -237,7 +239,7 @@ msgstr "nuvarande session"
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:46
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:42
 msgid "Location"
-msgstr "Lokalisering"
+msgstr "Plats"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:55
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:54
@@ -272,7 +274,7 @@ msgstr "Säkerhet"
 
 #: invenio_accounts/views/settings.py:53
 msgid "Account"
-msgstr "konto"
+msgstr "Konto"
 
 #. NOTE: Menu item text (icon replaced by a key icon).
 #: invenio_accounts/views/settings.py:68
