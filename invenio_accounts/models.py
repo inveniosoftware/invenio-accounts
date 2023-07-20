@@ -143,6 +143,21 @@ class User(db.Model, Timestamp, UserMixin):
         "LoginInformation", back_populates="user", uselist=False, lazy="joined"
     )
 
+    blocked_at = db.Column(
+        db.DateTime,
+        nullable=True,
+    )
+
+    suspended_at = db.Column(
+        db.DateTime,
+        nullable=True,
+    )
+
+    verified_at = db.Column(
+        db.DateTime,
+        nullable=True,
+    )
+
     def __init__(self, *args, **kwargs):
         """Constructor."""
         user_profile = kwargs.pop("user_profile", {})
