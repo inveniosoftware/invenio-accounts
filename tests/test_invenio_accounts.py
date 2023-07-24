@@ -92,6 +92,7 @@ def test_init_rest():
     assert "security_email_templates" in app.blueprints.keys()
 
 
+@pytest.mark.skip(reason="Mergepoint is on invenio-access.")
 def test_alembic(app):
     """Test alembic recipes."""
     ext = app.extensions["invenio-db"]
