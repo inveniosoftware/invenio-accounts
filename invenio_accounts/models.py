@@ -148,11 +148,6 @@ class User(db.Model, Timestamp, UserMixin):
         nullable=True,
     )
 
-    suspended_at = db.Column(
-        db.DateTime,
-        nullable=True,
-    )
-
     verified_at = db.Column(
         db.DateTime,
         nullable=True,
