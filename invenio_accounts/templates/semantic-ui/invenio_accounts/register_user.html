@@ -16,9 +16,9 @@
       <div class="divider hidden"></div>
 
       {%- block form_header %}
-        <h3 class="ui login header">
+        <h1 class="ui small login header">
           {% trans sitename=config.ACCOUNTS_SITENAME %}Sign up for an {{ sitename }} account!{% endtrans %}
-        </h3>
+        </h1>
       {%- endblock form_header %}
 
       {%- with form = register_user_form %}
@@ -45,10 +45,10 @@
       <div class="divider hidden"></div>
     </div>
 
-    <div class="ui primary segment padded text-muted">
+    <p class="ui primary segment padded text-muted">
       {{ _('Already have an account?') }}
       <a href="{{ url_for_security('login', next=request.args.get('next')) }}">{{ _('Log in') }}</a>
-    </div>
+    </p>
   </div>
 
 {% endblock page_body %}
