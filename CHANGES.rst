@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 3.1.0 (released 2023-07-31)
+
+- templates: Improve accessibility and layout
+- pulled translations
+
 Version 3.0.3 (released 2023-06-15)
 
 - models: fix autogeneration of role id
