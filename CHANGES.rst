@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.2.0 (released 2023-08-02)
+
+- users: add blocket_at and verified_at data model fields
+
 Version 3.1.0 (released 2023-07-31)
 
 - templates: Improve accessibility and layout
