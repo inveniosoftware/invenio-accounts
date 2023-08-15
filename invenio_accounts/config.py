@@ -334,3 +334,6 @@ ACCOUNTS_USERNAME_RULES_TEXT = _(
 
 .. note:: Used for both form help text and for form validation error.
 """
+
+ACCOUNTS_DEFAULT_USERS_VERIFIED = True
+"""Default verified status: if set to 'False', users are not verified by default."""

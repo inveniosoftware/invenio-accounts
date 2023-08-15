@@ -155,6 +155,11 @@ class User(db.Model, Timestamp, UserMixin):
 
     def __init__(self, *args, **kwargs):
         """Constructor."""
+        self.verified_at = (
+            datetime.utcnow()
+            if current_app.config.get("ACCOUNTS_DEFAULT_USERS_VERIFIED")
+            else None
+        )
         user_profile = kwargs.pop("user_profile", {})
         preferences = kwargs.pop("preferences", {})
         preferences.setdefault(
