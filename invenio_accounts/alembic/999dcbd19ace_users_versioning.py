@@ -34,10 +34,14 @@ def upgrade():
 
     # populate the columns of existing rows
     op.execute(
-        text("UPDATE accounts_role SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;")
+        text(
+            "UPDATE accounts_role SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;"
+        )
     )  # noqa
     op.execute(
-        text("UPDATE accounts_user SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;")
+        text(
+            "UPDATE accounts_user SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;"
+        )
     )  # noqa
 
     # make the columns not nullable

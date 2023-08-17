@@ -43,11 +43,11 @@ def upgrade():
 
     # move information from the user table into the new table
     op.execute(
-       text(
-        "INSERT INTO accounts_user_login_information "
-        "(user_id, current_login_at, current_login_ip, last_login_at, last_login_ip, login_count) "  # noqa
-        "SELECT id, current_login_at, current_login_ip, last_login_at, last_login_ip, login_count "  # noqa
-        "FROM accounts_user;"
+        text(
+            "INSERT INTO accounts_user_login_information "
+            "(user_id, current_login_at, current_login_ip, last_login_at, last_login_ip, login_count) "  # noqa
+            "SELECT id, current_login_at, current_login_ip, last_login_at, last_login_ip, login_count "  # noqa
+            "FROM accounts_user;"
         )
     )
 
@@ -87,16 +87,18 @@ def downgrade():
     # (at least with postgres)
     dialect_name = op._proxy.migration_context.dialect.name
     if dialect_name == "postgresql":
-        op.execute(text(
-            "UPDATE accounts_user SET "
-            " current_login_at = li.current_login_at, "
-            " current_login_ip = li.current_login_ip, "
-            " last_login_at = li.last_login_at, "
-            " last_login_ip = li.last_login_ip, "
-            " login_count = li.login_count "
-            "FROM accounts_user_login_information AS li "
-            "WHERE accounts_user.id = li.user_id;"
-        ))
+        op.execute(
+            text(
+                "UPDATE accounts_user SET "
+                " current_login_at = li.current_login_at, "
+                " current_login_ip = li.current_login_ip, "
+                " last_login_at = li.last_login_at, "
+                " last_login_ip = li.last_login_ip, "
+                " login_count = li.login_count "
+                "FROM accounts_user_login_information AS li "
+                "WHERE accounts_user.id = li.user_id;"
+            )
+        )
 
     # drop the new table
     op.drop_table("accounts_user_login_information")
