@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.2.1 (released 2023-08-17)
+
+- alembic: fix sqlalchemy op.execute statements due to latest sqlalchamy-continuum
+
 Version 3.2.0 (released 2023-08-02)
 
 - users: add blocket_at and verified_at data model fields
