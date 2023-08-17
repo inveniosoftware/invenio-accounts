@@ -9,6 +9,7 @@
 
 import sqlalchemy as sa
 from alembic import op
+from sqlalchemy.sql import text
 from sqlalchemy_utils import get_referencing_foreign_keys
 
 from invenio_accounts.models import Role
@@ -33,12 +34,12 @@ def upgrade():
                 fk.constraint.name, fk.constraint.table.name, type_="foreignkey"
             )
 
-        op.execute("ALTER TABLE accounts_role MODIFY COLUMN id INT")
+        op.execute(text("ALTER TABLE accounts_role MODIFY COLUMN id INT"))
 
         op.drop_constraint("pk_accounts_role", "accounts_role", type_="primary")
     else:
         op.execute(
-            "ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role CASCADE;"
+            text("ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role CASCADE;")
         )
 
     op.alter_column(
@@ -65,7 +66,7 @@ def upgrade():
             "is_managed", sa.Boolean(name="is_managed"), default=True, nullable=True
         ),
     )
-    op.execute("UPDATE accounts_role SET is_managed = true;")
+    op.execute(text("UPDATE accounts_role SET is_managed = true;"))
     op.alter_column(
         "accounts_role", "is_managed", existing_type=sa.Boolean, nullable=False
     )
@@ -97,7 +98,7 @@ def downgrade():
         op.drop_constraint("pk_accounts_role", "accounts_role", type_="primary")
     else:
         op.execute(
-            "ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role CASCADE;"
+            text("ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role CASCADE;")
         )
 
     op.alter_column(
