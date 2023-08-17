@@ -10,6 +10,7 @@
 
 from alembic import op
 from sqlalchemy import Column, DateTime, Integer
+from sqlalchemy.sql import text
 
 # revision identifiers, used by Alembic.
 revision = "999dcbd19ace"
@@ -33,10 +34,10 @@ def upgrade():
 
     # populate the columns of existing rows
     op.execute(
-        "UPDATE accounts_role SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;"
+        text("UPDATE accounts_role SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;")
     )  # noqa
     op.execute(
-        "UPDATE accounts_user SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;"
+        text("UPDATE accounts_user SET created = CURRENT_TIMESTAMP, updated = CURRENT_TIMESTAMP, version_id = 1;")
     )  # noqa
 
     # make the columns not nullable

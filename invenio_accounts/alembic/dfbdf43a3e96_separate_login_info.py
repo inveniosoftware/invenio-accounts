@@ -10,6 +10,7 @@
 
 import sqlalchemy as sa
 from alembic import op
+from sqlalchemy.sql import text
 from sqlalchemy_utils.types.ip_address import IPAddressType
 
 # revision identifiers, used by Alembic.
@@ -42,10 +43,12 @@ def upgrade():
 
     # move information from the user table into the new table
     op.execute(
+       text(
         "INSERT INTO accounts_user_login_information "
         "(user_id, current_login_at, current_login_ip, last_login_at, last_login_ip, login_count) "  # noqa
         "SELECT id, current_login_at, current_login_ip, last_login_at, last_login_ip, login_count "  # noqa
         "FROM accounts_user;"
+        )
     )
 
     # remove columns from the user table
@@ -84,7 +87,7 @@ def downgrade():
     # (at least with postgres)
     dialect_name = op._proxy.migration_context.dialect.name
     if dialect_name == "postgresql":
-        op.execute(
+        op.execute(text(
             "UPDATE accounts_user SET "
             " current_login_at = li.current_login_at, "
             " current_login_ip = li.current_login_ip, "
@@ -93,7 +96,7 @@ def downgrade():
             " login_count = li.login_count "
             "FROM accounts_user_login_information AS li "
             "WHERE accounts_user.id = li.user_id;"
-        )
+        ))
 
     # drop the new table
     op.drop_table("accounts_user_login_information")
