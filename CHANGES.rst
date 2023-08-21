@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 3.3.0 (released 2023-08-21)
+
+- models: add `verified_at` column in User model. The default value is controlled by
+  a new config variable called `ACCOUNTS_DEFAULT_USERS_VERIFIED`. If True, then a date
+  is generated, otherwise is set to `None`.
+
 Version 3.2.1 (released 2023-08-17)
 
 - alembic: fix sqlalchemy op.execute statements due to latest sqlalchamy-continuum
