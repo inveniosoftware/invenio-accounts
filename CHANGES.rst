@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.3.1 (released 2023-08-23)
+
+- config: set `ACCOUNTS_DEFAULT_USERS_VERIFIED` to False by default
+
 Version 3.3.0 (released 2023-08-21)
 
 - models: add `verified_at` column in User model. The default value is controlled by
