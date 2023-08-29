@@ -9,55 +9,31 @@
 {%- extends config.ACCOUNTS_COVER_TEMPLATE %}
 
 {% from "invenio_accounts/_macros.html" import render_field, form_errors %}
-{% block page_header %}
-<div class="ui two column centered grid">
-  <div class="row"></div>
-  <div class="row"></div>
-  <div class="column">
-    {%- block brand %}
-      {%- if config.THEME_LOGO %}
-        <a href="/">
-          <img
-            class="ui centered image masthead-brand"
-            src="{{ url_for('static', filename=config.THEME_LOGO)}}"
-            alt="{{ _(config.THEME_SITENAME) }}"
-            width="250px"
-          />
-        </a>
-        {%- elif config.THEME_SITENAME %}
-        <a href="/" class="text-center masthead-brand">
-          {{ _(config.THEME_SITENAME) }}
-        </a>
-      {% endif %}
-    {%- endblock %}
-  </div>
-</div>
-{% endblock page_header%}
 
 {% block page_body %}
-  {%- with form = send_confirmation_form %}
-  <div class="ui doubling three column centered grid">
-    <div class="row"></div>
-    <div class="row">
-      <div class="column ui middle">
-        <h1 class="ui header aligned center">{{config.ACCOUNTS_SITENAME}}</h1>
-        <div class="ui segment">
-          <h2 class="ui header aligned center">{{_('Resend confirmation email')}}</h2>
-          <div class="column ui middle">
-            <p class="left floated">
-              {{_('Enter your email address below and we will send you an email confirmation link.')}}
-            </p>
-          </div>
-          <form class="ui large form" action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
-            {{form.hidden_tag()}}
-            {{ render_field(form.email, icon="icon user", autofocus=True, errormsg='email' in form.errors) }}
-            <button type="submit" class="ui fluid large submit primary button">
-              <i class="ui sign-in icon" aria-hidden="true"></i>{{_('Send confirmation')}}
-            </button>
-          </form>
-        </div>
-      </div>
+
+  <div class="ui padded segments big form">
+    <div class="ui login segment padded">
+      <div class="divider hidden"></div>
+      {%- block form_header %}
+        <h1 class="ui small login header">{{ _('Resend confirmation email') }}</h1>
+      {%- endblock form_header %}
+
+      {%- block form_outer %}
+          {%- with form = send_confirmation_form %}
+            <form action="{{ url_for_security('send_confirmation') }}" method="POST"
+                  name="send_confirmation_form" class="ui big form">
+              {{ form.hidden_tag() }}
+              {{ render_field(form.email, icon="icon user", autofocus=True, errormsg='email' in form.errors) }}
+              <button type="submit" class="ui fluid large submit primary button">
+                <i class="ui send icon" aria-hidden="true"></i>{{ _('Send') }}
+              </button>
+            </form>
+          {%- endwith %}
+      {%- endblock form_outer %}
+      <div class="divider hidden"></div>
     </div>
+
   </div>
-  {%- endwith %}
+
 {% endblock page_body %}

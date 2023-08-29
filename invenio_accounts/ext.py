@@ -25,6 +25,7 @@ from invenio_accounts.forms import (
     confirm_register_form_factory,
     login_form_factory,
     register_form_factory,
+    send_confirmation_form_factory,
 )
 
 from . import config
@@ -171,6 +172,13 @@ class InvenioAccounts(object):
 
         app.extensions["security"].login_form = login_form_factory(
             app.extensions["security"].login_form, app
+        )
+
+        # send confirmation form
+        app.extensions[
+            "security"
+        ].send_confirmation_form = send_confirmation_form_factory(
+            app.extensions["security"].send_confirmation_form, app
         )
 
         if app.config["ACCOUNTS_USE_CELERY"]:

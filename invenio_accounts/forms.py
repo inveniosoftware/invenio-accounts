@@ -16,6 +16,8 @@ from flask_wtf import FlaskForm, Recaptcha, RecaptchaField
 from invenio_i18n import gettext as _
 from wtforms import FormField, HiddenField
 
+from invenio_accounts.proxies import current_datastore
+
 
 class RegistrationFormRecaptcha(FlaskForm):
     """Form for editing user profile."""
@@ -74,3 +76,24 @@ def login_form_factory(Form, app):
         pass
 
     return LoginForm
+
+
+def send_confirmation_form_factory(Form, app):
+    """Return extended login form."""
+
+    class SendConfirmationEmailView(Form):
+        """Form which sends confirmation instructions.
+
+        If user not in the system, do not raise but ignore.
+        The overriden behaviour exists because the endpoint is public and users can
+        take an insight on which emails exist in the system otherwise.
+        """
+
+        def validate(self, extra_validators=None):
+            self.user = current_datastore.get_user(self.data["email"])
+            # Form is valid if user exists and they are not yet confirmed
+            if self.user is not None and self.user.confirmed_at is None:
+                return True
+            return False
+
+    return SendConfirmationEmailView
