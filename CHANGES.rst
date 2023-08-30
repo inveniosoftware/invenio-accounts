@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.4.0 (released 2023-08-30)
+
+- templates: refactor send confirmation template
+
 Version 3.3.1 (released 2023-08-23)
 
 - config: set `ACCOUNTS_DEFAULT_USERS_VERIFIED` to False by default
