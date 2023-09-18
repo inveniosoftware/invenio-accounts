@@ -20,16 +20,19 @@ class ValidatedDict(dict):
     def __init__(self, schema, *args, **kwargs):
         """Constructor, validates the given data."""
         self._schema = schema() if isclass(schema) else schema
-        self._validate(dict(*args, **kwargs))
-        super().__init__(*args, **kwargs)
+        data = self._validate(dict(*args, **kwargs))
+        super().__init__(**data)
 
     def _validate(self, data):
-        """Validate the data with the dictionary's schema."""
+        """Validate the data with the dictionary's schema and return the value."""
+
+        if self._schema is None:
+            return data
+
         try:
-            if self._schema is not None:
-                # without schema, we basically revert to a normal dictionary
-                # with more overhead
-                self._schema.load(data)
+            # without schema, we basically revert to a normal dictionary
+            # with more overhead
+            return self._schema.load(data)
         except ValidationError as error:
             raise ValueError(f"Validation failed: {error}")
 
@@ -67,8 +70,9 @@ class ValidatedDict(dict):
     def __setitem__(self, key, value):
         """Validate the dictionary and set the value if successful."""
         data = {**self, key: value}
-        self._validate(data)
-        super().__setitem__(key, value)
+        data = self._validate(data)
+        # set schema loaded value
+        super().__setitem__(key, data[key])
 
     def __delitem__(self, key):
         """Validate the dictionary and delete the key if successful."""

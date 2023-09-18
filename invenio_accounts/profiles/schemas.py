@@ -12,7 +12,8 @@ import pytz
 from flask import current_app
 from invenio_i18n import lazy_gettext as _
 from marshmallow import Schema, ValidationError, fields
-
+from marshmallow_utils.fields import SanitizedHTML
+from marshmallow_utils.html import strip_html
 
 def validate_visibility(value):
     """Check if the value is a valid visibility setting."""
@@ -43,7 +44,8 @@ class UserProfileSchema(Schema):
     """The default user profile schema."""
 
     full_name = fields.String()
-    affiliations = fields.String()
+    # disallow all HTML tags and attrs on deserialization
+    affiliations = SanitizedHTML(tags=[], attrs=[])
 
 
 class UserPreferencesSchema(Schema):
