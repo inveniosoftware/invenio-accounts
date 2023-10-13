@@ -13,6 +13,7 @@ Currently supported: recaptcha
 from flask import request
 from flask_security.forms import NextFormMixin
 from flask_wtf import FlaskForm, Recaptcha, RecaptchaField
+from invenio_db import db
 from invenio_i18n import gettext as _
 from wtforms import FormField, HiddenField
 
@@ -90,7 +91,8 @@ def send_confirmation_form_factory(Form, app):
         """
 
         def validate(self, extra_validators=None):
-            self.user = current_datastore.get_user(self.data["email"])
+            with db.session.no_autoflush:
+                self.user = current_datastore.get_user(self.data["email"])
             # Form is valid if user exists and they are not yet confirmed
             if self.user is not None and self.user.confirmed_at is None:
                 return True
