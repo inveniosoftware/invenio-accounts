@@ -181,14 +181,18 @@ use_kwargs = webargs_parser.use_kwargs
 #
 def user_exists(email):
     """Validate that a user exists."""
-    if not current_datastore.get_user(email):
-        raise ValidationError(get_message("USER_DOES_NOT_EXIST")[0])
+    with db.session.no_autoflush:
+        if not current_datastore.get_user(email):
+            raise ValidationError(get_message("USER_DOES_NOT_EXIST")[0])
 
 
 def unique_user_email(email):
     """Validate unique user email."""
-    if current_datastore.get_user(email) is not None:
-        raise ValidationError(get_message("EMAIL_ALREADY_ASSOCIATED", email=email)[0])
+    with db.session.no_autoflush:
+        if current_datastore.get_user(email) is not None:
+            raise ValidationError(
+                get_message("EMAIL_ALREADY_ASSOCIATED", email=email)[0]
+            )
 
 
 def default_user_payload(user):
@@ -222,7 +226,8 @@ class UserViewMixin(object):
 
     def get_user(self, email=None, **kwargs):
         """Retrieve a user by the provided arguments."""
-        return current_datastore.get_user(email)
+        with db.session.no_autoflush:
+            return current_datastore.get_user(email)
 
 
 class LoginView(MethodView, UserViewMixin):
