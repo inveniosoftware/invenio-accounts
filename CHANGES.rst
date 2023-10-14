@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.4.1 (released 2023-10-14)
+
+- datastore: prevent autoflush on db
+
 Version 3.4.0 (released 2023-08-30)
 
 - templates: refactor send confirmation template
