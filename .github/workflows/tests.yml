@@ -23,7 +23,7 @@ jobs:
           python-version: [3.7, 3.8, 3.9]
           requirements-level: [min, pypi]
           cache-service: [redis]
-          db-service: [postgresql10, postgresql13, mysql8]
+          db-service: [postgresql14, postgresql13, mysql8]
           exclude:
           - python-version: 3.7
             requirements-level: pypi
@@ -38,7 +38,7 @@ jobs:
             python-version: 3.7
 
           include:
-          - db-service: postgresql10
+          - db-service: postgresql14
             DB_EXTRAS: "postgresql"
 
           - db-service: postgresql13
