@@ -87,8 +87,10 @@ def login_listener(app, user):
         session.regenerate()
         # Save the session first so that the sid_s gets generated.
         app.session_interface.save_session(app, session, response)
-        add_session(session)
-        current_accounts.datastore.commit()
+        # Don't add impersonation sessions
+        if "_impersonator_id" not in session:
+            add_session(session)
+            current_accounts.datastore.commit()
         return response
 
 
@@ -130,8 +132,9 @@ def delete_session(sid_s):
     # Remove entries from sessionstore
     _sessionstore.delete(sid_s)
     # Find and remove the corresponding SessionActivity entry
-    with db.session.begin_nested():
-        SessionActivity.query.filter_by(sid_s=sid_s).delete()
+    if "_impersonator_id" not in session:
+        with db.session.begin_nested():
+            SessionActivity.query.filter_by(sid_s=sid_s).delete()
     return 1
 
 
