@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.4.2 (released 2023-10-17)
+
+- Adds support for user impersonation
+
 Version 3.4.1 (released 2023-10-14)
 
 - datastore: prevent autoflush on db
