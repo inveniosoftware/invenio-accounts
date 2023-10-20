@@ -100,7 +100,7 @@ class User(db.Model, Timestamp, UserMixin):
     _displayname = db.Column("displayname", db.String(255), nullable=True)
     """Case-preserving version of the username."""
 
-    email = db.Column(db.String(255), unique=True)
+    _email = db.Column("email", db.String(255), unique=True)
     """User email."""
 
     password = db.Column(db.String(255))
@@ -202,6 +202,16 @@ class User(db.Model, Timestamp, UserMixin):
             validate_username(username)
             self._displayname = username
             self._username = username.lower()
+
+    @hybrid_property
+    def email(self):
+        """Get email."""
+        return self._email
+
+    @email.setter
+    def email(self, email):
+        """Set lowercase email."""
+        self._email = email.lower()
 
     @hybrid_property
     def user_profile(self):

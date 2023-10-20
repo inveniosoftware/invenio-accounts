@@ -57,13 +57,13 @@ def _mock_send_confirmation_mail(subject, recipient, template, **context):
     )
 
 
-def _login_user(client, user, email="normal@test.com", password="123456"):
+def _login_user(client, user, email="normal@TEST.com", password="123456"):
     url = url_for("invenio_accounts_rest_auth.login")
     res = client.post(url, data=dict(email=email, password=password))
     payload = get_json(res)
     assert res.status_code == 200
     assert payload["id"] == user.id
-    assert payload["email"] == user.email
+    assert payload["email"].lower() == user.email.lower()
     session_cookie = next(c for c in client.cookie_jar if c.name == "session")
     assert session_cookie is not None
     assert session_cookie.value
