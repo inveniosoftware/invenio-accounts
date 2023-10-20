@@ -284,8 +284,8 @@ def admin_view(app):
 @pytest.fixture()
 def users(app):
     """Create users."""
-    user1 = create_test_user(email="info@inveniosoftware.org", password="tester")
-    user2 = create_test_user(email="info2@inveniosoftware.org", password="tester2")
+    user1 = create_test_user(email="INFO@inveniosoftware.org", password="tester")
+    user2 = create_test_user(email="info2@invenioSOFTWARE.org", password="tester2")
 
     return [
         {

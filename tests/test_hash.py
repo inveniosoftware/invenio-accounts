@@ -101,7 +101,7 @@ def test_invenio_aes_encrypted_email(app):
 def test_user_login(app):
     """Test users' high-level login process."""
     with app.app_context():
-        user = create_test_user("test@test.org")
+        user = create_test_user("test@TEST.org")
         with app.test_client() as client:
             login_user_via_view(client, user.email, user.password_plaintext)
             assert client_authenticated(client)
