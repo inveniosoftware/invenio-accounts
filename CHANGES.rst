@@ -1,12 +1,16 @@
 ..
     This file is part of Invenio.
-    Copyright (C) 2015-2020 CERN.
+    Copyright (C) 2015-2023 CERN.
 
     Invenio is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
 
 Changes
 =======
+
+Version 3.4.3 (released 2023-10-20)
+
+- email: force lowercase
 
 Version 3.4.2 (released 2023-10-17)
 
