@@ -19,6 +19,7 @@ from flask_principal import AnonymousIdentity
 from flask_security import Security
 from invenio_db import db
 from passlib.registry import register_crypt_handler
+from sqlalchemy import event
 from werkzeug.utils import cached_property
 
 from invenio_accounts.forms import (
@@ -27,6 +28,8 @@ from invenio_accounts.forms import (
     register_form_factory,
     send_confirmation_form_factory,
 )
+from invenio_accounts.models import User
+from invenio_accounts.proxies import current_db_change_history
 
 from . import config
 from .datastore import SessionAwareSQLAlchemyUserDatastore
@@ -330,3 +333,12 @@ class InvenioAccountsUI(InvenioAccounts):
         @app.before_request
         def make_session_permanent():
             session.permanent = True
+
+
+# Discuss: Logically, this should happen after_flush to avoid cases of rollbacks/failure.
+@event.listens_for(db.session, "before_flush")
+def update_db_history_user_updates(session, flush_context, instances):
+    """Listener for syncing updates to Users to DB history."""
+    for obj in session.dirty:
+        if isinstance(obj, User):
+            current_db_change_history.add_updated_user(id(db.session), obj.id)
