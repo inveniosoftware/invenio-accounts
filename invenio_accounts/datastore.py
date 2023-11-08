@@ -37,6 +37,12 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
         datastore_post_commit.send(session=self.db.session)
         current_db_change_history.clear_dirty_sets(self.db.session)
 
+    def put(self, model):
+        """Put a user to its session."""
+        res = super().put(model)
+        self.mark_changed(id(self.db.session), uid=model.id)
+        return res
+
     def mark_changed(self, sid, uid=None, rid=None):
         """Save a user to the changed history."""
         if uid:
