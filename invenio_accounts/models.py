@@ -239,7 +239,7 @@ class User(db.Model, Timestamp, UserMixin):
         if self._preferences is None:
             return None
         elif not isinstance(self._preferences, UserPreferenceDict):
-            self._preferences = UserPreferenceDict(**self._preferences)
+            return UserPreferenceDict(**self._preferences)
 
         return self._preferences
 
