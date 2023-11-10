@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.5.0 (released 2023-11-10)
+
+- datastore: override put method to add changes to db history
+
 Version 3.4.4 (released 2023-11-10)
 
 models: do not set value in user preference getter
