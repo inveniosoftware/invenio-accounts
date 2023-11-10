@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.4.4 (released 2023-11-10)
+
+models: do not set value in user preference getter
+
 Version 3.4.3 (released 2023-10-20)
 
 - email: force lowercase
