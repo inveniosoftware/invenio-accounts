@@ -16,6 +16,7 @@ from flask import url_for
 from flask_security import current_user
 from invenio_db import db
 
+from invenio_accounts.models import Domain, DomainStatus
 from invenio_accounts.testutils import create_test_user
 
 
@@ -209,6 +210,21 @@ def test_custom_registration_view(app_with_flexible_registration):
                 url, data=dict(email="new@test.com", password="123456", active=True)
             )
             assert res.status_code == 200
+
+
+def test_registration_view_blocked_by_domain(api):
+    app = api
+    with app.app_context():
+        # Block the domain
+        Domain.create("test.com", status=DomainStatus.blocked)
+        db.session.commit()
+        with app.test_client() as client:
+            url = url_for("invenio_accounts_rest_auth.register")
+
+            res = client.post(
+                url, data=dict(email="new@test.com", password="123456", active=True)
+            )
+            assert_error_resp(res, [("email", "blocked")])
 
 
 def test_logout_view(api):
@@ -424,7 +440,7 @@ def test_confirm_email_view(api):
         confirmed_user = create_test_user(
             email="confirmed@test.com", confirmed_at=datetime.datetime.now()
         )
-
+        Domain.create("test.com", status=DomainStatus.verified)
         db.session.commit()
         # Generate token
         token = generate_confirmation_token(normal_user)
@@ -448,6 +464,8 @@ def test_confirm_email_view(api):
             payload = get_json(res)
             assert "your email has been confirmed" in payload["message"].lower()
             assert normal_user.confirmed_at
+            # User is verified because domain is verified.
+            assert normal_user.verified_at
 
 
 def test_sessions_list_view(api):

@@ -32,6 +32,7 @@ from flask_security.utils import (
 )
 from flask_security.views import logout
 from invenio_db import db
+from invenio_i18n import gettext as _
 from invenio_rest.errors import FieldError, RESTValidationError
 from webargs import ValidationError, fields, validate
 from webargs.flaskparser import FlaskParser as FlaskParserBase
@@ -46,6 +47,7 @@ from ..utils import (
     default_reset_password_link_func,
     obj_or_import_string,
     register_user,
+    validate_domain,
 )
 
 
@@ -210,6 +212,12 @@ def default_user_payload(user):
     }
 
 
+def validate_domain_rest(email):
+    """Validator for use with WTForm."""
+    if not validate_domain(email):
+        raise ValidationError(_("The email domain is blocked."))
+
+
 def _abort(message, field=None, status=None):
     if field:
         raise RESTValidationError([FieldError(field, message)])
@@ -313,7 +321,9 @@ class RegisterView(MethodView):
     decorators = [user_already_authenticated]
 
     post_args = {
-        "email": fields.Email(required=True, validate=[unique_user_email]),
+        "email": fields.Email(
+            required=True, validate=[unique_user_email, validate_domain_rest]
+        ),
         "password": fields.String(
             required=True, validate=[validate.Length(min=6, max=128)]
         ),
