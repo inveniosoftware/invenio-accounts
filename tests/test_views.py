@@ -15,9 +15,10 @@ from flask_login import COOKIE_NAME
 from flask_security import url_for_security
 from flask_security.forms import LoginForm
 from flask_security.views import _security
+from invenio_db import db
 from invenio_i18n import gettext as _
 
-from invenio_accounts.models import SessionActivity
+from invenio_accounts.models import Domain, DomainStatus, SessionActivity
 from invenio_accounts.testutils import create_test_user
 
 
@@ -68,6 +69,27 @@ def test_no_log_in_message_for_logged_in_users(app):
             # Future Flask-Security will redirect to post login view when
             # authenticated user requests password reset page.
             assert resp.data == client.get(app.config["SECURITY_POST_LOGIN_VIEW"]).data
+
+
+def test_registration_blocked(app):
+    """Test blocking of domain."""
+    with app.app_context():
+        forgot_password_url = url_for_security("forgot_password")
+        Domain.create("inveniosoftware.org", status=DomainStatus.blocked)
+        db.session.commit()
+
+    with app.test_client() as client:
+        test_email = "info@inveniosoftware.org"
+        test_password = "test1234"
+        resp = client.post(
+            url_for_security("register"),
+            data=dict(
+                email=test_email,
+                password=test_password,
+            ),
+            environ_base={"REMOTE_ADDR": "127.0.0.1"},
+        )
+        assert "The email domain is blocked." in resp.text
 
 
 def test_view_list_sessions(app):

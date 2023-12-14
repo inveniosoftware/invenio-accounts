@@ -25,7 +25,7 @@ from sqlalchemy_utils.types import JSONType
 
 from .errors import AlreadyLinkedError
 from .profiles import UserPreferenceDict, UserProfileDict
-from .utils import validate_username
+from .utils import DomainStatus, split_emailaddr, validate_username
 
 json_field = (
     db.JSON()
@@ -102,6 +102,9 @@ class User(db.Model, Timestamp, UserMixin):
 
     _email = db.Column("email", db.String(255), unique=True)
     """User email."""
+
+    domain = db.Column(db.String(255), nullable=True)
+    """Domain of email."""
 
     password = db.Column(db.String(255))
     """User password."""
@@ -212,6 +215,8 @@ class User(db.Model, Timestamp, UserMixin):
     def email(self, email):
         """Set lowercase email."""
         self._email = email.lower()
+        prefix, domain = split_emailaddr(email)
+        self.domain = domain
 
     @hybrid_property
     def user_profile(self):
@@ -463,3 +468,153 @@ class UserIdentity(db.Model, Timestamp):
         """Unlink a user from an external id."""
         with db.session.begin_nested():
             cls.query.filter_by(id_user=user.id, method=method).delete()
+
+
+class DomainOrg(db.Model):
+    """Domain organisation."""
+
+    __tablename__ = "accounts_domain_org"
+
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+
+    pid = db.Column(db.String(255), unique=True, nullable=True)
+    """Persistent identifier for organisation."""
+
+    name = db.Column(db.String(255), nullable=False)
+    """Name of organisation."""
+
+    json = db.Column(
+        json_field,
+        default=lambda: dict(),
+        nullable=False,
+    )
+    """Store additional metadata about the organisation."""
+
+    parent_id = db.Column(
+        db.Integer(), db.ForeignKey("accounts_domain_org.id"), nullable=True
+    )
+    """Link to parent organisation."""
+
+    parent = db.relationship("DomainOrg", remote_side=[id])
+    """Relationship to parent."""
+
+    domains = db.relationship("Domain", back_populates="org")
+    """Relationship to domains for this organisation."""
+
+    @classmethod
+    def create(cls, pid, name, json=None, parent=None):
+        """Create a domain organisation."""
+        obj = cls(pid=pid, name=name, json=json or {}, parent=parent)
+        db.session.add(obj)
+        return obj
+
+
+class DomainCategory(db.Model):
+    """Model for storing different domain categories."""
+
+    __tablename__ = "accounts_domain_category"
+
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+
+    label = db.Column(db.String(255))
+
+    @classmethod
+    def create(cls, label):
+        """Create a new domain category."""
+        obj = cls(label=label)
+        db.session.add(obj)
+        return obj
+
+    @classmethod
+    def get(cls, label):
+        """Get a domain category."""
+        return cls.query.filter_by(label=label).one_or_none()
+
+
+class Domain(db.Model, Timestamp):
+    """User domains model."""
+
+    __tablename__ = "accounts_domains"
+
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    """Domain ID"""
+
+    _domain = db.Column("domain", db.String(255), unique=True, nullable=False)
+    """Domain name."""
+
+    tld = db.Column(db.String(255), nullable=False)
+    """Top-level domain."""
+
+    status = db.Column(db.Enum(DomainStatus), default=DomainStatus.new, nullable=False)
+    """Status of domain.
+
+    Use to control possibility and capability of users registering with this domain.
+    """
+
+    flagged = db.Column(db.Boolean(), default=False, nullable=False)
+    """Flag domain - used by automatic processes to flag domain."""
+
+    flagged_source = db.Column(db.String(255), default="", nullable=False)
+    """Source of flag."""
+
+    org_id = db.Column(db.Integer(), db.ForeignKey(DomainOrg.id), nullable=True)
+    """Organisation associated with domain."""
+
+    org = db.relationship("DomainOrg", back_populates="domains")
+
+    # spammer, mail-provider, organisation, company
+    category = db.Column(db.Integer(), db.ForeignKey(DomainCategory.id), nullable=True)
+    """Category of domain."""
+
+    num_users = db.Column(db.Integer(), default=0, nullable=False)
+    """Computed property to store number of users in domain."""
+
+    num_active = db.Column(db.Integer(), default=0, nullable=False)
+    """Computed property to store number of active users in domain."""
+
+    num_inactive = db.Column(db.Integer(), default=0, nullable=False)
+    """Computed property to store number of inactive users in domain."""
+
+    num_confirmed = db.Column(db.Integer(), default=0, nullable=False)
+    """Computed property to store number of confirmed users in domain."""
+
+    num_verified = db.Column(db.Integer(), default=0, nullable=False)
+    """Computed property to store number of verified users in domain."""
+
+    num_blocked = db.Column(db.Integer(), default=0, nullable=False)
+    """Computed property to store number of blocked users in domain."""
+
+    @classmethod
+    def create(
+        cls,
+        domain,
+        status=DomainStatus.new,
+        flagged=False,
+        flagged_source="",
+        org=None,
+        category=None,
+    ):
+        """Create a new domain."""
+        obj = cls(
+            domain=domain,
+            status=status,
+            flagged=flagged,
+            flagged_source=flagged_source,
+            org=org,
+            category=category,
+        )
+        db.session.add(obj)
+        return obj
+
+    @hybrid_property
+    def domain(self):
+        """Get domain name."""
+        return self._domain
+
+    @domain.setter
+    def domain(self, value):
+        """Set domain name."""
+        if value[-1] == ".":
+            value = value[:-1]
+        self._domain = value.lower()
+        self.tld = self._domain.split(".")[-1]

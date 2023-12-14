@@ -17,7 +17,8 @@ from invenio_db import db
 from invenio_i18n import gettext as _
 from wtforms import FormField, HiddenField
 
-from invenio_accounts.proxies import current_datastore
+from .proxies import current_datastore
+from .utils import validate_domain
 
 
 class RegistrationFormRecaptcha(FlaskForm):
@@ -43,6 +44,16 @@ def confirm_register_form_factory(Form, app):
             super(ConfirmRegisterForm, self).__init__(*args, **kwargs)
             if not self.next.data:
                 self.next.data = request.args.get("next", "")
+
+        def validate(self, extra_validators=None):
+            """Validate domain on email list."""
+            if not super().validate(extra_validators=extra_validators):
+                return False
+
+            if not validate_domain(self.email.data):
+                self.email.errors.append(_("The email domain is blocked."))
+                return False
+            return True
 
     if app.config.get("RECAPTCHA_PUBLIC_KEY") and app.config.get(
         "RECAPTCHA_PRIVATE_KEY"

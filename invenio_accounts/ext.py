@@ -16,7 +16,7 @@ from flask import Blueprint, abort, current_app, request_finished, session
 from flask_kvsession import KVSessionExtension
 from flask_login import LoginManager, user_logged_in, user_logged_out
 from flask_principal import AnonymousIdentity
-from flask_security import Security
+from flask_security import Security, user_confirmed
 from invenio_db import db
 from passlib.registry import register_crypt_handler
 from werkzeug.utils import cached_property
@@ -30,6 +30,7 @@ from invenio_accounts.forms import (
 
 from . import config
 from .datastore import SessionAwareSQLAlchemyUserDatastore
+from .domains import on_user_confirmed
 from .hash import InvenioAesEncryptedEmail
 from .models import Role, User
 from .sessions import csrf_token_reset, login_listener, logout_listener
@@ -197,6 +198,8 @@ class InvenioAccounts(object):
         # Register signal receiver
         if app.config.get("ACCOUNTS_USERINFO_HEADERS"):
             request_finished.connect(set_session_info, app)
+
+        user_confirmed.connect(on_user_confirmed, app)
 
         # Set Session KV store
         session_kvstore_factory = obj_or_import_string(

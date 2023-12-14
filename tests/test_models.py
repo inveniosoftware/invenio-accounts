@@ -16,7 +16,14 @@ from marshmallow import Schema, fields
 from sqlalchemy import inspect
 
 from invenio_accounts import testutils
-from invenio_accounts.models import SessionActivity, User
+from invenio_accounts.models import (
+    Domain,
+    DomainCategory,
+    DomainOrg,
+    DomainStatus,
+    SessionActivity,
+    User,
+)
 
 
 class CustomProfile(Schema):
@@ -137,3 +144,68 @@ def test_custom_profiles(app):
         user.user_profile["file_descriptor"] = "1"
 
     assert dict(user.user_profile) == {"file_descriptor": 1}
+
+
+def test_user_domain_attr(app):
+    u = User(email="admin@CERN.CH")
+    db.session.commit()
+    assert u.domain == "cern.ch"
+
+
+def test_domain_model(app):
+    d = Domain.create("CERN.CH")
+    assert d.domain == "cern.ch"
+    assert d.tld == "ch"
+    assert d.status == DomainStatus.new
+    assert d.flagged == False
+    assert d.flagged_source == ""
+    assert d.org is None
+    assert d.category is None
+    db.session.commit()
+
+    # Support top level domains like
+    d = Domain.create("cern")
+    assert d.domain == "cern"
+    assert d.tld == "cern"
+    db.session.commit()
+
+    # Normalise domain names
+    d = Domain.create("zenodo.org.")
+    assert d.domain == "zenodo.org"
+    assert d.tld == "org"
+    db.session.commit()
+
+    with pytest.raises(Exception):
+        Domain.create("cern.ch.")
+        db.session.commit()
+
+
+def test_domain_org(app):
+    parent = DomainOrg.create(
+        "https://ror.org/01cwqze88",
+        "National Institutes of Health",
+        json={"country": "us"},
+    )
+
+    child = DomainOrg.create(
+        "https://ror.org/040gcmg81",
+        "National Cancer Institute",
+        json={"country": "us"},
+        parent=parent,
+    )
+    db.session.commit()
+
+    d = Domain.create("cancer.gov", status=DomainStatus.verified, org=child)
+    db.session.commit()
+
+    assert d.org == child
+    assert child.parent == parent
+
+
+def test_domain_category(app):
+    c1 = DomainCategory.create("spammer")
+    c2 = DomainCategory.create("organisation")
+    db.session.commit()
+
+    c = DomainCategory.get("spammer")
+    assert c.label == "spammer"

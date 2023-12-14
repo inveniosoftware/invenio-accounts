@@ -10,7 +10,7 @@
 
 from flask_security import SQLAlchemyUserDatastore
 
-from .models import Role
+from .models import Domain, Role
 from .proxies import current_db_change_history
 from .sessions import delete_user_sessions
 from .signals import datastore_post_commit, datastore_pre_commit
@@ -65,3 +65,11 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
     def find_role_by_id(self, role_id):
         """Fetches roles searching by id."""
         return self.role_model.query.filter_by(id=role_id).one_or_none()
+
+    def find_domain(self, domain):
+        """Find a domain."""
+        return Domain.query.filter_by(domain=domain).one_or_none()
+
+    def create_domain(self, domain, **kwargs):
+        """Create a new domain."""
+        return Domain.create(domain, **kwargs)

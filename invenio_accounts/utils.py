@@ -8,6 +8,7 @@
 
 """Utility function for ACCOUNTS."""
 
+import enum
 import re
 import uuid
 from datetime import datetime
@@ -20,12 +21,34 @@ from flask_security.recoverable import generate_reset_password_token
 from flask_security.signals import password_changed, user_registered
 from flask_security.utils import config_value as security_config_value
 from flask_security.utils import get_security_endpoint_name, hash_password, send_mail
+from invenio_db import db
+from invenio_i18n import gettext as _
 from jwt import DecodeError, ExpiredSignatureError, decode, encode
 from werkzeug.routing import BuildError
 from werkzeug.utils import import_string
+from wtforms import ValidationError
 
 from .errors import JWTDecodeError, JWTExpiredToken
 from .proxies import current_datastore, current_security
+
+
+class DomainStatus(enum.Enum):
+    """Domain status.
+
+    The domain status controls if new users can register and their verification status.
+    """
+
+    new = 1
+    """User registration is allowed - new domain requiring review."""
+
+    moderated = 2
+    """User registration is allowed and users are automatically verified."""
+
+    verified = 3
+    """User registration is allowed and users are automatically verified."""
+
+    blocked = 4
+    """User registration from domain is blocked."""
 
 
 def jwt_create_token(user_id=None, additional_data=None):
@@ -216,3 +239,33 @@ def validate_username(username):
         # text explaining the validation rules.
         message = current_app.config["ACCOUNTS_USERNAME_RULES_TEXT"]
         raise ValueError(message)
+
+
+def validate_domain_form(form, field):
+    """Validator for use with WTForm."""
+    if not validate_domain(field.data):
+        raise ValidationError(_("The email domain is blocked."))
+
+
+def validate_domain(email):
+    """Validate the domain of email address."""
+    email = email.lower()
+    try:
+        prefix, domain = split_emailaddr(email)
+    except ValueError:
+        return False
+    with db.session.no_autoflush:
+        domain = current_datastore.find_domain(domain)
+        if domain is not None and domain.status == DomainStatus.blocked:
+            return False
+        return True
+
+
+def split_emailaddr(email):
+    """Split email address in prefix and domain."""
+    prefix, domain = email.rsplit("@", 1)
+    prefix = prefix.lower().strip()
+    domain = domain.lower().strip()
+    if domain[-1] == ".":
+        domain = domain[:-1]
+    return prefix, domain
