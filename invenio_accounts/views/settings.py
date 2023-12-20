@@ -51,6 +51,8 @@ def init_menu():
     # Register root breadcrumbs
     item = current_menu.submenu("breadcrumbs.settings")
     item.register("invenio_userprofiles.profile", _("Account"))
+    if not current_app.config.get("ACCOUNTS_REGISTER_BLUEPRINT"):
+       return
 
     # - Register menu
     # - Change password

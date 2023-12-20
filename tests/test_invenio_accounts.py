@@ -91,6 +91,19 @@ def test_init_rest():
     assert "security" in app.blueprints.keys()
     assert "security_email_templates" in app.blueprints.keys()
 
+    app = Flask("testapp")
+    app.config["ACCOUNTS_REGISTER_BLUEPRINT"] = False
+    Babel(app)
+    Mail(app)
+    InvenioDB(app)
+    ext = InvenioAccountsREST()
+    assert "invenio-accounts" not in app.extensions
+    assert "security" not in app.blueprints.keys()
+    ext.init_app(app)
+    assert "invenio-accounts" in app.extensions
+    assert "security" in app.blueprints.keys()
+    assert "security_email_templates" in app.blueprints.keys()
+
 
 @pytest.mark.skip(reason="Mergepoint is on invenio-access.")
 def test_alembic(app):
