@@ -13,12 +13,14 @@ import pytest
 import requests
 from flask import Flask
 from flask_mail import Mail
+from flask_menu import current_menu
 from flask_security import url_for_security
 from invenio_db import InvenioDB, db
 from invenio_i18n import Babel
 
 from invenio_accounts import InvenioAccounts, InvenioAccountsREST, testutils
 from invenio_accounts.models import Role, User
+from invenio_accounts.views.settings import blueprint
 
 
 def test_version():
@@ -104,6 +106,21 @@ def test_init_rest():
     assert "invenio-accounts" in app.extensions
     assert "security" not in app.blueprints.keys()
     assert "security_email_templates" in app.blueprints.keys()
+
+
+def test_accounts_settings_blueprint(base_app):
+    """Test settings blueprint when ACCOUNTS_REGISTER_BLUEPRINT is False."""
+    app = base_app
+    app.config["ACCOUNTS_REGISTER_BLUEPRINT"] = False
+    InvenioAccounts(app)
+    # register settings blueprint
+    app.register_blueprint(blueprint)
+
+    with app.app_context():
+        with app.test_client() as client:
+            client.get("/account/settings")
+            menu = current_menu.submenu("settings.change_password", auto_create=False)
+            assert not menu
 
 
 @pytest.mark.skip(reason="Mergepoint is on invenio-access.")
