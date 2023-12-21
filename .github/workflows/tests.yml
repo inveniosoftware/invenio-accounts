@@ -7,37 +7,31 @@ on:
     branches: master
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '0 3 * * 6'
+    - cron: "0 3 * * 6"
   workflow_dispatch:
     inputs:
       reason:
-        description: 'Reason'
+        description: "Reason"
         required: false
-        default: 'Manual trigger'
+        default: "Manual trigger"
 
 jobs:
   Tests:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-          python-version: [3.7, 3.8, 3.9]
-          requirements-level: [min, pypi]
-          cache-service: [redis]
-          db-service: [postgresql14, postgresql13, mysql8]
-          exclude:
-          - python-version: 3.7
-            requirements-level: pypi
-
+        python-version: [3.8, 3.9]
+        requirements-level: [min, pypi]
+        cache-service: [redis]
+        db-service: [postgresql14, postgresql13, mysql8]
+        exclude:
           - python-version: 3.8
             requirements-level: min
 
           - python-version: 3.9
             requirements-level: min
 
-          - db-service: postgresql13
-            python-version: 3.7
-
-          include:
+        include:
           - db-service: postgresql14
             DB_EXTRAS: "postgresql"
 
