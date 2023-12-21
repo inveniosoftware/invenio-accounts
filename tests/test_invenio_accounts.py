@@ -101,8 +101,8 @@ def test_init_rest():
     assert "security" not in app.blueprints.keys()
     ext.init_app(app)
     assert "invenio-accounts" in app.extensions
-    assert "security" in app.blueprints.keys()
-    assert "security_email_templates" in app.blueprints.keys()
+    assert "security" not in app.blueprints.keys()
+    assert "security_email_templates" not in app.blueprints.keys()
 
 
 @pytest.mark.skip(reason="Mergepoint is on invenio-access.")
