@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 3.5.1 (released 2023-12-10)
+
+- views: disable registering of `settings.change_password` menu
+  if `ACCOUNTS_REGISTER_BLUEPRINT` is False
+
 Version 3.5.0 (released 2023-11-10)
 
 - datastore: override put method to add changes to db history
