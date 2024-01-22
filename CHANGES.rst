@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.5.2 (released 2024-01-22)
+
+- sessions: check for request before accessing session
+
 Version 3.5.1 (released 2023-12-10)
 
 - views: disable registering of `settings.change_password` menu
