@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015-2023 CERN.
+# Copyright (C) 2015-2024 CERN.
 # Copyright (C) 2022 KTH Royal Institute of Technology
 #
 # Invenio is free software; you can redistribute it and/or modify it
