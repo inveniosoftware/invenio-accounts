@@ -165,10 +165,10 @@ class InvenioAccounts(object):
             app.extensions["security"].register_form, app
         )
 
-        app.extensions[
-            "security"
-        ].confirm_register_form = confirm_register_form_factory(
-            app.extensions["security"].confirm_register_form, app
+        app.extensions["security"].confirm_register_form = (
+            confirm_register_form_factory(
+                app.extensions["security"].confirm_register_form, app
+            )
         )
 
         app.extensions["security"].login_form = login_form_factory(
@@ -176,10 +176,10 @@ class InvenioAccounts(object):
         )
 
         # send confirmation form
-        app.extensions[
-            "security"
-        ].send_confirmation_form = send_confirmation_form_factory(
-            app.extensions["security"].send_confirmation_form, app
+        app.extensions["security"].send_confirmation_form = (
+            send_confirmation_form_factory(
+                app.extensions["security"].send_confirmation_form, app
+            )
         )
 
         if app.config["ACCOUNTS_USE_CELERY"]:

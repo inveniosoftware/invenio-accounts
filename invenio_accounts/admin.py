@@ -38,9 +38,9 @@ class UserView(ModelView):
 
     list_all = ("id", "email", "active", "confirmed_at")
 
-    column_list = (
-        column_searchable_list
-    ) = column_sortable_list = column_details_list = list_all
+    column_list = column_searchable_list = column_sortable_list = (
+        column_details_list
+    ) = list_all
 
     form_columns = ("email", "password", "active", "roles", "notification")
 
@@ -130,9 +130,9 @@ class RoleView(ModelView):
 
     list_all = ("id", "name", "description")
 
-    column_list = (
-        column_searchable_list
-    ) = column_filters = column_details_list = columns_sortable_list = list_all
+    column_list = column_searchable_list = column_filters = column_details_list = (
+        columns_sortable_list
+    ) = list_all
 
     form_columns = ("name", "description", "users")
 
