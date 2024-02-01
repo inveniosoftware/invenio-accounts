@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 4.0.1 (released 2024-02-01)
+
+- models: fix column type for domain status
+
 Version 4.0.0 (released 2024-01-29)
 
 - sessions: check for request before accessing session
