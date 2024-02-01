@@ -21,7 +21,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import validates
 from sqlalchemy_utils import IPAddressType, Timestamp
-from sqlalchemy_utils.types import JSONType
+from sqlalchemy_utils.types import ChoiceType, JSONType
 
 from .errors import AlreadyLinkedError
 from .profiles import UserPreferenceDict, UserProfileDict
@@ -545,7 +545,11 @@ class Domain(db.Model, Timestamp):
     tld = db.Column(db.String(255), nullable=False)
     """Top-level domain."""
 
-    status = db.Column(db.Enum(DomainStatus), default=DomainStatus.new, nullable=False)
+    status = db.Column(
+        ChoiceType(DomainStatus, impl=db.Integer()),
+        default=DomainStatus.new,
+        nullable=False,
+    )
     """Status of domain.
 
     Use to control possibility and capability of users registering with this domain.
