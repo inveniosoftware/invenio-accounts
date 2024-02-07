@@ -10,7 +10,8 @@
 
 from datetime import datetime
 
-from flask_security import SQLAlchemyUserDatastore
+from flask import current_app
+from flask_security import SQLAlchemyUserDatastore, user_confirmed
 
 from .models import Domain, Role, User
 from .proxies import current_db_change_history
@@ -45,11 +46,11 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
     def activate_user(self, user):
         """Activate a unconfirmed/deactivated/blocked user."""
         res = super().activate_user(user)
-        if res:
-            user.blocked_at = None
-            if user.confirmed_at is None:
-                user.confirmed_at = datetime.utcnow()
-        return True
+        user.blocked_at = None
+        if user.confirmed_at is None:
+            user.confirmed_at = datetime.utcnow()
+            user_confirmed.send(current_app._get_current_object(), user=user)
+        return res
 
     def deactivate_user(self, user):
         """Deactivate a  user.
