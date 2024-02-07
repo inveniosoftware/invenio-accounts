@@ -30,3 +30,7 @@ def on_user_confirmed(app, user):
         user.blocked_at = security.datetime_factory()
         user.active = False
         user.verified_at = None
+
+    # Needed otherwise users are not indexed when they confirm their email
+    # address
+    datastore.mark_changed(id(datastore.db.session), model=user)

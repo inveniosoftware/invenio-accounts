@@ -8,9 +8,11 @@
 
 """Session-aware datastore."""
 
+from datetime import datetime
+
 from flask_security import SQLAlchemyUserDatastore
 
-from .models import Domain, Role
+from .models import Domain, Role, User
 from .proxies import current_db_change_history
 from .sessions import delete_user_sessions
 from .signals import datastore_post_commit, datastore_pre_commit
@@ -19,14 +21,46 @@ from .signals import datastore_post_commit, datastore_pre_commit
 class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
     """Datastore which deletes active session when a user is deactivated."""
 
+    def verify_user(self, user):
+        """Verify a user."""
+        now = datetime.utcnow()
+        user.blocked_at = None
+        user.verified_at = now
+        if user.confirmed_at is None:
+            user.confirmed_at = now
+        if not user.active:
+            user.active = True
+        return True
+
+    def block_user(self, user):
+        """Verify a user."""
+        now = datetime.utcnow()
+        user.blocked_at = now
+        user.verified_at = None
+        if user.active:
+            user.active = False
+        delete_user_sessions(user)
+        return True
+
+    def activate_user(self, user):
+        """Activate a unconfirmed/deactivated/blocked user."""
+        res = super().activate_user(user)
+        if res:
+            user.blocked_at = None
+            if user.confirmed_at is None:
+                user.confirmed_at = datetime.utcnow()
+        return True
+
     def deactivate_user(self, user):
         """Deactivate a  user.
 
         :param user: A :class:`invenio_accounts.models.User` instance.
         :returns: The datastore instance.
         """
-        res = super(SessionAwareSQLAlchemyUserDatastore, self).deactivate_user(user)
+        res = super().deactivate_user(user)
         if res:
+            user.blocked_at = None
+            user.verified_at = None
             delete_user_sessions(user)
         return res
 
@@ -37,29 +71,39 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
         datastore_post_commit.send(session=self.db.session)
         current_db_change_history.clear_dirty_sets(self.db.session)
 
-    def put(self, model):
-        """Put a user to its session."""
-        res = super().put(model)
-        self.mark_changed(id(self.db.session), uid=model.id)
-        return res
-
-    def mark_changed(self, sid, uid=None, rid=None):
+    def mark_changed(self, sid, uid=None, rid=None, model=None):
         """Save a user to the changed history."""
-        if uid:
+        if model:
+            if isinstance(model, User):
+                current_db_change_history.add_updated_user(sid, model.id)
+            elif isinstance(model, Role):
+                current_db_change_history.add_updated_role(sid, model.id)
+        elif uid:
+            # Deprecated - use model param instead (still used in e.g.
+            # UserFixture pytest-invenio)
             current_db_change_history.add_updated_user(sid, uid)
         elif rid:
+            # Deprecated - use model param instead
             current_db_change_history.add_updated_role(sid, rid)
 
     def update_role(self, role):
         """Updates roles."""
         role = self.db.session.merge(role)
-        self.mark_changed(id(self.db.session), rid=role.id)
+        # This works because role defines it's own id - for users
+        # the same doesn't work because id is assigned on commit which
+        # hasn't happened yet.
+        self.mark_changed(id(self.db.session), model=role)
         return role
 
     def create_role(self, **kwargs):
         """Creates and returns a new role from the given parameters."""
         role = super().create_role(**kwargs)
-        self.mark_changed(id(self.db.session), rid=role.id)
+        # This works because role defines it's own id - for users
+        # the same doesn't work because id is assigned on commit which
+        # hasn't happened yet.
+        if role.id is None:
+            role.id = role.name
+        self.mark_changed(id(self.db.session), model=role)
         return role
 
     def find_role_by_id(self, role_id):
