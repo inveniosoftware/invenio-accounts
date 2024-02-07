@@ -33,21 +33,25 @@ class DBUsersChangeHistory:
 
     def add_updated_user(self, session_id, user_id):
         """Adds a user to the updated users list."""
+        assert user_id is not None
         session = self._get_session(session_id)
         session.updated_users.add(user_id)
 
     def add_updated_role(self, session_id, role_id):
         """Adds a role to the updated roles list."""
+        assert role_id is not None
         session = self._get_session(session_id)
         session.updated_roles.add(role_id)
 
     def add_deleted_user(self, session_id, user_id):
         """Adds a user to the deleted users list."""
+        assert user_id is not None
         session = self._get_session(session_id)
         session.deleted_users.add(user_id)
 
     def add_deleted_role(self, session_id, role_id):
         """Adds a role to the deleted roles list."""
+        assert role_id is not None
         session = self._get_session(session_id)
         session.deleted_roles.add(role_id)
 
