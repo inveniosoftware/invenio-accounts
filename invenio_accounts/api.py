@@ -16,8 +16,10 @@ class Session:
         """Constructor."""
         self.updated_users = set()
         self.updated_roles = set()
+        self.updated_domains = set()
         self.deleted_users = set()
         self.deleted_roles = set()
+        self.deleted_domains = set()
 
 
 class DBUsersChangeHistory:
@@ -43,6 +45,12 @@ class DBUsersChangeHistory:
         session = self._get_session(session_id)
         session.updated_roles.add(role_id)
 
+    def add_updated_domain(self, session_id, domain_id):
+        """Adds a user to the updated domains list."""
+        assert domain_id is not None
+        session = self._get_session(session_id)
+        session.updated_domains.add(domain_id)
+
     def add_deleted_user(self, session_id, user_id):
         """Adds a user to the deleted users list."""
         assert user_id is not None
@@ -54,6 +62,12 @@ class DBUsersChangeHistory:
         assert role_id is not None
         session = self._get_session(session_id)
         session.deleted_roles.add(role_id)
+
+    def add_deleted_domain(self, session_id, domain_id):
+        """Adds a role to the deleted domain list."""
+        assert domain_id is not None
+        session = self._get_session(session_id)
+        session.deleted_domains.add(domain_id)
 
     def clear_dirty_sets(self, session):
         """Removes session object."""

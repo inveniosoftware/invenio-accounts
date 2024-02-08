@@ -20,6 +20,7 @@ def on_user_confirmed(app, user):
     domain = datastore.find_domain(user.domain)
     if domain is None:
         domain = datastore.create_domain(user.domain)
+        datastore.mark_changed(id(datastore.db.session), model=domain)
 
     # Verify user if domain is verified.
     if domain.status == DomainStatus.verified:
