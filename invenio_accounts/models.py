@@ -498,9 +498,6 @@ class DomainOrg(db.Model):
     parent = db.relationship("DomainOrg", remote_side=[id])
     """Relationship to parent."""
 
-    domains = db.relationship("Domain", back_populates="org")
-    """Relationship to domains for this organisation."""
-
     @classmethod
     def create(cls, pid, name, json=None, parent=None):
         """Create a domain organisation."""
@@ -564,11 +561,14 @@ class Domain(db.Model, Timestamp):
     org_id = db.Column(db.Integer(), db.ForeignKey(DomainOrg.id), nullable=True)
     """Organisation associated with domain."""
 
-    org = db.relationship("DomainOrg", back_populates="domains")
+    org = db.relationship("DomainOrg", backref="domains")
 
     # spammer, mail-provider, organisation, company
     category = db.Column(db.Integer(), db.ForeignKey(DomainCategory.id), nullable=True)
     """Category of domain."""
+
+    category_name = db.relationship("DomainCategory", backref="domains")
+    """Relationship to category"""
 
     num_users = db.Column(db.Integer(), default=0, nullable=False)
     """Computed property to store number of users in domain."""

@@ -12,6 +12,7 @@ from datetime import datetime
 
 from flask import current_app
 from flask_security import SQLAlchemyUserDatastore, user_confirmed
+from sqlalchemy.orm import joinedload
 
 from .models import Domain, Role, User
 from .proxies import current_db_change_history
@@ -27,10 +28,9 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
         now = datetime.utcnow()
         user.blocked_at = None
         user.verified_at = now
+        user.active = True
         if user.confirmed_at is None:
             user.confirmed_at = now
-        if not user.active:
-            user.active = True
         return True
 
     def block_user(self, user):
@@ -38,8 +38,7 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
         now = datetime.utcnow()
         user.blocked_at = now
         user.verified_at = None
-        if user.active:
-            user.active = False
+        user.active = False
         delete_user_sessions(user)
         return True
 
@@ -113,7 +112,11 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
 
     def find_domain(self, domain):
         """Find a domain."""
-        return Domain.query.filter_by(domain=domain).one_or_none()
+        return (
+            Domain.query.filter_by(domain=domain)
+            .options(joinedload(Domain.category_name))
+            .one_or_none()
+        )
 
     def create_domain(self, domain, **kwargs):
         """Create a new domain."""

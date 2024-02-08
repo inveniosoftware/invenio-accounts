@@ -122,27 +122,33 @@ def update_domain_status():
     # If statistics are updated regularly, the number of updates is relatively
     # low and hence fit in memory. We read all data first, to avoid starting
     # to modify the same table we're reading from.
-    domain_updates = []
-    for row in stmt.all():
-        domain_updates.append(row)
+    domain_updates = list(stmt.all())
 
-    # Update the database
-    i = 0
-    for row in domain_updates:
-        domain, users, active, inactive, confirmed, verified, blocked = row
-        db.session.query(Domain).filter(Domain.domain == domain).update(
-            {
-                "num_users": users,
-                "num_active": active,
-                "num_inactive": inactive,
-                "num_confirmed": confirmed,
-                "num_verified": verified,
-                "num_blocked": blocked,
-            }
-        )
-        i += 1
-        # Commit batches of 500 updates
-        if i % 500 == 0:
-            db.session.commit()
-    if i % 500 != 0:
-        db.session.commit()
+    # Commit batches of 500 updates
+    batch_size = 500
+    now = datetime.utcnow()
+
+    # Process updates in batches
+    for i in range(0, len(domain_updates), batch_size):
+        with db.session.begin_nested():  # Use nested transactions for safety
+            for (
+                domain,
+                users,
+                active,
+                inactive,
+                confirmed,
+                verified,
+                blocked,
+            ) in domain_updates[i : i + batch_size]:
+                db.session.query(Domain).filter(Domain.domain == domain).update(
+                    {
+                        "num_users": users,
+                        "num_active": active,
+                        "num_inactive": inactive,
+                        "num_confirmed": confirmed,
+                        "num_verified": verified,
+                        "num_blocked": blocked,
+                        "updated": now,
+                    }
+                )
+        db.session.commit()  # Commit after each batch
