@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 4.0.2 (released 2024-02-19)
+
+- add change history tracking of domains
+- add task to calculate domain statistics
+- add methods to verify, block and deactivate users in datastore
+
 Version 4.0.1 (released 2024-02-01)
 
 - models: fix column type for domain status
