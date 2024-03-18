@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 5.0.1 (released 2024-03-22)
+
+- models: fix username case-insensitive comparator
+
 Version 5.0.0 (released 2024-03-21)
 
 - fix: before_first_request deprecation
