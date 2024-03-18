@@ -16,9 +16,10 @@ from flask import current_app, session
 from flask_babel import refresh
 from flask_security import RoleMixin, UserMixin
 from invenio_db import db
+from sqlalchemy import func
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.ext.hybrid import Comparator, hybrid_property
 from sqlalchemy.orm import validates
 from sqlalchemy_utils import IPAddressType, Timestamp
 from sqlalchemy_utils.types import ChoiceType, JSONType
@@ -58,6 +59,14 @@ userrole = db.Table(
     ),
 )
 """Relationship between users and roles."""
+
+
+class CaseInsensitiveComparator(Comparator):
+    """Class allowing case-insensitive comparisons on an attribute."""
+
+    def __eq__(self, other):
+        """Case-insensitive equal operation."""
+        return func.lower(self.__clause_element__()) == func.lower(other)
 
 
 class Role(db.Model, Timestamp, RoleMixin):
@@ -205,6 +214,10 @@ class User(db.Model, Timestamp, UserMixin):
             validate_username(username)
             self._displayname = username
             self._username = username.lower()
+
+    @username.comparator
+    def username(cls):
+        return CaseInsensitiveComparator(cls._username)
 
     @hybrid_property
     def email(self):
