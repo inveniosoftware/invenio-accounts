@@ -152,6 +152,16 @@ def test_user_domain_attr(app):
     assert u.domain == "cern.ch"
 
 
+def test_user_username_case_insensitive_comparator(app):
+    ds = app.extensions["invenio-accounts"].datastore
+    ds.create_user(username="UserName")
+    ds.commit()
+
+    u = ds.find_user(username="uSERnAME")
+    assert u is not None
+    assert u.username == "UserName"
+
+
 def test_domain_model(app):
     d = Domain.create("CERN.CH")
     assert d.domain == "cern.ch"
