@@ -372,7 +372,7 @@ def check_security_settings(app):
 
 
 def init_menu(app):
-    """init menu."""
+    """Init menu."""
     current_menu.submenu("settings.security").register(
         endpoint="invenio_accounts.security",
         text=_(
