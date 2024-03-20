@@ -3,7 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
 # Copyright (C)      2021 TU Wien.
-# Copyright (C) 2023 Graz University of Technology.
+# Copyright (C) 2023-2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -16,9 +16,12 @@ import pkg_resources
 from flask import Blueprint, abort, current_app, request_finished, session
 from flask_kvsession import KVSessionExtension
 from flask_login import LoginManager, user_logged_in, user_logged_out
+from flask_menu import current_menu
 from flask_principal import AnonymousIdentity
 from flask_security import Security, user_confirmed
 from invenio_db import db
+from invenio_i18n import lazy_gettext as _
+from invenio_theme.proxies import current_theme_icons
 from passlib.registry import register_crypt_handler
 from werkzeug.utils import cached_property
 
@@ -335,6 +338,7 @@ def finalize_app(app):
     """Finalize app."""
     set_default_config(app)
     check_security_settings(app)
+    init_menu(app)
 
 
 def set_default_config(app):
@@ -364,4 +368,27 @@ def check_security_settings(app):
         app.logger.warning(
             "SESSION_COOKIE_SECURE setting must be set to True to prevent the "
             "session cookie from being leaked over an insecure channel."
+        )
+
+
+def init_menu(app):
+    """init menu."""
+    current_menu.submenu("settings.security").register(
+        endpoint="invenio_accounts.security",
+        text=_(
+            "%(icon)s Security", icon=f'<i class="{current_theme_icons.shield}"></i>'
+        ),
+        order=2,
+    )
+
+    # - Register menu
+    # - Change password
+    if app.config.get("SECURITY_CHANGEABLE", True):
+        current_menu.submenu("settings.change_password").register(
+            endpoint=f"{app.config['SECURITY_BLUEPRINT_NAME']}.change_password",
+            text=_(
+                "%(icon)s Change password",
+                icon=f'<i class="{current_theme_icons.key}"></i>',
+            ),
+            order=1,
         )
