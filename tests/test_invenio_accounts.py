@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2023 CERN.
 # Copyright (C) 2021      TU Wien.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -20,7 +21,7 @@ from invenio_i18n import Babel
 
 from invenio_accounts import InvenioAccounts, InvenioAccountsREST, testutils
 from invenio_accounts.models import Role, User
-from invenio_accounts.views.settings import blueprint
+from invenio_accounts.views.settings import create_settings_blueprint
 
 
 def test_version():
@@ -114,8 +115,8 @@ def test_accounts_settings_blueprint(base_app):
     app.config["ACCOUNTS_REGISTER_BLUEPRINT"] = False
     InvenioAccounts(app)
     # register settings blueprint
-    app.register_blueprint(blueprint)
-
+    # app.register_blueprint(blueprint)
+    create_settings_blueprint(app)
     with app.app_context():
         with app.test_client() as client:
             client.get("/account/settings")
