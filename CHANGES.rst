@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 5.0.0 (released 2024-03-21)
+
+- fix: before_first_request deprecation
+- change module blueprint to callable
+
 Version 4.0.2 (released 2024-02-19)
 
 - add change history tracking of domains
