@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2023 CERN.
+# Copyright (C) 2024      KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -9,7 +10,7 @@
 """Command Line Interface for accounts."""
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from functools import wraps
 
 import click
@@ -62,7 +63,7 @@ def users_create(email, password, active, confirm, profile):
         kwargs["password"] = hash_password(kwargs["password"])
         kwargs["active"] = active
         if confirm:
-            kwargs["confirmed_at"] = datetime.utcnow()
+            kwargs["confirmed_at"] = datetime.now(timezone.utc)
         if profile:
             kwargs["user_profile"] = json.loads(profile)
         _datastore.create_user(**kwargs)
