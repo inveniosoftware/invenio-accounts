@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2023 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -17,8 +18,11 @@ from flask import current_app
 from flask.cli import with_appcontext
 from flask_security.forms import ConfirmRegisterForm
 from flask_security.utils import hash_password
+from invenio_db import db
 from werkzeug.datastructures import MultiDict
 from werkzeug.local import LocalProxy
+
+from .models import DomainCategory
 
 _datastore = LocalProxy(lambda: current_app.extensions["security"].datastore)
 
@@ -42,6 +46,11 @@ def users():
 @click.group()
 def roles():
     """Role commands."""
+
+
+@click.group()
+def domains():
+    """Domain commands."""
 
 
 @users.command("create")
@@ -154,3 +163,18 @@ def users_deactivate(user):
         click.secho('User "%s" has been deactivated.' % user, fg="green")
     else:
         click.secho('User "%s" was already deactivated.' % user, fg="yellow")
+
+
+@domains.command("create")
+@click.argument("domain")
+@with_appcontext
+def domains_create(domain):
+    """Create domain."""
+    try:
+        domain_category = DomainCategory.create(domain.lower())
+        db.session.merge(domain_category)
+        db.session.commit()
+    except Exception as error:
+        click.secho(f"Domain {domain} creating failed with {error}", fg="red")
+    else:
+        click.secho(f"Domain {domain} created successfully", fg="green")
