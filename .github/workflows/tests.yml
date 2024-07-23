@@ -30,6 +30,7 @@ jobs:
         requirements-level: [pypi]
         cache-service: [redis]
         db-service: [postgresql14, mysql8]
+        search-service: [opensearch2]
 
         include:
           - db-service: postgresql14
@@ -41,7 +42,8 @@ jobs:
     env:
       CACHE: ${{ matrix.cache-service }}
       DB: ${{ matrix.db-service }}
-      EXTRAS: tests,admin,${{ matrix.DB_EXTRAS }}
+      SEARCH: ${{ matrix.search-service }}
+      EXTRAS: tests,admin,${{ matrix.DB_EXTRAS }},${{ matrix.search-service }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
