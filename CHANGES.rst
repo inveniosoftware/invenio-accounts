@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 5.1.0 (released 2024-07-30)
+
+- feat(cli): add command for group creation
+- feat(cli): add command for domain create
+
 Version 5.0.1 (released 2024-03-22)
 
 - models: fix username case-insensitive comparator
