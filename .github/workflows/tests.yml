@@ -29,7 +29,6 @@ jobs:
         python-version: ["3.9", "3.12"]
         cache-service: [redis]
         db-service: [postgresql14, mysql8]
-        search-service: [opensearch2]
 
         include:
           - db-service: postgresql14
@@ -42,7 +41,7 @@ jobs:
       CACHE: ${{ matrix.cache-service }}
       DB: ${{ matrix.db-service }}
       SEARCH: ${{ matrix.search-service }}
-      EXTRAS: tests,admin,${{ matrix.DB_EXTRAS }},${{ matrix.search-service }}
+      EXTRAS: tests,admin,${{ matrix.DB_EXTRAS }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
