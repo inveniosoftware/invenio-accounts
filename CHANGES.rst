@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 5.1.1 (released 2024-08-08)
+
+- revert: commit f9a8a85
+
 Version 5.1.0 (released 2024-07-30)
 
 - feat(cli): add command for group creation
