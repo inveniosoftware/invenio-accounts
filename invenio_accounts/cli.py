@@ -18,9 +18,7 @@ from flask import current_app
 from flask.cli import with_appcontext
 from flask_security.forms import ConfirmRegisterForm
 from flask_security.utils import hash_password
-from invenio_access.permissions import system_identity
 from invenio_db import db
-from invenio_users_resources.proxies import current_groups_service
 from werkzeug.datastructures import MultiDict
 from werkzeug.local import LocalProxy
 
@@ -53,11 +51,6 @@ def roles():
 @click.group()
 def domains():
     """Domain commands."""
-
-
-@click.group()
-def groups():
-    """Group commands."""
 
 
 @users.command("create")
@@ -185,14 +178,3 @@ def domains_create(domain):
         click.secho(f"Domain {domain} creating failed with {error}", fg="red")
     else:
         click.secho(f"Domain {domain} created successfully", fg="green")
-
-
-@groups.command("create")
-@click.argument("name")
-@with_appcontext
-@commit
-def groups_create(name):
-    """Create group."""
-    _datastore.create_role(id=name, name=name, is_managed=False)
-    current_groups_service.rebuild_index(system_identity)
-    click.secho(f'Role "({name})s" created successfully.', fg="green")
