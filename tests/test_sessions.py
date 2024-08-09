@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2022      KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -288,3 +289,27 @@ def test_session_ip_no_country(app, users):
         [session] = SessionActivity.query.all()
         assert session.country is None
         assert session.ip == "139.191.247.1"
+
+
+def test_unverify_user(app):
+    """Test unverifying a user."""
+    with app.app_context():
+        now = datetime.datetime.now(datetime.timezone.utc)
+        user = testutils.create_test_user(
+            "misha@kth.se",
+            verified_at=now,
+            confirmed_at=now,
+            active=True,
+        )
+
+        assert user.confirmed_at is not None
+        assert user.verified_at is not None
+        assert user.active is True
+
+        _datastore.unverify_user(user)
+        db.session.commit()
+
+        # Ensure the user is no longer verified
+        assert user.confirmed_at is not None
+        assert user.active is True
+        assert user.verified_at is None
