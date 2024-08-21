@@ -3,7 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
 # Copyright (C)      2022 TU Wien.
-# Copyright (C) 2022 KTH Royal Institute of Technology
+# Copyright (C) 2022-2024 KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -14,6 +14,7 @@ import pytest
 from invenio_db import db
 from marshmallow import Schema, fields
 from sqlalchemy import inspect
+from sqlalchemy.exc import IntegrityError
 
 from invenio_accounts import testutils
 from invenio_accounts.models import (
@@ -213,9 +214,25 @@ def test_domain_org(app):
 
 
 def test_domain_category(app):
+    """Test DomainCategory creation and retrieval."""
     c1 = DomainCategory.create("spammer")
     c2 = DomainCategory.create("organisation")
     db.session.commit()
 
     c = DomainCategory.get("spammer")
     assert c.label == "spammer"
+
+    # Try to create a duplicate category
+    with pytest.raises(IntegrityError):
+        duplicate_category = DomainCategory.create("spammer")
+        db.session.commit()
+    # Clean the state after the IntegrityError
+    db.session.rollback()
+
+    # Assert a valid category can still be created after the error
+    c3 = DomainCategory.create("company")
+    db.session.commit()
+
+    # Make sure the new category is correctly stored
+    c = DomainCategory.get("company")
+    assert c.label == "company"
