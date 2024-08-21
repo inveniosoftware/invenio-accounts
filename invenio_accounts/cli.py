@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2023 CERN.
 # Copyright (C) 2024 Graz University of Technology.
+# Copyright (C) 2024 KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -170,8 +171,14 @@ def users_deactivate(user):
 @with_appcontext
 def domains_create(domain):
     """Create domain."""
+    domain = domain.lower()
+
+    if DomainCategory.get(domain):
+        click.secho(f"Domain {domain} already exists.", fg="red")
+        return
+
     try:
-        domain_category = DomainCategory.create(domain.lower())
+        domain_category = DomainCategory.create(domain)
         db.session.merge(domain_category)
         db.session.commit()
     except Exception as error:
