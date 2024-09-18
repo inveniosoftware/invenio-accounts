@@ -22,15 +22,19 @@ from ..sessions import delete_session
 def security():
     """View for security page."""
     sessions = SessionActivity.query_by_user(user_id=current_user.get_id()).all()
-    master_session = None
+    current_session = None
     for index, session in enumerate(sessions):
         if SessionActivity.is_current(session.sid_s):
-            master_session = session
+            current_session = session
             del sessions[index]
+
+    # If the current session is still `None`, filter it out
+    sessions = [current_session] + sessions if current_session is not None else sessions
+
     return render_template(
         current_app.config["ACCOUNTS_SETTINGS_SECURITY_TEMPLATE"],
         formclass=RevokeForm,
-        sessions=[master_session] + sessions,
+        sessions=sessions,
         is_current=SessionActivity.is_current,
     )
 
