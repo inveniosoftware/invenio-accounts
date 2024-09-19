@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 5.1.2 (released 2024-09-19)
+
+- setup: bump minimum flask-security-invenio dependency
+- security: handle missing value for current session
+
 Version 5.1.1 (released 2024-08-08)
 
 - revert: commit f9a8a85
