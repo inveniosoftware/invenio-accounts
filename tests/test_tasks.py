@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2024      KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -9,7 +10,7 @@
 
 """Module tests."""
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from time import sleep
 
 from flask import url_for
@@ -20,6 +21,7 @@ from flask_security import url_for_security
 from invenio_accounts.models import SessionActivity, User
 from invenio_accounts.tasks import clean_session_table, delete_ips, send_security_email
 from invenio_accounts.testutils import create_test_user
+from invenio_accounts.utils import get_utc_now
 
 
 def test_send_message_outbox(task_app):
@@ -113,11 +115,9 @@ def test_clean_session_table(task_app):
 def test_delete_ips(task_app):
     """Test if ips are deleted after 30 days."""
     last_login_at1 = (
-        datetime.utcnow()
-        - task_app.config["ACCOUNTS_RETENTION_PERIOD"]
-        - timedelta(days=1)
+        get_utc_now() - task_app.config["ACCOUNTS_RETENTION_PERIOD"] - timedelta(days=1)
     )
-    last_login_at2 = datetime.utcnow()
+    last_login_at2 = get_utc_now()
 
     with task_app.app_context():
         user1 = create_test_user(

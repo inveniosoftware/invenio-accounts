@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2023 CERN.
 # Copyright (C) 2024 Graz University of Technology.
+# Copyright (C) 2024      KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -10,7 +11,6 @@
 """Command Line Interface for accounts."""
 
 import json
-from datetime import datetime
 from functools import wraps
 
 import click
@@ -23,6 +23,7 @@ from werkzeug.datastructures import MultiDict
 from werkzeug.local import LocalProxy
 
 from .models import DomainCategory
+from .utils import get_utc_now
 
 _datastore = LocalProxy(lambda: current_app.extensions["security"].datastore)
 
@@ -71,7 +72,7 @@ def users_create(email, password, active, confirm, profile):
         kwargs["password"] = hash_password(kwargs["password"])
         kwargs["active"] = active
         if confirm:
-            kwargs["confirmed_at"] = datetime.utcnow()
+            kwargs["confirmed_at"] = get_utc_now()
         if profile:
             kwargs["user_profile"] = json.loads(profile)
         _datastore.create_user(**kwargs)

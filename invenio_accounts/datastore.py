@@ -2,13 +2,13 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
+# Copyright (C) 2024      KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
 """Session-aware datastore."""
 
-from datetime import datetime
 
 from flask import current_app
 from flask_security import SQLAlchemyUserDatastore, user_confirmed
@@ -18,6 +18,7 @@ from .models import Domain, Role, User
 from .proxies import current_db_change_history
 from .sessions import delete_user_sessions
 from .signals import datastore_post_commit, datastore_pre_commit
+from .utils import get_utc_now
 
 
 class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
@@ -25,7 +26,7 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
 
     def verify_user(self, user):
         """Verify a user."""
-        now = datetime.utcnow()
+        now = get_utc_now()
         user.blocked_at = None
         user.verified_at = now
         user.active = True
@@ -35,7 +36,7 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
 
     def block_user(self, user):
         """Verify a user."""
-        now = datetime.utcnow()
+        now = get_utc_now()
         user.blocked_at = now
         user.verified_at = None
         user.active = False
@@ -47,7 +48,7 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
         res = super().activate_user(user)
         user.blocked_at = None
         if user.confirmed_at is None:
-            user.confirmed_at = datetime.utcnow()
+            user.confirmed_at = get_utc_now()
             user_confirmed.send(current_app._get_current_object(), user=user)
         return res
 

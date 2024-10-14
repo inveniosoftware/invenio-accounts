@@ -2,7 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
-# Copyright (C) 2022 KTH Royal Institute of Technology
+# Copyright (C) 2022-2024 KTH Royal Institute of Technology
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -10,7 +10,6 @@
 """Database models for accounts."""
 
 import uuid
-from datetime import datetime
 
 from flask import current_app, session
 from flask_babel import refresh
@@ -26,7 +25,7 @@ from sqlalchemy_utils.types import ChoiceType, JSONType
 
 from .errors import AlreadyLinkedError
 from .profiles import UserPreferenceDict, UserProfileDict
-from .utils import DomainStatus, split_emailaddr, validate_username
+from .utils import DomainStatus, get_utc_now, split_emailaddr, validate_username
 
 json_field = (
     db.JSON()
@@ -168,7 +167,7 @@ class User(db.Model, Timestamp, UserMixin):
     def __init__(self, *args, **kwargs):
         """Constructor."""
         self.verified_at = (
-            datetime.utcnow()
+            get_utc_now()
             if current_app.config.get("ACCOUNTS_DEFAULT_USERS_VERIFIED")
             else None
         )
@@ -414,7 +413,7 @@ class SessionActivity(db.Model, Timestamp):
     def query_by_expired(cls):
         """Query to select all expired sessions."""
         lifetime = current_app.permanent_session_lifetime
-        expired_moment = datetime.utcnow() - lifetime
+        expired_moment = get_utc_now() - lifetime
         return cls.query.filter(cls.created < expired_moment)
 
     @classmethod
