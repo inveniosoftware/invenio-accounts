@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2017-2024 CERN.
+# Copyright (C) 2024      KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -11,7 +12,7 @@
 import enum
 import re
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 
 from flask import current_app, request, session, url_for
@@ -69,7 +70,7 @@ def jwt_create_token(user_id=None, additional_data=None):
     # Create an ID
     uid = str(uuid.uuid4())
     # The time in UTC now
-    now = datetime.utcnow()
+    now = get_utc_now()
     # Build the token data
     token_data = {
         "exp": now + current_app.config["ACCOUNTS_JWT_EXPIRATION_DELTA"],
@@ -269,3 +270,8 @@ def split_emailaddr(email):
     if domain[-1] == ".":
         domain = domain[:-1]
     return prefix, domain
+
+
+def get_utc_now():
+    """Get the current time in UTC without timezone information for backwards compatibility."""
+    return datetime.now(timezone.utc).replace(tzinfo=None)

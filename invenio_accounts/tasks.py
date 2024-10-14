@@ -2,13 +2,13 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2024      KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
 """Background tasks for accounts."""
 
-from datetime import datetime
 
 from celery import shared_task
 from flask import current_app
@@ -18,6 +18,7 @@ from sqlalchemy import func, or_
 
 from .models import Domain, LoginInformation, SessionActivity, User
 from .sessions import delete_session
+from .utils import get_utc_now
 
 
 @shared_task
@@ -60,9 +61,7 @@ def clean_session_table():
 @shared_task
 def delete_ips():
     """Automatically remove login_info.last_login_ip older than 30 days."""
-    expiration_date = (
-        datetime.utcnow() - current_app.config["ACCOUNTS_RETENTION_PERIOD"]
-    )
+    expiration_date = get_utc_now() - current_app.config["ACCOUNTS_RETENTION_PERIOD"]
 
     LoginInformation.query.filter(
         LoginInformation.last_login_ip.isnot(None),
@@ -126,7 +125,7 @@ def update_domain_status():
 
     # Commit batches of 500 updates
     batch_size = 500
-    now = datetime.utcnow()
+    now = get_utc_now()
 
     # Process updates in batches
     for i in range(0, len(domain_updates), batch_size):
