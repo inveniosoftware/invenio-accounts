@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -122,12 +123,12 @@ def test_view_list_sessions(app):
         assert res.status_code == 200
 
         # check session for user 1 is not in the list
-        sessions_1 = SessionActivity.query.filter_by(user_id=user1.id).all()
+        sessions_1 = db.session.query(SessionActivity).filter_by(user_id=user1.id).all()
         assert len(sessions_1) == 1
         assert sessions_1[0].sid_s not in res.data.decode("utf-8")
 
         # check session for user 2 is in the list
-        sessions_2 = SessionActivity.query.filter_by(user_id=user2.id).all()
+        sessions_2 = db.session.query(SessionActivity).filter_by(user_id=user2.id).all()
         assert len(sessions_2) == 1
         assert sessions_2[0].sid_s in res.data.decode("utf-8")
 
@@ -136,9 +137,9 @@ def test_view_list_sessions(app):
         res = client.post(url, data={"sid_s": sessions_1[0].sid_s})
         assert res.status_code == 302
         assert (
-            SessionActivity.query.filter_by(
-                user_id=user1.id, sid_s=sessions_1[0].sid_s
-            ).count()
+            db.session.query(SessionActivity)
+            .filter_by(user_id=user1.id, sid_s=sessions_1[0].sid_s)
+            .count()
             == 1
         )
 
@@ -147,9 +148,9 @@ def test_view_list_sessions(app):
         res = client.post(url, data={"sid_s": sessions_2[0].sid_s})
         assert res.status_code == 302
         assert (
-            SessionActivity.query.filter_by(
-                user_id=user1.id, sid_s=sessions_2[0].sid_s
-            ).count()
+            db.session.query(SessionActivity)
+            .filter_by(user_id=user1.id, sid_s=sessions_2[0].sid_s)
+            .count()
             == 0
         )
 

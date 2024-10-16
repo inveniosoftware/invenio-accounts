@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
 # Copyright (C) 2022 KTH Royal Institute of Technology
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -415,12 +416,12 @@ class SessionActivity(db.Model, Timestamp):
         """Query to select all expired sessions."""
         lifetime = current_app.permanent_session_lifetime
         expired_moment = datetime.utcnow() - lifetime
-        return cls.query.filter(cls.created < expired_moment)
+        return db.session.query(cls).filter(cls.created < expired_moment)
 
     @classmethod
     def query_by_user(cls, user_id):
         """Query to select user sessions."""
-        return cls.query.filter_by(user_id=user_id)
+        return db.session.query(cls).filter_by(user_id=user_id)
 
     @classmethod
     def is_current(cls, sid_s):
@@ -446,7 +447,9 @@ class UserIdentity(db.Model, Timestamp):
     @classmethod
     def get_user(cls, method, external_id):
         """Get the user for a given identity."""
-        identity = cls.query.filter_by(id=external_id, method=method).one_or_none()
+        identity = (
+            db.session.query(cls).filter_by(id=external_id, method=method).one_or_none()
+        )
         if identity is not None:
             return identity.user
         return None
@@ -474,13 +477,13 @@ class UserIdentity(db.Model, Timestamp):
     def delete_by_external_id(cls, method, external_id):
         """Unlink a user from an external id."""
         with db.session.begin_nested():
-            cls.query.filter_by(id=external_id, method=method).delete()
+            db.session.query(cls).filter_by(id=external_id, method=method).delete()
 
     @classmethod
     def delete_by_user(cls, method, user):
         """Unlink a user from an external id."""
         with db.session.begin_nested():
-            cls.query.filter_by(id_user=user.id, method=method).delete()
+            db.session.query(cls).filter_by(id_user=user.id, method=method).delete()
 
 
 class DomainOrg(db.Model):
@@ -538,7 +541,7 @@ class DomainCategory(db.Model):
     @classmethod
     def get(cls, label):
         """Get a domain category."""
-        return cls.query.filter_by(label=label).one_or_none()
+        return db.session.query(cls).filter_by(label=label).one_or_none()
 
 
 class Domain(db.Model, Timestamp):

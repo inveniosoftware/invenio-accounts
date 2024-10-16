@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -134,7 +135,7 @@ def delete_session(sid_s):
     # Find and remove the corresponding SessionActivity entry
     if request and "_impersonator_id" not in session:
         with db.session.begin_nested():
-            SessionActivity.query.filter_by(sid_s=sid_s).delete()
+            db.session.query(SessionActivity).filter_by(sid_s=sid_s).delete()
     return 1
 
 
@@ -148,7 +149,7 @@ def delete_user_sessions(user):
         for s in user.active_sessions:
             _sessionstore.delete(s.sid_s)
 
-        SessionActivity.query.filter_by(user=user).delete()
+        db.session.query(SessionActivity).filter_by(user=user).delete()
 
     return True
 
