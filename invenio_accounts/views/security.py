@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2017-2018 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -48,9 +49,9 @@ def revoke_session():
 
     sid_s = form.data["sid_s"]
     if (
-        SessionActivity.query.filter_by(
-            user_id=current_user.get_id(), sid_s=sid_s
-        ).count()
+        db.session.query(SessionActivity)
+        .filter_by(user_id=current_user.get_id(), sid_s=sid_s)
+        .count()
         == 1
     ):
         delete_session(sid_s=sid_s)

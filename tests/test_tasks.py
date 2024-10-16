@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -16,6 +17,7 @@ from flask import url_for
 from flask_login import login_required
 from flask_mail import Message
 from flask_security import url_for_security
+from invenio_db import db
 
 from invenio_accounts.models import SessionActivity, User
 from invenio_accounts.tasks import clean_session_table, delete_ips, send_security_email
@@ -79,7 +81,7 @@ def test_clean_session_table(task_app):
                     password=user1.password_plaintext,
                 ),
             )
-        assert len(SessionActivity.query.all()) == 1
+        assert len(db.session.query(SessionActivity).all()) == 1
         sleep(15)
 
         with task_app.test_client() as client:
@@ -90,11 +92,11 @@ def test_clean_session_table(task_app):
                     password=user2.password_plaintext,
                 ),
             )
-            assert len(SessionActivity.query.all()) == 2
+            assert len(db.session.query(SessionActivity).all()) == 2
             sleep(10)
 
             clean_session_table.s().apply()
-            assert len(SessionActivity.query.all()) == 1
+            assert len(db.session.query(SessionActivity).all()) == 1
 
             protected_url = url_for("test")
 
@@ -103,7 +105,7 @@ def test_clean_session_table(task_app):
 
             sleep(15)
             clean_session_table.s().apply()
-            assert len(SessionActivity.query.all()) == 0
+            assert len(db.session.query(SessionActivity).all()) == 0
 
             res = client.get(protected_url)
             # check if the user is really logout
@@ -146,14 +148,14 @@ def test_delete_ips(task_app):
 
         delete_ips()
 
-        user = User.query.filter(User.id == user1.id).one()
+        user = db.session.query(User).filter(User.id == user1.id).one()
         assert user.last_login_ip is None
         assert user.current_login_ip is None
 
-        user = User.query.filter(User.id == user2.id).one()
+        user = db.session.query(User).filter(User.id == user2.id).one()
         assert user.last_login_ip is not None
         assert user.current_login_ip is not None
 
-        user = User.query.filter(User.id == user3.id).one()
+        user = db.session.query(User).filter(User.id == user3.id).one()
         assert user.last_login_ip is None
         assert user.current_login_ip is not None

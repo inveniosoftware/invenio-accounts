@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -64,12 +65,12 @@ def delete_ips():
         datetime.utcnow() - current_app.config["ACCOUNTS_RETENTION_PERIOD"]
     )
 
-    LoginInformation.query.filter(
+    db.session.query(LoginInformation).filter(
         LoginInformation.last_login_ip.isnot(None),
         LoginInformation.last_login_at < expiration_date,
     ).update({LoginInformation.last_login_ip: None})
 
-    LoginInformation.query.filter(
+    db.session.query(LoginInformation).filter(
         LoginInformation.current_login_ip.isnot(None),
         LoginInformation.current_login_at < expiration_date,
     ).update({LoginInformation.current_login_ip: None})

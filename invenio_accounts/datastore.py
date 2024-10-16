@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -12,6 +13,7 @@ from datetime import datetime
 
 from flask import current_app
 from flask_security import SQLAlchemyUserDatastore, user_confirmed
+from invenio_db import db
 from sqlalchemy.orm import joinedload
 
 from .models import Domain, Role, User
@@ -108,12 +110,13 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
 
     def find_role_by_id(self, role_id):
         """Fetches roles searching by id."""
-        return self.role_model.query.filter_by(id=role_id).one_or_none()
+        return db.session.query(self.role_model).filter_by(id=role_id).one_or_none()
 
     def find_domain(self, domain):
         """Find a domain."""
         return (
-            Domain.query.filter_by(domain=domain)
+            db.session.query(Domain)
+            .filter_by(domain=domain)
             .options(joinedload(Domain.category_name))
             .one_or_none()
         )

@@ -151,7 +151,9 @@ def test_datastore_usercreate(app):
     ds.commit()
     u2 = ds.find_user(email="info@inveniosoftware.org")
     assert u1 == u2
-    assert 1 == User.query.filter_by(email="info@inveniosoftware.org").count()
+    assert (
+        1 == db.session.query(User).filter_by(email="info@inveniosoftware.org").count()
+    )
 
 
 def test_datastore_rolecreate(app):
@@ -162,7 +164,7 @@ def test_datastore_rolecreate(app):
     ds.commit()
     r2 = ds.find_role("superuser")
     assert r1 == r2
-    assert 1 == Role.query.filter_by(name="superuser").count()
+    assert 1 == db.session.query(Role).filter_by(name="superuser").count()
 
 
 def test_datastore_update_role(app):
@@ -173,7 +175,7 @@ def test_datastore_update_role(app):
     ds.commit()
     r2 = ds.find_role("superuser")
     assert r1 == r2
-    assert 1 == Role.query.filter_by(name="superuser").count()
+    assert 1 == db.session.query(Role).filter_by(name="superuser").count()
     assert r2.is_managed is True
 
     r1 = ds.update_role(
@@ -186,8 +188,8 @@ def test_datastore_update_role(app):
     assert r1 == r2
     assert r2.description == "updated description"
     assert r2.is_managed is False
-    assert 1 == Role.query.filter_by(name="megauser").count()
-    assert 0 == Role.query.filter_by(name="superuser").count()
+    assert 1 == db.session.query(Role).filter_by(name="megauser").count()
+    assert 0 == db.session.query(Role).filter_by(name="superuser").count()
 
 
 def test_datastore_assignrole(app):
