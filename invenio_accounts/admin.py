@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2024 KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -45,14 +46,14 @@ class UserView(ModelView):
     form_columns = ("email", "password", "active", "roles", "notification")
 
     form_args = dict(
-        email=dict(label="Email", validators=[DataRequired()]),
+        email=dict(label=lazy_gettext("Email"), validators=[DataRequired()]),
         password=dict(default=lambda: pwd.genword(length=12)),
     )
 
     form_extra_fields = {
         "notification": BooleanField(
-            "Send User Notification",
-            description="Send the new user an email about their account.",
+            lazy_gettext("Send User Notification"),
+            description=lazy_gettext("Send the new user an email about their account."),
         )
     }
 
@@ -74,8 +75,8 @@ class UserView(ModelView):
 
     @action(
         "inactivate",
-        _("Inactivate"),
-        _("Are you sure you want to inactivate selected users?"),
+        lazy_gettext("Inactivate"),
+        lazy_gettext("Are you sure you want to inactivate selected users?"),
     )
     @commit
     def action_inactivate(self, ids):
@@ -99,8 +100,8 @@ class UserView(ModelView):
 
     @action(
         "activate",
-        _("Activate"),
-        _("Are you sure you want to activate selected users?"),
+        lazy_gettext("Activate"),
+        lazy_gettext("Are you sure you want to activate selected users?"),
     )
     @commit
     def action_activate(self, ids):
@@ -159,9 +160,9 @@ class SessionActivityView(ModelView):
     list_all = ("user.id", "user.email", "sid_s", "created")
 
     column_labels = {
-        "user.id": "User ID",
-        "user.email": "Email",
-        "sid_s": "Session ID",
+        "user.id": lazy_gettext("User ID"),
+        "user.email": lazy_gettext("Email"),
+        "sid_s": lazy_gettext("Session ID"),
     }
     column_list = list_all
     column_filters = list_all
@@ -174,7 +175,7 @@ class SessionActivityView(ModelView):
     def delete_model(self, model):
         """Delete a specific session."""
         if SessionActivity.is_current(sid_s=model.sid_s):
-            flash("You could not remove your current session", "error")
+            flash(_("You could not remove your current session"), "error")
             return
         delete_session(sid_s=model.sid_s)
         db.session.commit()
@@ -188,7 +189,7 @@ class SessionActivityView(ModelView):
         """Delete selected sessions."""
         is_current = any(SessionActivity.is_current(sid_s=id_) for id_ in ids)
         if is_current:
-            flash("You could not remove your current session", "error")
+            flash(_("You could not remove your current session"), "error")
             return
         for id_ in ids:
             delete_session(sid_s=id_)
@@ -218,34 +219,34 @@ class UserIdentityView(ModelView):
     )
 
     column_labels = {
-        "user.email": _("Email"),
-        "id_user": _("User ID"),
+        "user.email": lazy_gettext("Email"),
+        "id_user": lazy_gettext("User ID"),
     }
 
 
 session_adminview = {
     "model": SessionActivity,
     "modelview": SessionActivityView,
-    "category": _("User Management"),
+    "category": lazy_gettext("User Management"),
 }
 
 user_adminview = {
     "model": User,
     "modelview": UserView,
-    "category": _("User Management"),
+    "category": lazy_gettext("User Management"),
 }
 
 role_adminview = {
     "model": Role,
     "modelview": RoleView,
-    "category": _("User Management"),
+    "category": lazy_gettext("User Management"),
 }
 
 user_identity_adminview = {
     "model": UserIdentity,
     "modelview": UserIdentityView,
-    "category": _("User Management"),
-    "name": _("Linked account identities"),
+    "category": lazy_gettext("User Management"),
+    "name": lazy_gettext("Linked account identities"),
 }
 
 __all__ = (
