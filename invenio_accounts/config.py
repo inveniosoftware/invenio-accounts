@@ -3,7 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2016-2018 CERN.
 # Copyright (C)      2021 TU Wien.
-# Copyright (C) 2022 KTH Royal Institute of Technology
+# Copyright (C) 2022-2024 KTH Royal Institute of Technology
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -12,6 +12,7 @@
 
 from datetime import timedelta
 
+from invenio_i18n import gettext as _t
 from invenio_i18n import lazy_gettext as _
 
 from .profiles import UserPreferencesSchema, UserProfileSchema
@@ -201,19 +202,22 @@ SECURITY_LOGOUT_URL = "/logout/"
 SECURITY_CHANGE_URL = "/account/settings/password/"
 """URL endpoint for password change."""
 
-SECURITY_MSG_LOCAL_LOGIN_DISABLED = ("Local login is disabled.", "error")
+SECURITY_MSG_LOCAL_LOGIN_DISABLED = (_t("Local login is disabled."), "error")
 """The error to be displayed in REST login when local login is disabled."""
 
-SECURITY_MSG_REGISTRATION_DISABLED = ("Registration is disabled.", "error")
+SECURITY_MSG_REGISTRATION_DISABLED = (_t("Registration is disabled."), "error")
 """The error to be displayed in REST registration when it is disabled."""
 
-SECURITY_MSG_PASSWORD_CHANGE_DISABLED = ("Password change is disabled.", "error")
+SECURITY_MSG_PASSWORD_CHANGE_DISABLED = (_t("Password change is disabled."), "error")
 """The error to be displayed in REST password change when it is disabled."""
 
-SECURITY_MSG_PASSWORD_RECOVERY_DISABLED = ("Password recovery is disabled.", "error")
+SECURITY_MSG_PASSWORD_RECOVERY_DISABLED = (
+    _t("Password recovery is disabled."),
+    "error",
+)
 """The error to be displayed in REST password recovery when it is disabled."""
 
-SECURITY_MSG_PASSWORD_RESET_DISABLED = ("Password reset is disabled.", "error")
+SECURITY_MSG_PASSWORD_RESET_DISABLED = (_t("Password reset is disabled."), "error")
 """The error to be displayed in REST password reset when it is disabled."""
 
 REMEMBER_COOKIE_DURATION = timedelta(days=90)
