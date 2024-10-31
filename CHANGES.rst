@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v5.1.3 (released 2024-10-31)
+
+- UI: fix spacing on password reset form
+
 Version 5.1.2 (released 2024-09-19)
 
 - setup: bump minimum flask-security-invenio dependency
