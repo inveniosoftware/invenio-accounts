@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
+# Copyright (C) 2024      KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -31,6 +32,16 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
         user.active = True
         if user.confirmed_at is None:
             user.confirmed_at = now
+        return True
+
+    def unverify_user(self, user):
+        """Unverify a user.
+
+        This method unverifying the user without changing their active status or session information,
+        differentiating it from `deactivate_user` which impacts session and active status.
+        """
+        if user.verified_at is not None:
+            user.verified_at = None
         return True
 
     def block_user(self, user):
