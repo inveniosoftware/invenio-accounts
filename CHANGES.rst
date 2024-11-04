@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v5.1.4 (released 2024-11-04)
+
+- UI: fix spacing on password reset form
+
 Version v5.1.3 (released 2024-10-31)
 
 - UI: fix spacing on password reset form
