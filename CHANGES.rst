@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v5.1.5 (released 2024-11-05)
+
+- model: make forward compatible to sqlalchemy >= 2
+
 Version v5.1.4 (released 2024-11-04)
 
 - UI: fix spacing on password reset form
