@@ -75,11 +75,16 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
 
     def mark_changed(self, sid, uid=None, rid=None, model=None):
         """Save a user to the changed history."""
+        # needed so that we have the id from the DB on the model
+        self.db.session.flush()
+
         if model:
             if isinstance(model, User):
                 current_db_change_history.add_updated_user(sid, model.id)
             elif isinstance(model, Role):
                 current_db_change_history.add_updated_role(sid, model.id)
+            elif isinstance(model, Domain):
+                current_db_change_history.add_updated_domain(sid, model.id)
         elif uid:
             # Deprecated - use model param instead (still used in e.g.
             # UserFixture pytest-invenio)
@@ -91,20 +96,12 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
     def update_role(self, role):
         """Updates roles."""
         role = self.db.session.merge(role)
-        # This works because role defines it's own id - for users
-        # the same doesn't work because id is assigned on commit which
-        # hasn't happened yet.
         self.mark_changed(id(self.db.session), model=role)
         return role
 
     def create_role(self, **kwargs):
         """Creates and returns a new role from the given parameters."""
         role = super().create_role(**kwargs)
-        # This works because role defines it's own id - for users
-        # the same doesn't work because id is assigned on commit which
-        # hasn't happened yet.
-        if role.id is None:
-            role.id = role.name
         self.mark_changed(id(self.db.session), model=role)
         return role
 
