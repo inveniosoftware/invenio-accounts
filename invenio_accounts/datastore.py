@@ -106,14 +106,23 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
         return role
 
     def find_role_by_id(self, role_id):
-        """Fetches roles searching by id."""
+        """Fetches roles searching by ID."""
         return db.session.query(self.role_model).filter_by(id=role_id).one_or_none()
 
-    def find_domain(self, domain):
-        """Find a domain."""
+    def find_domain(self, domain_or_id):
+        """Find a domain by value or ID."""
+        if isinstance(domain_or_id, str):
+            if domain_or_id.isdigit():
+                clause = Domain.id == int(domain_or_id)
+            else:
+                clause = Domain.domain == domain_or_id
+        elif isinstance(domain_or_id, int):
+            clause = Domain.id == domain_or_id
+        else:
+            raise ValueError("Expected string or int, received:", type(domain_or_id))
         return (
             db.session.query(Domain)
-            .filter_by(domain=domain)
+            .filter(clause)
             .options(joinedload(Domain.category_name))
             .one_or_none()
         )
