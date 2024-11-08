@@ -14,6 +14,7 @@ from datetime import datetime
 from flask import current_app
 from flask_security import SQLAlchemyUserDatastore, user_confirmed
 from invenio_db import db
+from sqlalchemy import inspect
 from sqlalchemy.orm import joinedload
 
 from .models import Domain, Role, User
@@ -75,10 +76,11 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
 
     def mark_changed(self, sid, uid=None, rid=None, model=None):
         """Save a user to the changed history."""
-        # needed so that we have the id from the DB on the model
-        self.db.session.flush()
-
         if model:
+            # add the ID to the model from the DB if needed
+            if not inspect(model).persistent:
+                self.db.session.flush()
+
             if isinstance(model, User):
                 current_db_change_history.add_updated_user(sid, model.id)
             elif isinstance(model, Role):
