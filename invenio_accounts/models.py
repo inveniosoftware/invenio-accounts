@@ -20,7 +20,7 @@ from invenio_db import db
 from sqlalchemy import func
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.ext.hybrid import Comparator, hybrid_property
+from sqlalchemy.ext.hybrid import Comparator, hybrid_property, hybrid_method
 from sqlalchemy.orm import validates
 from sqlalchemy_utils import IPAddressType, Timestamp
 from sqlalchemy_utils.types import ChoiceType, JSONType
@@ -270,6 +270,16 @@ class User(db.Model, Timestamp, UserMixin):
         else:
             self._preferences = UserPreferenceDict(**value)
             refresh()
+
+    @hybrid_method
+    def has_key_in_profile(self, key):
+        """Check if the given key exists in the user_profile."""
+        return self._user_profile.get(key) is not None
+
+    @has_key_in_profile.expression
+    def has_key_in_profile(cls, key):
+        """SQL expression for filtering by presence of a key in the user_profile."""
+        return func.jsonb_extract_path_text(cls._user_profile, key).isnot(None)
 
     def _get_login_info_attr(self, attr_name):
         if self.login_info is None:
