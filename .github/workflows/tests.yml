@@ -26,3 +26,4 @@ jobs:
     uses: inveniosoftware/workflows/.github/workflows/tests-python.yml@master
     with:
       extras: "tests,admin,postgresql"
+      search-service: '[""]'
