@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2017-2024 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -105,6 +106,13 @@ def jwt_decode_token(token):
         return decode(
             token,
             current_app.config["ACCOUNTS_JWT_SECRET_KEY"],
+            options={
+                # Based on the JWT spec (https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.2)
+                # the "sub" claim has to be a string. However, we are not enforcing this
+                # and are assuming that the "sub" claim is an object/dictionary.
+                # PyJWT v2.10.0 started enforcing this and we are disabling this check.
+                "verify_sub": False,
+            },
             algorithms=[current_app.config["ACCOUNTS_JWT_ALOGORITHM"]],
         )
     except DecodeError as exc:
