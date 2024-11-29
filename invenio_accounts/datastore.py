@@ -113,6 +113,9 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
 
     def find_domain(self, domain_or_id):
         """Find a domain by value or ID."""
+        if domain_or_id is None:
+            return None
+
         if isinstance(domain_or_id, str):
             if domain_or_id.isdigit():
                 clause = Domain.id == int(domain_or_id)
