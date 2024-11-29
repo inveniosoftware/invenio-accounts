@@ -9,6 +9,10 @@
 Changes
 =======
 
+Version v5.1.7 (released 2024-11-29)
+
+- datastore: Fix domain fetching on None value
+
 Version v5.1.6 (released 2024-11-28)
 
 - setup: pin dependencies
