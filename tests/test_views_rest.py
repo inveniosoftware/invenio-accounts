@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2016-2024 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE
@@ -65,7 +66,7 @@ def _login_user(client, user, email="normal@TEST.com", password="123456"):
     assert res.status_code == 200
     assert payload["id"] == user.id
     assert payload["email"].lower() == user.email.lower()
-    session_cookie = next(c for c in client.cookie_jar if c.name == "session")
+    session_cookie = client.get_cookie("session")
     assert session_cookie is not None
     assert session_cookie.value
     assert current_user.is_authenticated
@@ -185,7 +186,7 @@ def test_registration_view(api):
             assert res.status_code == 200
             assert payload["id"] == 2
             assert payload["email"] == "new@test.com"
-            session_cookie = next(c for c in client.cookie_jar if c.name == "session")
+            session_cookie = client.get_cookie("session")
             assert session_cookie is not None
             assert session_cookie.value
 
@@ -235,18 +236,14 @@ def test_logout_view(api):
         with app.test_client() as client:
             # Login user
             _login_user(client, normal_user)
-            old_session_cookie = next(
-                c for c in client.cookie_jar if c.name == "session"
-            )
+            old_session_cookie = client.get_cookie("session")
 
             # Log out user
             url = url_for("invenio_accounts_rest_auth.logout")
             res = client.post(url)
             payload = get_json(res)
             assert payload["message"] == "User logged out."
-            new_session_cookie = next(
-                c for c in client.cookie_jar if c.name == "session"
-            )
+            new_session_cookie = client.get_cookie("session")
             assert old_session_cookie.value != new_session_cookie.value
             assert current_user.is_anonymous
 
@@ -315,7 +312,7 @@ def test_reset_password_view(api):
             assert res.status_code == 200
             assert payload["id"] == normal_user.id
             assert payload["email"] == normal_user.email
-            session_cookie = next(c for c in client.cookie_jar if c.name == "session")
+            session_cookie = client.get_cookie("session")
             assert session_cookie is not None
             assert session_cookie.value
 
