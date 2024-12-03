@@ -232,12 +232,12 @@ def test_cookies(cookie_app, users):
             data=dict(email=u["email"], password=u["password"], remember=True),
         )
         assert res.status_code == 302
-        cookies = {c.name: c for c in client.cookie_jar}
-        assert "session" in cookies
-        assert "remember_token" not in cookies
+
+        assert client.get_cookie(key="session", domain="example.com")
+        assert not client.get_cookie("remember_token")
 
         # Cookie must be HTTP only, secure and have a domain specified.
-        for c in cookies.values():
+        for c in client._cookies.values():
             assert c.path == "/"
             assert c.domain_specified is True, "no domain in {}".format(c.name)
             assert c.has_nonstandard_attr("HttpOnly")
@@ -269,6 +269,6 @@ def test_headers_info(app, users):
         # Login
         testutils.login_user_via_session(client, email=u["email"])
         response = client.get(url)
-        cookie = requests.utils.dict_from_cookiejar(client.cookie_jar)
-        assert response.headers["X-Session-ID"] == cookie["session"].split(".")[0]
+        cookie = client.get_cookie("session", domain="example.com")
+        assert response.headers["X-Session-ID"] == cookie.value.split(".")[0]
         assert int(response.headers["X-User-ID"]) == u["id"]
