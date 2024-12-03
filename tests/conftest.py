@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -158,14 +159,18 @@ def _app_factory(config=None):
 def _database_setup(app, request):
     """Set up the database."""
     with app.app_context():
-        if not database_exists(str(db.engine.url)):
-            create_database(str(db.engine.url))
+        if not database_exists(
+            str(db.engine.url.render_as_string(hide_password=False))
+        ):
+            create_database(str(db.engine.url.render_as_string(hide_password=False)))
         db.create_all()
 
     def teardown():
         with app.app_context():
-            if database_exists(str(db.engine.url)):
-                drop_database(str(db.engine.url))
+            if database_exists(
+                str(db.engine.url.render_as_string(hide_password=False))
+            ):
+                drop_database(str(db.engine.url.render_as_string(hide_password=False)))
             # Delete sessions in kvsession store
             if hasattr(app, "kvsession_store") and isinstance(
                 app.kvsession_store, RedisStore
