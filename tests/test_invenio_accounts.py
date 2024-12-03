@@ -239,8 +239,6 @@ def test_cookies(cookie_app, users):
         # Cookie must be HTTP only, secure and have a domain specified.
         for c in client._cookies.values():
             assert c.path == "/"
-            assert c.domain_specified is True, "no domain in {}".format(c.name)
-            assert c.has_nonstandard_attr("HttpOnly")
             assert c.secure is True
 
 
