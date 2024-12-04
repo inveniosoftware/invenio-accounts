@@ -119,6 +119,8 @@ def _app_factory(config=None):
         ACCOUNTS_SETTINGS_TEMPLATE="invenio_accounts/settings/base.html",
         ACCOUNTS_COVER_TEMPLATE="invenio_accounts/base_cover.html",
         WEBPACKEXT_MANIFEST_LOADER=MockManifestLoader,
+        SESSION_COOKIE_SECURE=True,
+        SESSION_COOKIE_DOMAIN="example.com",
     )
 
     app.config.update(config or {})
@@ -213,6 +215,7 @@ def api(request):
             ),
             SERVER_NAME="localhost",
             TESTING=True,
+            SESSION_COOKIE_DOMAIN="localhost",
         )
     )
 
@@ -272,20 +275,6 @@ def task_app(request):
         )
     )
     FlaskCeleryExt(app)
-    InvenioAccounts(app)
-    _database_setup(app, request)
-    return app
-
-
-@pytest.fixture
-def cookie_app(request):
-    """Flask application  enabled."""
-    app = _app_factory(
-        dict(
-            SESSION_COOKIE_SECURE=True,
-            SESSION_COOKIE_DOMAIN="example.com",
-        )
-    )
     InvenioAccounts(app)
     _database_setup(app, request)
     return app

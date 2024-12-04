@@ -222,11 +222,11 @@ def test_configuration(base_app):
     assert "deadbeef" == app.config["ACCOUNTS_USE_CELERY"]
 
 
-def test_cookies(cookie_app, users):
+def test_cookies(app, users):
     """Test cookies set on login."""
     u = users[0]
 
-    with cookie_app.test_client() as client:
+    with app.test_client() as client:
         res = client.post(
             url_for_security("login"),
             data=dict(email=u["email"], password=u["password"], remember=True),
