@@ -9,6 +9,15 @@
 Changes
 =======
 
+Version 6.0.0 (release 2024-12-04)
+
+- fix: cookie_app and users not using same app
+- test: fix properties not existing anymore
+- tests: fix cookie_jar not existing anymore
+- fix: add translation flag for publishing
+- tests: apply changes for sqlalchemy>=2.0
+- setup: bump major dependencies
+
 Version v5.1.7 (released 2024-11-29)
 
 - datastore: Fix domain fetching on None value
