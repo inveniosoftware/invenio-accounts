@@ -61,7 +61,10 @@ def revoke_session():
         if not SessionActivity.is_current(sid_s=sid_s):
             # if it's the same session doesn't show the message, otherwise
             # the session will be still open without the database record
-            flash(_("Session {0} successfully removed.").format(sid_s), "success")
+            flash(
+                _("Session %(sid_s)s successfully removed.") % {"sid_s": sid_s},
+                "success",
+            )
     else:
-        flash(_("Unable to remove the session {0}.").format(sid_s), "error")
+        flash(_("Unable to remove the session %(sid_s)s.") % {"sid_s": sid_s}, "error")
     return redirect(url_for("invenio_accounts.security"))
