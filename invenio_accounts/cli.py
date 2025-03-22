@@ -2,7 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2023 CERN.
-# Copyright (C) 2024 Graz University of Technology.
+# Copyright (C) 2024-2025 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -19,6 +19,7 @@ from flask.cli import with_appcontext
 from flask_security.forms import ConfirmRegisterForm
 from flask_security.utils import hash_password
 from invenio_db import db
+from psycopg2.errors import UniqueViolation
 from werkzeug.datastructures import MultiDict
 from werkzeug.local import LocalProxy
 
@@ -89,8 +90,15 @@ def users_create(email, password, active, confirm, profile):
 @commit
 def roles_create(**kwargs):
     """Create a role."""
-    _datastore.create_role(id=kwargs["name"], **kwargs)
-    click.secho('Role "%(name)s" created successfully.' % kwargs, fg="green")
+    try:
+        _datastore.create_role(id=kwargs["name"], **kwargs)
+        click.secho('Role "%(name)s" created successfully.' % kwargs, fg="green")
+    except UniqueViolation:
+        db.session.rollback()
+        click.secho('Role "%(name)s" already existed.' % kwargs, fg="green")
+    except Exception:
+        db.session.rollback()
+        click.secho('Role "%(name)s" already existed.' % kwargs, fg="green")
 
 
 @roles.command("add")
@@ -105,13 +113,14 @@ def roles_add(user, role):
         raise click.UsageError("Cannot find user.")
     if role is None:
         raise click.UsageError("Cannot find role.")
+
     if _datastore.add_role_to_user(user, role):
         click.secho(
-            'Role "{0}" added to user "{1}" ' "successfully.".format(role, user),
+            f"Role '{role}' added to user '{user}' successfully.",
             fg="green",
         )
     else:
-        raise click.UsageError("Cannot add role to user.")
+        raise click.secho("User already associated to role.", fg="green")
 
 
 @roles.command("remove")
