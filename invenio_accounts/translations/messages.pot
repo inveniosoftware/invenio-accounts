@@ -1,84 +1,129 @@
 # Translations template for invenio-accounts.
-# Copyright (C) 2024 CERN
+# Copyright (C) 2025 CERN
 # This file is distributed under the same license as the invenio-accounts
 # project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: invenio-accounts 5.1.0\n"
+"Project-Id-Version: invenio-accounts 5.1.7\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2024-08-06 08:44+0000\n"
+"POT-Creation-Date: 2025-04-01 12:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.15.0\n"
+"Generated-By: Babel 2.17.0\n"
 
-#: invenio_accounts/admin.py:77
-msgid "Inactivate"
-msgstr ""
-
-#: invenio_accounts/admin.py:78
-msgid "Are you sure you want to inactivate selected users?"
-msgstr ""
-
-#: invenio_accounts/admin.py:88 invenio_accounts/admin.py:113
-msgid "Cannot find user."
-msgstr ""
-
-#: invenio_accounts/admin.py:92 invenio_accounts/admin.py:117
-msgid "User(s) were successfully inactivated."
-msgstr ""
-
-#: invenio_accounts/admin.py:98
-msgid "Failed to inactivate users."
-msgstr ""
-
-#: invenio_accounts/admin.py:102
-msgid "Activate"
-msgstr ""
-
-#: invenio_accounts/admin.py:103
-msgid "Are you sure you want to activate selected users?"
-msgstr ""
-
-#: invenio_accounts/admin.py:123
-msgid "Failed to activate users."
-msgstr ""
-
-#: invenio_accounts/admin.py:221
+#: invenio_accounts/admin.py:49 invenio_accounts/admin.py:164
+#: invenio_accounts/admin.py:222
 msgid "Email"
 msgstr ""
 
-#: invenio_accounts/admin.py:222
+#: invenio_accounts/admin.py:55
+msgid "Send User Notification"
+msgstr ""
+
+#: invenio_accounts/admin.py:56
+msgid "Send the new user an email about their account."
+msgstr ""
+
+#: invenio_accounts/admin.py:78
+msgid "Inactivate"
+msgstr ""
+
+#: invenio_accounts/admin.py:79
+msgid "Are you sure you want to inactivate selected users?"
+msgstr ""
+
+#: invenio_accounts/admin.py:89 invenio_accounts/admin.py:114
+msgid "Cannot find user."
+msgstr ""
+
+#: invenio_accounts/admin.py:93 invenio_accounts/admin.py:118
+msgid "User(s) were successfully inactivated."
+msgstr ""
+
+#: invenio_accounts/admin.py:99
+msgid "Failed to inactivate users."
+msgstr ""
+
+#: invenio_accounts/admin.py:103
+msgid "Activate"
+msgstr ""
+
+#: invenio_accounts/admin.py:104
+msgid "Are you sure you want to activate selected users?"
+msgstr ""
+
+#: invenio_accounts/admin.py:124
+msgid "Failed to activate users."
+msgstr ""
+
+#: invenio_accounts/admin.py:163 invenio_accounts/admin.py:223
 msgid "User ID"
 msgstr ""
 
-#: invenio_accounts/admin.py:229 invenio_accounts/admin.py:235
-#: invenio_accounts/admin.py:241 invenio_accounts/admin.py:247
+#: invenio_accounts/admin.py:165
+msgid "Session ID"
+msgstr ""
+
+#: invenio_accounts/admin.py:178 invenio_accounts/admin.py:192
+msgid "You could not remove your current session"
+msgstr ""
+
+#: invenio_accounts/admin.py:185
+msgid "Delete selected sessions"
+msgstr ""
+
+#: invenio_accounts/admin.py:186
+msgid "Are you sure you want to delete selected sessions?"
+msgstr ""
+
+#: invenio_accounts/admin.py:230 invenio_accounts/admin.py:236
+#: invenio_accounts/admin.py:242 invenio_accounts/admin.py:248
 msgid "User Management"
 msgstr ""
 
-#: invenio_accounts/admin.py:248
+#: invenio_accounts/admin.py:249
 msgid "Linked account identities"
 msgstr ""
 
-#: invenio_accounts/config.py:329
+#: invenio_accounts/config.py:205
+msgid "Local login is disabled."
+msgstr ""
+
+#: invenio_accounts/config.py:208
+msgid "Registration is disabled."
+msgstr ""
+
+#: invenio_accounts/config.py:211
+msgid "Password change is disabled."
+msgstr ""
+
+#: invenio_accounts/config.py:215
+msgid "Password recovery is disabled."
+msgstr ""
+
+#: invenio_accounts/config.py:220
+msgid "Password reset is disabled."
+msgstr ""
+
+#: invenio_accounts/config.py:334
 msgid ""
 "Username must start with a letter, be at least three characters long and "
 "only contain alphanumeric characters, dashes and underscores."
 msgstr ""
 
-#: invenio_accounts/ext.py:378
+#: invenio_accounts/ext.py:379
 #, python-format
 msgid "%(icon)s Security"
 msgstr ""
 
-#: invenio_accounts/ext.py:389
+#: invenio_accounts/ext.py:390
 #, python-format
 msgid "%(icon)s Change password"
 msgstr ""
@@ -87,7 +132,7 @@ msgstr ""
 msgid "Please complete the reCAPTCHA."
 msgstr ""
 
-#: invenio_accounts/forms.py:54 invenio_accounts/utils.py:247
+#: invenio_accounts/forms.py:54 invenio_accounts/utils.py:255
 #: invenio_accounts/views/rest.py:218
 msgid "The email domain is blocked."
 msgstr ""
@@ -277,5 +322,15 @@ msgstr ""
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:29
 msgid "Send"
+msgstr ""
+
+#: invenio_accounts/views/security.py:65
+#, python-format
+msgid "Session %(sid_s)s successfully removed."
+msgstr ""
+
+#: invenio_accounts/views/security.py:69
+#, python-format
+msgid "Unable to remove the session %(sid_s)s."
 msgstr ""
 
