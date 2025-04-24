@@ -52,9 +52,12 @@ def clean_session_table():
     See `Invenio-Celery <https://invenio-celery.readthedocs.io/>`_
     documentation for further details.
     """
-    sessions = SessionActivity.query_by_expired().all()
-    for session in sessions:
-        delete_session(sid_s=session.sid_s)
+    expired_sids = [s.sid_s for s in SessionActivity.query_by_expired()]
+    for sid_s in expired_sids:
+        try:
+            delete_session(sid_s=sid_s)
+        except Exception as e:
+            current_app.logger.warning(f"Failed to delete session {sid_s}: {e}")
     db.session.commit()
 
 

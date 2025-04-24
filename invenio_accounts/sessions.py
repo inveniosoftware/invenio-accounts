@@ -132,10 +132,11 @@ def delete_session(sid_s):
     """
     # Remove entries from sessionstore
     _sessionstore.delete(sid_s)
+    # Check if there is an impersonation session
+    if request and "_impersonate_id" in session:
+        return 0
     # Find and remove the corresponding SessionActivity entry
-    if request and "_impersonator_id" not in session:
-        with db.session.begin_nested():
-            db.session.query(SessionActivity).filter_by(sid_s=sid_s).delete()
+    db.session.query(SessionActivity).filter_by(sid_s=sid_s).delete()
     return 1
 
 
