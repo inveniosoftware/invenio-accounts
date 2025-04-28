@@ -9,6 +9,11 @@
 Changes
 =======
 
+Version v6.0.1 (released 2025-04-28)
+
+- session: fix cleanup session task
+- fix: update session removal flash messages for consistent formatting
+
 Version 6.0.0 (release 2024-12-04)
 
 - fix: cookie_app and users not using same app
