@@ -17,8 +17,7 @@ from flask_admin.model.fields import AjaxSelectMultipleField
 from flask_security.recoverable import send_reset_password_instructions
 from flask_security.utils import hash_password
 from invenio_db import db
-from invenio_i18n import gettext as _
-from invenio_i18n import lazy_gettext
+from invenio_i18n import lazy_gettext as _
 from passlib import pwd
 from werkzeug.local import LocalProxy
 from wtforms.fields import BooleanField
@@ -182,8 +181,8 @@ class SessionActivityView(ModelView):
 
     @action(
         "delete",
-        lazy_gettext("Delete selected sessions"),
-        lazy_gettext("Are you sure you want to delete selected sessions?"),
+        _("Delete selected sessions"),
+        _("Are you sure you want to delete selected sessions?"),
     )
     def action_delete(self, ids):
         """Delete selected sessions."""

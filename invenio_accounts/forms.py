@@ -14,7 +14,7 @@ from flask import request
 from flask_security.forms import NextFormMixin
 from flask_wtf import FlaskForm, Recaptcha, RecaptchaField
 from invenio_db import db
-from invenio_i18n import gettext as _
+from invenio_i18n import lazy_gettext as _
 from wtforms import FormField, HiddenField
 
 from .proxies import current_datastore
