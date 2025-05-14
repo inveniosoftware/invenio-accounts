@@ -11,6 +11,10 @@ Changes
 =======
 
 
+Version v5.2.2 (released 2025-05-14)
+
+- i18n: pull and remove deleted translations
+
 Version v5.2.1 (released 2025-05-07)
 
 - i18n: add compile step to publish workflow
