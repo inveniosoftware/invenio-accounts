@@ -144,7 +144,7 @@ msgstr "يرجى إكمال اختبار reCAPTCHA."
 #: invenio_accounts/forms.py:54 invenio_accounts/utils.py:255
 #: invenio_accounts/views/rest.py:218
 msgid "The email domain is blocked."
-msgstr "مجال البريد الإلكتروني محظور."
+msgstr "نطاق البريد الإلكتروني محظور."
 
 #: invenio_accounts/profiles/schemas.py:21
 msgid "Value must be either 'public' or 'restricted'."
@@ -315,7 +315,7 @@ msgstr "إذا لم تقم بتغيير كلمة عبور حسابك،"
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:3
 msgid "click here to reset it."
-msgstr "انقر هنا لإعادة ضبطه"
+msgstr "انقر هنا لإعادة ضبطها"
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:19
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:34
