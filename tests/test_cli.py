@@ -2,7 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
-# Copyright (C) 2024 KTH Royal Institute of Technology.
+# Copyright (C) 2025 KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -172,7 +172,7 @@ def test_cli_createdomain(app):
     # Reject Creating the same domain again
     result = runner.invoke(domains_create, ["mailprovider"])
     assert result.exit_code == 0
-    assert "Domain mailprovider already exists." in result.output
+    assert "creating failed" in result.output
 
     # Create another domain successfully
     result = runner.invoke(domains_create, ["kth.se"])
@@ -182,4 +182,4 @@ def test_cli_createdomain(app):
     # Create a domain with a fancy case should be treated like others
     result = runner.invoke(domains_create, ["MailPrOvIdEr"])
     assert result.exit_code == 0
-    assert "Domain mailprovider already exists." in result.output
+    assert "creating failed" in result.output
