@@ -1,27 +1,41 @@
 # Translations template for invenio-accounts.
-# Copyright (C) 2022 CERN
+# Copyright (C) 2025 CERN
 # This file is distributed under the same license as the invenio-accounts
 # project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 # 
 # Translators:
-# Andrea Dömötör, 2022
+# Dora Szauter, 2025
+# Andrea Dömötör, 2025
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: invenio-accounts 2.0.0\n"
+"Project-Id-Version: invenio-accounts 5.1.7\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2022-10-12 09:05+0000\n"
+"POT-Creation-Date: 2025-04-01 12:16+0000\n"
 "PO-Revision-Date: 2016-08-18 08:29+0000\n"
-"Last-Translator: Andrea Dömötör, 2022\n"
+"Last-Translator: Andrea Dömötör, 2025\n"
 "Language-Team: Hungarian (https://app.transifex.com/inveniosoftware/teams/23537/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.17.0\n"
 "Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: invenio_accounts/admin.py:49 invenio_accounts/admin.py:164
+#: invenio_accounts/admin.py:222
+msgid "Email"
+msgstr "Email"
+
+#: invenio_accounts/admin.py:55
+msgid "Send User Notification"
+msgstr "Felhasználó értesítése"
+
+#: invenio_accounts/admin.py:56
+msgid "Send the new user an email about their account."
+msgstr "E-mail küldése új felhasználói fiókról"
 
 #: invenio_accounts/admin.py:78
 msgid "Inactivate"
@@ -55,13 +69,25 @@ msgstr "Biztosan aktiválni akarja a kijelölt felhasználókat?"
 msgid "Failed to activate users."
 msgstr "Nem sikerült aktiválni a felhasználókat."
 
-#: invenio_accounts/admin.py:222
-msgid "Email"
-msgstr "Email"
-
-#: invenio_accounts/admin.py:223
+#: invenio_accounts/admin.py:163 invenio_accounts/admin.py:223
 msgid "User ID"
 msgstr "Felhasználói azonosító"
+
+#: invenio_accounts/admin.py:165
+msgid "Session ID"
+msgstr "Munkamenet ID"
+
+#: invenio_accounts/admin.py:178 invenio_accounts/admin.py:192
+msgid "You could not remove your current session"
+msgstr "Az aktuális munkamenet nem távolítható el"
+
+#: invenio_accounts/admin.py:185
+msgid "Delete selected sessions"
+msgstr "Kiválasztott munkamenetek törlése"
+
+#: invenio_accounts/admin.py:186
+msgid "Are you sure you want to delete selected sessions?"
+msgstr "Biztosan törölni akarja a kijelölt munkameneteket?"
 
 #: invenio_accounts/admin.py:230 invenio_accounts/admin.py:236
 #: invenio_accounts/admin.py:242 invenio_accounts/admin.py:248
@@ -72,7 +98,27 @@ msgstr "Felhasználók kezelése"
 msgid "Linked account identities"
 msgstr "Kapcsolt fiókazonosítók"
 
-#: invenio_accounts/config.py:322
+#: invenio_accounts/config.py:205
+msgid "Local login is disabled."
+msgstr "A helyi bejelentkezés le van tiltva."
+
+#: invenio_accounts/config.py:208
+msgid "Registration is disabled."
+msgstr "A regisztráció le van tiltva."
+
+#: invenio_accounts/config.py:211
+msgid "Password change is disabled."
+msgstr "A jelszómódosítás le van tiltva."
+
+#: invenio_accounts/config.py:215
+msgid "Password recovery is disabled."
+msgstr "A jelszó-emlékeztető le van tiltva."
+
+#: invenio_accounts/config.py:220
+msgid "Password reset is disabled."
+msgstr "A jelszó-visszaállítás le van tiltva."
+
+#: invenio_accounts/config.py:334
 msgid ""
 "Username must start with a letter, be at least three characters long and "
 "only contain alphanumeric characters, dashes and underscores."
@@ -81,17 +127,40 @@ msgstr ""
 "hosszúnak kell lennie, és csak alfanumerikus karaktereket, kötőjeleket és "
 "alulvonásokat tartalmazhat."
 
-#: invenio_accounts/forms.py:24
+#: invenio_accounts/ext.py:379
+#, python-format
+msgid "%(icon)s Security"
+msgstr "%(icon)sBiztonság"
+
+#: invenio_accounts/ext.py:390
+#, python-format
+msgid "%(icon)s Change password"
+msgstr "%(icon)sJelszó megváltoztatása"
+
+#: invenio_accounts/forms.py:28
 msgid "Please complete the reCAPTCHA."
 msgstr "Kérjük, töltse ki a reCAPTCHA-t!"
 
-#: invenio_accounts/profiles/schemas.py:20
+#: invenio_accounts/forms.py:54 invenio_accounts/utils.py:255
+#: invenio_accounts/views/rest.py:218
+msgid "The email domain is blocked."
+msgstr "Az e-mail domain le van tiltva."
+
+#: invenio_accounts/profiles/schemas.py:21
 msgid "Value must be either 'public' or 'restricted'."
 msgstr "Az érték 'nyilvános' vagy 'korlátozott' lehet."
 
+#: invenio_accounts/profiles/schemas.py:31
+msgid "Value must be a valid locale."
+msgstr "Az értéknek valós nyelvi beállításnak kell lennie."
+
+#: invenio_accounts/profiles/schemas.py:38
+msgid "Value must be a valid timezone."
+msgstr "Az értéknek érvényes időzónának kell lennie."
+
 #: invenio_accounts/templates/invenio_accounts/change_password.html:13
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:13
-#: invenio_accounts/views/settings.py:80
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:34
 msgid "Change password"
 msgstr "Jelszó megváltoztatása"
 
@@ -111,7 +180,6 @@ msgid "Confirm new password"
 msgstr "Új jelszó megerősítése"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:34
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:34
 msgid "Change Password"
 msgstr "Jelszó megváltoztatása"
 
@@ -119,10 +187,6 @@ msgstr "Jelszó megváltoztatása"
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:29
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:20
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:30
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:19
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:34
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:18
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:31
 msgid "Reset Password"
 msgstr "Jelszó visszaállítása"
 
@@ -148,8 +212,8 @@ msgstr "Bejelentkezés"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:44
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:40
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:45
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:41
 msgid "or"
 msgstr "vagy"
 
@@ -157,10 +221,10 @@ msgstr "vagy"
 #: invenio_accounts/templates/invenio_accounts/login_user.html:38
 #: invenio_accounts/templates/invenio_accounts/register_user.html:32
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:44
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:44
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:45
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:43
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:41
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:40
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:41
 msgid "Sign up"
 msgstr "Regisztráció"
 
@@ -170,13 +234,13 @@ msgid "Log in to account"
 msgstr "Bejelentkezés a felhasználói fiókba"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:43
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:42
 #, python-format
 msgid "New to %(sitename)s?"
 msgstr "Új a(z) %(sitename)s oldalon?"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:45
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:54
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:53
 msgid "Forgot password?"
 msgstr "Elfelejtette a jelszavát?"
 
@@ -191,19 +255,16 @@ msgid "Already have an account?"
 msgstr "Már van felhasználói fiókja?"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:19
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:43
 msgid "Resend Confirmation Email"
 msgstr "Megerősítő email újraküldése"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:20
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:45
 msgid ""
 "Enter your email address below and we will send you an email confirmation "
 "link."
 msgstr "Adja meg az email címét, és elküldjük a megerősítő linket."
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:25
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:51
 msgid "Send Confirmation"
 msgstr "Megerősítés küldése"
 
@@ -213,32 +274,32 @@ msgid "Sessions"
 msgstr "Munkamenetek"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:16
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:54
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:68
 msgid "Revoke"
 msgstr "Visszavonás"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:20
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:16
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:18
 msgid "This is a list of devices that have logged into your account."
 msgstr "Ez a fiókjába bejelentkezett eszközök listája."
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:36
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:34
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:38
 msgid "Signed in"
 msgstr "Bejelentkezve"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:36
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:40
 msgid "current session"
 msgstr "aktuális munkamenet"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:46
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:42
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:46
 msgid "Location"
 msgstr "Hely"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:55
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:54
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:68
 msgid "Logout"
 msgstr "Kijelentkezés"
 
@@ -254,26 +315,32 @@ msgstr "Ha nem módosította a jelszavát,"
 msgid "click here to reset it."
 msgstr "a visszaállításhoz kattintson ide"
 
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:19
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:34
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:18
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:31
+msgid "Reset password"
+msgstr "Jelszó visszaállítása"
+
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:20
 #, python-format
 msgid "Sign up for an %(sitename)s account!"
 msgstr "Regisztráljon %(sitename)s fiókot!"
 
-#: invenio_accounts/views/security.py:35
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:19
+msgid "Resend confirmation email"
+msgstr "Megerősítő e-mail újraküldése"
+
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:29
+msgid "Send"
+msgstr "Küldés"
+
+#: invenio_accounts/views/security.py:65
 #, python-format
-msgid "%(icon)s Security"
-msgstr "%(icon)sBiztonság"
+msgid "Session %(sid_s)s successfully removed."
+msgstr "A(z) %(sid_s)s munkamenetet sikeresen eltávolítottuk."
 
-#: invenio_accounts/views/security.py:40
-msgid "Security"
-msgstr "Biztonság"
-
-#: invenio_accounts/views/settings.py:53
-msgid "Account"
-msgstr "Felhasználói fiók"
-
-#. NOTE: Menu item text (icon replaced by a key icon).
-#: invenio_accounts/views/settings.py:68
+#: invenio_accounts/views/security.py:69
 #, python-format
-msgid "%(icon)s Change password"
-msgstr "%(icon)sJelszó megváltoztatása"
+msgid "Unable to remove the session %(sid_s)s."
+msgstr "Nem sikerült eltávolítani a(z) %(sid_s)s munkamenetet."
