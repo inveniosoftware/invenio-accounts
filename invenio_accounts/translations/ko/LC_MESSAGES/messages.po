@@ -1,130 +1,198 @@
 # Translations template for invenio-accounts.
-# Copyright (C) 2022 CERN
+# Copyright (C) 2025 CERN
 # This file is distributed under the same license as the invenio-accounts
 # project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+# 
+# Translators:
+# Minjae Kwon, 2025
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: invenio-accounts 2.0.0\n"
+"Project-Id-Version: invenio-accounts 5.1.7\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2022-10-12 09:05+0000\n"
+"POT-Creation-Date: 2025-04-01 12:16+0000\n"
 "PO-Revision-Date: 2016-08-18 08:29+0000\n"
-"Language-Team: Galician (https://app.transifex.com/inveniosoftware/teams/23537/gl/)\n"
+"Last-Translator: Minjae Kwon, 2025\n"
+"Language-Team: Korean (https://app.transifex.com/inveniosoftware/teams/23537/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
-"Language: gl\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Generated-By: Babel 2.17.0\n"
+"Language: ko\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: invenio_accounts/admin.py:49 invenio_accounts/admin.py:164
+#: invenio_accounts/admin.py:222
+msgid "Email"
+msgstr "이메일"
+
+#: invenio_accounts/admin.py:55
+msgid "Send User Notification"
+msgstr ""
+
+#: invenio_accounts/admin.py:56
+msgid "Send the new user an email about their account."
+msgstr ""
 
 #: invenio_accounts/admin.py:78
 msgid "Inactivate"
-msgstr ""
+msgstr "비활성화"
 
 #: invenio_accounts/admin.py:79
 msgid "Are you sure you want to inactivate selected users?"
-msgstr ""
+msgstr "선택한 사용자를 비활성화하겠습니까?"
 
 #: invenio_accounts/admin.py:89 invenio_accounts/admin.py:114
 msgid "Cannot find user."
-msgstr ""
+msgstr "사용자를 찾을 수 없습니다."
 
 #: invenio_accounts/admin.py:93 invenio_accounts/admin.py:118
 msgid "User(s) were successfully inactivated."
-msgstr ""
+msgstr "사용자를 비활성화하였습니다."
 
 #: invenio_accounts/admin.py:99
 msgid "Failed to inactivate users."
-msgstr ""
+msgstr "사용자를 비활성화하는데 실패했습니다."
 
 #: invenio_accounts/admin.py:103
 msgid "Activate"
-msgstr ""
+msgstr "활성화"
 
 #: invenio_accounts/admin.py:104
 msgid "Are you sure you want to activate selected users?"
-msgstr ""
+msgstr "선택한 사용자를 활성화하겠습니까?"
 
 #: invenio_accounts/admin.py:124
 msgid "Failed to activate users."
-msgstr ""
+msgstr "사용자를 활성화하는데 실패했습니다."
 
-#: invenio_accounts/admin.py:222
-msgid "Email"
-msgstr ""
-
-#: invenio_accounts/admin.py:223
+#: invenio_accounts/admin.py:163 invenio_accounts/admin.py:223
 msgid "User ID"
+msgstr "사용자 ID"
+
+#: invenio_accounts/admin.py:165
+msgid "Session ID"
+msgstr ""
+
+#: invenio_accounts/admin.py:178 invenio_accounts/admin.py:192
+msgid "You could not remove your current session"
+msgstr ""
+
+#: invenio_accounts/admin.py:185
+msgid "Delete selected sessions"
+msgstr ""
+
+#: invenio_accounts/admin.py:186
+msgid "Are you sure you want to delete selected sessions?"
 msgstr ""
 
 #: invenio_accounts/admin.py:230 invenio_accounts/admin.py:236
 #: invenio_accounts/admin.py:242 invenio_accounts/admin.py:248
 msgid "User Management"
-msgstr ""
+msgstr "유저 관리"
 
 #: invenio_accounts/admin.py:249
 msgid "Linked account identities"
+msgstr "연결된 계정"
+
+#: invenio_accounts/config.py:205
+msgid "Local login is disabled."
 msgstr ""
 
-#: invenio_accounts/config.py:322
+#: invenio_accounts/config.py:208
+msgid "Registration is disabled."
+msgstr ""
+
+#: invenio_accounts/config.py:211
+msgid "Password change is disabled."
+msgstr ""
+
+#: invenio_accounts/config.py:215
+msgid "Password recovery is disabled."
+msgstr ""
+
+#: invenio_accounts/config.py:220
+msgid "Password reset is disabled."
+msgstr ""
+
+#: invenio_accounts/config.py:334
 msgid ""
 "Username must start with a letter, be at least three characters long and "
 "only contain alphanumeric characters, dashes and underscores."
 msgstr ""
+"사용자명은 글자로 시작해야하며, 최소 3글자 이상이어야 합니다. 알파벳, 숫자, 대시(-) 와 밑줄(_) 만 포함할 수 있습니다."
 
-#: invenio_accounts/forms.py:24
+#: invenio_accounts/ext.py:379
+#, python-format
+msgid "%(icon)s Security"
+msgstr "%(icon)s 보안"
+
+#: invenio_accounts/ext.py:390
+#, python-format
+msgid "%(icon)s Change password"
+msgstr "%(icon)s 비밀번호 변경"
+
+#: invenio_accounts/forms.py:28
 msgid "Please complete the reCAPTCHA."
+msgstr "reCAPTCHA 를 완료하십시오."
+
+#: invenio_accounts/forms.py:54 invenio_accounts/utils.py:255
+#: invenio_accounts/views/rest.py:218
+msgid "The email domain is blocked."
 msgstr ""
 
-#: invenio_accounts/profiles/schemas.py:20
+#: invenio_accounts/profiles/schemas.py:21
 msgid "Value must be either 'public' or 'restricted'."
+msgstr "'공개됨' 또는 '제한됨' 이어야 합니다."
+
+#: invenio_accounts/profiles/schemas.py:31
+msgid "Value must be a valid locale."
+msgstr ""
+
+#: invenio_accounts/profiles/schemas.py:38
+msgid "Value must be a valid timezone."
 msgstr ""
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:13
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:13
-#: invenio_accounts/views/settings.py:80
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:34
 msgid "Change password"
-msgstr ""
+msgstr "비밀번호 변경"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:22
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:21
 msgid "Current password"
-msgstr ""
+msgstr "현재 비밀번호"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:26
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:25
 msgid "New password"
-msgstr ""
+msgstr "새 비밀번호"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:30
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:29
 msgid "Confirm new password"
-msgstr ""
+msgstr "새 비밀번호 확인"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:34
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:34
 msgid "Change Password"
-msgstr ""
+msgstr "비밀번호 변경"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:19
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:29
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:20
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:30
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:19
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:34
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:18
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:31
 msgid "Reset Password"
-msgstr ""
+msgstr "비밀번호 초기화"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:25
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:28
 msgid ""
 "Enter your email address below and we will send you a link to reset your "
 "password."
-msgstr ""
+msgstr "이메일 주소를 입력하면, 비밀번호 초기화를 위한 링크를 보내드립니다."
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
 #: invenio_accounts/templates/invenio_accounts/login_user.html:29
@@ -135,136 +203,139 @@ msgstr ""
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:50
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:39
 msgid "Log in"
-msgstr ""
+msgstr "로그인"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:44
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:40
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:45
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:41
 msgid "or"
-msgstr ""
+msgstr "또는"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
 #: invenio_accounts/templates/invenio_accounts/login_user.html:38
 #: invenio_accounts/templates/invenio_accounts/register_user.html:32
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:44
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:44
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:45
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:43
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:41
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:40
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:41
 msgid "Sign up"
-msgstr ""
+msgstr "가입"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:19
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:18
 msgid "Log in to account"
-msgstr ""
+msgstr "계정에 로그인"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:43
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:42
 #, python-format
 msgid "New to %(sitename)s?"
-msgstr ""
+msgstr "%(sitename)s에 처음 오셨습니까?"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:45
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:54
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:53
 msgid "Forgot password?"
-msgstr ""
+msgstr "비밀번호를 분실하였습니까?"
 
 #: invenio_accounts/templates/invenio_accounts/register_user.html:18
 #, python-format
 msgid "Sign up for a %(sitename)s account!"
-msgstr ""
+msgstr "%(sitename)s의 계정을 만듭니다."
 
 #: invenio_accounts/templates/invenio_accounts/register_user.html:37
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:49
 msgid "Already have an account?"
-msgstr ""
+msgstr "이미 계정이 있습니까?"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:19
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:43
 msgid "Resend Confirmation Email"
-msgstr ""
+msgstr "확인 이메일 재전송"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:20
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:45
 msgid ""
 "Enter your email address below and we will send you an email confirmation "
 "link."
-msgstr ""
+msgstr "이메일 주소를 입력하면, 이메일 확인을 위한 링크를 보내드립니다."
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:25
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:51
 msgid "Send Confirmation"
-msgstr ""
+msgstr "확인 이메일 전송"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:11
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:11
 msgid "Sessions"
-msgstr ""
+msgstr "세션"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:16
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:54
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:68
 msgid "Revoke"
-msgstr ""
+msgstr "해당 세션 종료"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:20
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:16
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:18
 msgid "This is a list of devices that have logged into your account."
-msgstr ""
+msgstr "본 계정이 로그인된 기기 목록입니다."
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:36
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:34
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:38
 msgid "Signed in"
-msgstr ""
+msgstr "로그인 시간"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:36
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:40
 msgid "current session"
-msgstr ""
+msgstr "현재 세션"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:46
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:42
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:46
 msgid "Location"
-msgstr ""
+msgstr "위치"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:55
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:54
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:68
 msgid "Logout"
-msgstr ""
+msgstr "로그아웃"
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:1
 msgid "Your password has been changed."
-msgstr ""
+msgstr "비밀번호를 변경했습니다."
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:3
 msgid "If you did not change your password,"
-msgstr ""
+msgstr "비밀번호를 변경하지 않았으면,"
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:3
 msgid "click here to reset it."
+msgstr "여기를 눌러 초기화하십시오."
+
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:19
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:34
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:18
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:31
+msgid "Reset password"
 msgstr ""
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:20
 #, python-format
 msgid "Sign up for an %(sitename)s account!"
+msgstr "%(sitename)s 계정을 생성하세요!"
+
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:19
+msgid "Resend confirmation email"
 msgstr ""
 
-#: invenio_accounts/views/security.py:35
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:29
+msgid "Send"
+msgstr ""
+
+#: invenio_accounts/views/security.py:65
 #, python-format
-msgid "%(icon)s Security"
+msgid "Session %(sid_s)s successfully removed."
 msgstr ""
 
-#: invenio_accounts/views/security.py:40
-msgid "Security"
-msgstr ""
-
-#: invenio_accounts/views/settings.py:53
-msgid "Account"
-msgstr ""
-
-#. NOTE: Menu item text (icon replaced by a key icon).
-#: invenio_accounts/views/settings.py:68
+#: invenio_accounts/views/security.py:69
 #, python-format
-msgid "%(icon)s Change password"
+msgid "Unable to remove the session %(sid_s)s."
 msgstr ""
