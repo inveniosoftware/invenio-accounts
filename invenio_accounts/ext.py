@@ -3,16 +3,16 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
 # Copyright (C)      2021 TU Wien.
-# Copyright (C) 2023-2024 Graz University of Technology.
+# Copyright (C) 2023-2025 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
 """Invenio user management and authentication."""
 
+from importlib.util import find_spec
 from warnings import warn
 
-import pkg_resources
 from flask import Blueprint, abort, current_app, request_finished, session
 from flask_kvsession import KVSessionExtension
 from flask_login import LoginManager, user_logged_in, user_logged_out
@@ -222,10 +222,9 @@ class InvenioAccounts(object):
 
         :param app: The Flask application.
         """
-        try:
-            pkg_resources.get_distribution("celery")
+        if find_spec("celery") is not None:
             app.config.setdefault("ACCOUNTS_USE_CELERY", not (app.debug or app.testing))
-        except pkg_resources.DistributionNotFound:  # pragma: no cover
+        else:
             app.config.setdefault("ACCOUNTS_USE_CELERY", False)
 
         # Register Invenio legacy password hashing
