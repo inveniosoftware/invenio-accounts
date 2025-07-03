@@ -10,6 +10,7 @@
 
 """Invenio user management and authentication."""
 
+from contextlib import suppress
 from importlib.util import find_spec
 from warnings import warn
 
@@ -222,10 +223,13 @@ class InvenioAccounts(object):
 
         :param app: The Flask application.
         """
-        if find_spec("celery") is not None:
-            app.config.setdefault("ACCOUNTS_USE_CELERY", not (app.debug or app.testing))
-        else:
-            app.config.setdefault("ACCOUNTS_USE_CELERY", False)
+        app.config.setdefault("ACCOUNTS_USE_CELERY", False)
+
+        with suppress(ValueError):
+            if find_spec("celery") is not None:
+                app.config.setdefault(
+                    "ACCOUNTS_USE_CELERY", not (app.debug or app.testing)
+                )
 
         # Register Invenio legacy password hashing
         register_crypt_handler(InvenioAesEncryptedEmail)
