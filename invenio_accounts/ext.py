@@ -222,9 +222,12 @@ class InvenioAccounts(object):
 
         :param app: The Flask application.
         """
-        if find_spec("celery") is not None:
-            app.config.setdefault("ACCOUNTS_USE_CELERY", not (app.debug or app.testing))
-        else:
+        try:
+            if find_spec("celery") is not None:
+                app.config.setdefault(
+                    "ACCOUNTS_USE_CELERY", not (app.debug or app.testing)
+                )
+        except ValueError:
             app.config.setdefault("ACCOUNTS_USE_CELERY", False)
 
         # Register Invenio legacy password hashing
