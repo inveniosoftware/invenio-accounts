@@ -9,6 +9,10 @@
 Changes
 =======
 
+Version v6.1.1 (released 2025-07-03)
+
+- fix: find_spec raise ValueError
+
 Version v6.1.0 (released 2025-07-03)
 
 - fix: pkg_resources DeprecationWarning
