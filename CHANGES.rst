@@ -9,6 +9,12 @@
 Changes
 =======
 
+Version v6.2.0 (released 2025-07-17)
+
+- i18n: force pull translations
+- docs: update transifex-client installation instructions
+- i18n: extract msgs
+
 Version v6.1.1 (released 2025-07-03)
 
 - fix: find_spec raise ValueError
