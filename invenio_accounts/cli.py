@@ -105,6 +105,14 @@ def roles_add(user, role):
         raise click.UsageError("Cannot find user.")
     if role is None:
         raise click.UsageError("Cannot find role.")
+    if not role.is_managed:
+        click.secho(
+            'Role "{0}" is externally managed. Cannot perform CLI actions on it.'.format(
+                role
+            ),
+            fg="red",
+        )
+        return
     if _datastore.add_role_to_user(user, role):
         click.secho(
             'Role "{0}" added to user "{1}" ' "successfully.".format(role, user),
@@ -126,6 +134,14 @@ def roles_remove(user, role):
         raise click.UsageError("Cannot find user.")
     if role is None:
         raise click.UsageError("Cannot find role.")
+    if not role.is_managed:
+        click.secho(
+            'Role "{0}" is externally managed. Cannot perform CLI actions on it.'.format(
+                role
+            ),
+            fg="red",
+        )
+        return
     if _datastore.remove_role_from_user(user, role):
         click.secho(
             'Role "{0}" removed from user "{1}" ' "successfully.".format(role, user),
