@@ -159,11 +159,15 @@ class SessionActivityView(ModelView):
 
     list_all = ("user.id", "user.email", "sid_s", "created")
 
-    column_labels = {
-        "user.id": lazy_gettext("User ID"),
-        "user.email": lazy_gettext("Email"),
-        "sid_s": lazy_gettext("Session ID"),
-    }
+    @property
+    def column_labels(self):
+        """Return translated column labels."""
+        return {
+            "user.id": _("User ID"),
+            "user.email": _("Email"),
+            "sid_s": _("Session ID"),
+        }
+
     column_list = list_all
     column_filters = list_all
     column_sortable_list = list_all
@@ -218,10 +222,13 @@ class UserIdentityView(ModelView):
         "user.email",
     )
 
-    column_labels = {
-        "user.email": lazy_gettext("Email"),
-        "id_user": lazy_gettext("User ID"),
-    }
+    @property
+    def column_labels(self):
+        """Return translated column labels."""
+        return {
+            "user.email": _("Email"),
+            "id_user": _("User ID"),
+        }
 
 
 session_adminview = {
