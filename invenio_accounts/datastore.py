@@ -2,14 +2,14 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
-# Copyright (C) 2024 Graz University of Technology.
+# Copyright (C) 2024-2025 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
 """Session-aware datastore."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from flask import current_app
 from flask_security import SQLAlchemyUserDatastore, user_confirmed
@@ -28,7 +28,7 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
 
     def verify_user(self, user):
         """Verify a user."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         user.blocked_at = None
         user.verified_at = now
         user.active = True
@@ -38,7 +38,7 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
 
     def block_user(self, user):
         """Verify a user."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         user.blocked_at = now
         user.verified_at = None
         user.active = False
@@ -50,7 +50,7 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
         res = super().activate_user(user)
         user.blocked_at = None
         if user.confirmed_at is None:
-            user.confirmed_at = datetime.utcnow()
+            user.confirmed_at = datetime.now(timezone.utc)
             user_confirmed.send(current_app._get_current_object(), user=user)
         return res
 

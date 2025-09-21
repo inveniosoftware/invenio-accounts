@@ -2,7 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
-# Copyright (C) 2024 Graz University of Technology.
+# Copyright (C) 2024-2025 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -231,7 +231,7 @@ def api(request):
 @pytest.fixture()
 def app_with_redis_url(request):
     """Flask application fixture with Invenio Accounts."""
-    app = _app_factory(dict(ACCOUNTS_SESSION_REDIS_URL="redis://localhost:6379/0"))
+    app = _app_factory(dict(ACCOUNTS_SESSION_REDIS_URL="redis://localhost:6380/0"))
     app.config.update(ACCOUNTS_USERINFO_HEADERS=True)
     InvenioAccounts(app)
 

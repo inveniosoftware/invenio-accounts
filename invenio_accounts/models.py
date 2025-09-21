@@ -3,7 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
 # Copyright (C) 2022 KTH Royal Institute of Technology
-# Copyright (C) 2024 Graz University of Technology.
+# Copyright (C) 2024-2025 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -11,7 +11,7 @@
 """Database models for accounts."""
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 from flask import current_app, session
 from flask_babel import refresh
@@ -22,7 +22,7 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.hybrid import Comparator, hybrid_property
 from sqlalchemy.orm import validates
-from sqlalchemy_utils import IPAddressType, Timestamp
+from sqlalchemy_utils import IPAddressType
 from sqlalchemy_utils.types import ChoiceType, JSONType
 
 from .errors import AlreadyLinkedError
@@ -70,7 +70,7 @@ class CaseInsensitiveComparator(Comparator):
         return func.lower(self.__clause_element__()) == func.lower(other)
 
 
-class Role(db.Model, Timestamp, RoleMixin):
+class Role(db.Model, db.Timestamp, RoleMixin):
     """Role data model."""
 
     __tablename__ = "accounts_role"
@@ -97,7 +97,7 @@ class Role(db.Model, Timestamp, RoleMixin):
         return "{0.name} - {0.description}".format(self)
 
 
-class User(db.Model, Timestamp, UserMixin):
+class User(db.Model, db.Timestamp, UserMixin):
     """User data model."""
 
     __tablename__ = "accounts_user"
@@ -169,7 +169,7 @@ class User(db.Model, Timestamp, UserMixin):
     def __init__(self, *args, **kwargs):
         """Constructor."""
         self.verified_at = (
-            datetime.utcnow()
+            datetime.now(timezone.utc)
             if current_app.config.get("ACCOUNTS_DEFAULT_USERS_VERIFIED")
             else None
         )
@@ -372,7 +372,7 @@ class LoginInformation(db.Model):
         return value
 
 
-class SessionActivity(db.Model, Timestamp):
+class SessionActivity(db.Model, db.Timestamp):
     """User Session Activity model.
 
     Instances of this model correspond to a session belonging to a user.
@@ -415,7 +415,7 @@ class SessionActivity(db.Model, Timestamp):
     def query_by_expired(cls):
         """Query to select all expired sessions."""
         lifetime = current_app.permanent_session_lifetime
-        expired_moment = datetime.utcnow() - lifetime
+        expired_moment = datetime.now(timezone.utc) - lifetime
         return db.session.query(cls).filter(cls.created < expired_moment)
 
     @classmethod
@@ -429,7 +429,7 @@ class SessionActivity(db.Model, Timestamp):
         return session.sid_s == sid_s
 
 
-class UserIdentity(db.Model, Timestamp):
+class UserIdentity(db.Model, db.Timestamp):
     """Represent a UserIdentity record."""
 
     __tablename__ = "accounts_useridentity"
@@ -544,7 +544,7 @@ class DomainCategory(db.Model):
         return db.session.query(cls).filter_by(label=label).one_or_none()
 
 
-class Domain(db.Model, Timestamp):
+class Domain(db.Model, db.Timestamp):
     """User domains model."""
 
     __tablename__ = "accounts_domains"
