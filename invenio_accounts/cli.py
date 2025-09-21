@@ -10,7 +10,7 @@
 """Command Line Interface for accounts."""
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from functools import wraps
 
 import click
@@ -71,7 +71,7 @@ def users_create(email, password, active, confirm, profile):
         kwargs["password"] = hash_password(kwargs["password"])
         kwargs["active"] = active
         if confirm:
-            kwargs["confirmed_at"] = datetime.utcnow()
+            kwargs["confirmed_at"] = datetime.now(timezone.utc)
         if profile:
             kwargs["user_profile"] = json.loads(profile)
         _datastore.create_user(**kwargs)
