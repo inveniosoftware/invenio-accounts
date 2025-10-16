@@ -5,8 +5,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 # 
 # Translators:
-# Alizee Pace <alizee.pace@gmail.com>, 2022
-# Lars Holm Nielsen <lars.holm.nielsen@cern.ch>, 2025
+# Matti Lassila <matti.lassila@gmail.com>, 2025
 # 
 #, fuzzy
 msgid ""
@@ -15,179 +14,179 @@ msgstr ""
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
 "POT-Creation-Date: 2025-07-08 19:09+0000\n"
 "PO-Revision-Date: 2016-08-18 08:29+0000\n"
-"Last-Translator: Lars Holm Nielsen <lars.holm.nielsen@cern.ch>, 2025\n"
-"Language-Team: Danish (https://app.transifex.com/inveniosoftware/teams/23537/da/)\n"
+"Last-Translator: Matti Lassila <matti.lassila@gmail.com>, 2025\n"
+"Language-Team: Finnish (https://app.transifex.com/inveniosoftware/teams/23537/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
-"Language: da\n"
+"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: invenio_accounts/admin.py:49 invenio_accounts/admin.py:164
 #: invenio_accounts/admin.py:222
 msgid "Email"
-msgstr "Email"
+msgstr "Sähköposti"
 
 #: invenio_accounts/admin.py:55
 msgid "Send User Notification"
-msgstr ""
+msgstr "Lähetä käyttäjäilmoitus"
 
 #: invenio_accounts/admin.py:56
 msgid "Send the new user an email about their account."
-msgstr ""
+msgstr "Lähetä uudelle käyttäjälle sähköposti hänen tilistään."
 
 #: invenio_accounts/admin.py:78
 msgid "Inactivate"
-msgstr ""
+msgstr "Passivoi"
 
 #: invenio_accounts/admin.py:79
 msgid "Are you sure you want to inactivate selected users?"
-msgstr ""
+msgstr "Haluatko varmasti passivoida valitut käyttäjät?"
 
 #: invenio_accounts/admin.py:89 invenio_accounts/admin.py:114
 msgid "Cannot find user."
-msgstr ""
+msgstr "Käyttäjää ei löydy."
 
 #: invenio_accounts/admin.py:93 invenio_accounts/admin.py:118
 msgid "User(s) were successfully inactivated."
-msgstr ""
+msgstr "Käyttäjä(t) passivoitiin onnistuneesti."
 
 #: invenio_accounts/admin.py:99
 msgid "Failed to inactivate users."
-msgstr ""
+msgstr "Käyttäjien passivointi epäonnistui."
 
 #: invenio_accounts/admin.py:103
 msgid "Activate"
-msgstr ""
+msgstr "Aktivoi"
 
 #: invenio_accounts/admin.py:104
 msgid "Are you sure you want to activate selected users?"
-msgstr ""
+msgstr "Haluatko varmasti aktivoida valitut käyttäjät?"
 
 #: invenio_accounts/admin.py:124
 msgid "Failed to activate users."
-msgstr ""
+msgstr "Käyttäjien aktivointi epäonnistui."
 
 #: invenio_accounts/admin.py:163 invenio_accounts/admin.py:223
 msgid "User ID"
-msgstr "Bruger id"
+msgstr "Käyttäjän tunnus"
 
 #: invenio_accounts/admin.py:165
 msgid "Session ID"
-msgstr ""
+msgstr "Istunnon tunnus"
 
 #: invenio_accounts/admin.py:178 invenio_accounts/admin.py:192
 msgid "You could not remove your current session"
-msgstr ""
+msgstr "Et voi poistaa nykyistä istuntoasi"
 
 #: invenio_accounts/admin.py:185
 msgid "Delete selected sessions"
-msgstr ""
+msgstr "Poista valitut istunnot"
 
 #: invenio_accounts/admin.py:186
 msgid "Are you sure you want to delete selected sessions?"
-msgstr ""
+msgstr "Haluatko varmasti poistaa valitut istunnot?"
 
 #: invenio_accounts/admin.py:230 invenio_accounts/admin.py:236
 #: invenio_accounts/admin.py:242 invenio_accounts/admin.py:248
 msgid "User Management"
-msgstr "Bruger administration"
+msgstr "Käyttäjähallinta"
 
 #: invenio_accounts/admin.py:249
 msgid "Linked account identities"
-msgstr ""
+msgstr "Linkitetyt tilitunnisteet"
 
 #: invenio_accounts/config.py:205
 msgid "Local login is disabled."
-msgstr ""
+msgstr "Paikallinen kirjautuminen on pois käytöstä."
 
 #: invenio_accounts/config.py:208
 msgid "Registration is disabled."
-msgstr ""
+msgstr "Rekisteröityminen on pois käytöstä."
 
 #: invenio_accounts/config.py:211
 msgid "Password change is disabled."
-msgstr ""
+msgstr "Salasanan vaihto on pois käytöstä."
 
 #: invenio_accounts/config.py:215
 msgid "Password recovery is disabled."
-msgstr ""
+msgstr "Salasanan palautus on pois käytöstä."
 
 #: invenio_accounts/config.py:220
 msgid "Password reset is disabled."
-msgstr ""
+msgstr "Salasanan nollaus on pois käytöstä."
 
 #: invenio_accounts/config.py:334
 msgid ""
 "Username must start with a letter, be at least three characters long and "
 "only contain alphanumeric characters, dashes and underscores."
 msgstr ""
-"Brugernavn skal starte med et bogstav, have minimum tre tegn, og må kun "
-"indeholde alfanumeriske tegn, bindestreg og understregningstegn."
+"Käyttäjänimen on alettava kirjaimella, oltava vähintään kolme merkkiä pitkä "
+"ja saa sisältää vain aakkosnumeerisia merkkejä, tavuviivoja ja alaviivoja."
 
 #: invenio_accounts/ext.py:382
 #, python-format
 msgid "%(icon)s Security"
-msgstr ""
+msgstr "%(icon)s Tietoturva"
 
 #: invenio_accounts/ext.py:393
 #, python-format
 msgid "%(icon)s Change password"
-msgstr ""
+msgstr "%(icon)s Vaihda salasana"
 
 #: invenio_accounts/forms.py:28
 msgid "Please complete the reCAPTCHA."
-msgstr ""
+msgstr "Ole hyvä ja täytä reCAPTCHA."
 
 #: invenio_accounts/forms.py:54 invenio_accounts/utils.py:255
 #: invenio_accounts/views/rest.py:218
 msgid "The email domain is blocked."
-msgstr ""
+msgstr "Sähköpostidomain on estetty."
 
 #: invenio_accounts/profiles/schemas.py:21
 msgid "Value must be either 'public' or 'restricted'."
-msgstr ""
+msgstr "Arvon on oltava joko 'public' tai 'restricted'."
 
 #: invenio_accounts/profiles/schemas.py:31
 msgid "Value must be a valid locale."
-msgstr ""
+msgstr "Arvon on oltava kelvollinen kielialue."
 
 #: invenio_accounts/profiles/schemas.py:38
 msgid "Value must be a valid timezone."
-msgstr ""
+msgstr "Arvon on oltava kelvollinen aikavyöhyke."
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:13
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:13
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:34
 msgid "Change password"
-msgstr ""
+msgstr "Vaihda salasana"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:22
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:21
 msgid "Current password"
-msgstr ""
+msgstr "Nykyinen salasana"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:26
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:25
 msgid "New password"
-msgstr ""
+msgstr "Uusi salasana"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:30
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:29
 msgid "Confirm new password"
-msgstr ""
+msgstr "Vahvista uusi salasana"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:34
 msgid "Change Password"
-msgstr ""
+msgstr "Vaihda salasana"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:19
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:29
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:20
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:30
 msgid "Reset Password"
-msgstr ""
+msgstr "Nollaa salasana"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:25
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:28
@@ -195,6 +194,8 @@ msgid ""
 "Enter your email address below and we will send you a link to reset your "
 "password."
 msgstr ""
+"Syötä sähköpostiosoitteesi alle, niin lähetämme sinulle linkin salasanan "
+"nollausta varten."
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
 #: invenio_accounts/templates/invenio_accounts/login_user.html:29
@@ -205,14 +206,14 @@ msgstr ""
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:50
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:39
 msgid "Log in"
-msgstr ""
+msgstr "Kirjaudu sisään"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:38
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:45
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:41
 msgid "or"
-msgstr ""
+msgstr "tai"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
 #: invenio_accounts/templates/invenio_accounts/login_user.html:38
@@ -223,121 +224,122 @@ msgstr ""
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:41
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:41
 msgid "Sign up"
-msgstr ""
+msgstr "Luo tili"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:19
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:18
 msgid "Log in to account"
-msgstr ""
+msgstr "Kirjaudu tilille"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:38
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:42
 #, python-format
 msgid "New to %(sitename)s?"
-msgstr ""
+msgstr "Oletko uusi palvelussa %(sitename)s?"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:45
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:53
 msgid "Forgot password?"
-msgstr ""
+msgstr "Unohditko salasanan?"
 
 #: invenio_accounts/templates/invenio_accounts/register_user.html:18
 #, python-format
 msgid "Sign up for a %(sitename)s account!"
-msgstr ""
+msgstr "Luo %(sitename)s-tili!"
 
 #: invenio_accounts/templates/invenio_accounts/register_user.html:37
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:49
 msgid "Already have an account?"
-msgstr ""
+msgstr "Onko sinulla jo tili?"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:19
 msgid "Resend Confirmation Email"
-msgstr ""
+msgstr "Lähetä vahvistussähköposti uudelleen"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:20
 msgid ""
 "Enter your email address below and we will send you an email confirmation "
 "link."
 msgstr ""
+"Syötä sähköpostiosoitteesi alle, niin lähetämme sinulle vahvistuslinkin."
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:25
 msgid "Send Confirmation"
-msgstr ""
+msgstr "Lähetä vahvistus"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:11
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:11
 msgid "Sessions"
-msgstr ""
+msgstr "Istunnot"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:16
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:68
 msgid "Revoke"
-msgstr ""
+msgstr "Peruuta"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:20
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:18
 msgid "This is a list of devices that have logged into your account."
-msgstr ""
+msgstr "Tämä on luettelo laitteista, joilla on kirjauduttu tilillesi."
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:36
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:38
 msgid "Signed in"
-msgstr ""
+msgstr "Kirjautunut"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:38
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:40
 msgid "current session"
-msgstr ""
+msgstr "nykyinen istunto"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:46
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:46
 msgid "Location"
-msgstr ""
+msgstr "Sijainti"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:55
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:68
 msgid "Logout"
-msgstr ""
+msgstr "Kirjaudu ulos"
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:1
 msgid "Your password has been changed."
-msgstr ""
+msgstr "Salasanasi on vaihdettu."
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:3
 msgid "If you did not change your password,"
-msgstr ""
+msgstr "Jos et vaihtanut salasanaasi,"
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:3
 msgid "click here to reset it."
-msgstr ""
+msgstr "napsauta tästä nollataksesi sen."
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:19
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:34
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:18
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:31
 msgid "Reset password"
-msgstr ""
+msgstr "Nollaa salasana"
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:20
 #, python-format
 msgid "Sign up for an %(sitename)s account!"
-msgstr ""
+msgstr "Luo %(sitename)s-tili!"
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:19
 msgid "Resend confirmation email"
-msgstr ""
+msgstr "Lähetä vahvistussähköposti uudelleen"
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:29
 msgid "Send"
-msgstr ""
+msgstr "Lähetä"
 
 #: invenio_accounts/views/security.py:65
 #, python-format
 msgid "Session %(sid_s)s successfully removed."
-msgstr ""
+msgstr "Istunto %(sid_s)s poistettiin onnistuneesti."
 
 #: invenio_accounts/views/security.py:69
 #, python-format
 msgid "Unable to remove the session %(sid_s)s."
-msgstr ""
+msgstr "Istuntoa %(sid_s)s ei voitu poistaa."
