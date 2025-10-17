@@ -10,9 +10,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: invenio-accounts 5.1.7\n"
+"Project-Id-Version: invenio-accounts 6.1.1\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2025-04-01 12:16+0000\n"
+"POT-Creation-Date: 2025-07-08 19:09+0000\n"
 "PO-Revision-Date: 2016-08-18 08:29+0000\n"
 "Last-Translator: Minjae Kwon, 2025\n"
 "Language-Team: Korean (https://app.transifex.com/inveniosoftware/teams/23537/ko/)\n"
@@ -124,12 +124,12 @@ msgid ""
 msgstr ""
 "사용자명은 글자로 시작해야하며, 최소 3글자 이상이어야 합니다. 알파벳, 숫자, 대시(-) 와 밑줄(_) 만 포함할 수 있습니다."
 
-#: invenio_accounts/ext.py:379
+#: invenio_accounts/ext.py:382
 #, python-format
 msgid "%(icon)s Security"
 msgstr "%(icon)s 보안"
 
-#: invenio_accounts/ext.py:390
+#: invenio_accounts/ext.py:393
 #, python-format
 msgid "%(icon)s Change password"
 msgstr "%(icon)s 비밀번호 변경"
