@@ -9,6 +9,11 @@
 Changes
 =======
 
+Version v6.2.1 (released 2025-10-20)
+
+- fix(user): allow properties to be accessed via the class
+- i18n: pulled translations
+
 Version v6.2.0 (released 2025-07-17)
 
 - i18n: force pull translations
