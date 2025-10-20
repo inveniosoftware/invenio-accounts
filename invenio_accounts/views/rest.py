@@ -218,6 +218,12 @@ def validate_domain_rest(email):
         raise ValidationError(_("The email domain is blocked."))
 
 
+def validate_password(password):
+    """Validate password using Flask-Security."""
+    if msg := current_security._password_validator(password, True):
+        raise ValidationError(msg)
+
+
 def _abort(message, field=None, status=None):
     if field:
         raise RESTValidationError([FieldError(field, message)])
@@ -324,9 +330,7 @@ class RegisterView(MethodView):
         "email": fields.Email(
             required=True, validate=[unique_user_email, validate_domain_rest]
         ),
-        "password": fields.String(
-            required=True, validate=[validate.Length(min=6, max=128)]
-        ),
+        "password": fields.String(required=True, validate=[validate_password]),
     }
 
     def login_user(self, user):
@@ -404,9 +408,7 @@ class ResetPasswordView(MethodView):
 
     post_args = {
         "token": fields.String(required=True),
-        "password": fields.String(
-            required=True, validate=[validate.Length(min=6, max=128)]
-        ),
+        "password": fields.String(required=True, validate=[validate_password]),
     }
 
     def get_user(self, token=None, **kwargs):
@@ -449,12 +451,8 @@ class ChangePasswordView(MethodView):
     decorators = [login_required]
 
     post_args = {
-        "password": fields.String(
-            required=True, validate=[validate.Length(min=6, max=128)]
-        ),
-        "new_password": fields.String(
-            required=True, validate=[validate.Length(min=6, max=128)]
-        ),
+        "password": fields.String(required=True, validate=[validate_password]),
+        "new_password": fields.String(required=True, validate=[validate_password]),
     }
 
     def verify_password(self, password=None, new_password=None, **kwargs):
