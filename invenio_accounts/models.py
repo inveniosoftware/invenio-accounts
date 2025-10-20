@@ -10,6 +10,7 @@
 
 """Database models for accounts."""
 
+import inspect
 import uuid
 from datetime import datetime
 
@@ -239,7 +240,12 @@ class User(db.Model, Timestamp, UserMixin):
         if self._user_profile is None:
             return None
         elif not isinstance(self._user_profile, UserProfileDict):
-            return UserProfileDict(**self._user_profile)
+            if inspect.isclass(self):
+                # if accessed via the class, there is no value and we pass through
+                # the SQLA InstrumentedAttribute instead
+                return self._user_profile
+            else:
+                return UserProfileDict(**self._user_profile)
 
         return self._user_profile
 
@@ -258,7 +264,12 @@ class User(db.Model, Timestamp, UserMixin):
         if self._preferences is None:
             return None
         elif not isinstance(self._preferences, UserPreferenceDict):
-            return UserPreferenceDict(**self._preferences)
+            if inspect.isclass(self):
+                # if accessed via the class, there is no value and we pass through
+                # the SQLA InstrumentedAttribute instead
+                return self._user_profile
+            else:
+                return UserPreferenceDict(**self._preferences)
 
         return self._preferences
 
