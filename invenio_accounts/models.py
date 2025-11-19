@@ -2,7 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
-# Copyright (C) 2022 KTH Royal Institute of Technology
+# Copyright (C) 2022-2024 KTH Royal Institute of Technology.
 # Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
@@ -540,7 +540,7 @@ class DomainCategory(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
 
-    label = db.Column(db.String(255))
+    label = db.Column(db.String(255), unique=True)
 
     @classmethod
     def create(cls, label):

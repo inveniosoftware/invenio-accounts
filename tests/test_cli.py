@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2025 KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -10,6 +11,7 @@
 """Module tests."""
 
 from invenio_accounts.cli import (
+    domains_create,
     roles_add,
     roles_create,
     roles_remove,
@@ -156,3 +158,28 @@ def test_cli_activate_deactivate(app):
     assert result.exit_code == 0
     result = runner.invoke(users_deactivate, ["a@test.org"])
     assert result.exit_code == 0
+
+
+def test_cli_createdomain(app):
+    """Test create domain CLI."""
+    runner = app.test_cli_runner()
+
+    # Create a domain successfully
+    result = runner.invoke(domains_create, ["mailprovider"])
+    assert result.exit_code == 0
+    assert "Domain mailprovider created successfully" in result.output
+
+    # Reject Creating the same domain again
+    result = runner.invoke(domains_create, ["mailprovider"])
+    assert result.exit_code == 0
+    assert "creating failed" in result.output
+
+    # Create another domain successfully
+    result = runner.invoke(domains_create, ["kth.se"])
+    assert result.exit_code == 0
+    assert "Domain kth.se created successfully" in result.output
+
+    # Create a domain with a fancy case should be treated like others
+    result = runner.invoke(domains_create, ["MailPrOvIdEr"])
+    assert result.exit_code == 0
+    assert "creating failed" in result.output
