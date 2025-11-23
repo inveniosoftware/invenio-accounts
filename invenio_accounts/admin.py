@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2025 CERN.
 # Copyright (C) 2024 KTH Royal Institute of Technology.
+# Copyright (C) 2025 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -16,6 +17,7 @@ from flask_admin.contrib.sqla.ajax import QueryAjaxModelLoader
 from flask_admin.model.fields import AjaxSelectMultipleField
 from flask_security.recoverable import send_reset_password_instructions
 from flask_security.utils import hash_password
+from invenio_admin.filters import FilterConverter
 from invenio_db import db
 from invenio_i18n import gettext as _
 from invenio_i18n import lazy_gettext
@@ -34,6 +36,7 @@ _datastore = LocalProxy(lambda: current_app.extensions["security"].datastore)
 class UserView(ModelView):
     """Flask-Admin view to manage users."""
 
+    filter_converter = FilterConverter()
     can_view_details = True
     can_delete = False
 
@@ -127,6 +130,8 @@ class UserView(ModelView):
 class RoleView(ModelView):
     """Admin view for roles."""
 
+    filter_converter = FilterConverter()
+
     can_view_details = True
 
     list_all = ("id", "name", "description")
@@ -152,6 +157,8 @@ class RoleView(ModelView):
 
 class SessionActivityView(ModelView):
     """Admin view for user sessions."""
+
+    filter_converter = FilterConverter()
 
     can_view_details = False
     can_create = False
@@ -198,6 +205,8 @@ class SessionActivityView(ModelView):
 
 class UserIdentityView(ModelView):
     """Flask-Admin view to manage user identities from invenio-accounts."""
+
+    filter_converter = FilterConverter()
 
     can_view_details = True
     can_create = False
