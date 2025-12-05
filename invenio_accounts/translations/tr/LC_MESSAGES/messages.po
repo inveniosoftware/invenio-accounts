@@ -9,6 +9,7 @@
 # Hakan Bayindir <hbayindir@gmail.com>, 2025
 # Ben Translation and Interpreting Services <info@bentercume.com>, 2025
 # Berat Aldemir <berataldemir@gmail.com>, 2025
+# Eylül-1 -, 2025
 # 
 #, fuzzy
 msgid ""
@@ -17,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
 "POT-Creation-Date: 2025-07-08 19:09+0000\n"
 "PO-Revision-Date: 2016-08-18 08:29+0000\n"
-"Last-Translator: Berat Aldemir <berataldemir@gmail.com>, 2025\n"
+"Last-Translator: Eylül-1 -, 2025\n"
 "Language-Team: Turkish (https://app.transifex.com/inveniosoftware/teams/23537/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,11 +34,11 @@ msgstr "E-posta"
 
 #: invenio_accounts/admin.py:55
 msgid "Send User Notification"
-msgstr ""
+msgstr "Kullanıcı Bildirimi Gönder"
 
 #: invenio_accounts/admin.py:56
 msgid "Send the new user an email about their account."
-msgstr ""
+msgstr "Yeni kullanıcıya hesabı ile ilgili bir e-posta gönderin."
 
 #: invenio_accounts/admin.py:78
 msgid "Inactivate"
@@ -78,19 +79,19 @@ msgstr "Kullanıcı Kimliği"
 
 #: invenio_accounts/admin.py:165
 msgid "Session ID"
-msgstr ""
+msgstr "Oturum Kimliği"
 
 #: invenio_accounts/admin.py:178 invenio_accounts/admin.py:192
 msgid "You could not remove your current session"
-msgstr ""
+msgstr "Mevcut oturumunuzu kaldıramadınız"
 
 #: invenio_accounts/admin.py:185
 msgid "Delete selected sessions"
-msgstr ""
+msgstr "Seçili oturumları sil"
 
 #: invenio_accounts/admin.py:186
 msgid "Are you sure you want to delete selected sessions?"
-msgstr ""
+msgstr "Seçili oturumları silmek istediğinizden emin misiniz?"
 
 #: invenio_accounts/admin.py:230 invenio_accounts/admin.py:236
 #: invenio_accounts/admin.py:242 invenio_accounts/admin.py:248
@@ -103,23 +104,23 @@ msgstr "Bağlı hesap kimlikleri"
 
 #: invenio_accounts/config.py:205
 msgid "Local login is disabled."
-msgstr ""
+msgstr "Yerel oturum açma devre dışıdır"
 
 #: invenio_accounts/config.py:208
 msgid "Registration is disabled."
-msgstr ""
+msgstr "Kayıt işlemi devre dışıdır."
 
 #: invenio_accounts/config.py:211
 msgid "Password change is disabled."
-msgstr ""
+msgstr "Şifre değiştirme devre dışıdır."
 
 #: invenio_accounts/config.py:215
 msgid "Password recovery is disabled."
-msgstr ""
+msgstr "Şifre kurtarma devre dışıdır."
 
 #: invenio_accounts/config.py:220
 msgid "Password reset is disabled."
-msgstr ""
+msgstr "Şifre sıfırlama devre dışıdır."
 
 #: invenio_accounts/config.py:334
 msgid ""
@@ -342,9 +343,9 @@ msgstr "Gönder"
 #: invenio_accounts/views/security.py:65
 #, python-format
 msgid "Session %(sid_s)s successfully removed."
-msgstr ""
+msgstr "%(sid_s)s oturumu başarıyla kaldırıldı."
 
 #: invenio_accounts/views/security.py:69
 #, python-format
 msgid "Unable to remove the session %(sid_s)s."
-msgstr ""
+msgstr "%(sid_s)s oturumu kaldırılamadı."
