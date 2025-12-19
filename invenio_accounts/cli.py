@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2023 CERN.
 # Copyright (C) 2024 Graz University of Technology.
+# Copyright (C) 2025 KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -59,11 +60,14 @@ def domains():
 @click.option("-a", "--active", default=False, is_flag=True)
 @click.option("-c", "--confirm", default=False, is_flag=True)
 @click.option("-p", "--profile")
+@click.option("-u", "--username", help="Username for the new user account")
 @with_appcontext
 @commit
-def users_create(email, password, active, confirm, profile):
+def users_create(email, password, active, confirm, profile, username):
     """Create a user."""
     kwargs = dict(email=email, password=password, active="y" if active else "")
+    if username is not None:
+        kwargs["username"] = username
 
     form = ConfirmRegisterForm(MultiDict(kwargs), meta={"csrf": False})
 
