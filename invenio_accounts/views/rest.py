@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2017-2024 CERN.
 # Copyright (C)      2021 TU Wien.
+# Copyright (C) 2025 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -184,14 +185,14 @@ use_kwargs = webargs_parser.use_kwargs
 def user_exists(email):
     """Validate that a user exists."""
     with db.session.no_autoflush:
-        if not current_datastore.get_user(email):
+        if not current_datastore.get_user_by_email(email):
             raise ValidationError(get_message("USER_DOES_NOT_EXIST")[0])
 
 
 def unique_user_email(email):
     """Validate unique user email."""
     with db.session.no_autoflush:
-        if current_datastore.get_user(email) is not None:
+        if current_datastore.get_user_by_email(email) is not None:
             raise ValidationError(
                 get_message("EMAIL_ALREADY_ASSOCIATED", email=email)[0]
             )
@@ -235,7 +236,7 @@ class UserViewMixin(object):
     def get_user(self, email=None, **kwargs):
         """Retrieve a user by the provided arguments."""
         with db.session.no_autoflush:
-            return current_datastore.get_user(email)
+            return current_datastore.get_user_by_email(email)
 
 
 class LoginView(MethodView, UserViewMixin):
