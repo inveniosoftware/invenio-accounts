@@ -9,7 +9,6 @@
 
 """Invenio-accounts views."""
 
-
 from .settings import login
 
 __all__ = ("login",)
