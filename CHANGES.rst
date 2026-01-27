@@ -10,6 +10,13 @@
 Changes
 =======
 
+Version v7.0.0 (released 2026-01-27)
+
+- chore(setup): bump dependencies
+- fix: DeprecationWarning: get_user
+- fix(chore): DeprecationWarning stdlib
+- fix(cli): rollback failed db calls
+
 Version v6.2.3 (released 2026-01-27)
 
 - chore(black): update formatting to >= 26.0
