@@ -10,6 +10,7 @@
 
 Currently supported: recaptcha
 """
+
 from flask import request
 from flask_security.forms import NextFormMixin
 from flask_wtf import FlaskForm, Recaptcha, RecaptchaField
