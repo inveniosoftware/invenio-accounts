@@ -24,6 +24,7 @@
             <form action="{{ url_for_security('login') }}" method="POST"
                   name="login_user_form" class="ui big form">
               {{ form.hidden_tag() }}
+              {{ form_errors(form) }}
               {{ render_field(form.email, icon="user icon", autofocus=True, errormsg='email' in form.errors) }}
               {{ render_field(form.password, icon="lock icon", errormsg='password' in form.errors) }}
               <button type="submit" class="ui fluid large submit primary button">

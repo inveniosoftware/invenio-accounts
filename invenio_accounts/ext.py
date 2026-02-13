@@ -28,6 +28,7 @@ from werkzeug.utils import cached_property
 
 from invenio_accounts.forms import (
     confirm_register_form_factory,
+    forgot_password_form_factory,
     login_form_factory,
     register_form_factory,
     send_confirmation_form_factory,
@@ -179,6 +180,14 @@ class InvenioAccounts(object):
         app.extensions["security"].login_form = login_form_factory(
             app.extensions["security"].login_form, app
         )
+
+        if app.config.get("ACCOUNTS_FORGOT_PASSWORD_EMAIL_RATELIMIT"):
+            app.extensions["security"].forgot_password_form = (
+                forgot_password_form_factory(
+                    app.extensions["security"].forgot_password_form,
+                    app,
+                )
+            )
 
         # send confirmation form
         app.extensions["security"].send_confirmation_form = (
