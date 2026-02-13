@@ -18,6 +18,11 @@ from invenio_db import db
 from invenio_i18n import gettext as _
 from wtforms import FormField, HiddenField
 
+from .limiter import (
+    enforce_forgot_password_limit,
+    enforce_login_limit,
+    enforce_send_confirmation_limit,
+)
 from .proxies import current_datastore
 from .utils import validate_domain
 
@@ -86,7 +91,16 @@ def login_form_factory(Form, app):
     """Return extended login form."""
 
     class LoginForm(Form):
-        pass
+        def validate(self, extra_validators=None):
+            is_valid = super().validate(extra_validators=extra_validators)
+            if app.config.get("ACCOUNTS_LOGIN_RATELIMIT"):
+                allowed, message = enforce_login_limit(getattr(self, "user", None))
+                if not allowed:
+                    self.form_errors = [*self.form_errors, str(message)]
+                    self.email.errors = []
+                    self.password.errors = []
+                    return False
+            return is_valid
 
     return LoginForm
 
@@ -107,7 +121,28 @@ def send_confirmation_form_factory(Form, app):
                 self.user = current_datastore.get_user(self.data["email"])
             # Form is valid if user exists and they are not yet confirmed
             if self.user is not None and self.user.confirmed_at is None:
+                if app.config.get("ACCOUNTS_SEND_CONFIRMATION_RATELIMIT"):
+                    allowed, message = enforce_send_confirmation_limit(self.user)
+                    if not allowed:
+                        self.email.errors = [*self.email.errors, str(message)]
+                        return False
                 return True
             return False
 
     return SendConfirmationEmailView
+
+
+def forgot_password_form_factory(Form, app):
+    """Return forgot-password form with per-account rate limiting."""
+
+    class ForgotPasswordForm(Form):
+        def validate(self, extra_validators=None):
+            if not super().validate(extra_validators=extra_validators):
+                return False
+            allowed, message = enforce_forgot_password_limit(self.user)
+            if not allowed:
+                self.email.errors = [*self.email.errors, str(message)]
+                return False
+            return True
+
+    return ForgotPasswordForm

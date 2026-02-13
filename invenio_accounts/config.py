@@ -88,6 +88,48 @@ This will be used to build an absolute URL, thus if e.g. a hostname isn't
 included, the one from the current request's context will be used.
 """
 
+ACCOUNTS_FORGOT_PASSWORD_EMAIL_RATELIMIT = None
+"""Flask-Limiter rate limit string for forgot-password requests per account.
+
+Example: ``"3 per hour"``. Disabled when ``None``.
+"""
+
+ACCOUNTS_FORGOT_PASSWORD_EMAIL_RATELIMIT_KEY_PREFIX = "accounts.fp_email"
+"""Prefix used to namespace forgot-password per-account limiter keys."""
+
+ACCOUNTS_FORGOT_PASSWORD_EMAIL_RATELIMIT_MSG = _(
+    "Too many password-reset requests for this account. Please try again later."
+)
+"""Message shown when forgot-password per-account rate limit is exceeded."""
+
+ACCOUNTS_LOGIN_RATELIMIT = None
+"""Flask-Limiter rate limit string for login requests per account.
+
+Example: ``"5 per 15 minutes"``. Disabled when ``None``.
+"""
+
+ACCOUNTS_LOGIN_RATELIMIT_KEY_PREFIX = "accounts.login"
+"""Prefix used to namespace login per-account limiter keys."""
+
+ACCOUNTS_LOGIN_RATELIMIT_MSG = _(
+    "Too many login attempts for this account. Please try again later."
+)
+"""Message shown when login per-account rate limit is exceeded."""
+
+ACCOUNTS_SEND_CONFIRMATION_RATELIMIT = None
+"""Flask-Limiter rate limit string for send-confirmation requests per account.
+
+Example: ``"3 per hour"``. Disabled when ``None``.
+"""
+
+ACCOUNTS_SEND_CONFIRMATION_RATELIMIT_KEY_PREFIX = "accounts.cf_email"
+"""Prefix used to namespace send-confirmation per-account limiter keys."""
+
+ACCOUNTS_SEND_CONFIRMATION_RATELIMIT_MSG = _(
+    "Too many confirmation-email requests for this account. Please try again later."
+)
+"""Message shown when send-confirmation per-account rate limit is exceeded."""
+
 ACCOUNTS_REST_AUTH_VIEWS = {
     "login": "invenio_accounts.views.rest:LoginView",
     "logout": "invenio_accounts.views.rest:LogoutView",
