@@ -11,7 +11,7 @@
 
 from functools import wraps
 
-from flask import Blueprint, after_this_request, current_app, jsonify
+from flask import Blueprint, abort, after_this_request, current_app, jsonify
 from flask.views import MethodView
 from flask_login import login_required
 from flask_security import current_user
@@ -40,6 +40,7 @@ from webargs.flaskparser import FlaskParser as FlaskParserBase
 from invenio_accounts.models import SessionActivity
 from invenio_accounts.sessions import delete_session
 
+from ..limiter import enforce_login_limit, enforce_send_confirmation_limit
 from ..proxies import current_datastore, current_security
 from ..utils import (
     change_user_password,
@@ -274,6 +275,10 @@ class LoginView(MethodView, UserViewMixin):
             _abort(get_message("LOCAL_LOGIN_DISABLED")[0])
 
         user = self.get_user(**kwargs)
+        if current_app.config.get("ACCOUNTS_LOGIN_RATELIMIT"):
+            allowed, message = enforce_login_limit(user)
+            if not allowed:
+                abort(429, description=str(message))
         self.verify_login(user, **kwargs)
         self.login_user(user)
         return self.success_response(user)
@@ -530,6 +535,10 @@ class SendConfirmationEmailView(MethodView, UserViewMixin):
         """Send confirmation email."""
         user = self.get_user(**kwargs)
         self.verify(user)
+        if current_app.config.get("ACCOUNTS_SEND_CONFIRMATION_RATELIMIT"):
+            allowed, message = enforce_send_confirmation_limit(user)
+            if not allowed:
+                abort(429, description=str(message))
         self.send_confirmation_link(user)
         return self.success_response(user)
 
