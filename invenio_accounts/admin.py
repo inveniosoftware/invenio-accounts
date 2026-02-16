@@ -10,6 +10,9 @@
 
 """Admin views for invenio-accounts."""
 
+import secrets
+import string
+
 from flask import current_app, flash
 from flask_admin.actions import action
 from flask_admin.contrib.sqla import ModelView
@@ -21,7 +24,6 @@ from invenio_admin.filters import FilterConverter
 from invenio_db import db
 from invenio_i18n import gettext as _
 from invenio_i18n import lazy_gettext
-from passlib import pwd
 from werkzeug.local import LocalProxy
 from wtforms.fields import BooleanField
 from wtforms.validators import DataRequired
@@ -31,6 +33,12 @@ from .models import Role, SessionActivity, User, UserIdentity
 from .sessions import delete_session
 
 _datastore = LocalProxy(lambda: current_app.extensions["security"].datastore)
+
+
+def _generate_password(length=12):
+    """Generate a random password without external deps."""
+    alphabet = string.ascii_letters + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 class UserView(ModelView):
@@ -50,7 +58,7 @@ class UserView(ModelView):
 
     form_args = dict(
         email=dict(label=lazy_gettext("Email"), validators=[DataRequired()]),
-        password=dict(default=lambda: pwd.genword(length=12)),
+        password=dict(default=lambda: _generate_password(length=12)),
     )
 
     form_extra_fields = {
