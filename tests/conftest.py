@@ -251,7 +251,7 @@ def app_with_flexible_registration(request):
         @use_kwargs(post_args)
         def post(self, **kwargs):
             """Register a user."""
-            return super(MyRegisterView, self).post(**kwargs)
+            return self._post(**kwargs)
 
     api_app = _app_factory()
     InvenioREST(api_app)
