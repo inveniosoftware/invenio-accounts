@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2026 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -12,7 +13,6 @@ import hashlib
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from passlib.utils.compat import str_to_uascii
 from passlib.utils.handlers import GenericHandler, HasSalt, parse_mc2, render_mc2
 
 __all__ = ("InvenioAesEncryptedEmail",)
@@ -126,6 +126,4 @@ class InvenioAesEncryptedEmail(HasSalt, GenericHandler):
         :param secret: The secret key.
         :returns: The checksum.
         """
-        return str_to_uascii(
-            hashlib.sha256(mysql_aes_encrypt(self.salt, secret)).hexdigest()
-        )
+        return hashlib.sha256(mysql_aes_encrypt(self.salt, secret)).hexdigest()
