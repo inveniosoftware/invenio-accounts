@@ -3,7 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2017-2024 CERN.
 # Copyright (C)      2021 TU Wien.
-# Copyright (C) 2025 Graz University of Technology.
+# Copyright (C) 2025-2026 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -168,13 +168,26 @@ class FlaskParser(FlaskParserBase):
         """Handle errors during parsing."""
         if isinstance(error, ValidationError):
             _errors = []
-            for field, messages in error.messages.items():
-                _errors.extend([FieldError(field, msg) for msg in messages])
+            try:
+                # webargs >=6.0.0b7
+                for location, field_data in error.messages.items():
+                    for field, messages in field_data.items():
+                        _errors.extend([FieldError(field, msg) for msg in messages])
+            except AttributeError:
+                # webargs < 6.0.0b7
+                for field, messages in error.messages.items():
+                    _errors.extend([FieldError(field, msg) for msg in messages])
             raise RESTValidationError(errors=_errors)
         super(FlaskParser, self).handle_error(error, *args, **kwargs)
 
 
-webargs_parser = FlaskParser()
+try:
+    # webargs >= 6.0.0
+    webargs_parser = FlaskParser(location="form")
+except TypeError:
+    # webargs < 6.0.0
+    webargs_parser = FlaskParser()
+
 use_args = webargs_parser.use_args
 use_kwargs = webargs_parser.use_kwargs
 
@@ -343,15 +356,19 @@ class RegisterView(MethodView):
         """Return a successful register response."""
         return jsonify(default_user_payload(user))
 
-    @use_kwargs(post_args)
-    def post(self, **kwargs):
-        """Register a user."""
+    def _post(self, **kwargs):
+        """To call it from inherited classes."""
         if not current_security.registerable:
             _abort(get_message("REGISTRATION_DISABLED")[0])
 
         user = register_user(**kwargs)
         self.login_user(user)
         return self.success_response(user)
+
+    @use_kwargs(post_args)
+    def post(self, **kwargs):
+        """Register a user."""
+        return self._post(**kwargs)
 
 
 class ForgotPasswordView(MethodView, UserViewMixin):
