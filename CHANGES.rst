@@ -10,6 +10,12 @@
 Changes
 =======
 
+Version v6.3.0 (released 2026-02-19)
+
+- feat(auth): add per-account auth rate limits
+  - Enforce per-account limits on forgot-password, login, and send-confirmation flows using user-id limiter keys.
+  - Add configurable rate-limit and key-prefix settings for each protected flow.
+
 Version v6.2.3 (released 2026-01-27)
 
 - chore(black): update formatting to >= 26.0
