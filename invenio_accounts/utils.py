@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2017-2024 CERN.
 # Copyright (C) 2024-2025 Graz University of Technology.
+# Copyright (C) 2026 KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -22,6 +23,7 @@ from flask_security.recoverable import generate_reset_password_token
 from flask_security.signals import password_changed, user_registered
 from flask_security.utils import config_value as security_config_value
 from flask_security.utils import get_security_endpoint_name, hash_password, send_mail
+from invenio_cache import current_cache
 from invenio_db import db
 from invenio_i18n import gettext as _
 from jwt import DecodeError, ExpiredSignatureError, decode, encode
@@ -29,6 +31,7 @@ from werkzeug.routing import BuildError
 from werkzeug.utils import import_string
 from wtforms import ValidationError
 
+from .cache import RoleResolverCache
 from .errors import JWTDecodeError, JWTExpiredToken
 from .proxies import current_datastore, current_security
 
@@ -277,3 +280,57 @@ def split_emailaddr(email):
     if domain[-1] == ".":
         domain = domain[:-1]
     return prefix, domain
+
+
+def _role_resolver_cache():
+    """Return shared role resolver cache wrapper."""
+    try:
+        # try as extension is not loaded in some tests.
+        cache = current_cache._get_current_object()
+    except Exception:
+        cache = None
+    return RoleResolverCache(cache)
+
+
+def clear_role_id_cache():
+    """Clear cached role identifier resolutions."""
+    _role_resolver_cache().clear()
+
+
+def resolve_role_id(role):
+    """Resolve a role identifier (id or name) to role id.
+
+    The result is cached in shared invenio-cache and invalidated on role
+    create/update/delete.
+
+    Typical usage in access generators:
+
+    .. code-block:: python
+        from invenio_accounts.utils import resolve_role_id
+
+        class CommunityCreator(Generator):
+            def needs(self, **kwargs):
+                role_id = resolve_role_id("community-creator")
+                return [RoleNeed(role_id)] if role_id else []
+    """
+    if role is None:
+        return None
+
+    role = str(role)
+    shared_cache = _role_resolver_cache()
+    shared_cached = shared_cache.get(role)
+    if shared_cached is not None:
+        return shared_cached
+
+    role_obj = current_datastore.find_role(role)
+    if role_obj is None:
+        role_obj = current_datastore.find_role_by_id(role)
+
+    if role_obj is None:
+        return None
+
+    role_id = role_obj.id
+    shared_cache.set(role, role_id)
+    shared_cache.set(role_obj.id, role_id)
+    shared_cache.set(role_obj.name, role_id)
+    return role_id
