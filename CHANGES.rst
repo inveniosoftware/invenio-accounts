@@ -10,6 +10,11 @@
 Changes
 =======
 
+Version v7.1.0 (released 2026-03-12)
+
+- chore: compatibility webargs > 6.0.0
+- chore: remove usage of python2 compat
+
 Version v7.0.0 (released 2026-01-27)
 
 - chore(setup): bump dependencies
