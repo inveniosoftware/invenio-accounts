@@ -10,6 +10,14 @@
 Changes
 =======
 
+Version v7.2.0 (released 2026-04-13)
+
+- feat(auth): add per-account auth rate limits
+    - Enforce per-account limits on forgot-password, login,
+      and send-confirmation flows using user-id limiter keys.
+    - Add configurable rate-limit and key-prefix settings
+      for each protected flow.
+
 Version v7.1.0 (released 2026-03-12)
 
 - chore: compatibility webargs > 6.0.0

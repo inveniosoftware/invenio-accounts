@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015-2025 CERN.
+# Copyright (C) 2015-2026 CERN.
 # Copyright (C) 2024-2026 Graz University of Technology.
 # Copyright (C) 2025 KTH Royal Institute of Technology.
 #
@@ -56,7 +56,7 @@ except AttributeError:
 from .ext import InvenioAccounts, InvenioAccountsREST, InvenioAccountsUI
 from .proxies import current_accounts
 
-__version__ = "7.1.0"
+__version__ = "7.2.0"
 
 __all__ = (
     "__version__",
