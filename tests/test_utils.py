@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
+# Copyright (C) 2026 KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -15,11 +16,30 @@ import mock
 import pytest
 from flask_security import url_for_security
 from flask_security.utils import hash_password
+from invenio_cache import InvenioCache
+from invenio_cache.proxies import current_cache
 from invenio_db import db
 
 from invenio_accounts import testutils
 from invenio_accounts.errors import JWTDecodeError, JWTExpiredToken
-from invenio_accounts.utils import jwt_create_token, jwt_decode_token, register_user
+from invenio_accounts.utils import (
+    jwt_create_token,
+    jwt_decode_token,
+    register_user,
+    resolve_role_id,
+)
+
+
+@pytest.fixture()
+def role_cache(app):
+    """Real cache fixture with cleanup before/after test."""
+    if "cache" not in app.extensions:
+        InvenioCache(app)
+
+    with app.app_context():
+        current_cache.clear()
+        yield current_cache
+        current_cache.clear()
 
 
 def test_client_authenticated(app):
@@ -183,3 +203,70 @@ def test_register_user_send_mail(mock_send_mail, app):
 
         register_user(send_register_msg=False, email="test2@test.org", password="1234")
         mock_send_mail.assert_not_called()
+
+
+def test_resolve_role_id_is_cached(app, role_cache):
+    """Role resolution should use cached values across repeated lookups."""
+    ds = app.extensions["security"].datastore
+
+    with app.app_context():
+        role = ds.create_role(id="system-role", name="system-role-name")
+        ds.commit()
+
+        assert "system-role" == resolve_role_id("system-role-name")
+        assert "system-role" == resolve_role_id("system-role")
+
+        # Remove role directly from DB (without datastore invalidation hook).
+        # If cache is working, previously resolved values still return.
+        db.session.delete(role)
+        db.session.commit()
+
+        assert "system-role" == resolve_role_id("system-role-name")
+        assert "system-role" == resolve_role_id("system-role")
+
+
+def test_resolve_role_id_cache_invalidation_on_update(app, role_cache):
+    """Renaming a role should invalidate resolver cache."""
+    ds = app.extensions["security"].datastore
+
+    with app.app_context():
+        role = ds.create_role(id="renamable-role", name="role-before-rename")
+        ds.commit()
+
+        assert "renamable-role" == resolve_role_id("role-before-rename")
+
+        role.name = "role-after-rename"
+        ds.update_role(role)
+        ds.commit()
+
+        assert resolve_role_id("role-before-rename") is None
+        assert "renamable-role" == resolve_role_id("role-after-rename")
+
+
+def test_resolve_role_id_cache_invalidation_on_delete(app, role_cache):
+    """Deleting a role should invalidate resolver cache."""
+    ds = app.extensions["security"].datastore
+
+    with app.app_context():
+        role = ds.create_role(id="deletable-role", name="role-to-delete")
+        ds.commit()
+
+        assert "deletable-role" == resolve_role_id("role-to-delete")
+        ds.delete(role)
+        ds.commit()
+
+        assert resolve_role_id("role-to-delete") is None
+        assert resolve_role_id("deletable-role") is None
+
+
+def test_resolve_role_id_does_not_cache_miss(app, role_cache):
+    """Missing roles should not be cached as None."""
+    ds = app.extensions["security"].datastore
+
+    with app.app_context():
+        assert resolve_role_id("late-created-role") is None
+
+        ds.create_role(id="late-created-role-id", name="late-created-role")
+        ds.commit()
+
+        assert "late-created-role-id" == resolve_role_id("late-created-role")

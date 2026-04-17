@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2024 CERN.
 # Copyright (C) 2024-2025 Graz University of Technology.
+# Copyright (C) 2026 KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -21,6 +22,7 @@ from .models import Domain, Role, User
 from .proxies import current_db_change_history
 from .sessions import delete_user_sessions
 from .signals import datastore_post_commit, datastore_pre_commit
+from .utils import clear_role_id_cache
 
 
 class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
@@ -98,14 +100,22 @@ class SessionAwareSQLAlchemyUserDatastore(SQLAlchemyUserDatastore):
     def update_role(self, role):
         """Updates roles."""
         role = self.db.session.merge(role)
+        clear_role_id_cache()
         self.mark_changed(id(self.db.session), model=role)
         return role
 
     def create_role(self, **kwargs):
         """Creates and returns a new role from the given parameters."""
         role = super().create_role(**kwargs)
+        clear_role_id_cache()
         self.mark_changed(id(self.db.session), model=role)
         return role
+
+    def delete(self, model):
+        """Override delete model to invalidate role cache on delete."""
+        if isinstance(model, self.role_model):
+            clear_role_id_cache()
+        return super().delete(model)
 
     def find_role_by_id(self, role_id):
         """Fetches roles searching by ID."""
