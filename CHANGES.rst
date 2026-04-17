@@ -10,6 +10,10 @@
 Changes
 =======
 
+Version v7.2.1 (released 2026-04-17)
+
+- fix: add missing `limits` dependency
+
 Version v7.2.0 (released 2026-04-13)
 
 - feat(auth): add per-account auth rate limits
