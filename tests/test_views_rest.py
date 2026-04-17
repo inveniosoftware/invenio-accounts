@@ -171,7 +171,7 @@ def test_registration_view(api):
             assert_error_resp(
                 res,
                 (
-                    ("password", "length"),
+                    ("password", "password must be at least"),
                     ("email", "not a valid email"),
                 ),
             )
