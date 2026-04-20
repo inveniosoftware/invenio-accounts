@@ -97,6 +97,12 @@ class Role(db.Model, db.Timestamp, RoleMixin):
         """Return the name and description of the role."""
         return "{0.name} - {0.description}".format(self)
 
+    def __init__(self, **kwargs):
+        """Constructor."""
+        if kwargs.get("name"):
+            kwargs.setdefault("id", kwargs["name"])
+        super().__init__(**kwargs)
+
 
 class User(db.Model, db.Timestamp, UserMixin):
     """User data model."""
