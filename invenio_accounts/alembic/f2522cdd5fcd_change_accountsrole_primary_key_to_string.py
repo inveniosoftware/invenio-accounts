@@ -14,6 +14,18 @@ from sqlalchemy_utils import get_referencing_foreign_keys
 
 from invenio_accounts.models import Role
 
+# Invenio-Access depends on this package. During the evolution of this package,
+# the AccountsRole primary key was changed from an integer to a string. Because
+# invenio-access used this model in relationship definitions, the Alembic history
+# must be serialized so that some invenio-access migrations run before this change
+# and others run after it.
+#
+# The only way to do this is to make this package depend on invenio-access,
+# which creates a circular dependency at the Alembic level between the two
+# packages. To allow package migrations to be tested in isolation, we use this
+# switch: if invenio-access is installed, force the correct linearization; if
+# not, depend only on the primary-key-change revision.
+
 # need to make sure that everything that depends on `accounts_role.id` being integer has already been
 # initialized
 resolved_depends_on = []
@@ -22,6 +34,15 @@ try:
 
     # invenio_communities/alembic/37b21951084c_update_role_id_type_downgrade.py
     resolved_depends_on += ["37b21951084c"]
+
+except ImportError:
+    pass
+
+try:
+    import invenio_access
+
+    # invenio_access/alembic/842a62b56e60_change_fk_accountsrole_to_string_downgrade.py
+    resolved_depends_on += ["842a62b56e60"]
 
 except ImportError:
     pass
