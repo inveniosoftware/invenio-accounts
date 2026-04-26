@@ -24,11 +24,11 @@ from sqlalchemy import Column, DateTime
 try:
     import invenio_access
 
-    resolved_down_revision = "f9843093f686"
+    # invenio_access/alembic/f9843093f686_change_fk_accountsrole_to_string_upgrade.py
+    resolved_down_revision = ["f9843093f686"]
 
 except ImportError:
-    resolved_down_revision = "f2522cdd5fcd"
-
+    resolved_down_revision = ["f2522cdd5fcd"]
 
 # revision identifiers, used by Alembic.
 revision = "037afe10e9ff"
