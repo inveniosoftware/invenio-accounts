@@ -14,11 +14,23 @@ from sqlalchemy_utils import get_referencing_foreign_keys
 
 from invenio_accounts.models import Role
 
+# need to make sure that everything that depends on `accounts_role.id` being integer has already been
+# initialized
+resolved_depends_on = []
+try:
+    import invenio_communities
+
+    # invenio_communities/alembic/37b21951084c_update_role_id_type_downgrade.py
+    resolved_depends_on += ["37b21951084c"]
+
+except ImportError:
+    pass
+
 # revision identifiers, used by Alembic.
 revision = "f2522cdd5fcd"
 down_revision = "eb9743315a9d"
 branch_labels = ()
-depends_on = None
+depends_on = resolved_depends_on
 
 
 def upgrade():
@@ -38,6 +50,7 @@ def upgrade():
 
         op.drop_constraint("pk_accounts_role", "accounts_role", type_="primary")
     else:
+        # note: CASCADE here is what drops the foreign key constrains that reference `accounts_role`
         op.execute(
             text("ALTER TABLE accounts_role DROP CONSTRAINT pk_accounts_role CASCADE;")
         )
