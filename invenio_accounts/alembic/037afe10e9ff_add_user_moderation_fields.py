@@ -10,29 +10,9 @@
 from alembic import op
 from sqlalchemy import Column, DateTime
 
-# Invenio-Access depends on this package. During the evolution of this package,
-# the AccountsRole primary key was changed from an integer to a string. Because
-# invenio-access used this model in relationship definitions, the Alembic history
-# must be serialized so that some invenio-access migrations run before this change
-# and others run after it.
-#
-# The only way to do this is to make this package depend on invenio-access,
-# which creates a circular dependency at the Alembic level between the two
-# packages. To allow package migrations to be tested in isolation, we use this
-# switch: if invenio-access is installed, force the correct linearization; if
-# not, depend only on the primary-key-change revision.
-try:
-    import invenio_access
-
-    # invenio_access/alembic/f9843093f686_change_fk_accountsrole_to_string_upgrade.py
-    resolved_down_revision = ["f9843093f686"]
-
-except ImportError:
-    resolved_down_revision = ["f2522cdd5fcd"]
-
 # revision identifiers, used by Alembic.
 revision = "037afe10e9ff"
-down_revision = resolved_down_revision
+down_revision = "f2522cdd5fcd"
 branch_labels = ()
 depends_on = ""
 
