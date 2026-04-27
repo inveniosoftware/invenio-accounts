@@ -124,7 +124,6 @@ def test_accounts_settings_blueprint(base_app):
             assert not menu
 
 
-@pytest.mark.skip(reason="Mergepoint is on invenio-access.")
 def test_alembic(app):
     """Test alembic recipes."""
     ext = app.extensions["invenio-db"]
