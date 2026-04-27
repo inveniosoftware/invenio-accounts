@@ -81,16 +81,22 @@ def upgrade():
             name="fk_accounts_userrole_user_id",
         ),
     )
-    with op.batch_alter_table("transaction") as batch_op:
-        batch_op.add_column(
-            sa.Column(
-                "user_id",
-                sa.Integer(),
-                sa.ForeignKey("accounts_user.id"),
-                nullable=True,
+
+    from flask import current_app
+
+    if current_app.config.get("DB_VERSIONING_USER_MODEL", "not_a_none") is not None:
+        with op.batch_alter_table("transaction") as batch_op:
+            batch_op.add_column(
+                sa.Column(
+                    "user_id",
+                    sa.Integer(),
+                    sa.ForeignKey("accounts_user.id"),
+                    nullable=True,
+                )
             )
-        )
-        batch_op.create_index(op.f("ix_transaction_user_id"), ["user_id"], unique=False)
+            batch_op.create_index(
+                op.f("ix_transaction_user_id"), ["user_id"], unique=False
+            )
 
 
 def downgrade():
