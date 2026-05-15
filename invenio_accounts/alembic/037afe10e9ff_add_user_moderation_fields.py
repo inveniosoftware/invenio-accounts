@@ -12,7 +12,7 @@ from sqlalchemy import Column, DateTime
 
 # revision identifiers, used by Alembic.
 revision = "037afe10e9ff"
-down_revision = "f9843093f686"  # TODO this should be the mergepoint "f9843093f686" but tests fail because that's from invenio-access
+down_revision = "f2522cdd5fcd"
 branch_labels = ()
 depends_on = ""
 
