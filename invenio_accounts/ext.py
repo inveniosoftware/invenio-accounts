@@ -390,7 +390,7 @@ def init_menu(app):
         text=_(
             "%(icon)s Security", icon=f'<i class="{current_theme_icons.shield}"></i>'
         ),
-        order=2,
+        order=20, # VCS are allocated 10-19
     )
 
     # - Register menu
