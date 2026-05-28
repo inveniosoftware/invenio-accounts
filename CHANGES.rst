@@ -10,6 +10,18 @@
 Changes
 =======
 
+Version v8.0.0 (released 2026-05-28)
+
+- fix: update password generation and remove passlib dependency
+- fix(ui): reorder menu in user settings
+- feat(users): add username option to create user
+- fix: not adding user_id if configuration prevents it
+- fix: better dependencies after communities tests
+- fix: conditional dependency to invenio-communities
+- fix: Added a comment to the alembic file
+- fix: unskipping alembic test
+- fix: handle Alembic dependency on invenio-access
+
 Version v7.2.1 (released 2026-04-17)
 
 - fix: add missing `limits` dependency
