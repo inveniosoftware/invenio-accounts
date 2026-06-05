@@ -10,6 +10,10 @@
 Changes
 =======
 
+Version v8.1.0 (released 2026-06-05)
+
+- feat: adapt for pluggable password validation
+
 Version v8.0.0 (released 2026-05-28)
 
 - fix: update password generation and remove passlib dependency
