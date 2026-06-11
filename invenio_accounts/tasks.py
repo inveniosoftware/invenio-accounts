@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2025 CERN.
 # Copyright (C) 2024-2025 Graz University of Technology.
+# Copyright (C) 2026 KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -15,9 +16,10 @@ from celery import shared_task
 from flask import current_app
 from flask_mail import Message
 from invenio_db import db
-from sqlalchemy import func, or_
+from sqlalchemy import and_, func, or_
 
 from .models import Domain, LoginInformation, SessionActivity, User
+from .proxies import current_datastore, current_db_change_history
 from .sessions import delete_session
 
 
@@ -63,21 +65,66 @@ def clean_session_table():
 
 @shared_task
 def delete_ips():
-    """Automatically remove login_info.last_login_ip older than 30 days."""
-    expiration_date = (
-        datetime.now(timezone.utc) - current_app.config["ACCOUNTS_RETENTION_PERIOD"]
-    )
-
-    db.session.query(LoginInformation).filter(
+    """Remove expired login IPs and mark affected users for reindexing."""
+    now = datetime.now(timezone.utc)
+    expiration_date = now - current_app.config["ACCOUNTS_RETENTION_PERIOD"]
+    batch_size = current_app.config["ACCOUNTS_IP_CLEANUP_BATCH_SIZE"]
+    expired_last_login_ip = and_(
         LoginInformation.last_login_ip.isnot(None),
         LoginInformation.last_login_at < expiration_date,
-    ).update({LoginInformation.last_login_ip: None})
-
-    db.session.query(LoginInformation).filter(
+    )
+    expired_current_login_ip = and_(
         LoginInformation.current_login_ip.isnot(None),
         LoginInformation.current_login_at < expiration_date,
-    ).update({LoginInformation.current_login_ip: None})
-    db.session.commit()
+    )
+
+    while True:
+        affected_user_ids = [
+            row.user_id
+            for row in db.session.query(LoginInformation.user_id)
+            .filter(or_(expired_last_login_ip, expired_current_login_ip))
+            .order_by(LoginInformation.user_id)
+            .distinct()
+            .limit(batch_size)
+        ]
+        if not affected_user_ids:
+            return
+
+        try:
+            db.session.query(LoginInformation).filter(
+                LoginInformation.user_id.in_(affected_user_ids), expired_last_login_ip
+            ).update({LoginInformation.last_login_ip: None}, synchronize_session=False)
+
+            db.session.query(LoginInformation).filter(
+                LoginInformation.user_id.in_(affected_user_ids),
+                expired_current_login_ip,
+            ).update(
+                {LoginInformation.current_login_ip: None}, synchronize_session=False
+            )
+
+            db.session.query(User).filter(User.id.in_(affected_user_ids)).update(
+                {
+                    User.updated: db.func.now(),
+                    # User indexing uses version_id as the record revision, so
+                    # bulk changes must advance it to replace the search doc.
+                    User.version_id: User.version_id + 1,
+                },
+                synchronize_session=False,
+            )
+
+            # Bulk updates bypass ORM dirty tracking; mark IDs for post-commit reindex.
+            for user_id in affected_user_ids:
+                current_datastore.mark_changed(id(db.session), uid=user_id)
+
+            # Commit per batch to bound transactions and reindex task payloads.
+            current_datastore.commit()
+            current_app.logger.info(
+                "delete_ips task: cleared IPs for %d users", len(affected_user_ids)
+            )
+        except Exception:
+            db.session.rollback()
+            current_db_change_history.clear_dirty_sets(db.session)
+            raise
 
 
 @shared_task

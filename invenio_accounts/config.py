@@ -3,7 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2016-2026 CERN.
 # Copyright (C)      2021 TU Wien.
-# Copyright (C) 2022-2024 KTH Royal Institute of Technology
+# Copyright (C) 2022-2026 KTH Royal Institute of Technology
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -25,6 +25,10 @@ If False, you won't be able to login via the web UI.
 """
 
 ACCOUNTS_RETENTION_PERIOD = timedelta(days=30)
+"""Time after which login IP addresses are removed."""
+
+ACCOUNTS_IP_CLEANUP_BATCH_SIZE = 1000
+"""Maximum number of users processed per login IP cleanup batch."""
 
 ACCOUNTS_SESSION_STORE_FACTORY = (
     "invenio_accounts.sessions:default_session_store_factory"
