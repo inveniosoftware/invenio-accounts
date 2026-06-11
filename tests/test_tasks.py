@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2015-2018 CERN.
 # Copyright (C) 2024-2025 Graz University of Technology.
+# Copyright (C) 2026 KTH Royal Institute of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -12,7 +13,9 @@
 
 from datetime import datetime, timedelta, timezone
 from time import sleep
+from unittest import mock
 
+import pytest
 from flask import url_for
 from flask_login import login_required
 from flask_mail import Message
@@ -20,6 +23,7 @@ from flask_security import url_for_security
 from invenio_db import db
 
 from invenio_accounts.models import SessionActivity, User
+from invenio_accounts.proxies import current_datastore, current_db_change_history
 from invenio_accounts.tasks import clean_session_table, delete_ips, send_security_email
 from invenio_accounts.testutils import create_test_user
 
@@ -112,7 +116,7 @@ def test_clean_session_table(task_app):
             assert res.status_code == 302
 
 
-def test_delete_ips(task_app):
+def test_delete_ips(task_app, monkeypatch):
     """Test if ips are deleted after 30 days."""
     last_login_at1 = (
         datetime.now(timezone.utc)
@@ -122,6 +126,7 @@ def test_delete_ips(task_app):
     last_login_at2 = datetime.now(timezone.utc)
 
     with task_app.app_context():
+        task_app.config["ACCOUNTS_IP_CLEANUP_BATCH_SIZE"] = 1
         user1 = create_test_user(
             email="user1@invenio-software.org",
             last_login_ip="127.0.0.1",
@@ -145,17 +150,70 @@ def test_delete_ips(task_app):
             last_login_at=last_login_at1,
             current_login_at=last_login_at2,
         )
+        user_versions = {
+            user1.id: user1.version_id,
+            user2.id: user2.version_id,
+            user3.id: user3.version_id,
+        }
+
+        datastore = current_datastore._get_current_object()
+        marked_user_ids = []
+        original_mark_changed = datastore.mark_changed
+
+        def mark_changed(sid, uid=None, rid=None, model=None):
+            marked_user_ids.append(uid)
+            return original_mark_changed(sid, uid=uid, rid=rid, model=model)
+
+        monkeypatch.setattr(datastore, "mark_changed", mark_changed)
 
         delete_ips()
 
         user = db.session.query(User).filter(User.id == user1.id).one()
         assert user.last_login_ip is None
         assert user.current_login_ip is None
+        assert user.version_id == user_versions[user1.id] + 1
 
         user = db.session.query(User).filter(User.id == user2.id).one()
         assert user.last_login_ip is not None
         assert user.current_login_ip is not None
+        assert user.version_id == user_versions[user2.id]
 
         user = db.session.query(User).filter(User.id == user3.id).one()
         assert user.last_login_ip is None
         assert user.current_login_ip is not None
+        assert user.version_id == user_versions[user3.id] + 1
+
+        assert sorted(marked_user_ids) == sorted([user1.id, user3.id])
+
+
+def test_delete_ips_rolls_back_failed_batch(task_app):
+    """Test that IP cleanup rolls back when a batch fails before commit."""
+    last_login_at = (
+        datetime.now(timezone.utc)
+        - task_app.config["ACCOUNTS_RETENTION_PERIOD"]
+        - timedelta(days=1)
+    )
+
+    with task_app.app_context():
+        user = create_test_user(
+            email="rollback@invenio-software.org",
+            last_login_ip="127.0.0.1",
+            current_login_ip="127.0.0.1",
+            last_login_at=last_login_at,
+            current_login_at=last_login_at,
+        )
+        user_version = user.version_id
+        datastore = current_datastore._get_current_object()
+
+        with mock.patch.object(
+            datastore, "mark_changed", side_effect=RuntimeError("failed")
+        ):
+            with pytest.raises(RuntimeError):
+                delete_ips()
+
+        db.session.expire_all()
+        user = db.session.query(User).filter(User.id == user.id).one()
+        assert user.last_login_ip is not None
+        assert user.current_login_ip is not None
+        assert user.version_id == user_version
+        assert id(db.session) not in current_db_change_history.sessions
