@@ -165,7 +165,7 @@ def test_datastore_update_role(app):
     """Test update role."""
     ds = app.extensions["invenio-accounts"].datastore
 
-    r1 = ds.create_role(id="1", name="superuser", description="1234")
+    r1 = ds.create_role(name="superuser", description="1234")
     ds.commit()
     r2 = ds.find_role("superuser")
     assert r1 == r2
@@ -174,16 +174,29 @@ def test_datastore_update_role(app):
 
     r1 = ds.update_role(
         Role(
-            id="1", name="megauser", description="updated description", is_managed=False
+            id="superuser",
+            name="superuser",
+            description="updated description",
+            is_managed=False,
         )
     )
     ds.commit()
-    r2 = ds.find_role("megauser")
+    r2 = ds.find_role("superuser")
     assert r1 == r2
     assert r2.description == "updated description"
     assert r2.is_managed is False
-    assert 1 == db.session.query(Role).filter_by(name="megauser").count()
-    assert 0 == db.session.query(Role).filter_by(name="superuser").count()
+    assert 1 == db.session.query(Role).filter_by(name="superuser").count()
+
+
+def test_role_name_immutable_after_persist(app):
+    """Test that renaming a persisted role raises an error."""
+    ds = app.extensions["invenio-accounts"].datastore
+
+    r = ds.create_role(name="superuser", description="1234")
+    ds.commit()
+
+    with pytest.raises(ValueError, match="Cannot change the name of a persisted role"):
+        r.name = "megauser"
 
 
 def test_datastore_assignrole(app):
