@@ -14,6 +14,7 @@ from flask_babel import refresh
 from flask_security import RoleMixin, UserMixin
 from invenio_db import db
 from sqlalchemy import func
+from sqlalchemy import inspect as sa_inspect
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.hybrid import Comparator, hybrid_property
@@ -71,9 +72,10 @@ class Role(db.Model, db.Timestamp, RoleMixin):
 
     __tablename__ = "accounts_role"
 
-    id = db.Column(db.String(80), primary_key=True, default=lambda x: str(uuid.uuid4()))
+    _id = db.Column("id", db.String(80), primary_key=True)
+    """Always equal to name. Prefer using ``name`` to refer to a role."""
 
-    name = db.Column(db.String(80), unique=True)
+    _name = db.Column("name", db.String(80), unique=True)
     """Role name."""
 
     description = db.Column(db.String(255))
@@ -87,6 +89,35 @@ class Role(db.Model, db.Timestamp, RoleMixin):
     """Used by SQLAlchemy for optimistic concurrency control."""
 
     __mapper_args__ = {"version_id_col": version_id}
+
+    @hybrid_property
+    def id(self):
+        """Get the role id."""
+        return self._id
+
+    @id.setter
+    def id(self, value):
+        """Set the role id and sync the name."""
+        self._id = value
+        self._name = value
+
+    @hybrid_property
+    def name(self):
+        """Get the role name."""
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        """Set the role name and sync the id.
+
+        Raises an error if the role is already persisted, since renaming
+        would change the primary key.
+        """
+        insp = sa_inspect(self, raiseerr=False)
+        if insp is not None and insp.persistent:
+            raise ValueError("Cannot change the name of a persisted role.")
+        self._name = value
+        self._id = value
 
     def __str__(self):
         """Return the name and description of the role."""
