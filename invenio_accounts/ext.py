@@ -338,7 +338,13 @@ class InvenioAccountsUI(InvenioAccounts):
 
         @app.before_request
         def make_session_permanent():
-            session.permanent = True
+            # `KVSession.modified` simply tracks if there were any write accesses
+            # to it, regardless of whether the value was actually changed or not.
+            # Since the `session.modified` marker is also used by Flask to determine
+            # if it should set a session cookie, and we don't want to have that
+            # set on every response, we avoid the write access here unless necessary.
+            if not session.permanent:
+                session.permanent = True
 
 
 def finalize_app(app):
