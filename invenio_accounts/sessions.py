@@ -60,7 +60,7 @@ def add_session(session=None):
             sid_s=sid_s,
             ip=request.remote_addr,
             country=_ip2country(request.remote_addr),
-            **_extract_info_from_useragent(request.headers.get("User-Agent", ""))
+            **_extract_info_from_useragent(request.headers.get("User-Agent", "")),
         )
         db.session.merge(session_activity)
 
