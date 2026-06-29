@@ -61,3 +61,4 @@ target/
 # Vim swapfiles
 .*.sw?
 
+uv.lock
