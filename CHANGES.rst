@@ -7,6 +7,11 @@
 Changes
 =======
 
+Version v8.2.0 (released 2026-07-20)
+
+- feat: enforce role id and name are equal
+- chore(licenses): update license headers to use SPDX
+
 Version v8.1.0 (released 2026-06-05)
 
 - feat: adapt for pluggable password validation
