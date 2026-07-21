@@ -7,6 +7,12 @@
 Changes
 =======
 
+Version v8.2.1 (released 2026-07-21)
+
+- chore(setup): migrate from setuptools to hatchling
+- chore(format): reformat with black
+- chore(cleanup): remove outdated and unnecessary file
+
 Version v8.2.0 (released 2026-07-20)
 
 - feat: enforce role id and name are equal
