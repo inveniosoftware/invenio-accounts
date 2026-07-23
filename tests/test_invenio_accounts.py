@@ -189,7 +189,7 @@ def test_datastore_update_role(app):
 
 
 def test_role_name_immutable_after_persist(app):
-    """Test that renaming a persisted role raises an error."""
+    """Test that changing name of a persisted managed role raises an error."""
     ds = app.extensions["invenio-accounts"].datastore
 
     r = ds.create_role(name="superuser", description="1234")
@@ -197,6 +197,23 @@ def test_role_name_immutable_after_persist(app):
 
     with pytest.raises(ValueError, match="Cannot change the name of a persisted role"):
         r.name = "megauser"
+
+
+def test_unmanaged_role(app):
+    """Test that unmanaged roles allow id != name and mutation after persist."""
+    ds = app.extensions["invenio-accounts"].datastore
+
+    r = ds.create_role(
+        id="ext-uuid", name="admin", description="External", is_managed=False
+    )
+    ds.commit()
+
+    assert r.id == "ext-uuid"
+    assert r.name == "admin"
+
+    r.name = "new-admin"
+    assert r.name == "new-admin"
+    assert r.id == "ext-uuid"
 
 
 def test_datastore_assignrole(app):
