@@ -73,7 +73,7 @@ class Role(db.Model, db.Timestamp, RoleMixin):
     __tablename__ = "accounts_role"
 
     _id = db.Column("id", db.String(80), primary_key=True)
-    """Always equal to name. Prefer using ``name`` to refer to a role."""
+    """Always equal to name for managed roles. Prefer using ``name`` to refer to a role."""
 
     _name = db.Column("name", db.String(80), unique=True)
     """Role name."""
@@ -90,6 +90,12 @@ class Role(db.Model, db.Timestamp, RoleMixin):
 
     __mapper_args__ = {"version_id_col": version_id}
 
+    def __init__(self, **kwargs):
+        """Constructor."""
+        # Set is_managed first so id/name setters behave correctly
+        self.is_managed = kwargs.pop("is_managed", True)
+        super().__init__(**kwargs)
+
     @hybrid_property
     def id(self):
         """Get the role id."""
@@ -97,9 +103,10 @@ class Role(db.Model, db.Timestamp, RoleMixin):
 
     @id.setter
     def id(self, value):
-        """Set the role id and sync the name."""
+        """Set the role id and sync the name for managed roles."""
         self._id = value
-        self._name = value
+        if self.is_managed:
+            self._name = value
 
     @hybrid_property
     def name(self):
@@ -108,16 +115,19 @@ class Role(db.Model, db.Timestamp, RoleMixin):
 
     @name.setter
     def name(self, value):
-        """Set the role name and sync the id.
+        """Set the role name and sync the id for managed roles.
 
         Raises an error if the role is already persisted, since renaming
-        would change the primary key.
+        would change the primary key. This only applies to managed roles.
         """
-        insp = sa_inspect(self, raiseerr=False)
-        if insp is not None and insp.persistent:
-            raise ValueError("Cannot change the name of a persisted role.")
-        self._name = value
-        self._id = value
+        if not self.is_managed:
+            self._name = value
+        else:
+            insp = sa_inspect(self, raiseerr=False)
+            if insp is not None and insp.persistent:
+                raise ValueError("Cannot change the name of a persisted role.")
+            self._name = value
+            self._id = value
 
     def __str__(self):
         """Return the name and description of the role."""
