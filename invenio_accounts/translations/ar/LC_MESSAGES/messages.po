@@ -1,125 +1,146 @@
 # Translations template for invenio-accounts.
-# Copyright (C) 2025 CERN
+# Copyright (C) 2026 CERN
 # This file is distributed under the same license as the invenio-accounts
 # project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 # 
 # Translators:
 # Tibor Simko <tibor.simko@cern.ch>, 2017
 # Bessem Aamira <bessemamira@gmail.com>, 2025
-# Salaheddine Ben Ali <salaheddine.benali@cnudst.tn>, 2025
+# Salaheddine Ben Ali <salaheddine.benali@cnudst.tn>, 2026
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: invenio-accounts 6.1.1\n"
+"Project-Id-Version: invenio-accounts 8.1.0\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2025-07-08 19:09+0000\n"
+"POT-Creation-Date: 2026-06-22 20:31+0000\n"
 "PO-Revision-Date: 2016-08-18 08:29+0000\n"
-"Last-Translator: Salaheddine Ben Ali <salaheddine.benali@cnudst.tn>, 2025\n"
+"Last-Translator: Salaheddine Ben Ali <salaheddine.benali@cnudst.tn>, 2026\n"
 "Language-Team: Arabic (https://app.transifex.com/inveniosoftware/teams/23537/ar/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: invenio_accounts/admin.py:49 invenio_accounts/admin.py:164
-#: invenio_accounts/admin.py:222
+#: invenio_accounts/admin.py:55 invenio_accounts/admin.py:174
+#: invenio_accounts/admin.py:234
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
-#: invenio_accounts/admin.py:55
+#: invenio_accounts/admin.py:61
 msgid "Send User Notification"
 msgstr "إرسال إشعار للمستخدم"
 
-#: invenio_accounts/admin.py:56
+#: invenio_accounts/admin.py:62
 msgid "Send the new user an email about their account."
 msgstr "أرسل بريدًا إلكترونيًا للمستخدم الجديد حول حسابه."
 
-#: invenio_accounts/admin.py:78
+#: invenio_accounts/admin.py:84
 msgid "Inactivate"
 msgstr "معطّل"
 
-#: invenio_accounts/admin.py:79
+#: invenio_accounts/admin.py:85
 msgid "Are you sure you want to inactivate selected users?"
 msgstr "هل أنت متؤكد من تعطيل المستخدمين الذين إخترتهم؟"
 
-#: invenio_accounts/admin.py:89 invenio_accounts/admin.py:114
+#: invenio_accounts/admin.py:95 invenio_accounts/admin.py:120
 msgid "Cannot find user."
 msgstr "لم نتمكن من العثور على هذا المستخدم."
 
-#: invenio_accounts/admin.py:93 invenio_accounts/admin.py:118
+#: invenio_accounts/admin.py:99 invenio_accounts/admin.py:124
 msgid "User(s) were successfully inactivated."
 msgstr "تم تعطيل المستخدم(ين) بنجاح."
 
-#: invenio_accounts/admin.py:99
+#: invenio_accounts/admin.py:105
 msgid "Failed to inactivate users."
 msgstr "فشل في تعطيل المستخدمين."
 
-#: invenio_accounts/admin.py:103
+#: invenio_accounts/admin.py:109
 msgid "Activate"
 msgstr "تفعيل"
 
-#: invenio_accounts/admin.py:104
+#: invenio_accounts/admin.py:110
 msgid "Are you sure you want to activate selected users?"
 msgstr "هل أنت متؤكد من تفعيل المستخدمين الذين إخترتهم؟"
 
-#: invenio_accounts/admin.py:124
+#: invenio_accounts/admin.py:130
 msgid "Failed to activate users."
 msgstr "فشل في تفعيل المستخدمين."
 
-#: invenio_accounts/admin.py:163 invenio_accounts/admin.py:223
+#: invenio_accounts/admin.py:173 invenio_accounts/admin.py:235
 msgid "User ID"
 msgstr "معرّف المستخدم"
 
-#: invenio_accounts/admin.py:165
+#: invenio_accounts/admin.py:175
 msgid "Session ID"
 msgstr "معرّف فضاء العمل"
 
-#: invenio_accounts/admin.py:178 invenio_accounts/admin.py:192
+#: invenio_accounts/admin.py:188 invenio_accounts/admin.py:202
 msgid "You could not remove your current session"
 msgstr "لا يمكنك إزالة فضاء العمل الحالي"
 
-#: invenio_accounts/admin.py:185
+#: invenio_accounts/admin.py:195
 msgid "Delete selected sessions"
 msgstr "حذف فضاءات العمل التي وقع إختيارها"
 
-#: invenio_accounts/admin.py:186
+#: invenio_accounts/admin.py:196
 msgid "Are you sure you want to delete selected sessions?"
 msgstr "هل أنت متأكد من حذف فضاءات العمل التي وقع إختيارها؟"
 
-#: invenio_accounts/admin.py:230 invenio_accounts/admin.py:236
 #: invenio_accounts/admin.py:242 invenio_accounts/admin.py:248
+#: invenio_accounts/admin.py:254 invenio_accounts/admin.py:260
 msgid "User Management"
 msgstr "إدارة المستخدم"
 
-#: invenio_accounts/admin.py:249
+#: invenio_accounts/admin.py:261
 msgid "Linked account identities"
 msgstr "هويات الحسابات المرتبطة"
 
-#: invenio_accounts/config.py:205
+#: invenio_accounts/config.py:96
+msgid ""
+"Too many password-reset requests for this account. Please try again later."
+msgstr ""
+" تم تقديم عدد كبير جدًا من طلبات إعادة تعيين كلمة المرور لهذا الحساب. يُرجى "
+"المحاولة مرة أخرى لاحقًا."
+
+#: invenio_accounts/config.py:110
+msgid "Too many login attempts for this account. Please try again later."
+msgstr ""
+" تم إجراء عدد كبير جدًا من محاولات تسجيل الدخول لهذا الحساب. يُرجى المحاولة "
+"مرة أخرى لاحقًا."
+
+#: invenio_accounts/config.py:124
+msgid ""
+"Too many confirmation-email requests for this account. Please try again "
+"later."
+msgstr ""
+" تم تقديم عدد كبير جدًا من طلبات إرسال رسالة تأكيد البريد الإلكتروني لهذا "
+"الحساب. يُرجى المحاولة مرة أخرى لاحقًا."
+
+#: invenio_accounts/config.py:242
 msgid "Local login is disabled."
 msgstr "تم تعطيل تسجيل الدخول المحلي."
 
-#: invenio_accounts/config.py:208
+#: invenio_accounts/config.py:245
 msgid "Registration is disabled."
 msgstr "التسجيل معطّل."
 
-#: invenio_accounts/config.py:211
+#: invenio_accounts/config.py:248
 msgid "Password change is disabled."
 msgstr "تغيير كلمة العبور معطّل."
 
-#: invenio_accounts/config.py:215
+#: invenio_accounts/config.py:252
 msgid "Password recovery is disabled."
 msgstr "إسترجاع كلمة العبور معطّل"
 
-#: invenio_accounts/config.py:220
+#: invenio_accounts/config.py:257
 msgid "Password reset is disabled."
 msgstr "تم تعطيل إعادة ضبط كلمة العبور."
 
-#: invenio_accounts/config.py:334
+#: invenio_accounts/config.py:371
 msgid ""
 "Username must start with a letter, be at least three characters long and "
 "only contain alphanumeric characters, dashes and underscores."
@@ -127,71 +148,71 @@ msgstr ""
 "إسم المستخدم يتكون من ثلاثة حروف على الأقل. يجب ان يبدأ بحرف هجائي. و تستعمل"
 " فيه الحروف الهجائية، الأرقم و الشّرطات القصيرة و الطويلة."
 
-#: invenio_accounts/ext.py:382
+#: invenio_accounts/ext.py:386
 #, python-format
 msgid "%(icon)s Security"
 msgstr "%(icon)s السلامة"
 
-#: invenio_accounts/ext.py:393
+#: invenio_accounts/ext.py:397
 #, python-format
 msgid "%(icon)s Change password"
 msgstr "%(icon)s غير كلمة العبور"
 
-#: invenio_accounts/forms.py:28
+#: invenio_accounts/forms.py:29
 msgid "Please complete the reCAPTCHA."
 msgstr "يرجى إكمال اختبار reCAPTCHA."
 
-#: invenio_accounts/forms.py:54 invenio_accounts/utils.py:255
-#: invenio_accounts/views/rest.py:218
+#: invenio_accounts/forms.py:55 invenio_accounts/utils.py:250
+#: invenio_accounts/views/rest.py:228
 msgid "The email domain is blocked."
 msgstr "نطاق البريد الإلكتروني محظور."
 
-#: invenio_accounts/profiles/schemas.py:21
+#: invenio_accounts/profiles/schemas.py:16
 msgid "Value must be either 'public' or 'restricted'."
 msgstr "يجب أن تكون القيمة إما \"مشاع\" أو \"مقيّد\"."
 
-#: invenio_accounts/profiles/schemas.py:31
+#: invenio_accounts/profiles/schemas.py:26
 msgid "Value must be a valid locale."
 msgstr "يجب أن تكون القيمة موقعًا ساري المفعول."
 
-#: invenio_accounts/profiles/schemas.py:38
+#: invenio_accounts/profiles/schemas.py:33
 msgid "Value must be a valid timezone."
 msgstr "يجب أن تكون القيمة عبارة عن منطقة زمنية سارية المفعول."
 
-#: invenio_accounts/templates/invenio_accounts/change_password.html:13
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:13
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:34
+#: invenio_accounts/templates/invenio_accounts/change_password.html:9
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:9
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:30
 msgid "Change password"
 msgstr "غير كلمة العبور"
 
-#: invenio_accounts/templates/invenio_accounts/change_password.html:22
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:21
+#: invenio_accounts/templates/invenio_accounts/change_password.html:18
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:17
 msgid "Current password"
 msgstr "كلمة العبور الحالية"
 
-#: invenio_accounts/templates/invenio_accounts/change_password.html:26
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:25
+#: invenio_accounts/templates/invenio_accounts/change_password.html:22
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:21
 msgid "New password"
 msgstr "كلمة المرور الجديدة"
 
-#: invenio_accounts/templates/invenio_accounts/change_password.html:30
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:29
+#: invenio_accounts/templates/invenio_accounts/change_password.html:26
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:25
 msgid "Confirm new password"
 msgstr "تأكيد كلمة المرور الجديدة"
 
-#: invenio_accounts/templates/invenio_accounts/change_password.html:34
+#: invenio_accounts/templates/invenio_accounts/change_password.html:30
 msgid "Change Password"
 msgstr "غير كلمة المرور"
 
-#: invenio_accounts/templates/invenio_accounts/forgot_password.html:19
-#: invenio_accounts/templates/invenio_accounts/forgot_password.html:29
-#: invenio_accounts/templates/invenio_accounts/reset_password.html:20
-#: invenio_accounts/templates/invenio_accounts/reset_password.html:30
+#: invenio_accounts/templates/invenio_accounts/forgot_password.html:15
+#: invenio_accounts/templates/invenio_accounts/forgot_password.html:25
+#: invenio_accounts/templates/invenio_accounts/reset_password.html:16
+#: invenio_accounts/templates/invenio_accounts/reset_password.html:26
 msgid "Reset Password"
 msgstr "إعادة ضبط كلمة العبور"
 
-#: invenio_accounts/templates/invenio_accounts/forgot_password.html:25
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:28
+#: invenio_accounts/templates/invenio_accounts/forgot_password.html:21
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:24
 msgid ""
 "Enter your email address below and we will send you a link to reset your "
 "password."
@@ -199,66 +220,66 @@ msgstr ""
 "أدخل عنوان بريدك الإلكتروني أدناه وسنرسل لك رابطًا لإعادة تعيين كلمة العبور "
 "الخاصة بك."
 
-#: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
-#: invenio_accounts/templates/invenio_accounts/login_user.html:29
-#: invenio_accounts/templates/invenio_accounts/register_user.html:38
-#: invenio_accounts/templates/invenio_accounts/reset_password.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:43
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:30
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:50
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:39
+#: invenio_accounts/templates/invenio_accounts/forgot_password.html:33
+#: invenio_accounts/templates/invenio_accounts/login_user.html:25
+#: invenio_accounts/templates/invenio_accounts/register_user.html:34
+#: invenio_accounts/templates/invenio_accounts/reset_password.html:34
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:39
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:27
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:46
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:35
 msgid "Log in"
 msgstr "تسجيل الدّخول"
 
-#: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
-#: invenio_accounts/templates/invenio_accounts/reset_password.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:45
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:41
+#: invenio_accounts/templates/invenio_accounts/forgot_password.html:33
+#: invenio_accounts/templates/invenio_accounts/reset_password.html:34
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:41
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:37
 msgid "or"
 msgstr "أو"
 
-#: invenio_accounts/templates/invenio_accounts/forgot_password.html:37
-#: invenio_accounts/templates/invenio_accounts/login_user.html:38
-#: invenio_accounts/templates/invenio_accounts/register_user.html:32
-#: invenio_accounts/templates/invenio_accounts/reset_password.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:45
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:43
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:41
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:41
+#: invenio_accounts/templates/invenio_accounts/forgot_password.html:33
+#: invenio_accounts/templates/invenio_accounts/login_user.html:34
+#: invenio_accounts/templates/invenio_accounts/register_user.html:28
+#: invenio_accounts/templates/invenio_accounts/reset_password.html:34
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:41
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:40
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:37
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:37
 msgid "Sign up"
 msgstr "سجّل"
 
-#: invenio_accounts/templates/invenio_accounts/login_user.html:19
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:18
+#: invenio_accounts/templates/invenio_accounts/login_user.html:15
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:14
 msgid "Log in to account"
 msgstr "تسجيل الدخول لحساب"
 
-#: invenio_accounts/templates/invenio_accounts/login_user.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:42
+#: invenio_accounts/templates/invenio_accounts/login_user.html:34
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:39
 #, python-format
 msgid "New to %(sitename)s?"
 msgstr "أوّل زيارة لـ %(sitename)s؟"
 
-#: invenio_accounts/templates/invenio_accounts/login_user.html:45
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:53
+#: invenio_accounts/templates/invenio_accounts/login_user.html:41
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:50
 msgid "Forgot password?"
 msgstr "فقدت كلمة المرور؟"
 
-#: invenio_accounts/templates/invenio_accounts/register_user.html:18
+#: invenio_accounts/templates/invenio_accounts/register_user.html:14
 #, python-format
 msgid "Sign up for a %(sitename)s account!"
 msgstr "يمكنك إنشاء حساب الآن في%(sitename)s !"
 
-#: invenio_accounts/templates/invenio_accounts/register_user.html:37
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:49
+#: invenio_accounts/templates/invenio_accounts/register_user.html:33
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:45
 msgid "Already have an account?"
 msgstr " لديك حساب ؟"
 
-#: invenio_accounts/templates/invenio_accounts/send_confirmation.html:19
+#: invenio_accounts/templates/invenio_accounts/send_confirmation.html:15
 msgid "Resend Confirmation Email"
 msgstr "أعد إرسال بريد الـتأكيد"
 
-#: invenio_accounts/templates/invenio_accounts/send_confirmation.html:20
+#: invenio_accounts/templates/invenio_accounts/send_confirmation.html:16
 msgid ""
 "Enter your email address below and we will send you an email confirmation "
 "link."
@@ -266,83 +287,83 @@ msgstr ""
 "أدخل عنوان بريدك الإلكتروني أدناه وسنرسل لك رابط التأكيد عبر البريد "
 "الإلكتروني ."
 
-#: invenio_accounts/templates/invenio_accounts/send_confirmation.html:25
+#: invenio_accounts/templates/invenio_accounts/send_confirmation.html:21
 msgid "Send Confirmation"
 msgstr "أرسل الـتأكيد"
 
-#: invenio_accounts/templates/invenio_accounts/settings/security.html:11
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:11
+#: invenio_accounts/templates/invenio_accounts/settings/security.html:7
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:7
 msgid "Sessions"
 msgstr "جلسات"
 
-#: invenio_accounts/templates/invenio_accounts/settings/security.html:16
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:68
+#: invenio_accounts/templates/invenio_accounts/settings/security.html:12
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:64
 msgid "Revoke"
 msgstr "إلغاء"
 
-#: invenio_accounts/templates/invenio_accounts/settings/security.html:20
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:18
+#: invenio_accounts/templates/invenio_accounts/settings/security.html:16
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:14
 msgid "This is a list of devices that have logged into your account."
 msgstr "هذه قائمة بالأجهزة التي سجل منها الدخول إلى حسابك."
 
-#: invenio_accounts/templates/invenio_accounts/settings/security.html:36
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:38
+#: invenio_accounts/templates/invenio_accounts/settings/security.html:32
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:34
 msgid "Signed in"
 msgstr "تم الدخول"
 
-#: invenio_accounts/templates/invenio_accounts/settings/security.html:38
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:40
+#: invenio_accounts/templates/invenio_accounts/settings/security.html:34
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:36
 msgid "current session"
 msgstr "الجلسة الحالية"
 
-#: invenio_accounts/templates/invenio_accounts/settings/security.html:46
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:46
+#: invenio_accounts/templates/invenio_accounts/settings/security.html:42
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:42
 msgid "Location"
 msgstr "الموضع"
 
-#: invenio_accounts/templates/invenio_accounts/settings/security.html:55
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:68
+#: invenio_accounts/templates/invenio_accounts/settings/security.html:51
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:64
 msgid "Logout"
 msgstr "الخروج"
 
-#: invenio_accounts/templates/security/email/change_notice_rest.html:1
+#: invenio_accounts/templates/security/email/change_notice_rest.html:6
 msgid "Your password has been changed."
 msgstr "تم تغيير كلمة العبور الخاصة بك."
 
-#: invenio_accounts/templates/security/email/change_notice_rest.html:3
+#: invenio_accounts/templates/security/email/change_notice_rest.html:8
 msgid "If you did not change your password,"
 msgstr "إذا لم تقم بتغيير كلمة عبور حسابك،"
 
-#: invenio_accounts/templates/security/email/change_notice_rest.html:3
+#: invenio_accounts/templates/security/email/change_notice_rest.html:8
 msgid "click here to reset it."
 msgstr "انقر هنا لإعادة ضبطها"
 
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:19
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:34
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:18
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:31
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:15
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:30
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:14
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:27
 msgid "Reset password"
 msgstr "إعادة ضبط كلمة العبور"
 
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:20
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:16
 #, python-format
 msgid "Sign up for an %(sitename)s account!"
 msgstr "قم بإنشاء حساب %(sitename)s !"
 
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:19
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:15
 msgid "Resend confirmation email"
 msgstr "أرسل إعاد تأكيد البريد الإلكتروني"
 
-#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:29
+#: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:25
 msgid "Send"
 msgstr "أرسل"
 
-#: invenio_accounts/views/security.py:65
+#: invenio_accounts/views/security.py:60
 #, python-format
 msgid "Session %(sid_s)s successfully removed."
 msgstr "فضاء العمل %(sid_s)s حذف بنجاح."
 
-#: invenio_accounts/views/security.py:69
+#: invenio_accounts/views/security.py:64
 #, python-format
 msgid "Unable to remove the session %(sid_s)s."
 msgstr "غير قادر على حذف فضاء العمل %(sid_s)s."
