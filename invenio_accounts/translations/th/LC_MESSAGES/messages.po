@@ -5,7 +5,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 # 
 # Translators:
-# Tibor Simko <tibor.simko@cern.ch>, 2025
+# Suthep Yonphimai <tomztt@gmail.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -14,199 +14,201 @@ msgstr ""
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
 "POT-Creation-Date: 2026-06-22 20:31+0000\n"
 "PO-Revision-Date: 2016-08-18 08:29+0000\n"
-"Last-Translator: Tibor Simko <tibor.simko@cern.ch>, 2025\n"
-"Language-Team: Polish (https://app.transifex.com/inveniosoftware/teams/23537/pl/)\n"
+"Last-Translator: Suthep Yonphimai <tomztt@gmail.com>, 2026\n"
+"Language-Team: Thai (https://app.transifex.com/inveniosoftware/teams/23537/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
-"Language: pl\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"Language: th\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: invenio_accounts/admin.py:55 invenio_accounts/admin.py:174
 #: invenio_accounts/admin.py:234
 msgid "Email"
-msgstr "Email"
+msgstr "อีเมล"
 
 #: invenio_accounts/admin.py:61
 msgid "Send User Notification"
-msgstr ""
+msgstr "ส่งการแจ้งเตือนไปยังผู้ใช้"
 
 #: invenio_accounts/admin.py:62
 msgid "Send the new user an email about their account."
-msgstr ""
+msgstr "ส่งอีเมลเกี่ยวกับบัญชีไปยังผู้ใช้ใหม่"
 
 #: invenio_accounts/admin.py:84
 msgid "Inactivate"
-msgstr ""
+msgstr "ปิดใช้งาน"
 
 #: invenio_accounts/admin.py:85
 msgid "Are you sure you want to inactivate selected users?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการปิดใช้งานผู้ใช้ที่เลือก?"
 
 #: invenio_accounts/admin.py:95 invenio_accounts/admin.py:120
 msgid "Cannot find user."
-msgstr ""
+msgstr "ไม่พบผู้ใช้"
 
 #: invenio_accounts/admin.py:99 invenio_accounts/admin.py:124
 msgid "User(s) were successfully inactivated."
-msgstr ""
+msgstr "ปิดใช้งานผู้ใช้สำเร็จแล้ว"
 
 #: invenio_accounts/admin.py:105
 msgid "Failed to inactivate users."
-msgstr ""
+msgstr "ไม่สามารถปิดใช้งานผู้ใช้ได้"
 
 #: invenio_accounts/admin.py:109
 msgid "Activate"
-msgstr ""
+msgstr "เปิดใช้งาน"
 
 #: invenio_accounts/admin.py:110
 msgid "Are you sure you want to activate selected users?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการเปิดใช้งานผู้ใช้ที่เลือก?"
 
 #: invenio_accounts/admin.py:130
 msgid "Failed to activate users."
-msgstr ""
+msgstr "ไม่สามารถเปิดใช้งานผู้ใช้ได้"
 
 #: invenio_accounts/admin.py:173 invenio_accounts/admin.py:235
 msgid "User ID"
-msgstr "ID użytkownika"
+msgstr "รหัสผู้ใช้"
 
 #: invenio_accounts/admin.py:175
 msgid "Session ID"
-msgstr ""
+msgstr "รหัสเซสชัน"
 
 #: invenio_accounts/admin.py:188 invenio_accounts/admin.py:202
 msgid "You could not remove your current session"
-msgstr ""
+msgstr "คุณไม่สามารถลบเซสชันปัจจุบันได้"
 
 #: invenio_accounts/admin.py:195
 msgid "Delete selected sessions"
-msgstr ""
+msgstr "ลบเซสชันที่เลือก"
 
 #: invenio_accounts/admin.py:196
 msgid "Are you sure you want to delete selected sessions?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบเซสชันที่เลือก?"
 
 #: invenio_accounts/admin.py:242 invenio_accounts/admin.py:248
 #: invenio_accounts/admin.py:254 invenio_accounts/admin.py:260
 msgid "User Management"
-msgstr ""
+msgstr "การจัดการผู้ใช้"
 
 #: invenio_accounts/admin.py:261
 msgid "Linked account identities"
-msgstr ""
+msgstr "บัญชีที่เชื่อมโยง"
 
 #: invenio_accounts/config.py:96
 msgid ""
 "Too many password-reset requests for this account. Please try again later."
-msgstr ""
+msgstr "มีการขอรีเซ็ตรหัสผ่านมากเกินไปสำหรับบัญชีนี้ กรุณาลองใหม่ภายหลัง"
 
 #: invenio_accounts/config.py:110
 msgid "Too many login attempts for this account. Please try again later."
-msgstr ""
+msgstr "มีการพยายามเข้าสู่ระบบมากเกินไปสำหรับบัญชีนี้ กรุณาลองใหม่ภายหลัง"
 
 #: invenio_accounts/config.py:124
 msgid ""
 "Too many confirmation-email requests for this account. Please try again "
 "later."
-msgstr ""
+msgstr "มีการขอส่งอีเมลยืนยันมากเกินไปสำหรับบัญชีนี้ กรุณาลองใหม่ภายหลัง"
 
 #: invenio_accounts/config.py:242
 msgid "Local login is disabled."
-msgstr ""
+msgstr "การเข้าสู่ระบบในเครื่องถูกปิดใช้งาน"
 
 #: invenio_accounts/config.py:245
 msgid "Registration is disabled."
-msgstr ""
+msgstr "การลงทะเบียนถูกปิดใช้งาน"
 
 #: invenio_accounts/config.py:248
 msgid "Password change is disabled."
-msgstr ""
+msgstr "การเปลี่ยนรหัสผ่านถูกปิดใช้งาน"
 
 #: invenio_accounts/config.py:252
 msgid "Password recovery is disabled."
-msgstr ""
+msgstr "การกู้คืนรหัสผ่านถูกปิดใช้งาน"
 
 #: invenio_accounts/config.py:257
 msgid "Password reset is disabled."
-msgstr ""
+msgstr "การรีเซ็ตรหัสผ่านถูกปิดใช้งาน"
 
 #: invenio_accounts/config.py:371
 msgid ""
 "Username must start with a letter, be at least three characters long and "
 "only contain alphanumeric characters, dashes and underscores."
 msgstr ""
+"ชื่อผู้ใช้ต้องขึ้นต้นด้วยตัวอักษร มีความยาวอย่างน้อยสามตัวอักษร "
+"และประกอบด้วยตัวอักษร ตัวเลข ขีดกลาง และขีดล่างเท่านั้น"
 
 #: invenio_accounts/ext.py:386
 #, python-format
 msgid "%(icon)s Security"
-msgstr ""
+msgstr "%(icon)s ความปลอดภัย"
 
 #: invenio_accounts/ext.py:397
 #, python-format
 msgid "%(icon)s Change password"
-msgstr ""
+msgstr "%(icon)s เปลี่ยนรหัสผ่าน"
 
 #: invenio_accounts/forms.py:29
 msgid "Please complete the reCAPTCHA."
-msgstr ""
+msgstr "กรุณายืนยัน reCAPTCHA"
 
 #: invenio_accounts/forms.py:55 invenio_accounts/utils.py:250
 #: invenio_accounts/views/rest.py:228
 msgid "The email domain is blocked."
-msgstr ""
+msgstr "โดเมนอีเมลนี้ถูกบล็อก"
 
 #: invenio_accounts/profiles/schemas.py:16
 msgid "Value must be either 'public' or 'restricted'."
-msgstr ""
+msgstr "ค่าต้องเป็น 'public' หรือ 'restricted' เท่านั้น"
 
 #: invenio_accounts/profiles/schemas.py:26
 msgid "Value must be a valid locale."
-msgstr ""
+msgstr "ค่าต้องเป็นภาษาท้องถิ่นที่ถูกต้อง"
 
 #: invenio_accounts/profiles/schemas.py:33
 msgid "Value must be a valid timezone."
-msgstr ""
+msgstr "ค่าต้องเป็นเขตเวลาที่ถูกต้อง"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:9
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:9
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:30
 msgid "Change password"
-msgstr ""
+msgstr "เปลี่ยนรหัสผ่าน"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:18
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:17
 msgid "Current password"
-msgstr ""
+msgstr "รหัสผ่านปัจจุบัน"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:22
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:21
 msgid "New password"
-msgstr "Nowe hasło"
+msgstr "รหัสผ่านใหม่"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:26
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/change_password.html:25
 msgid "Confirm new password"
-msgstr ""
+msgstr "ยืนยันรหัสผ่านใหม่"
 
 #: invenio_accounts/templates/invenio_accounts/change_password.html:30
 msgid "Change Password"
-msgstr ""
+msgstr "เปลี่ยนรหัสผ่าน"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:15
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:25
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:16
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:26
 msgid "Reset Password"
-msgstr ""
+msgstr "รีเซ็ตรหัสผ่าน"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:21
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:24
 msgid ""
 "Enter your email address below and we will send you a link to reset your "
 "password."
-msgstr ""
+msgstr "กรอกที่อยู่อีเมลด้านล่าง เราจะส่งลิงก์รีเซ็ตรหัสผ่านให้คุณ"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:33
 #: invenio_accounts/templates/invenio_accounts/login_user.html:25
@@ -217,14 +219,14 @@ msgstr ""
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:46
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:35
 msgid "Log in"
-msgstr ""
+msgstr "เข้าสู่ระบบ"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:33
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:34
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:41
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:37
 msgid "or"
-msgstr "lub"
+msgstr "หรือ"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:33
 #: invenio_accounts/templates/invenio_accounts/login_user.html:34
@@ -235,121 +237,121 @@ msgstr "lub"
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:37
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:37
 msgid "Sign up"
-msgstr ""
+msgstr "สมัครสมาชิก"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:15
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:14
 msgid "Log in to account"
-msgstr ""
+msgstr "เข้าสู่ระบบบัญชี"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:34
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:39
 #, python-format
 msgid "New to %(sitename)s?"
-msgstr ""
+msgstr "ยังไม่มีบัญชี %(sitename)s?"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:41
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:50
 msgid "Forgot password?"
-msgstr ""
+msgstr "ลืมรหัสผ่าน?"
 
 #: invenio_accounts/templates/invenio_accounts/register_user.html:14
 #, python-format
 msgid "Sign up for a %(sitename)s account!"
-msgstr ""
+msgstr "สมัครบัญชี %(sitename)s!"
 
 #: invenio_accounts/templates/invenio_accounts/register_user.html:33
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:45
 msgid "Already have an account?"
-msgstr ""
+msgstr "มีบัญชีอยู่แล้ว?"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:15
 msgid "Resend Confirmation Email"
-msgstr ""
+msgstr "ส่งอีเมลยืนยันอีกครั้ง"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:16
 msgid ""
 "Enter your email address below and we will send you an email confirmation "
 "link."
-msgstr ""
+msgstr "กรอกที่อยู่อีเมลด้านล่าง เราจะส่งลิงก์ยืนยันอีเมลให้คุณ"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:21
 msgid "Send Confirmation"
-msgstr ""
+msgstr "ส่งการยืนยัน"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:7
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:7
 msgid "Sessions"
-msgstr ""
+msgstr "เซสชัน"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:12
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:64
 msgid "Revoke"
-msgstr ""
+msgstr "เพิกถอน"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:16
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:14
 msgid "This is a list of devices that have logged into your account."
-msgstr ""
+msgstr "นี่คือรายการอุปกรณ์ที่เข้าสู่ระบบบัญชีของคุณ"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:32
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:34
 msgid "Signed in"
-msgstr ""
+msgstr "เข้าสู่ระบบแล้ว"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:34
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:36
 msgid "current session"
-msgstr ""
+msgstr "เซสชันปัจจุบัน"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:42
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:42
 msgid "Location"
-msgstr ""
+msgstr "ตำแหน่งที่ตั้ง"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:51
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:64
 msgid "Logout"
-msgstr "Wyloguj"
+msgstr "ออกจากระบบ"
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:6
 msgid "Your password has been changed."
-msgstr ""
+msgstr "รหัสผ่านของคุณถูกเปลี่ยนแล้ว"
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:8
 msgid "If you did not change your password,"
-msgstr ""
+msgstr "หากคุณไม่ได้เปลี่ยนรหัสผ่าน"
 
 #: invenio_accounts/templates/security/email/change_notice_rest.html:8
 msgid "click here to reset it."
-msgstr ""
+msgstr "คลิกที่นี่เพื่อรีเซ็ต"
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:15
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:30
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:14
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:27
 msgid "Reset password"
-msgstr "Zmień hasło"
+msgstr "รีเซ็ตรหัสผ่าน"
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:16
 #, python-format
 msgid "Sign up for an %(sitename)s account!"
-msgstr ""
+msgstr "สมัครบัญชี %(sitename)s!"
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:15
 msgid "Resend confirmation email"
-msgstr ""
+msgstr "ส่งอีเมลยืนยันอีกครั้ง"
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:25
 msgid "Send"
-msgstr ""
+msgstr "ส่ง"
 
 #: invenio_accounts/views/security.py:60
 #, python-format
 msgid "Session %(sid_s)s successfully removed."
-msgstr ""
+msgstr "ลบเซสชัน %(sid_s)s สำเร็จแล้ว"
 
 #: invenio_accounts/views/security.py:64
 #, python-format
 msgid "Unable to remove the session %(sid_s)s."
-msgstr ""
+msgstr "ไม่สามารถลบเซสชัน %(sid_s)s ได้"
