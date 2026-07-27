@@ -7,6 +7,11 @@
 Changes
 =======
 
+Version v8.3.0 (released 2026-07-27)
+
+- feat: support unmanaged roles with distinct id and name
+- i18n: pulled translations
+
 Version v8.2.1 (released 2026-07-21)
 
 - chore(setup): migrate from setuptools to hatchling
