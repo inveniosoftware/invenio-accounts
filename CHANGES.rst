@@ -7,6 +7,10 @@
 Changes
 =======
 
+Version v8.3.1 (released 2026-08-04)
+
+- fix(i18n): include .mo files in distribution
+
 Version v8.3.0 (released 2026-07-27)
 
 - feat: support unmanaged roles with distinct id and name
