@@ -9,6 +9,7 @@
 # Keziah Okyere, 2025
 # Tibor Simko <tibor.simko@cern.ch>, 2025
 # Alizee Pace <alizee.pace@gmail.com>, 2025
+# Pascal Repond <pascal.repond@rero.ch>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -17,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
 "POT-Creation-Date: 2026-06-22 20:31+0000\n"
 "PO-Revision-Date: 2016-08-18 08:29+0000\n"
-"Last-Translator: Alizee Pace <alizee.pace@gmail.com>, 2025\n"
+"Last-Translator: Pascal Repond <pascal.repond@rero.ch>, 2026\n"
 "Language-Team: French (https://app.transifex.com/inveniosoftware/teams/23537/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -33,11 +34,11 @@ msgstr "Email"
 
 #: invenio_accounts/admin.py:61
 msgid "Send User Notification"
-msgstr ""
+msgstr "Envoyer une notification à l'utilisateur"
 
 #: invenio_accounts/admin.py:62
 msgid "Send the new user an email about their account."
-msgstr ""
+msgstr "Envoyer un e-mail au nouvel utilisateur à propos de son compte."
 
 #: invenio_accounts/admin.py:84
 msgid "Inactivate"
@@ -45,7 +46,7 @@ msgstr "Désactiver"
 
 #: invenio_accounts/admin.py:85
 msgid "Are you sure you want to inactivate selected users?"
-msgstr "Êtes-vous sûr de vouloir désactiver les utilisateurs séléctionnés?"
+msgstr "Êtes-vous sûr de vouloir désactiver les utilisateurs sélectionnés ?"
 
 #: invenio_accounts/admin.py:95 invenio_accounts/admin.py:120
 msgid "Cannot find user."
@@ -57,7 +58,7 @@ msgstr "Ces utilisateurs ont été désactivés avec succès."
 
 #: invenio_accounts/admin.py:105
 msgid "Failed to inactivate users."
-msgstr "Échec : ces utilisateurs n'ont pas pu être désactivés."
+msgstr "Échec : ces utilisateurs n'ont pas pu être désactivés."
 
 #: invenio_accounts/admin.py:109
 msgid "Activate"
@@ -65,11 +66,11 @@ msgstr "Activer"
 
 #: invenio_accounts/admin.py:110
 msgid "Are you sure you want to activate selected users?"
-msgstr "Êtes-vous sûr de vouloir activer les utilisateurs séléctionnés?"
+msgstr "Êtes-vous sûr de vouloir activer les utilisateurs sélectionnés ?"
 
 #: invenio_accounts/admin.py:130
 msgid "Failed to activate users."
-msgstr "Échec: ces utilisateurs n'ont pas pu être activés."
+msgstr "Échec : ces utilisateurs n'ont pas pu être activés."
 
 #: invenio_accounts/admin.py:173 invenio_accounts/admin.py:235
 msgid "User ID"
@@ -77,7 +78,7 @@ msgstr "Identifiant d'utilisateur"
 
 #: invenio_accounts/admin.py:175
 msgid "Session ID"
-msgstr ""
+msgstr "Identifiant de session"
 
 #: invenio_accounts/admin.py:188 invenio_accounts/admin.py:202
 msgid "You could not remove your current session"
@@ -339,7 +340,7 @@ msgstr "cliquez ici pour le réinitialiser."
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:14
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:27
 msgid "Reset password"
-msgstr "Réinitaliser le mot de passe"
+msgstr "Réinitialiser le mot de passe"
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:16
 #, python-format
