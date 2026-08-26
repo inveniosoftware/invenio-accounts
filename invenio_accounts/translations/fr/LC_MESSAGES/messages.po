@@ -82,15 +82,15 @@ msgstr "Identifiant de session"
 
 #: invenio_accounts/admin.py:188 invenio_accounts/admin.py:202
 msgid "You could not remove your current session"
-msgstr ""
+msgstr "Impossible d'effacer votre session actuelle"
 
 #: invenio_accounts/admin.py:195
 msgid "Delete selected sessions"
-msgstr ""
+msgstr "Effacer les sessions sélectionnées"
 
 #: invenio_accounts/admin.py:196
 msgid "Are you sure you want to delete selected sessions?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir effacer les sessions sélectionnées ?"
 
 #: invenio_accounts/admin.py:242 invenio_accounts/admin.py:248
 #: invenio_accounts/admin.py:254 invenio_accounts/admin.py:260
@@ -105,36 +105,41 @@ msgstr "Identités de compte liées"
 msgid ""
 "Too many password-reset requests for this account. Please try again later."
 msgstr ""
+"Trop de demandes de réinitialisation de mot de passe pour ce compte. "
+"Veuillez réessayer plus tard."
 
 #: invenio_accounts/config.py:110
 msgid "Too many login attempts for this account. Please try again later."
 msgstr ""
+"Trop de tentatives de connexion pour ce compte. Veuillez réessayer plus tard"
 
 #: invenio_accounts/config.py:124
 msgid ""
 "Too many confirmation-email requests for this account. Please try again "
 "later."
 msgstr ""
+"Trop de demandes de confirmation d'email pour ce compte. Veuillez réessayer "
+"plus tard"
 
 #: invenio_accounts/config.py:242
 msgid "Local login is disabled."
-msgstr ""
+msgstr "L'identification locale est désactivée."
 
 #: invenio_accounts/config.py:245
 msgid "Registration is disabled."
-msgstr ""
+msgstr "L'inscription est désactivée."
 
 #: invenio_accounts/config.py:248
 msgid "Password change is disabled."
-msgstr ""
+msgstr "La modification de mot de passe est désactivée."
 
 #: invenio_accounts/config.py:252
 msgid "Password recovery is disabled."
-msgstr ""
+msgstr "La récupération de mot de passe est désactivée."
 
 #: invenio_accounts/config.py:257
 msgid "Password reset is disabled."
-msgstr ""
+msgstr "La réinitialisation de mot de passe est désactivée."
 
 #: invenio_accounts/config.py:371
 msgid ""
@@ -153,7 +158,7 @@ msgstr "%(icon)s Sécurité"
 #: invenio_accounts/ext.py:397
 #, python-format
 msgid "%(icon)s Change password"
-msgstr "Modifier le mot de passe %(icon)s"
+msgstr "%(icon)s Modifier le mot de passe"
 
 #: invenio_accounts/forms.py:29
 msgid "Please complete the reCAPTCHA."
@@ -206,7 +211,7 @@ msgstr "Modifier le mot de passe"
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:16
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:26
 msgid "Reset Password"
-msgstr "Réinitailiser le mot de passe"
+msgstr "Réinitialiser le mot de passe"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:21
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/forgot_password.html:24
@@ -226,7 +231,7 @@ msgstr ""
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:46
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:35
 msgid "Log in"
-msgstr "Connexion"
+msgstr "S'identifier"
 
 #: invenio_accounts/templates/invenio_accounts/forgot_password.html:33
 #: invenio_accounts/templates/invenio_accounts/reset_password.html:34
@@ -244,7 +249,7 @@ msgstr "ou"
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:37
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/reset_password.html:37
 msgid "Sign up"
-msgstr "Inscription"
+msgstr "S'inscrire"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:15
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:14
@@ -255,22 +260,22 @@ msgstr "Connectez-vous à votre compte"
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:39
 #, python-format
 msgid "New to %(sitename)s?"
-msgstr "Vous découvrez %(sitename)s?"
+msgstr "Vous découvrez %(sitename)s ?"
 
 #: invenio_accounts/templates/invenio_accounts/login_user.html:41
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/login_user.html:50
 msgid "Forgot password?"
-msgstr "Mot de passe oublié?"
+msgstr "Mot de passe oublié ?"
 
 #: invenio_accounts/templates/invenio_accounts/register_user.html:14
 #, python-format
 msgid "Sign up for a %(sitename)s account!"
-msgstr "Inscrivez-vous sur %(sitename)s!"
+msgstr "Inscrivez-vous sur %(sitename)s !"
 
 #: invenio_accounts/templates/invenio_accounts/register_user.html:33
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:45
 msgid "Already have an account?"
-msgstr "Déja inscrit?"
+msgstr "Déja inscrit ?"
 
 #: invenio_accounts/templates/invenio_accounts/send_confirmation.html:15
 msgid "Resend Confirmation Email"
@@ -306,7 +311,7 @@ msgstr "Voici une liste des appareils qui se sont connectés à votre compte."
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:32
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:34
 msgid "Signed in"
-msgstr "Signé en"
+msgstr "Connecté"
 
 #: invenio_accounts/templates/invenio_accounts/settings/security.html:34
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/settings/security.html:36
@@ -345,7 +350,7 @@ msgstr "Réinitialiser le mot de passe"
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/register_user.html:16
 #, python-format
 msgid "Sign up for an %(sitename)s account!"
-msgstr "Inscrivez-vous pour un %(sitename)s compte!"
+msgstr "Inscrivez-vous pour un compte %(sitename)s !"
 
 #: invenio_accounts/templates/semantic-ui/invenio_accounts/send_confirmation.html:15
 msgid "Resend confirmation email"
@@ -358,9 +363,9 @@ msgstr "Envoyer"
 #: invenio_accounts/views/security.py:60
 #, python-format
 msgid "Session %(sid_s)s successfully removed."
-msgstr ""
+msgstr "Session %(sid_s)s effacée avec succès."
 
 #: invenio_accounts/views/security.py:64
 #, python-format
 msgid "Unable to remove the session %(sid_s)s."
-msgstr ""
+msgstr "Impossible d'effacer la session %(sid_s)s."
