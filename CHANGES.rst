@@ -7,6 +7,10 @@
 Changes
 =======
 
+Version v8.3.2 (released 2026-08-26)
+
+- i18n: pulled translations
+
 Version v8.3.1 (released 2026-08-04)
 
 - fix(i18n): include .mo files in distribution
