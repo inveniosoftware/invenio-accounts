@@ -365,6 +365,10 @@ class RegisterView(MethodView):
         if not current_security.registerable:
             _abort(get_message("REGISTRATION_DISABLED")[0])
 
+        # Prevent the use of email aliases
+        if "+" in kwargs["email"]:
+            _abort(get_message("INVALID_EMAIL_ADDRESS")[0])
+
         user = register_user(**kwargs)
         self.login_user(user)
         return self.success_response(user)

@@ -175,6 +175,13 @@ def test_registration_view(api):
             res = client.post(url, data=dict(email="old@test.com", password="123456"))
             assert_error_resp(res, (("email", "old@test.com is already associated"),))
 
+            # Invalid email due to "+" sign (alias)
+            res = client.post(
+                url, data=dict(email="old+123@test.com", password="123456")
+            )
+            assert res.status_code == 400
+            assert res.json["message"] == "Invalid email address"
+
             # Successful registration
             res = client.post(url, data=dict(email="new@test.com", password="123456"))
             payload = get_json(res)
