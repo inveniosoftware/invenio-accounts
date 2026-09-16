@@ -29,7 +29,7 @@ from sqlalchemy_utils.functions import create_database, database_exists, drop_da
 from webargs import fields
 from werkzeug.exceptions import NotFound
 
-from invenio_accounts import InvenioAccounts, InvenioAccountsREST
+from invenio_accounts import InvenioAccounts, InvenioAccountsREST, InvenioAccountsUI
 from invenio_accounts.admin import role_adminview, session_adminview, user_adminview
 from invenio_accounts.testutils import create_test_user
 from invenio_accounts.views.rest import RegisterView, create_rest_blueprint, use_kwargs
@@ -234,6 +234,19 @@ def app_with_redis_url(request):
 
     _database_setup(app, request)
     yield app
+
+
+@pytest.fixture()
+def ui_app_no_db():
+    """Flask application fixture with Invenio-Accounts UI, no database."""
+    app = Flask("ui_app_no_db")
+    app.config.update(
+        SECRET_KEY="CHANGE_ME",
+        SQLALCHEMY_DATABASE_URI="sqlite://",
+        TESTING=True,
+    )
+    InvenioAccountsUI(app)
+    return app
 
 
 @pytest.fixture()

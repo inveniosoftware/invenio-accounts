@@ -283,3 +283,15 @@ def test_session_ip_no_country(app, users):
         [session] = SessionActivity.query.all()
         assert session.country is None
         assert session.ip == "139.191.247.1"
+
+
+def test_session_permanent(ui_app_no_db):
+    """Test that the session cookie isn't re-issued on every request."""
+    with ui_app_no_db.test_client() as client:
+        res = client.get("/")
+        assert "Set-Cookie" in res.headers
+
+        # `session.permanent` is already True
+        for _ in range(3):
+            res = client.get("/")
+            assert "Set-Cookie" not in res.headers
