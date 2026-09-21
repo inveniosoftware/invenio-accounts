@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2016-2026 CERN.
 # SPDX-FileCopyrightText: 2021 TU Wien.
-# SPDX-FileCopyrightText: 2022-2024 KTH Royal Institute of Technology
+# SPDX-FileCopyrightText: 2022-2026 KTH Royal Institute of Technology
 # SPDX-License-Identifier: MIT
 
 """Default configuration for ACCOUNTS."""
@@ -20,6 +20,10 @@ If False, you won't be able to login via the web UI.
 """
 
 ACCOUNTS_RETENTION_PERIOD = timedelta(days=30)
+"""Time after which login IP addresses are removed."""
+
+ACCOUNTS_IP_CLEANUP_BATCH_SIZE = 1000
+"""Maximum number of users processed per login IP cleanup batch."""
 
 ACCOUNTS_SESSION_STORE_FACTORY = (
     "invenio_accounts.sessions:default_session_store_factory"
