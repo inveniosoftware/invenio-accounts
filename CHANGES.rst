@@ -8,6 +8,17 @@
 Changes
 =======
 
+Version v9.2.0 (released 2026-09-21)
+
+- test(session): add set-cookie test
+- fix(session): only set session permanent if it wasn't permanent before
+    * any write operation to the `KVSession` will mark it as modified
+    * Flask uses `session.modified` to check if it should add the session
+      cookie to the response
+    * to avoid setting more session cookies on responses than necessary
+      (e.g. because that's bad with HTTP caches), we avoid marking the
+      session as modified unnecessarily here
+
 Version v9.1.0 (released 2026-08-04)
 
 - fix(i18n): include *.mo files in distribution
