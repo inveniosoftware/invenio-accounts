@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2015-2018 CERN.
+# SPDX-FileCopyrightText: 2026 Graz University of Technology.
 # SPDX-License-Identifier: MIT
 
 """Test password hashing."""
@@ -142,9 +143,8 @@ def create_legacy_user(email="test@test.org", password="qwert1234", **kwargs):
 
     # Encrypt password
     ctx = flask.current_app.extensions["security"].pwd_context
-    encrypted_password = ctx.encrypt(
+    encrypted_password = ctx.hash(
         password,
-        scheme="invenio_aes_encrypted_email",
         salt=email,
     )
 
