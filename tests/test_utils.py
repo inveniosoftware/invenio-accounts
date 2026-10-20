@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2015-2018 CERN.
+# SPDX-FileCopyrightText: 2015-2026 CERN.
 # SPDX-License-Identifier: MIT
 
 """Test test utilities."""
@@ -14,7 +14,12 @@ from invenio_db import db
 
 from invenio_accounts import testutils
 from invenio_accounts.errors import JWTDecodeError, JWTExpiredToken
-from invenio_accounts.utils import jwt_create_token, jwt_decode_token, register_user
+from invenio_accounts.utils import (
+    jwt_create_token,
+    jwt_decode_token,
+    register_user,
+    sanitize_full_name,
+)
 
 
 def test_client_authenticated(app):
@@ -178,3 +183,35 @@ def test_register_user_send_mail(mock_send_mail, app):
 
         register_user(send_register_msg=False, email="test2@test.org", password="1234")
         mock_send_mail.assert_not_called()
+
+
+ZWSP = "\u200b"
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        ("Jane Doe", "Jane Doe"),
+        ("", ""),
+        (None, None),
+        ("evil.com", f"evil{ZWSP}.com"),
+        ("https://evil.com", f"httpsevil{ZWSP}.com"),
+        ("J. R. R. Tolkien", f"J{ZWSP}. R{ZWSP}. R{ZWSP}. Tolkien"),
+        ("a..b", f"a{ZWSP}.{ZWSP}.b"),
+        # removing "://" must not leave a new "://" behind
+        (":/:///", ""),
+        ("h:/://ttp", "h:/ttp"),
+    ],
+)
+def test_sanitize_full_name(value, expected):
+    """Test that URL-like parts of full names are neutralised."""
+    assert sanitize_full_name(value) == expected
+
+
+def test_sanitize_full_name_idempotent():
+    """Test that sanitizing twice does not add more zero-width spaces."""
+    once = sanitize_full_name("https://evil.com and x.y")
+    assert sanitize_full_name(once) == once
+    assert once.count(ZWSP) == 2
+    # the visible text still shows the dots
+    assert once.replace(ZWSP, "") == "httpsevil.com and x.y"
