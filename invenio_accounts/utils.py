@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2017-2024 CERN.
+# SPDX-FileCopyrightText: 2017-2026 CERN.
 # SPDX-FileCopyrightText: 2024-2025 Graz University of Technology.
 # SPDX-License-Identifier: MIT
 
@@ -227,6 +227,28 @@ def change_user_password(_reset_password_link_func=None, **user_data):
             reset_password_link=reset_password_link,
         )
     password_changed.send(current_app._get_current_object(), user=user)
+
+
+def sanitize_full_name(full_name):
+    """Neutralise URL-like parts of a full name.
+
+    Full names end up in emails, where clients turn anything that looks like
+    a URL or a domain into a link. This removes every ``://`` and puts a
+    zero-width space before each dot, so the dots stay visible but
+    ``evil.com`` is not detected as a link.
+
+    The function is idempotent, so a name can safely be sanitized again
+    when the profile is saved.
+
+    :param full_name: The full name to sanitize.
+    :returns: The sanitized full name.
+    """
+    if not full_name:
+        return full_name
+    # loop, as removing one "://" can join the parts around it into another
+    while "://" in full_name:
+        full_name = full_name.replace("://", "")
+    return re.sub(r"(?<!\u200b)\.", "\u200b.", full_name)
 
 
 def validate_username(username):

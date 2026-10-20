@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2015-2024 CERN.
+# SPDX-FileCopyrightText: 2015-2026 CERN.
 # SPDX-FileCopyrightText: 2022 KTH Royal Institute of Technology
 # SPDX-FileCopyrightText: 2024-2026 Graz University of Technology.
 # SPDX-License-Identifier: MIT
@@ -24,7 +24,12 @@ from sqlalchemy_utils.types import ChoiceType, JSONType
 
 from .errors import AlreadyLinkedError
 from .profiles import UserPreferenceDict, UserProfileDict
-from .utils import DomainStatus, split_emailaddr, validate_username
+from .utils import (
+    DomainStatus,
+    sanitize_full_name,
+    split_emailaddr,
+    validate_username,
+)
 
 json_field = (
     db.JSON()
@@ -291,6 +296,8 @@ class User(db.Model, db.Timestamp, UserMixin):
         if value is None:
             self._user_profile = None
         else:
+            if value.get("full_name"):
+                value = {**value, "full_name": sanitize_full_name(value["full_name"])}
             self._user_profile = UserProfileDict(**value)
 
     @hybrid_property
