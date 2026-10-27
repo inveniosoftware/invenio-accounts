@@ -1,9 +1,11 @@
 # SPDX-FileCopyrightText: 2022 TU Wien.
+# SPDX-FileCopyrightText: 2026 CERN.
 # SPDX-License-Identifier: MIT
 
 """Schemas for user profiles and preferences."""
 
-import pytz
+import zoneinfo
+
 from flask import current_app
 from invenio_i18n import lazy_gettext as _
 from marshmallow import Schema, ValidationError, fields
@@ -29,7 +31,7 @@ def validate_locale(value):
 
 def validate_timezone(value):
     """Check if the value is a valid timezone."""
-    if value not in pytz.all_timezones:
+    if value not in zoneinfo.available_timezones():
         raise ValidationError(message=str(_("Value must be a valid timezone.")))
     current_app.config["BABEL_DEFAULT_TIMEZONE"] = value
 
