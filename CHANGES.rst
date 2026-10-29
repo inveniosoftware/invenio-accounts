@@ -3,10 +3,15 @@
     SPDX-FileCopyrightText: 2024-2026 Graz University of Technology.
     SPDX-FileCopyrightText: 2025 KTH Royal Institute of Technology.
     SPDX-FileCopyrightText: 2026 TU Wien.
+    SPDX-FileCopyrightText: 2026 Northwestern University.
     SPDX-License-Identifier: MIT
 
 Changes
 =======
+
+Version v9.2.1 (released 2026-10-29)
+
+- fix(profiles): sanitize full name
 
 Version v9.2.0 (released 2026-09-21)
 
