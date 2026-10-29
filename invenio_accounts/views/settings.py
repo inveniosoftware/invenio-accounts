@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2015-2018 CERN.
+# SPDX-FileCopyrightText: 2015-2026 CERN.
 # SPDX-FileCopyrightText: 2024 Graz University of Technology.
 # SPDX-License-Identifier: MIT
 
@@ -8,7 +8,7 @@ from flask import Blueprint, abort, current_app, request
 from flask_security.views import anonymous_user_required
 from flask_security.views import login as base_login
 
-from .security import revoke_session, security
+from .security import reauth, revoke_session, security
 
 
 @anonymous_user_required
@@ -42,5 +42,8 @@ def create_settings_blueprint(app):
         blueprint.add_url_rule(
             "/sessions/revoke", view_func=revoke_session, methods=["POST"]
         )
+
+    if app.config.get("ACCOUNTS_REAUTH_ENABLED"):
+        blueprint.add_url_rule("/reauth", view_func=reauth, methods=["GET", "POST"])
 
     return blueprint

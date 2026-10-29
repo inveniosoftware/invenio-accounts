@@ -1,0 +1,9 @@
+{#-
+  SPDX-FileCopyrightText: 2026 CERN.
+  SPDX-License-Identifier: MIT
+#}
+{{ _('Your verification code is:') }} {{ code }}
+
+{{ _('It expires in %(minutes)s minutes.', minutes=ttl_minutes) }}
+
+{{ _("If you didn't request this code, someone may be trying to make changes to your account. Do not share this code with anyone.") }}

@@ -1,0 +1,42 @@
+{#
+  SPDX-FileCopyrightText: 2026 CERN.
+  SPDX-License-Identifier: MIT
+#}
+{%- extends config.ACCOUNTS_SETTINGS_TEMPLATE %}
+
+{% from "invenio_accounts/_macros.html" import render_field %}
+
+{% set panel_title = _("Confirm it's you") %}
+{% set panel_icon = current_theme_icons.shield %}
+
+{% block settings_form %}
+<p>
+  {{ _("For your security, we need to confirm it's you before you continue. We will send a verification code to %(email)s.", email=current_user.email) }}
+</p>
+
+<form class="ui form" method="POST" name="reauth_send_form">
+  {{ send_form.hidden_tag() }}
+  <input type="hidden" name="action" value="send">
+  <button type="submit" class="ui {% if not code_sent %}primary {% endif %}labeled icon button">
+    <i class="envelope icon" aria-hidden="true"></i>
+    {%- if code_sent %}{{ _("Send a new code") }}{% else %}{{ _("Send code") }}{% endif %}
+  </button>
+</form>
+
+{%- if code_sent or verify_form.errors %}
+<div class="ui divider"></div>
+<form class="ui form" method="POST" name="reauth_verify_form">
+  {{ verify_form.hidden_tag() }}
+  <input type="hidden" name="action" value="verify">
+  <div class="field">
+    <label for="{{ verify_form.code.id }}">{{ _("Verification code") }}</label>
+    {{ render_field(verify_form.code, autofocus=True) }}
+  </div>
+  <button type="submit" class="ui primary labeled icon button">
+    <i class="check icon" aria-hidden="true"></i>
+    {{ _("Confirm") }}
+  </button>
+  <a href="{{ next_url }}" class="ui button">{{ _("Cancel") }}</a>
+</form>
+{%- endif %}
+{% endblock settings_form %}

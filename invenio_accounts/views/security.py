@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2017-2025 CERN.
+# SPDX-FileCopyrightText: 2017-2026 CERN.
 # SPDX-FileCopyrightText: 2024 KTH Royal Institute of Technology.
 # SPDX-FileCopyrightText: 2024 Graz University of Technology.
 # SPDX-License-Identifier: MIT
@@ -11,8 +11,16 @@ from flask_security import current_user
 from invenio_db import db
 from invenio_i18n import gettext as _
 
-from ..forms import RevokeForm
+from ..forms import ReauthSendCodeForm, ReauthVerifyCodeForm, RevokeForm
 from ..models import SessionActivity
+from ..reauth import (
+    ReauthError,
+    has_pending_code,
+    is_reauth_fresh,
+    is_safe_next_url,
+    send_reauth_code,
+    verify_reauth_code,
+)
 from ..sessions import delete_session
 
 
@@ -63,3 +71,45 @@ def revoke_session():
     else:
         flash(_("Unable to remove the session %(sid_s)s.") % {"sid_s": sid_s}, "error")
     return redirect(url_for("invenio_accounts.security"))
+
+
+@login_required
+def reauth():
+    """View for re-authenticating with a code sent by email."""
+    next_url = request.args.get("next")
+    if not is_safe_next_url(next_url):
+        next_url = "/"
+
+    if request.method == "GET" and is_reauth_fresh():
+        return redirect(next_url)
+
+    send_form = ReauthSendCodeForm(prefix="send")
+    verify_form = ReauthVerifyCodeForm(prefix="verify")
+    action = request.form.get("action")
+
+    if action == "send" and send_form.validate_on_submit():
+        try:
+            send_reauth_code()
+            flash(
+                _("A verification code has been sent to %(email)s.")
+                % {"email": current_user.email},
+                category="success",
+            )
+        except ReauthError as e:
+            flash(str(e), category="error")
+        return redirect(url_for(".reauth", next=next_url))
+
+    if action == "verify" and verify_form.validate_on_submit():
+        if verify_reauth_code(verify_form.code.data):
+            return redirect(next_url)
+        verify_form.code.errors.append(
+            _("The code is invalid or has expired. Please try again.")
+        )
+
+    return render_template(
+        current_app.config["ACCOUNTS_REAUTH_TEMPLATE"],
+        send_form=send_form,
+        verify_form=verify_form,
+        code_sent=has_pending_code(),
+        next_url=next_url,
+    )

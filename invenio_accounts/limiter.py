@@ -48,6 +48,16 @@ def enforce_login_limit(user):
     )
 
 
+def enforce_reauth_send_limit(user):
+    """Return result for re-authentication code per-account rate limit."""
+    return _enforce_user_limit(
+        user=user,
+        limit_key="ACCOUNTS_REAUTH_SEND_RATELIMIT",
+        key_prefix_key="ACCOUNTS_REAUTH_SEND_RATELIMIT_KEY_PREFIX",
+        message_key="ACCOUNTS_REAUTH_SEND_RATELIMIT_MSG",
+    )
+
+
 def enforce_send_confirmation_limit(user):
     """Return result for send-confirmation per-account rate limit."""
     return _enforce_user_limit(

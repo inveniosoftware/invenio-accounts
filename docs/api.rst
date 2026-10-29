@@ -1,5 +1,5 @@
 ..
-    SPDX-FileCopyrightText: 2015-2018 CERN.
+    SPDX-FileCopyrightText: 2015-2026 CERN.
     SPDX-License-Identifier: MIT
 
 API Docs
@@ -22,6 +22,14 @@ Datastore
 
 .. automodule:: invenio_accounts.datastore
    :members:
+
+Re-authentication
+-----------------
+
+.. automodule:: invenio_accounts.reauth
+   :members: reauth_required, is_reauth_fresh, reauth_redirect, is_reauth_enabled,
+      send_reauth_code, verify_reauth_code, has_pending_code, clear_reauth,
+      is_safe_next_url, ReauthError
 
 Errors
 ------

@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2015-2018 CERN.
+# SPDX-FileCopyrightText: 2015-2026 CERN.
 # SPDX-FileCopyrightText: 2024-2025 Graz University of Technology.
 # SPDX-License-Identifier: MIT
 
@@ -13,6 +13,7 @@ import pytest
 from flask import Flask
 from flask_admin import Admin
 from flask_celeryext import FlaskCeleryExt
+from flask_login import login_required
 from flask_mail import Mail
 from flask_webpackext.manifest import (
     JinjaManifest,
@@ -31,6 +32,7 @@ from werkzeug.exceptions import NotFound
 
 from invenio_accounts import InvenioAccounts, InvenioAccountsREST, InvenioAccountsUI
 from invenio_accounts.admin import role_adminview, session_adminview, user_adminview
+from invenio_accounts.reauth import reauth_required
 from invenio_accounts.testutils import create_test_user
 from invenio_accounts.views.rest import RegisterView, create_rest_blueprint, use_kwargs
 from invenio_accounts.views.settings import create_settings_blueprint
@@ -338,3 +340,35 @@ def users(app):
             "obj": user2,
         },
     ]
+
+
+def _protected():
+    return "protected"
+
+
+@pytest.fixture()
+def reauth_app(request):
+    """Application with re-authentication enabled and a protected view."""
+    app = _app_factory(
+        dict(
+            ACCOUNTS_REAUTH_ENABLED=True,
+            APP_ENABLE_SECURE_HEADERS=False,
+            RATELIMIT_STORAGE_URI="memory://",
+        )
+    )
+    InvenioAccounts(app)
+    app.register_blueprint(create_settings_blueprint(app))
+    app.add_url_rule(
+        "/protected",
+        "protected",
+        login_required(reauth_required()(_protected)),
+        methods=["GET", "POST"],
+    )
+    app.add_url_rule(
+        "/protected-post",
+        "protected_post",
+        login_required(reauth_required(methods=["POST"])(_protected)),
+        methods=["GET", "POST"],
+    )
+    _database_setup(app, request)
+    yield app

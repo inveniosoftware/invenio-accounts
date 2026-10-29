@@ -1,5 +1,5 @@
 ..
-    SPDX-FileCopyrightText: 2015-2018 CERN.
+    SPDX-FileCopyrightText: 2015-2026 CERN.
     SPDX-License-Identifier: MIT
 
 Configuration
@@ -61,6 +61,40 @@ set the following two configuration variables (provided by
 .. autodata:: invenio_accounts.config.RECAPTCHA_PUBLIC_KEY
 
 .. autodata:: invenio_accounts.config.RECAPTCHA_PRIVATE_KEY
+
+Re-authentication
+-----------------
+Sensitive actions (e.g. creating API credentials or changing the email address)
+can require users to re-authenticate by entering a one-time code sent to their
+current email address. Modules opt in by protecting their views with
+:func:`invenio_accounts.reauth.reauth_required`; instances enable it with:
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_REAUTH_ENABLED
+
+The validity of a re-authentication and of the codes can be tuned with:
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_REAUTH_WINDOW
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_REAUTH_CODE_TTL
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_REAUTH_MAX_ATTEMPTS
+
+To avoid flooding a user's mailbox, sending codes can be rate limited per
+account (requires Invenio-App's rate limiter):
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_REAUTH_SEND_RATELIMIT
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_REAUTH_SEND_RATELIMIT_MSG
+
+The page and the email can be customized with:
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_REAUTH_TEMPLATE
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_REAUTH_EMAIL_SUBJECT
+
+The email body is rendered from ``security/email/reauth_code.txt`` and
+``security/email/reauth_code.html``, which can be overridden like any other
+template.
 
 User tracking
 -------------

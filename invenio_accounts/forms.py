@@ -10,8 +10,9 @@ from flask import request
 from flask_security.forms import NextFormMixin
 from flask_wtf import FlaskForm, Recaptcha, RecaptchaField
 from invenio_db import db
-from invenio_i18n import gettext as _
-from wtforms import FormField, HiddenField
+from invenio_i18n import lazy_gettext as _
+from wtforms import FormField, HiddenField, StringField
+from wtforms.validators import DataRequired, Regexp
 
 from .limiter import (
     enforce_forgot_password_limit,
@@ -34,6 +35,23 @@ class RevokeForm(FlaskForm):
     """Form for revoking a session."""
 
     sid_s = HiddenField()
+
+
+class ReauthSendCodeForm(FlaskForm):
+    """Form for requesting a re-authentication code."""
+
+
+class ReauthVerifyCodeForm(FlaskForm):
+    """Form for entering a re-authentication code."""
+
+    code = StringField(
+        _("Verification code"),
+        validators=[
+            DataRequired(),
+            Regexp(r"^\s*\d{6}\s*$", message=_("Enter the 6-digit code.")),
+        ],
+        render_kw={"autocomplete": "one-time-code", "inputmode": "numeric"},
+    )
 
 
 def confirm_register_form_factory(Form, app):

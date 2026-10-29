@@ -125,6 +125,43 @@ ACCOUNTS_SEND_CONFIRMATION_RATELIMIT_MSG = _(
 )
 """Message shown when send-confirmation per-account rate limit is exceeded."""
 
+ACCOUNTS_REAUTH_ENABLED = False
+"""Require users to re-authenticate before sensitive actions.
+
+When enabled, views protected with
+:func:`invenio_accounts.reauth.reauth_required` ask the user to confirm a
+one-time code sent to their current email address before proceeding.
+"""
+
+ACCOUNTS_REAUTH_WINDOW = timedelta(minutes=5)
+"""How long a successful re-authentication remains valid."""
+
+ACCOUNTS_REAUTH_CODE_TTL = timedelta(minutes=10)
+"""How long a re-authentication code remains valid after being sent."""
+
+ACCOUNTS_REAUTH_MAX_ATTEMPTS = 5
+"""Maximum number of attempts to enter a code before it is invalidated."""
+
+ACCOUNTS_REAUTH_TEMPLATE = "invenio_accounts/settings/reauth.html"
+"""Template for the re-authentication page."""
+
+ACCOUNTS_REAUTH_EMAIL_SUBJECT = _("Your verification code")
+"""Subject of the email containing the re-authentication code."""
+
+ACCOUNTS_REAUTH_SEND_RATELIMIT = None
+"""Flask-Limiter rate limit string for sending re-authentication codes per account.
+
+Example: ``"3 per 10 minutes; 10 per day"``. Disabled when ``None``.
+"""
+
+ACCOUNTS_REAUTH_SEND_RATELIMIT_KEY_PREFIX = "accounts.reauth"
+"""Prefix used to namespace re-authentication per-account limiter keys."""
+
+ACCOUNTS_REAUTH_SEND_RATELIMIT_MSG = _(
+    "Too many verification codes requested for this account. Please try again later."
+)
+"""Message shown when the re-authentication per-account rate limit is exceeded."""
+
 ACCOUNTS_REST_AUTH_VIEWS = {
     "login": "invenio_accounts.views.rest:LoginView",
     "logout": "invenio_accounts.views.rest:LogoutView",

@@ -34,6 +34,7 @@ from .datastore import SessionAwareSQLAlchemyUserDatastore
 from .domains import on_user_confirmed
 from .hash import InvenioAesEncryptedEmail
 from .models import Role, User
+from .reauth import clear_reauth
 from .sessions import csrf_token_reset, login_listener, logout_listener
 from .utils import obj_or_import_string, set_session_info
 
@@ -209,6 +210,10 @@ class InvenioAccounts(object):
             request_finished.connect(set_session_info, app)
 
         user_confirmed.connect(on_user_confirmed, app)
+
+        # Re-authentication never outlives a login session
+        user_logged_in.connect(clear_reauth, app)
+        user_logged_out.connect(clear_reauth, app)
 
         # Set Session KV store
         session_kvstore_factory = obj_or_import_string(
