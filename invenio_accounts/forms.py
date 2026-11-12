@@ -3,16 +3,17 @@
 
 """Additional non-userprofile fields used during registration.
 
-Currently supported: recaptcha
+Currently supported: ALTCHA
 """
 
 from flask import request
 from flask_security.forms import NextFormMixin
-from flask_wtf import FlaskForm, Recaptcha, RecaptchaField
+from flask_wtf import FlaskForm
 from invenio_db import db
 from invenio_i18n import gettext as _
-from wtforms import FormField, HiddenField
+from wtforms import HiddenField
 
+from .captcha import AltchaField, has_legacy_recaptcha_config, is_altcha_enabled
 from .limiter import (
     enforce_forgot_password_limit,
     enforce_login_limit,
@@ -22,12 +23,20 @@ from .proxies import current_datastore
 from .utils import validate_domain
 
 
-class RegistrationFormRecaptcha(FlaskForm):
-    """Form for editing user profile."""
+def _add_altcha(Form, app, name="register"):
+    """Add the ALTCHA field to the form if enabled."""
+    if not is_altcha_enabled(app):
+        return Form
 
-    recaptcha = RecaptchaField(
-        validators=[Recaptcha(message=_("Please complete the reCAPTCHA."))]
-    )
+    class FormWithAltcha(Form):
+        altcha = AltchaField()
+
+    if name == "register" and has_legacy_recaptcha_config(app):
+        # Deprecated: templates written for reCAPTCHA render ``form.recaptcha``,
+        # make it render the ALTCHA widget instead.
+        FormWithAltcha.recaptcha = property(lambda self: self.altcha)
+
+    return FormWithAltcha
 
 
 class RevokeForm(FlaskForm):
@@ -56,30 +65,12 @@ def confirm_register_form_factory(Form, app):
                 return False
             return True
 
-    if app.config.get("RECAPTCHA_PUBLIC_KEY") and app.config.get(
-        "RECAPTCHA_PRIVATE_KEY"
-    ):
-
-        class ConfirmRegisterWithCaptchaForm(ConfirmRegisterForm):
-            recaptcha = FormField(RegistrationFormRecaptcha, separator=".")
-
-        return ConfirmRegisterWithCaptchaForm
-
-    return ConfirmRegisterForm
+    return _add_altcha(ConfirmRegisterForm, app)
 
 
 def register_form_factory(Form, app):
     """Return extended registration form."""
-    if app.config.get("RECAPTCHA_PUBLIC_KEY") and app.config.get(
-        "RECAPTCHA_PRIVATE_KEY"
-    ):
-
-        class RegisterForm(Form):
-            recaptcha = FormField(RegistrationFormRecaptcha, separator=".")
-
-        return RegisterForm
-
-    return Form
+    return _add_altcha(Form, app)
 
 
 def login_form_factory(Form, app):
@@ -103,6 +94,8 @@ def login_form_factory(Form, app):
 def send_confirmation_form_factory(Form, app):
     """Return extended login form."""
 
+    Form = _add_altcha(Form, app, "send_confirmation")
+
     class SendConfirmationEmailView(Form):
         """Form which sends confirmation instructions.
 
@@ -112,6 +105,11 @@ def send_confirmation_form_factory(Form, app):
         """
 
         def validate(self, extra_validators=None):
+            # This method does not call ``super().validate()``, so the ALTCHA
+            # field has to be validated explicitly.
+            altcha = getattr(self, "altcha", None)
+            if altcha is not None and not altcha.validate(self):
+                return False
             with db.session.no_autoflush:
                 self.user = current_datastore.get_user(self.data["email"])
             # Form is valid if user exists and they are not yet confirmed
@@ -128,7 +126,8 @@ def send_confirmation_form_factory(Form, app):
 
 
 def forgot_password_form_factory(Form, app):
-    """Return forgot-password form with per-account rate limiting."""
+    """Return forgot-password form with per-account rate limiting and ALTCHA."""
+    Form = _add_altcha(Form, app, "forgot_password")
 
     class ForgotPasswordForm(Form):
         def validate(self, extra_validators=None):
