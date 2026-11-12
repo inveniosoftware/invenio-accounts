@@ -1,10 +1,9 @@
 {#
-  SPDX-FileCopyrightText: 2015-2020 CERN.
+  SPDX-FileCopyrightText: 2015-2026 CERN.
   SPDX-License-Identifier: MIT
 #}
 {%- extends config.ACCOUNTS_COVER_TEMPLATE %}
-
-{% from "invenio_accounts/_macros.html" import render_field, form_errors %}
+{% from "invenio_accounts/_macros.html" import render_field, form_errors, render_altcha %}
 
 {% block page_body %}
 
@@ -21,6 +20,7 @@
                   name="send_confirmation_form" class="ui big form">
               {{ form.hidden_tag() }}
               {{ render_field(form.email, icon="icon user", autofocus=True, errormsg='email' in form.errors) }}
+              {{ render_altcha(send_confirmation_form) }}
               <button type="submit" class="ui fluid large submit primary button">
                 <i class="ui send icon" aria-hidden="true"></i>{{ _('Send') }}
               </button>
@@ -33,3 +33,10 @@
   </div>
 
 {% endblock page_body %}
+
+{%- block javascript %}
+  {{ super() }}
+  {%- if send_confirmation_form.altcha %}
+    {{ webpack['invenio-accounts-altcha.js'] }}
+  {%- endif %}
+{%- endblock javascript %}

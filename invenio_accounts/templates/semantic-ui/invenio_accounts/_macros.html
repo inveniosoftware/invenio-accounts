@@ -1,5 +1,5 @@
 {#
-  SPDX-FileCopyrightText: 2015-2020 CERN.
+  SPDX-FileCopyrightText: 2015-2026 CERN.
   SPDX-License-Identifier: MIT
 #}
 
@@ -33,6 +33,17 @@
             <p>{{ single_message }}</p>
           {% endfor %}
         {% endif %}
+      {%- endfor %}
+    </div>
+  {%- endif %}
+{% endmacro %}
+
+{% macro render_altcha(form) %}
+  {%- if form.altcha %}
+    <div class="field{% if form.altcha.errors %} error{% endif %}">
+      {{ form.altcha() }}
+      {%- for error in form.altcha.errors %}
+        <div class="ui pointing red basic label">{{ error }}</div>
       {%- endfor %}
     </div>
   {%- endif %}

@@ -330,11 +330,32 @@ ACCOUNTS_JWT_DECODE_FACTORY = "invenio_accounts.utils:jwt_decode_token"
 ACCOUNTS_JWT_CREATION_FACTORY = "invenio_accounts.utils:jwt_create_token"
 """Import path of factory used to generate JWT."""
 
-RECAPTCHA_PUBLIC_KEY = None
-"""reCAPTCHA public key."""
+ACCOUNTS_ALTCHA_ENABLED = False
+"""Enable the ALTCHA proof-of-work captcha."""
 
-RECAPTCHA_PRIVATE_KEY = None
-"""reCAPTCHA private key."""
+ACCOUNTS_ALTCHA_WIDGET_ATTRS = {"display": "floating", "auto": "onsubmit"}
+"""Default HTML attributes of the ``<altcha-widget>`` element."""
+
+ACCOUNTS_ALTCHA_HMAC_KEY = None
+"""Secret used to sign ALTCHA challenges.
+
+.. note::
+
+    If set to ``None``, a key derived from ``SECRET_KEY`` is used.
+"""
+
+ACCOUNTS_ALTCHA_ALGORITHM = "PBKDF2/SHA-256"
+"""Key derivation algorithm used for ALTCHA challenges."""
+
+ACCOUNTS_ALTCHA_COST = 5000
+"""Cost (e.g. number of iterations) of the ALTCHA key derivation algorithm."""
+
+ACCOUNTS_ALTCHA_EXPIRES = timedelta(minutes=10)
+"""Validity period of an ALTCHA challenge.
+
+A solved challenge can only be used once within this period. Replay protection
+relies on the rate limiter storage of Invenio-App (``RATELIMIT_STORAGE_URI``).
+"""
 
 ACCOUNTS_USERINFO_HEADERS = False
 """If True, add X-Session-ID and X-User-ID to the HTTP response."""

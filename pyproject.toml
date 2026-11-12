@@ -24,6 +24,7 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
 ]
 dependencies = [
+  "altcha>=2.0.0",
   "cryptography>=3.0.0",
   "flask-kvsession-invenio>=1.0.0,<2.0.0",
   "flask-security-invenio>=4.0.0,<5.0.0",
@@ -53,6 +54,9 @@ invenio_accounts_role = "invenio_accounts.admin:role_adminview"
 invenio_accounts_session = "invenio_accounts.admin:session_adminview"
 invenio_accounts_user = "invenio_accounts.admin:user_adminview"
 invenio_accounts_user_identity = "invenio_accounts.admin:user_identity_adminview"
+
+[project.entry-points."invenio_assets.webpack"]
+invenio_accounts = "invenio_accounts.webpack:accounts"
 
 [project.entry-points."invenio_base.api_apps"]
 invenio_accounts_rest = "invenio_accounts:InvenioAccountsREST"

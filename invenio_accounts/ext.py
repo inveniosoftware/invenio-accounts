@@ -30,6 +30,7 @@ from invenio_accounts.forms import (
 )
 
 from . import config
+from .captcha import is_altcha_enabled, warn_recaptcha_deprecated
 from .datastore import SessionAwareSQLAlchemyUserDatastore
 from .domains import on_user_confirmed
 from .hash import InvenioAesEncryptedEmail
@@ -162,6 +163,8 @@ class InvenioAccounts(object):
 
         self.register_anonymous_identity_loader(state)
 
+        warn_recaptcha_deprecated(app)
+
         app.extensions["security"].register_form = register_form_factory(
             app.extensions["security"].register_form, app
         )
@@ -176,7 +179,9 @@ class InvenioAccounts(object):
             app.extensions["security"].login_form, app
         )
 
-        if app.config.get("ACCOUNTS_FORGOT_PASSWORD_EMAIL_RATELIMIT"):
+        if app.config.get(
+            "ACCOUNTS_FORGOT_PASSWORD_EMAIL_RATELIMIT"
+        ) or is_altcha_enabled(app):
             app.extensions["security"].forgot_password_form = (
                 forgot_password_form_factory(
                     app.extensions["security"].forgot_password_form,
