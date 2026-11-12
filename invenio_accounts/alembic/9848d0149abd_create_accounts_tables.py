@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2016-2018 CERN.
+# SPDX-FileCopyrightText: 2026 Graz University of Technology.
 # SPDX-License-Identifier: MIT
 
 """Create accounts tables."""
@@ -6,7 +7,7 @@
 import sqlalchemy as sa
 import sqlalchemy_utils
 from alembic import op
-from sqlalchemy.engine.reflection import Inspector
+from sqlalchemy import inspect
 
 # revision identifiers, used by Alembic.
 revision = "9848d0149abd"
@@ -97,7 +98,7 @@ def upgrade():
 def downgrade():
     """Downgrade database."""
     ctx = op.get_context()
-    insp = Inspector.from_engine(ctx.connection.engine)
+    insp = inspect(ctx.connection.engine)
 
     for fk in insp.get_foreign_keys("transaction"):
         if fk["referred_table"] == "accounts_user":
