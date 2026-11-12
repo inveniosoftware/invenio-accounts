@@ -21,6 +21,7 @@ from flask_security.signals import reset_password_instructions_sent
 from flask_security.utils import (
     config_value,
     get_message,
+    hash_password,
     login_user,
     logout_user,
     send_mail,
@@ -260,7 +261,7 @@ class LoginView(MethodView, UserViewMixin):
     decorators = [user_already_authenticated]
 
     post_args = {
-        "email": fields.Email(required=True, validate=[user_exists]),
+        "email": fields.Email(required=True),
         "password": fields.String(required=True),
     }
 
@@ -269,11 +270,18 @@ class LoginView(MethodView, UserViewMixin):
         return jsonify(default_user_payload(user))
 
     def verify_login(self, user, password=None, **kwargs):
-        """Verify the login via password."""
-        if not user.password:
-            _abort(get_message("PASSWORD_NOT_SET")[0], "password")
+        """Verify the login via password.
+
+        An unknown email address, an account without a password and a wrong
+        password all produce the same error, so that the response does not
+        reveal whether an account exists.
+        """
+        if user is None or not user.password:
+            # Hash anyway, so that the response time does not reveal it either
+            hash_password(password)
+            _abort(get_message("GENERIC_AUTHN_FAILED")[0])
         if not verify_and_update_password(password, user):
-            _abort(get_message("INVALID_PASSWORD")[0], "password")
+            _abort(get_message("GENERIC_AUTHN_FAILED")[0])
         if requires_confirmation(user):
             _abort(get_message("CONFIRMATION_REQUIRED")[0])
         if not user.is_active:
@@ -291,7 +299,7 @@ class LoginView(MethodView, UserViewMixin):
 
         user = self.get_user(**kwargs)
         if current_app.config.get("ACCOUNTS_LOGIN_RATELIMIT"):
-            allowed, message = enforce_login_limit(user)
+            allowed, message = enforce_login_limit(kwargs.get("email"))
             if not allowed:
                 abort(429, description=str(message))
         self.verify_login(user, **kwargs)
@@ -376,14 +384,18 @@ class RegisterView(MethodView):
 
 
 class ForgotPasswordView(MethodView, UserViewMixin):
-    """View to get a link to reset the user password."""
+    """View to get a link to reset the user password.
+
+    The response is the same whether or not an account exists for the email
+    address, so that it does not reveal which addresses are registered.
+    """
 
     decorators = [user_already_authenticated]
 
     reset_password_link_func = default_reset_password_link_func
 
     post_args = {
-        "email": fields.Email(required=True, validate=[user_exists]),
+        "email": fields.Email(required=True),
     }
 
     @classmethod
@@ -402,21 +414,22 @@ class ForgotPasswordView(MethodView, UserViewMixin):
                 current_app._get_current_object(), user=user, token=token
             )
 
-    def success_response(self, user):
+    def success_response(self, email):
         """Return a response containing reset password instructions."""
         return jsonify(
-            {"message": get_message("PASSWORD_RESET_REQUEST", email=user.email)[0]}
+            {"message": get_message("PASSWORD_RESET_REQUEST", email=email)[0]}
         )
 
     @use_kwargs(post_args)
     def post(self, **kwargs):
-        """Send reset password instructions."""
+        """Send reset password instructions, if an account exists."""
         if not current_security.recoverable:
             _abort(get_message("PASSWORD_RECOVERY_DISABLED")[0])
 
         user = self.get_user(**kwargs)
-        self.send_reset_password_instructions(user)
-        return self.success_response(user)
+        if user is not None:
+            self.send_reset_password_instructions(user)
+        return self.success_response(kwargs["email"])
 
 
 class ResetPasswordView(MethodView):

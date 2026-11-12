@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2016-2024 CERN.
+# SPDX-FileCopyrightText: 2016-2026 CERN.
 # SPDX-FileCopyrightText: 2024 Graz University of Technology.
 # SPDX-License-Identifier: MIT
 
@@ -98,15 +98,15 @@ def test_login_view(api):
                 ),
             )
 
-            # Invalid credentials
-            res = client.post(url, data=dict(email="not@exists.com", password="123456"))
-            assert_error_resp(res, (("email", "user does not exist"),))
-
-            # No-password user
-            res = client.post(
-                url, data=dict(email="nopass@test.com", password="123456")
-            )
-            assert_error_resp(res, (("password", "no password is set"),))
+            # Unknown user, wrong password and no-password user give the same
+            # error (see also test_account_enumeration.py)
+            for email, password in (
+                ("not@exists.com", "123456"),
+                ("normal@test.com", "wrong-password"),
+                ("nopass@test.com", "123456"),
+            ):
+                res = client.post(url, data=dict(email=email, password=password))
+                assert_error_resp(res, ((None, "invalid email address or password"),))
 
             # Disabled account
             res = client.post(
@@ -254,12 +254,13 @@ def test_forgot_password_view(api):
 
             # Invalid email
             res = client.post(url, data=dict(email="invalid"))
-            assert_error_resp(res, (("email", "user does not exist"),))
+            assert_error_resp(res, (("email", "not a valid email"),))
 
             # Valid email
             res = client.post(url, data=dict(email="normal@test.com"))
             payload = get_json(res)
-            assert "Instructions to reset your password" in payload["message"]
+            assert res.status_code == 200
+            assert "instructions to reset your password" in payload["message"]
 
 
 def test_disabled_forgot_password_view(api):
