@@ -11,7 +11,7 @@ from invenio_i18n import gettext as _t
 from invenio_i18n import lazy_gettext as _
 
 from .profiles import UserPreferencesSchema, UserProfileSchema
-from .views import login
+from .views import forgot_password, login
 
 ACCOUNTS = True
 """Tells if the templates should use the accounts module.
@@ -257,6 +257,27 @@ SECURITY_MSG_PASSWORD_RECOVERY_DISABLED = (
 SECURITY_MSG_PASSWORD_RESET_DISABLED = (_t("Password reset is disabled."), "error")
 """The error to be displayed in REST password reset when it is disabled."""
 
+SECURITY_MSG_PASSWORD_RESET_REQUEST = (
+    _t(
+        "If an account exists for %(email)s, you will receive an email with "
+        "instructions to reset your password."
+    ),
+    "info",
+)
+"""The message displayed after a password reset request.
+
+It is displayed whether or not an account exists for the email address, so it
+must not reveal which is the case.
+"""
+
+SECURITY_MSG_GENERIC_AUTHN_FAILED = (_t("Invalid email address or password."), "error")
+"""The error displayed when a login fails because of the email or password.
+
+It is used for unknown email addresses, accounts without a password and wrong
+passwords alike, so that the login form does not reveal whether an account
+exists.
+"""
+
 REMEMBER_COOKIE_DURATION = timedelta(days=90)
 """Remember me cookie life time changed to 90 days instead of 365 days."""
 
@@ -345,6 +366,16 @@ ACCOUNTS_LOGIN_VIEW_FUNCTION = login
 This can be either an import string, or the view function itself.
 If set to None, the default login view function from Flask-Security will be
 left as is.
+"""
+
+ACCOUNTS_FORGOT_PASSWORD_VIEW_FUNCTION = forgot_password
+"""The view function to use for the forgot password endpoint.
+
+This can be either an import string, or the view function itself.
+The default view does not disclose whether an account exists for the submitted
+email address. A custom view must do the same, and must handle a valid form
+whose ``user`` is ``None`` (no account, or an unconfirmed one) by not sending
+any instructions.
 """
 
 ACCOUNTS_LOCAL_LOGIN_ENABLED = True

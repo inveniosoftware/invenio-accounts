@@ -8,6 +8,7 @@ Currently supported: recaptcha
 
 from flask import request
 from flask_security.forms import NextFormMixin
+from flask_security.utils import get_message
 from flask_wtf import FlaskForm, Recaptcha, RecaptchaField
 from invenio_db import db
 from invenio_i18n import gettext as _
@@ -82,14 +83,42 @@ def register_form_factory(Form, app):
     return Form
 
 
+def _remove_errors(field, message_keys):
+    """Remove the given Flask-Security messages from a field's errors.
+
+    :returns: ``True`` if any error was removed.
+    """
+    messages = {get_message(key)[0] for key in message_keys}
+    remaining = [error for error in field.errors if error not in messages]
+    removed = len(remaining) != len(field.errors)
+    field.errors = remaining
+    return removed
+
+
 def login_form_factory(Form, app):
-    """Return extended login form."""
+    """Return extended login form.
+
+    Flask-Security reports an unknown email address, an account without a
+    password and a wrong password with different errors on different fields,
+    which discloses whether an account exists. These are replaced by a single
+    form-level error.
+    """
 
     class LoginForm(Form):
         def validate(self, extra_validators=None):
             is_valid = super().validate(extra_validators=extra_validators)
+            if not is_valid:
+                concealed_email = _remove_errors(self.email, ["USER_DOES_NOT_EXIST"])
+                concealed_password = _remove_errors(
+                    self.password, ["PASSWORD_NOT_SET", "INVALID_PASSWORD"]
+                )
+                if concealed_email or concealed_password:
+                    self.form_errors = [
+                        *self.form_errors,
+                        get_message("GENERIC_AUTHN_FAILED")[0],
+                    ]
             if app.config.get("ACCOUNTS_LOGIN_RATELIMIT"):
-                allowed, message = enforce_login_limit(getattr(self, "user", None))
+                allowed, message = enforce_login_limit(self.email.data)
                 if not allowed:
                     self.form_errors = [*self.form_errors, str(message)]
                     self.email.errors = []
@@ -128,13 +157,31 @@ def send_confirmation_form_factory(Form, app):
 
 
 def forgot_password_form_factory(Form, app):
-    """Return forgot-password form with per-account rate limiting."""
+    """Return forgot-password form that does not disclose account existence.
+
+    Flask-Security rejects unknown and unconfirmed email addresses with
+    validation errors, which discloses whether an account exists. This form
+    accepts them instead, with ``user`` set to ``None`` so that no
+    instructions are sent. It must be used together with
+    :func:`invenio_accounts.views.settings.forgot_password`, which shows the
+    same message in both cases.
+
+    The form also applies the per-account rate limit
+    (``ACCOUNTS_FORGOT_PASSWORD_EMAIL_RATELIMIT``), if configured.
+    """
 
     class ForgotPasswordForm(Form):
         def validate(self, extra_validators=None):
             if not super().validate(extra_validators=extra_validators):
-                return False
-            allowed, message = enforce_forgot_password_limit(self.user)
+                concealed = _remove_errors(
+                    self.email, ["USER_DOES_NOT_EXIST", "CONFIRMATION_REQUIRED"]
+                )
+                if not concealed or self.errors:
+                    # Any other error, e.g. an invalid email address or CSRF token
+                    return False
+                self.user = None
+
+            allowed, message = enforce_forgot_password_limit(self.email.data)
             if not allowed:
                 self.email.errors = [*self.email.errors, str(message)]
                 return False

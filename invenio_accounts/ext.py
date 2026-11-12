@@ -160,6 +160,20 @@ class InvenioAccounts(object):
         if new_login_view is not None:
             app.view_functions["security.login"] = new_login_view
 
+        # Override Flask-Security's forgot password view function, so that it
+        # does not disclose whether an account exists
+        forgot_password_view = obj_or_import_string(
+            app.config.get("ACCOUNTS_FORGOT_PASSWORD_VIEW_FUNCTION")
+        )
+        forgot_password_endpoint = (
+            f"{app.config.get('SECURITY_BLUEPRINT_NAME', 'security')}.forgot_password"
+        )
+        if (
+            forgot_password_view is not None
+            and forgot_password_endpoint in app.view_functions
+        ):
+            app.view_functions[forgot_password_endpoint] = forgot_password_view
+
         self.register_anonymous_identity_loader(state)
 
         app.extensions["security"].register_form = register_form_factory(
@@ -176,13 +190,10 @@ class InvenioAccounts(object):
             app.extensions["security"].login_form, app
         )
 
-        if app.config.get("ACCOUNTS_FORGOT_PASSWORD_EMAIL_RATELIMIT"):
-            app.extensions["security"].forgot_password_form = (
-                forgot_password_form_factory(
-                    app.extensions["security"].forgot_password_form,
-                    app,
-                )
-            )
+        app.extensions["security"].forgot_password_form = forgot_password_form_factory(
+            app.extensions["security"].forgot_password_form,
+            app,
+        )
 
         # send confirmation form
         app.extensions["security"].send_confirmation_form = (
