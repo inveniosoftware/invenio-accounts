@@ -29,8 +29,13 @@
             {%- endif %}
           {%- endblock registration_form_fields %}
 
-          {%- if form.recaptcha %}
-            <div class="grouped fields">{{ form.recaptcha() }}</div>
+          {%- if form.altcha %}
+            <div class="field{% if form.altcha.errors %} error{% endif %}">
+              {{ form.altcha() }}
+              {%- for error in form.altcha.errors %}
+                <div class="ui pointing red basic label">{{ error }}</div>
+              {%- endfor %}
+            </div>
           {%- endif %}
 
           <button type="submit" class="ui fluid large signup submit button">

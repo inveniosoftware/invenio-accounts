@@ -30,6 +30,7 @@ from invenio_accounts.forms import (
 )
 
 from . import config
+from .captcha import warn_recaptcha_deprecated
 from .datastore import SessionAwareSQLAlchemyUserDatastore
 from .domains import on_user_confirmed
 from .hash import InvenioAesEncryptedEmail
@@ -161,6 +162,8 @@ class InvenioAccounts(object):
             app.view_functions["security.login"] = new_login_view
 
         self.register_anonymous_identity_loader(state)
+
+        warn_recaptcha_deprecated(app)
 
         app.extensions["security"].register_form = register_form_factory(
             app.extensions["security"].register_form, app

@@ -22,8 +22,13 @@
         {{ render_field(form.password_confirm, icon="glyphicon glyphicon-lock", errormsg=False) }}
       {%- endif %}
       {%- endblock registration_form_fields %}
-      {%- if form.recaptcha %}
-        <div class="form-group form-group-lg">{{ form.recaptcha() }}</div>
+      {%- if form.altcha %}
+        <div class="form-group form-group-lg{% if form.altcha.errors %} has-error{% endif %}">
+          {{ form.altcha() }}
+          {%- for error in form.altcha.errors %}
+            <span class="help-block">{{ error }}</span>
+          {%- endfor %}
+        </div>
       {%- endif %}
       <button type="submit" class="btn btn-warning btn-lg btn-block"><i class="fa fa-edit"></i> {{ _('Sign up') }}</button>
       </form>
