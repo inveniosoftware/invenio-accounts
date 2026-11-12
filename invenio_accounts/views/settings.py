@@ -8,6 +8,7 @@ from flask import Blueprint, abort, current_app, request
 from flask_security.views import anonymous_user_required
 from flask_security.views import login as base_login
 
+from ..captcha import challenge_view, is_altcha_enabled
 from .security import revoke_session, security
 
 
@@ -41,6 +42,14 @@ def create_settings_blueprint(app):
         blueprint.add_url_rule("/security", view_func=security, methods=["GET"])
         blueprint.add_url_rule(
             "/sessions/revoke", view_func=revoke_session, methods=["POST"]
+        )
+
+    if is_altcha_enabled(app):
+        blueprint.add_url_rule(
+            "/altcha/challenge",
+            endpoint="altcha_challenge",
+            view_func=challenge_view,
+            methods=["GET"],
         )
 
     return blueprint

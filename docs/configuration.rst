@@ -52,11 +52,31 @@ following two configuration variables:
 
 .. autodata:: invenio_accounts.config.SECURITY_DEPRECATED_PASSWORD_SCHEMES
 
-Recaptcha
----------
-The user registration form has support for recaptcha. All you need to do is to
-set the following two configuration variables (provided by
-`reCAPTCHA <https://www.google.com/recaptcha/>`_ when you register):
+Captcha
+-------
+The user registration form can be protected by `ALTCHA <https://altcha.org>`_,
+a privacy-friendly proof-of-work captcha. Challenges are issued and verified by
+the application itself, without any third-party service.
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_ALTCHA_ENABLED
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_ALTCHA_HMAC_KEY
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_ALTCHA_ALGORITHM
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_ALTCHA_COST
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_ALTCHA_EXPIRES
+
+.. autodata:: invenio_accounts.config.ACCOUNTS_ALTCHA_WIDGET_URL
+
+reCAPTCHA (deprecated)
+~~~~~~~~~~~~~~~~~~~~~~
+Google `reCAPTCHA <https://www.google.com/recaptcha/>`_ has been replaced by
+ALTCHA. For backward compatibility, setting both reCAPTCHA keys enables ALTCHA
+(and ``form.recaptcha`` renders the ALTCHA widget in custom templates), and a
+deprecation warning is emitted at start-up. These keys will be removed in a
+future release:
 
 .. autodata:: invenio_accounts.config.RECAPTCHA_PUBLIC_KEY
 

@@ -24,6 +24,7 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
 ]
 dependencies = [
+  "altcha>=2.0.0,<3.0.0",
   "cryptography>=3.0.0",
   "flask-kvsession-invenio>=1.0.0,<2.0.0",
   "flask-security-invenio>=4.0.0,<5.0.0",
