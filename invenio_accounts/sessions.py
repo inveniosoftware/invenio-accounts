@@ -43,7 +43,9 @@ _sessionstore = LocalProxy(lambda: current_app.kvsession_store)
 def _ip2country(ip):
     """Get user country."""
     if ip:
-        return country_code(ip)
+        cc = country_code(ip)
+        # "EU" is a registry placeholder, not a country.
+        return None if cc == "EU" else cc
 
 
 def _extract_info_from_useragent(user_agent):
