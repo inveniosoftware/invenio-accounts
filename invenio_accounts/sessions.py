@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2015-2025 CERN.
+# SPDX-FileCopyrightText: 2015-2026 CERN.
 # SPDX-FileCopyrightText: 2024 Graz University of Technology.
 # SPDX-License-Identifier: MIT
 
@@ -10,8 +10,9 @@ This module provides management functionality and populates the
 created.
 """
 
+import sys
+
 from flask import after_this_request, current_app, request, session
-from geolite2 import geolite2
 from invenio_db import db
 from invenio_rest.csrf import reset_token
 from ua_parser import user_agent_parser
@@ -20,14 +21,31 @@ from werkzeug.local import LocalProxy
 from .models import SessionActivity
 from .proxies import current_accounts
 
+# iptocc>=3 needs Python 3.10.
+# Delete this branch when 3.9 is dropped.
+if sys.version_info >= (3, 10):
+    from iptocc import country_code
+else:
+    from geolite2 import geolite2
+
+    def country_code(ip):
+        """Return the country code, or None, like iptocc>=3."""
+        try:
+            match = geolite2.reader().get(ip) or {}
+        except ValueError:
+            return None
+        return match.get("country", {}).get("iso_code") if match else None
+
+
 _sessionstore = LocalProxy(lambda: current_app.kvsession_store)
 
 
 def _ip2country(ip):
     """Get user country."""
     if ip:
-        match = geolite2.reader().get(ip)
-        return match.get("country", {}).get("iso_code") if match else None
+        cc = country_code(ip)
+        # "EU" is a registry placeholder, not a country.
+        return None if cc == "EU" else cc
 
 
 def _extract_info_from_useragent(user_agent):
