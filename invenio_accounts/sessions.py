@@ -10,42 +10,83 @@ This module provides management functionality and populates the
 created.
 """
 
-import sys
+import os
+from functools import lru_cache
 
 from flask import after_this_request, current_app, request, session
 from invenio_db import db
 from invenio_rest.csrf import reset_token
+from iptocc import country_code
 from ua_parser import user_agent_parser
 from werkzeug.local import LocalProxy
 
 from .models import SessionActivity
 from .proxies import current_accounts
 
-# iptocc>=3 needs Python 3.10.
-# Delete this branch when 3.9 is dropped.
-if sys.version_info >= (3, 10):
-    from iptocc import country_code
-else:
-    from geolite2 import geolite2
-
-    def country_code(ip):
-        """Return the country code, or None, like iptocc>=3."""
-        try:
-            match = geolite2.reader().get(ip) or {}
-        except ValueError:
-            return None
-        return match.get("country", {}).get("iso_code") if match else None
-
-
 _sessionstore = LocalProxy(lambda: current_app.kvsession_store)
 
 
+def _file_signature(path):
+    """Return a value that changes when the file at ``path`` is replaced.
+
+    The modification time alone is not enough: it can be kept by the tool that
+    copies the file, and it can be too coarse on some file systems. The size
+    catches most of those. The inode catches a file that is written next to
+    the old one and renamed over it, which is the safe way to refresh a file.
+    """
+    stat = os.stat(path)
+    return stat.st_mtime_ns, stat.st_size, stat.st_ino
+
+
+@lru_cache(maxsize=2)
+def _open_mmdb(path, signature):
+    """Open the MaxMind DB at ``path``.
+
+    ``signature`` is only part of the cache key, so that a file that was
+    replaced on disk (e.g. by a monthly refresh) is opened again.
+    """
+    # Imported here so that it is only loaded when the setting is used.
+    import maxminddb
+
+    return maxminddb.open_database(path)
+
+
+def _mmdb_country(path, ip):
+    """Look up ``ip`` in the MaxMind DB at ``path``."""
+    reader = _open_mmdb(path, _file_signature(path))
+    try:
+        record = reader.get(ip)
+    except ValueError:  # not a valid IP address
+        return None
+    return (record or {}).get("country", {}).get("iso_code")
+
+
 def _ip2country(ip):
-    """Get user country."""
-    if ip:
+    """Get user country.
+
+    Uses the MaxMind DB from ``ACCOUNTS_GEOIP_DB_PATH`` if it is set, and
+    ``iptocc`` otherwise. If the file cannot be read, logs the error and uses
+    ``iptocc``.
+    """
+    if not ip:
+        return None
+
+    path = current_app.config.get("ACCOUNTS_GEOIP_DB_PATH")
+    if path:
+        try:
+            cc = _mmdb_country(path, ip)
+        except Exception:
+            current_app.logger.exception(
+                "Cannot read the GeoIP database from ACCOUNTS_GEOIP_DB_PATH=%r, "
+                "falling back to iptocc.",
+                path,
+            )
+            cc = country_code(ip)
+    else:
         cc = country_code(ip)
-        # "EU" is a registry placeholder, not a country.
-        return None if cc == "EU" else cc
+
+    # "EU" is a registry placeholder, not a country.
+    return None if cc == "EU" else cc
 
 
 def _extract_info_from_useragent(user_agent):
