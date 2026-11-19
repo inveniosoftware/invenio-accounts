@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2015-2023 CERN.
-# SPDX-FileCopyrightText: 2024-2025 Graz University of Technology.
+# SPDX-FileCopyrightText: 2024-2026 Graz University of Technology.
 # SPDX-FileCopyrightText: 2025 KTH Royal Institute of Technology.
 # SPDX-License-Identifier: MIT
 
@@ -15,7 +15,7 @@ from flask.cli import with_appcontext
 from flask_security.forms import ConfirmRegisterForm
 from flask_security.utils import hash_password
 from invenio_db import db
-from psycopg2.errors import UniqueViolation
+from psycopg.errors import UniqueViolation
 from werkzeug.datastructures import MultiDict
 from werkzeug.local import LocalProxy
 
