@@ -55,8 +55,6 @@ def ip2country(ip):
     ``iptocc`` otherwise. If the file cannot be read, logs the error and uses
     ``iptocc``. An IP that is not in the file gives ``None``.
 
-    Other Invenio packages (e.g. ``invenio-stats``) use this function too, so
-    this one setting is used for all of them.
 
     :param ip: The IP address.
     """
