@@ -52,7 +52,7 @@ ACCOUNTS_SESSION_ACTIVITY_ENABLED = True
 """Enable session activity tracking."""
 
 ACCOUNTS_GEOIP_DB_PATH = None
-"""Path to a MaxMind DB (``.mmdb``) file used to find the country of a session.
+"""Path to a Maxmind DB file (``.mmdb``) used to find the country of an IP address.
 
 If ``None`` (default), the country is looked up with ``iptocc``. If set, the
 file is read with ``maxminddb``. If it cannot be read, the error is logged and
