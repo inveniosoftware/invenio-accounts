@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2015-2025 CERN.
+# SPDX-FileCopyrightText: 2015-2026 CERN.
 # SPDX-FileCopyrightText: 2024 Graz University of Technology.
 # SPDX-License-Identifier: MIT
 
@@ -11,23 +11,16 @@ created.
 """
 
 from flask import after_this_request, current_app, request, session
-from geolite2 import geolite2
 from invenio_db import db
 from invenio_rest.csrf import reset_token
 from ua_parser import user_agent_parser
 from werkzeug.local import LocalProxy
 
+from .geolocation import ip2country
 from .models import SessionActivity
 from .proxies import current_accounts
 
 _sessionstore = LocalProxy(lambda: current_app.kvsession_store)
-
-
-def _ip2country(ip):
-    """Get user country."""
-    if ip:
-        match = geolite2.reader().get(ip)
-        return match.get("country", {}).get("iso_code") if match else None
 
 
 def _extract_info_from_useragent(user_agent):
@@ -59,7 +52,7 @@ def add_session(session=None):
             user_id=user_id,
             sid_s=sid_s,
             ip=request.remote_addr,
-            country=_ip2country(request.remote_addr),
+            country=ip2country(request.remote_addr),
             **_extract_info_from_useragent(request.headers.get("User-Agent", "")),
         )
         db.session.merge(session_activity)

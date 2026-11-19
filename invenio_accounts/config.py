@@ -51,6 +51,17 @@ By default, it uses Celery if it can find it.
 ACCOUNTS_SESSION_ACTIVITY_ENABLED = True
 """Enable session activity tracking."""
 
+ACCOUNTS_GEOIP_DB_PATH = None
+"""Path to a Maxmind DB file (``.mmdb``) used to find the country of an IP address.
+
+If ``None`` (default), the country is looked up with ``iptocc``. If set, the
+file is read with ``maxminddb``. If it cannot be read, the error is logged and
+``iptocc`` is used instead. A file that is replaced on disk is picked up
+without a restart. To replace it safely, write the new file next to the old
+one and rename it over the old one, so that a lookup never reads a
+half-written file.
+"""
+
 ACCOUNTS_SETTINGS_SECURITY_TEMPLATE = "invenio_accounts/settings/security.html"
 """Template for the account security page."""
 

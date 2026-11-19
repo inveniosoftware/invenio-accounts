@@ -31,6 +31,7 @@ from werkzeug.exceptions import NotFound
 
 from invenio_accounts import InvenioAccounts, InvenioAccountsREST, InvenioAccountsUI
 from invenio_accounts.admin import role_adminview, session_adminview, user_adminview
+from invenio_accounts.geolocation import _open_mmdb
 from invenio_accounts.testutils import create_test_user
 from invenio_accounts.views.rest import RegisterView, create_rest_blueprint, use_kwargs
 from invenio_accounts.views.settings import create_settings_blueprint
@@ -338,3 +339,34 @@ def users(app):
             "obj": user2,
         },
     ]
+
+
+@pytest.fixture(autouse=True)
+def clear_mmdb_cache():
+    """Do not share open MaxMind DB readers between tests."""
+    _open_mmdb.cache_clear()
+    yield
+    _open_mmdb.cache_clear()
+
+
+@pytest.fixture()
+def make_mmdb(tmp_path):
+    """Factory that writes a MaxMind DB file with the given ``{network: cc}``."""
+    from mmdb_writer import MMDBWriter
+    from netaddr import IPSet
+
+    def _make(networks, name="geo.mmdb", ip_version=6):
+        writer = MMDBWriter(
+            ip_version=ip_version,
+            ipv4_compatible=ip_version == 6,
+            database_type="Test-Country",
+            languages=["en"],
+            description={"en": "test database"},
+        )
+        for network, cc in networks.items():
+            writer.insert_network(IPSet([network]), {"country": {"iso_code": cc}})
+        path = tmp_path / name
+        writer.to_db_file(str(path))
+        return str(path)
+
+    return _make
