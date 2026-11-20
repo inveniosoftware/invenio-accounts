@@ -13,7 +13,6 @@
 # Jiří Kunčar <jiri.kuncar@gmail.com>, 2025
 # daniela.hornickova, 2025
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: invenio-accounts 6.1.1\n"
