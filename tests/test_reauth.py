@@ -14,7 +14,11 @@ from invenio_accounts.reauth import (
     SESSION_REAUTH_AT_KEY,
     SESSION_REAUTH_CODE_KEY,
 )
-from invenio_accounts.testutils import create_test_user, login_user_via_session
+from invenio_accounts.testutils import (
+    create_test_user,
+    login_user_via_session,
+    reauth_user_via_session,
+)
 
 
 @pytest.fixture()
@@ -164,8 +168,17 @@ def test_send_rate_limit(reauth_app, client):
     assert outbox == []
 
 
-def test_disabled_is_passthrough(reauth_app, client):
-    reauth_app.config["ACCOUNTS_REAUTH_ENABLED"] = False
+def test_send_without_rate_limiter(reauth_app, client):
+    # the default limit is set, but Invenio-App's limiter is not available
+    assert reauth_app.config["ACCOUNTS_REAUTH_SEND_RATELIMIT"]
+    assert "invenio-app" not in reauth_app.extensions
+    _send_code(reauth_app, client)
+    _send_code(reauth_app, client)
+
+
+def test_reauth_user_via_session(reauth_app, client):
+    assert client.get("/protected").status_code == 302
+    reauth_user_via_session(client)
     assert client.get("/protected").status_code == 200
 
 
@@ -183,8 +196,8 @@ def test_reauth_page_renders(reauth_app, client):
     assert "user@example.org" in res.get_data(as_text=True)
 
 
-def test_route_not_registered_when_disabled(app):
-    assert "invenio_accounts.reauth" not in app.view_functions
+def test_route_registered_by_default(app):
+    assert "invenio_accounts.reauth" in app.view_functions
 
 
 def test_window_config_is_timedelta(app):

@@ -43,7 +43,6 @@ def create_settings_blueprint(app):
             "/sessions/revoke", view_func=revoke_session, methods=["POST"]
         )
 
-    if app.config.get("ACCOUNTS_REAUTH_ENABLED"):
-        blueprint.add_url_rule("/reauth", view_func=reauth, methods=["GET", "POST"])
+    blueprint.add_url_rule("/reauth", view_func=reauth, methods=["GET", "POST"])
 
     return blueprint

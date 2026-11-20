@@ -10,10 +10,7 @@ the user's browser since it needs access to the user's mailbox.
 
 A successful re-authentication is valid for
 :data:`~invenio_accounts.config.ACCOUNTS_REAUTH_WINDOW`, is bound to the user
-and is cleared on login and logout. When
-:data:`~invenio_accounts.config.ACCOUNTS_REAUTH_ENABLED` is ``False`` (the
-default) every check passes, so modules can protect their views
-unconditionally and let the instance decide.
+and is cleared on login and logout.
 
 Protect a whole view (all methods, or only some of them):
 
@@ -87,11 +84,6 @@ def _hash_code(code):
     return hmac.new(key, msg, hashlib.sha256).hexdigest()
 
 
-def is_reauth_enabled():
-    """Return whether re-authentication is enabled."""
-    return current_app.config.get("ACCOUNTS_REAUTH_ENABLED", False)
-
-
 def is_safe_next_url(url):
     """Return whether ``url`` is a safe local URL to redirect to."""
     if not url or "\\" in url or not url.startswith("/") or url.startswith("//"):
@@ -102,8 +94,6 @@ def is_safe_next_url(url):
 
 def is_reauth_fresh():
     """Return whether the current user has recently re-authenticated."""
-    if not is_reauth_enabled():
-        return True
     if not current_user.is_authenticated:
         return False
     data = session.get(SESSION_REAUTH_AT_KEY)

@@ -65,11 +65,9 @@ set the following two configuration variables (provided by
 Re-authentication
 -----------------
 Sensitive actions (e.g. creating API credentials or changing the email address)
-can require users to re-authenticate by entering a one-time code sent to their
-current email address. Modules opt in by protecting their views with
-:func:`invenio_accounts.reauth.reauth_required`; instances enable it with:
-
-.. autodata:: invenio_accounts.config.ACCOUNTS_REAUTH_ENABLED
+require users to re-authenticate by entering a one-time code sent to their
+current email address. Modules protect their views with
+:func:`invenio_accounts.reauth.reauth_required`.
 
 The validity of a re-authentication and of the codes can be tuned with:
 
@@ -79,8 +77,8 @@ The validity of a re-authentication and of the codes can be tuned with:
 
 .. autodata:: invenio_accounts.config.ACCOUNTS_REAUTH_MAX_ATTEMPTS
 
-To avoid flooding a user's mailbox, sending codes can be rate limited per
-account (requires Invenio-App's rate limiter):
+To avoid flooding a user's mailbox, sending codes is rate limited per account
+(requires Invenio-App's rate limiter):
 
 .. autodata:: invenio_accounts.config.ACCOUNTS_REAUTH_SEND_RATELIMIT
 

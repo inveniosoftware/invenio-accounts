@@ -49,7 +49,12 @@ def enforce_login_limit(user):
 
 
 def enforce_reauth_send_limit(user):
-    """Return result for re-authentication code per-account rate limit."""
+    """Return result for re-authentication code per-account rate limit.
+
+    The limit is set by default, so it is skipped without Invenio-App's limiter.
+    """
+    if "invenio-app" not in current_app.extensions:
+        return True, None
     return _enforce_user_limit(
         user=user,
         limit_key="ACCOUNTS_REAUTH_SEND_RATELIMIT",

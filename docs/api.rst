@@ -27,7 +27,7 @@ Re-authentication
 -----------------
 
 .. automodule:: invenio_accounts.reauth
-   :members: reauth_required, is_reauth_fresh, reauth_redirect, is_reauth_enabled,
+   :members: reauth_required, is_reauth_fresh, reauth_redirect,
       send_reauth_code, verify_reauth_code, has_pending_code, clear_reauth,
       is_safe_next_url, ReauthError
 

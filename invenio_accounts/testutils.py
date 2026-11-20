@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2015-2018 CERN.
+# SPDX-FileCopyrightText: 2015-2026 CERN.
 # SPDX-License-Identifier: MIT
 
 """Invenio-Accounts utility functions for tests and testing purposes.
@@ -10,6 +10,8 @@ of an application context. If pytest-flask is installed you don't have to worry
 about this.
 """
 
+import time
+
 import flask
 import flask_login
 from flask import current_app
@@ -17,6 +19,8 @@ from flask_kvsession import SessionID
 from flask_security import url_for_security
 from flask_security.utils import hash_password
 from werkzeug.local import LocalProxy
+
+from .reauth import SESSION_REAUTH_AT_KEY
 
 # "Convenient references" (lifted from flask_security source)
 _datastore = LocalProxy(lambda: current_app.extensions["security"].datastore)
@@ -58,6 +62,20 @@ def login_user_via_session(client, user=None, email=None):
         sess["user_id"] = user.get_id()
         # Flask-Login >=0.5
         sess["_user_id"] = user.get_id()
+
+
+def reauth_user_via_session(client, user=None):
+    """Mark the logged-in user as freshly re-authenticated via the session.
+
+    Call it after logging in, as logging in clears the re-authentication.
+
+    :param client: The CLI test client.
+    :param user: The :class:`invenio_accounts.models.User` instance. Optional.
+        (Default: the user logged in the session)
+    """
+    with client.session_transaction() as sess:
+        user_id = user.get_id() if user else sess["_user_id"]
+        sess[SESSION_REAUTH_AT_KEY] = {"user_id": str(user_id), "at": time.time()}
 
 
 def login_user_via_view(client, email=None, password=None, user=None, login_url=None):

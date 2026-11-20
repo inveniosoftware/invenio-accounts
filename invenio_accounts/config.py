@@ -125,14 +125,6 @@ ACCOUNTS_SEND_CONFIRMATION_RATELIMIT_MSG = _(
 )
 """Message shown when send-confirmation per-account rate limit is exceeded."""
 
-ACCOUNTS_REAUTH_ENABLED = False
-"""Require users to re-authenticate before sensitive actions.
-
-When enabled, views protected with
-:func:`invenio_accounts.reauth.reauth_required` ask the user to confirm a
-one-time code sent to their current email address before proceeding.
-"""
-
 ACCOUNTS_REAUTH_WINDOW = timedelta(minutes=5)
 """How long a successful re-authentication remains valid."""
 
@@ -148,10 +140,10 @@ ACCOUNTS_REAUTH_TEMPLATE = "invenio_accounts/settings/reauth.html"
 ACCOUNTS_REAUTH_EMAIL_SUBJECT = _("Your verification code")
 """Subject of the email containing the re-authentication code."""
 
-ACCOUNTS_REAUTH_SEND_RATELIMIT = None
+ACCOUNTS_REAUTH_SEND_RATELIMIT = "3 per 10 minutes; 10 per day"
 """Flask-Limiter rate limit string for sending re-authentication codes per account.
 
-Example: ``"3 per 10 minutes; 10 per day"``. Disabled when ``None``.
+Applied when Invenio-App's rate limiter is available. Disabled when ``None``.
 """
 
 ACCOUNTS_REAUTH_SEND_RATELIMIT_KEY_PREFIX = "accounts.reauth"

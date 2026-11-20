@@ -335,10 +335,9 @@ def _protected():
 
 @pytest.fixture()
 def reauth_app(request):
-    """Application with re-authentication enabled and a protected view."""
+    """Application with protected views."""
     app = _app_factory(
         dict(
-            ACCOUNTS_REAUTH_ENABLED=True,
             APP_ENABLE_SECURE_HEADERS=False,
             RATELIMIT_STORAGE_URI="memory://",
         )
