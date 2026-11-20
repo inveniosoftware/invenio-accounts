@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2015-2025 CERN.
 # SPDX-FileCopyrightText: 2024-2025 Graz University of Technology.
+# Copyright (C) 2026 KTH Royal Institute of Technology.
 # SPDX-License-Identifier: MIT
 
 """Background tasks for accounts."""
@@ -10,9 +11,10 @@ from celery import shared_task
 from flask import current_app
 from flask_mail import Message
 from invenio_db import db
-from sqlalchemy import func, or_
+from sqlalchemy import and_, func, or_
 
 from .models import Domain, LoginInformation, SessionActivity, User
+from .proxies import current_datastore, current_db_change_history
 from .sessions import delete_session
 
 
@@ -58,21 +60,42 @@ def clean_session_table():
 
 @shared_task
 def delete_ips():
-    """Automatically remove login_info.last_login_ip older than 30 days."""
-    expiration_date = (
+    """Remove expired login IPs and mark affected users for reindexing."""
+    cutoff = (
         datetime.now(timezone.utc) - current_app.config["ACCOUNTS_RETENTION_PERIOD"]
     )
+    login = LoginInformation
+    last_expired = and_(login.last_login_ip.isnot(None), login.last_login_at < cutoff)
+    current_expired = and_(
+        login.current_login_ip.isnot(None), login.current_login_at < cutoff
+    )
+    expired_logins = (
+        db.session.query(login, last_expired, current_expired)
+        .filter(or_(last_expired, current_expired))
+        .order_by(login.user_id)
+        .with_for_update()
+    )
 
-    db.session.query(LoginInformation).filter(
-        LoginInformation.last_login_ip.isnot(None),
-        LoginInformation.last_login_at < expiration_date,
-    ).update({LoginInformation.last_login_ip: None})
+    try:
+        user_ids = []
+        for info, clear_last, clear_current in expired_logins:
+            if clear_last:
+                info.last_login_ip = None
+            if clear_current:
+                info.current_login_ip = None
+            user_ids.append(info.user_id)
+            current_datastore.mark_changed(id(db.session), uid=info.user_id)
 
-    db.session.query(LoginInformation).filter(
-        LoginInformation.current_login_ip.isnot(None),
-        LoginInformation.current_login_at < expiration_date,
-    ).update({LoginInformation.current_login_ip: None})
-    db.session.commit()
+        # Advance the indexed revision atomically alongside concurrent user edits.
+        User.query.filter(User.id.in_(user_ids)).update(
+            {User.version_id: User.version_id + 1, User.updated: func.now()},
+            synchronize_session=False,
+        )
+        current_datastore.commit()
+    except Exception:
+        db.session.rollback()
+        current_db_change_history.clear_dirty_sets(db.session)
+        raise
 
 
 @shared_task
