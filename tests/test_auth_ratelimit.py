@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2026 CERN.
+# SPDX-FileCopyrightText: 2026 CESNET z.s.p.o.
 # SPDX-License-Identifier: MIT
 
 """Test per-account auth rate limits."""
@@ -197,3 +198,48 @@ def test_send_confirmation_per_account_limit_blocks_second_attempt_rest(api):
             assert second.get_data(as_text=True) == str(
                 api.config["ACCOUNTS_SEND_CONFIRMATION_RATELIMIT_MSG"]
             )
+
+
+def test_login_per_account_limit_skipped_when_ratelimit_disabled_ui(app):
+    _init_limiter(app, RATELIMIT_ENABLED=False, ACCOUNTS_LOGIN_RATELIMIT="1 per minute")
+
+    with app.app_context():
+        user = create_test_user(email="normal@test.com")
+        db.session.commit()
+        with app.test_client() as client:
+            url = url_for_security("login")
+            first = client.post(
+                url,
+                data={"email": user.email, "password": "wrong-password"},
+            )
+            second = client.post(
+                url,
+                data={"email": user.email, "password": "wrong-password"},
+            )
+
+            assert first.status_code != 429
+            assert second.status_code != 429
+            assert str(
+                app.config["ACCOUNTS_LOGIN_RATELIMIT_MSG"]
+            ) not in second.get_data(as_text=True)
+
+
+def test_login_per_account_limit_skipped_when_ratelimit_disabled_rest(api):
+    _init_limiter(api, RATELIMIT_ENABLED=False, ACCOUNTS_LOGIN_RATELIMIT="1 per minute")
+
+    with api.app_context():
+        user = create_test_user(email="normal@test.com")
+        db.session.commit()
+        with api.test_client() as client:
+            url = url_for("invenio_accounts_rest_auth.login")
+            first = client.post(
+                url,
+                data={"email": user.email, "password": "wrong-password"},
+            )
+            second = client.post(
+                url,
+                data={"email": user.email, "password": "wrong-password"},
+            )
+
+            assert first.status_code != 429
+            assert second.status_code != 429

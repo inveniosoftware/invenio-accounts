@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2026 CERN.
+# SPDX-FileCopyrightText: 2026 CESNET z.s.p.o.
 # SPDX-License-Identifier: MIT
 
 """Forgot-password rate limit helpers."""
@@ -13,6 +14,9 @@ def _enforce_user_limit(user, limit_key, key_prefix_key, message_key):
         return True, None
 
     limiter_ext = current_app.extensions["invenio-app"].limiter
+    if not current_app.config.get("RATELIMIT_ENABLED", True):
+        return True, None
+
     key_prefix = current_app.config[key_prefix_key]
 
     user_id = getattr(user, "id", None)
