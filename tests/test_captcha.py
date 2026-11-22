@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2026 CERN.
+# SPDX-FileCopyrightText: 2026 CESNET z.s.p.o.
 # SPDX-License-Identifier: MIT
 
 """Test ALTCHA captcha on registration."""
@@ -134,6 +135,34 @@ def test_replay_rejected(altcha_app):
         assert "Please complete the verification" in resp.get_data(as_text=True)
     with altcha_app.app_context():
         assert User.query.filter_by(email="b@example.org").count() == 0
+
+
+def test_replay_allowed_when_ratelimit_disabled(altcha_app):
+    """Without rate limiter storage, used challenges are not tracked."""
+    altcha_app.config.update(
+        APP_ENABLE_SECURE_HEADERS=False,
+        RATELIMIT_ENABLED=False,
+        RATELIMIT_STORAGE_URI="memory://",
+    )
+    InvenioApp(altcha_app)
+    with altcha_app.test_client() as client:
+        payload = _solve(client)
+        assert _register(client, "a@example.org", payload).status_code == 302
+    with altcha_app.test_client() as client:
+        assert _register(client, "b@example.org", payload).status_code == 302
+    with altcha_app.app_context():
+        assert User.query.filter_by(email="b@example.org").one()
+
+
+@pytest.mark.parametrize("ratelimit_enabled", [True, False])
+def test_replay_unprotected_warning(base_app, caplog, ratelimit_enabled):
+    """Disabling rate limiting with ALTCHA enabled logs a warning."""
+    base_app.config.update(
+        ACCOUNTS_ALTCHA_ENABLED=True, RATELIMIT_ENABLED=ratelimit_enabled
+    )
+    InvenioAccounts(base_app)
+    warned = "ALTCHA replay protection is inactive" in caplog.text
+    assert warned is not ratelimit_enabled
 
 
 def test_legacy_recaptcha_config(base_app):

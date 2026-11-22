@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2016-2026 CERN.
 # SPDX-FileCopyrightText: 2021 TU Wien.
 # SPDX-FileCopyrightText: 2022-2024 KTH Royal Institute of Technology
+# SPDX-FileCopyrightText: 2026 CESNET z.s.p.o.
 # SPDX-License-Identifier: MIT
 
 """Default configuration for ACCOUNTS."""
@@ -355,6 +356,8 @@ ACCOUNTS_ALTCHA_EXPIRES = timedelta(minutes=10)
 
 A solved challenge can only be used once within this period. Replay protection
 relies on the rate limiter storage of Invenio-App (``RATELIMIT_STORAGE_URI``).
+With ``RATELIMIT_ENABLED = False``, there is no such storage and a solved
+challenge can be reused until it expires.
 """
 
 ACCOUNTS_USERINFO_HEADERS = False

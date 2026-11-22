@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2015-2018 CERN.
 # SPDX-FileCopyrightText: 2024-2025 Graz University of Technology.
+# SPDX-FileCopyrightText: 2026 CESNET z.s.p.o.
 # SPDX-License-Identifier: MIT
 
 
@@ -96,6 +97,9 @@ def _app_factory(config=None):
         CELERY_RESULT_BACKEND="cache",
         LOGIN_DISABLED=False,
         MAIL_SUPPRESS_SEND=True,
+        # Flask-Limiter is a process-wide singleton that keeps the last app's
+        # RATELIMIT_ENABLED when an app does not set it, so set it explicitly.
+        RATELIMIT_ENABLED=True,
         SECRET_KEY="CHANGE_ME",
         SECURITY_PASSWORD_SALT="CHANGE_ME_ALSO",
         SECURITY_CONFIRM_EMAIL_WITHIN="2 seconds",

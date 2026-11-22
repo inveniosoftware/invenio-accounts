@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2026 CERN.
+# SPDX-FileCopyrightText: 2026 CESNET z.s.p.o.
 # SPDX-License-Identifier: MIT
 
 """ALTCHA proof-of-work captcha support.
@@ -50,6 +51,22 @@ def warn_recaptcha_deprecated(app):
     warnings.warn(message, DeprecationWarning, stacklevel=3)
     # DeprecationWarnings are hidden by default, so also tell the operators.
     app.logger.warning(message)
+
+
+def warn_altcha_replay_unprotected(app):
+    """Warn when ALTCHA is enabled but replay protection is unavailable.
+
+    Used challenges are recorded in the rate limiter storage of Invenio-App.
+    With ``RATELIMIT_ENABLED = False`` there is no such storage, so a solved
+    challenge can be reused until it expires.
+    """
+    if not is_altcha_enabled(app) or app.config.get("RATELIMIT_ENABLED", True):
+        return
+    app.logger.warning(
+        "ALTCHA replay protection is inactive because rate limiting is disabled "
+        "(RATELIMIT_ENABLED = False): a solved challenge can be reused until it "
+        "expires (ACCOUNTS_ALTCHA_EXPIRES)."
+    )
 
 
 def is_altcha_enabled(app):
@@ -106,7 +123,7 @@ def _mark_used(signature):
     """
     app_ext = current_app.extensions.get("invenio-app")
     limiter = getattr(app_ext, "limiter", None)
-    if limiter is None:
+    if limiter is None or not current_app.config.get("RATELIMIT_ENABLED", True):
         return True
     expires = current_app.config["ACCOUNTS_ALTCHA_EXPIRES"]
     item = RateLimitItemPerSecond(1, max(int(expires.total_seconds()), 1))
