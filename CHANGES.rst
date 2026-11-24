@@ -1,5 +1,5 @@
 ..
-    SPDX-FileCopyrightText: 2015-2024 CERN.
+    SPDX-FileCopyrightText: 2015-2026 CERN.
     SPDX-FileCopyrightText: 2024-2026 Graz University of Technology.
     SPDX-FileCopyrightText: 2025 KTH Royal Institute of Technology.
     SPDX-FileCopyrightText: 2026 TU Wien.
@@ -7,6 +7,59 @@
 
 Changes
 =======
+
+Version v10.0.0 (released 2026-11-24)
+
+**Breaking changes**
+
+- Overridden account templates must render the ALTCHA widget. ALTCHA is
+  disabled by default, but once enabled (``ACCOUNTS_ALTCHA_ENABLED = True``,
+  or the deprecated reCAPTCHA keys set), forms rendered by overridden
+  templates without the widget fail validation. Affected templates:
+
+  - ``invenio_accounts/register_user.html``
+  - ``invenio_accounts/forgot_password.html``
+  - ``invenio_accounts/send_confirmation.html``
+  - ``invenio_accounts/base.html`` (must define a ``javascript`` block)
+
+  To update them, render the field with the new ``render_altcha`` macro and
+  load the widget JavaScript, e.g. in ``forgot_password.html``:
+
+  .. code-block:: html+jinja
+
+      {% from "invenio_accounts/_macros.html" import render_altcha %}
+
+      {{ render_altcha(forgot_password_form) }}
+
+      {%- block javascript %}
+        {{ super() }}
+        {%- if forgot_password_form.altcha %}
+          {{ webpack['invenio-accounts-altcha.js'] }}
+        {%- endif %}
+      {%- endblock javascript %}
+
+  Use ``send_confirmation_form`` in ``send_confirmation.html`` and ``form`` in
+  ``register_user.html``. Then rebuild the assets
+  (``invenio-cli assets build``), as a new webpack bundle is added. See the
+  default templates for complete examples.
+
+**Deprecations**
+
+- The reCAPTCHA keys ``RECAPTCHA_PUBLIC_KEY`` and ``RECAPTCHA_PRIVATE_KEY``
+  are deprecated: when set, ALTCHA is enabled instead and a warning is logged.
+  Templates rendering ``form.recaptcha`` on the register form keep working.
+  Use ``ACCOUNTS_ALTCHA_ENABLED`` instead.
+
+**Changes**
+
+- chore: replace pytz.all_timezones usage by zoneinfo.available_timezones
+- feat(registration): replace reCAPTCHA with ALTCHA
+    * add ALTCHA, a privacy-friendly proof-of-work captcha, to the register,
+      forgot password and send confirmation forms
+
+Version v9.2.1 (released 2026-10-29)
+
+- fix(profiles): sanitize full name
 
 Version v9.2.0 (released 2026-09-21)
 
