@@ -1,9 +1,10 @@
-# SPDX-FileCopyrightText: 2015-2018 CERN.
+# SPDX-FileCopyrightText: 2015-2026 CERN.
 # SPDX-License-Identifier: MIT
 
 """Test backend sessions."""
 
 import datetime
+import logging
 import time
 
 import flask_security
@@ -295,3 +296,37 @@ def test_session_permanent(ui_app_no_db):
         for _ in range(3):
             res = client.get("/")
             assert "Set-Cookie" not in res.headers
+
+
+CERN_IP = "188.184.9.234"  # iptocc says "CH"
+
+
+def _login_from(app, users, ip):
+    ua = "Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
+    with app.test_client() as client:
+        res = client.post(
+            url_for_security("login"),
+            data={"email": users[0]["email"], "password": users[0]["password"]},
+            environ_base={"REMOTE_ADDR": ip},
+            headers={"User-Agent": ua},
+        )
+        assert res.status_code == 302
+    [session] = SessionActivity.query.all()
+    return session
+
+
+def test_session_country_from_mmdb(app, users, make_mmdb):
+    """The session stores the country from the configured MaxMind DB."""
+    app.config["ACCOUNTS_GEOIP_DB_PATH"] = make_mmdb({"188.184.0.0/16": "DE"})
+    session = _login_from(app, users, CERN_IP)
+    assert session.country == "DE"
+    assert session.ip == CERN_IP
+
+
+def test_session_country_unreadable_mmdb(app, users, tmp_path, caplog):
+    """A broken file does not break login, the country comes from iptocc."""
+    app.config["ACCOUNTS_GEOIP_DB_PATH"] = str(tmp_path / "missing.mmdb")
+    with caplog.at_level(logging.ERROR):
+        session = _login_from(app, users, CERN_IP)
+    assert session.country == "CH"
+    assert any("ACCOUNTS_GEOIP_DB_PATH" in r.getMessage() for r in caplog.records)
