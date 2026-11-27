@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2015-2024 CERN.
+# SPDX-FileCopyrightText: 2015-2026 CERN.
 # SPDX-FileCopyrightText: 2022 TU Wien.
 # SPDX-FileCopyrightText: 2022 KTH Royal Institute of Technology
 # SPDX-License-Identifier: MIT
@@ -117,6 +117,19 @@ def test_profiles(app):
     assert (
         app.config["ACCOUNTS_DEFAULT_USER_VISIBILITY"] == user.preferences["visibility"]
     )
+
+
+def test_user_profile_full_name_sanitized(app):
+    """Test that the full name is sanitized when the profile is set."""
+    user = User(email="admin@inveniosoftware.org")
+    user.user_profile = {"full_name": "http://evil.com", "affiliations": "a.b"}
+    assert user.user_profile["full_name"] == "httpevil\u200b.com"
+    # other profile fields are left alone
+    assert user.user_profile["affiliations"] == "a.b"
+
+    # re-saving the profile (e.g. via the profile form) keeps it stable
+    user.user_profile = {**user.user_profile}
+    assert user.user_profile["full_name"] == "httpevil\u200b.com"
 
 
 def test_custom_profiles(app):
